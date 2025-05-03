@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Python virtual environments
+.venv/
+env/
+venv/
+
+# Env config
+.env
+*.env
+
+# Python tooling
+pip-log.txt
+poetry.lock
+
+# Vite / Node
+node_modules/
+dist/
+.vite/
+*.log
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage.xml
+
+# VSCode
+.vscode/
+
+# macOS metadata
+.DS_Store
+
+# Docker
+*.pid
+*.db
+*.sqlite3
+
+# Compiled output
+*.egg-info/
+build/
+.eggs/
+*.manifest
+*.spec
+
+# Local data
+chatlog.jsonl

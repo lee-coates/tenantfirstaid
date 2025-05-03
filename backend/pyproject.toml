@@ -1,0 +1,10 @@
+[project]
+name = "flask-hello"
+version = "0.1.0"
+dependencies = [
+  "flask",
+  "gunicorn",
+  "openai",
+  "jsonlines",
+  "python-dotenv"
+]
