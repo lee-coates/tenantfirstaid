@@ -12,8 +12,8 @@ import openai
 import jsonlines
 from flask import Flask, request, stream_with_context, Response, jsonify
 
-load_dotenv()
-
+load_dotenv(override=True)
+print(os.getenv("OPENAI_API_KEY"))
 MODEL = "gpt-4.1"
 DATA_FILE = "chatlog.jsonl"
 
