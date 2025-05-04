@@ -53,19 +53,16 @@ def chat():
     data = request.json
     session_id = data.get("session_id") or str(uuid.uuid4())
     user_msg = data["message"]
-    print("user_msg:", user_msg)
     _ensure_context(session_id)
     CACHE[session_id].append({"role": "user", "content": user_msg})
 
     def generate():
-        print("CACHE[session_id]:", CACHE[session_id])
         resp = openai.chat.completions.create(
             model=MODEL,
             messages=CACHE[session_id],
             stream=True
         )
         assistant_chunks = []
-        print("resp", resp)
         for chunk in resp:
             token = chunk.choices[0].delta.content or ""
             assistant_chunks.append(token)
