@@ -17,6 +17,7 @@ interface Message {
   content: string;
   messageId: string;
   showFeedback?: boolean;
+  feedbackSubmitted?: boolean;
 }
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
   const [sessionId, setSessionId] = useState<string>("");
   const [feedbackOpen, setFeedbackOpen] = useState<string | null>(null);
   const [betterResponse, setBetterResponse] = useState("");
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   
   // Initialize session ID when component mounts
   useEffect(() => {
@@ -48,21 +50,27 @@ export default function App() {
       // Close feedback form and reset
       setFeedbackOpen(null);
       setBetterResponse("");
+      setFeedbackSubmitted(true);
       
-      // Update UI to show feedback was submitted and remove all feedback buttons
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.messageId === messageId 
-            ? {...msg, feedbackSubmitted: true, showFeedback: false} 
-            : {...msg, showFeedback: false}
-        )
-      );
+      // Add a refresh message and mark session as feedback submitted
+      setMessages(prev => [
+        ...prev,
+        { 
+          role: "bot", 
+          content: "Thank you for your feedback! Please refresh the page to start a new conversation.", 
+          messageId: Date.now().toString(),
+          feedbackSubmitted: true
+        }
+      ]);
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
   };
 
   const handleSend = async () => {
+    // If feedback was submitted, disable further interaction
+    if (feedbackSubmitted) return;
+    
     if (!text.trim()) return;
     
     const userMessage = text;
@@ -224,13 +232,13 @@ export default function App() {
             }
           }}
           className="input"
-          placeholder="Type your message here..."
-          disabled={isLoading}
+          placeholder={feedbackSubmitted ? "Please refresh the page to start a new conversation" : "Type your message here..."}
+          disabled={isLoading || feedbackSubmitted}
         />
         <button 
           className="button" 
           onClick={handleSend} 
-          disabled={isLoading || !text.trim()}
+          disabled={isLoading || !text.trim() || feedbackSubmitted}
         >
           {isLoading ? '...' : 'Send'}
         </button>
