@@ -20,7 +20,6 @@ jobs:
       # remote paths
       REMOTE_APP_DIR: /var/www/tenantfirstaid
       REMOTE_BACKEND_DIR: /var/www/tenantfirstaid/backend
-      REMOTE_FRONTEND_DIR: /var/www/tenantfirstaid/frontend
       SERVICE_NAME: tenantfirstaid-backend
 
     steps:
@@ -45,9 +44,8 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: |
-            ${{ env.BACKEND_DIR }}
-          target: ${{ env.REMOTE_BACKEND_DIR }}
+          source: ${{ env.BACKEND_DIR }}
+          target: ${{ env.REMOTE_APP_DIR }}
           rm: true
 
       - name: Upload frontend code via SCP
@@ -56,9 +54,8 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: |
-            ${{ env.FRONTEND_DIR }}/dist
-          target: ${{ env.REMOTE_FRONTEND_DIR }}/dist
+          source: ${{ env.FRONTEND_DIR }}/dist
+          target: ${{ env.REMOTE_APP_DIR }}
           rm: true
 
       - name: Bootstrap on droplet
