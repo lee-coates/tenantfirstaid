@@ -1,19 +1,15 @@
-# app.py
-import os
 import uuid
 import json
 import datetime
 import asyncio
 from collections import defaultdict
 from dotenv import load_dotenv
-import os
 
 import openai
 import jsonlines
 from flask import Flask, request, stream_with_context, Response, jsonify
 
 load_dotenv(override=True)
-print(os.getenv("OPENAI_API_KEY"))
 MODEL = "gpt-4.1"
 DATA_FILE = "chatlog.jsonl"
 
@@ -29,6 +25,7 @@ CACHE = defaultdict(list)
 
 app = Flask(__name__)
 
+
 def _append_training_example(session_id, user_msg, assistant_msg):
     with jsonlines.open(DATA_FILE, mode="a") as f:
         f.write({
@@ -42,12 +39,14 @@ def _append_training_example(session_id, user_msg, assistant_msg):
             }
         })
 
+
 def _ensure_context(session_id):
     if not CACHE[session_id]:
         CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT})
         CACHE[session_id].append({"role": "assistant", "content": "What are you here for?"})
-    else: 
+    else:
         print("Found an already cached session:", session_id)
+
 
 @app.post("/query")
 def chat():
@@ -76,18 +75,19 @@ def chat():
         CACHE[session_id].append({"role": "assistant", "content": assistant_msg})
         _append_training_example(session_id, user_msg, assistant_msg)
 
-
-
     return Response(stream_with_context(generate()), mimetype="text/plain")
+
 
 @app.get("/history/<session_id>")
 def history(session_id):
     return jsonify(CACHE.get(session_id, []))
 
+
 @app.post("/retrain")
 def retrain():
     asyncio.create_task(_run_pipeline())
     return {"status": "started"}, 202
+
 
 async def _run_pipeline():
     import subprocess
@@ -106,6 +106,7 @@ async def _run_pipeline():
         "-e", "oregon_call_eval",
         "-m", job_id
     ])
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
