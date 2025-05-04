@@ -164,7 +164,7 @@ export default function App() {
                   {message.role === 'bot' && message.content === "" && isLoading ? (
                     <span className="dot-pulse">...</span>
                   ) : (
-                    <span>{message.content}</span>
+                    <span style={{ whiteSpace: 'pre-wrap' }}>{message.content}</span>
                   )}
                 </div>
                 
