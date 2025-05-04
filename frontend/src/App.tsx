@@ -34,7 +34,7 @@ export default function App() {
     setSessionId(generateSessionId());
   }, []);
 
-  const handleFeedback = async (messageId: string, betterText: string) => {
+  const handleFeedback = async (_messageId: string, betterText: string) => {
     if (!betterText.trim()) return;
     
     try {
