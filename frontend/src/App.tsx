@@ -12,26 +12,77 @@ const generateSessionId = (): string => {
          Math.random().toString(36).substring(2, 15);
 };
 
+interface Message {
+  role: "user" | "bot";
+  content: string;
+  messageId: string;
+  showFeedback?: boolean;
+}
+
 export default function App() {
   const [text, setText] = useState("");
-  const [conversationHistory, setConversationHistory] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
+  const [feedbackOpen, setFeedbackOpen] = useState<string | null>(null);
+  const [betterResponse, setBetterResponse] = useState("");
   
   // Initialize session ID when component mounts
   useEffect(() => {
     setSessionId(generateSessionId());
   }, []);
 
+  const handleFeedback = async (messageId: string, betterText: string) => {
+    if (!betterText.trim()) return;
+    
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          better_response: betterText
+        }),
+      });
+      
+      // Close feedback form and reset
+      setFeedbackOpen(null);
+      setBetterResponse("");
+      
+      // Update UI to show feedback was submitted and remove all feedback buttons
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.messageId === messageId 
+            ? {...msg, feedbackSubmitted: true, showFeedback: false} 
+            : {...msg, showFeedback: false}
+        )
+      );
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
+  };
+
   const handleSend = async () => {
     if (!text.trim()) return;
     
     const userMessage = text;
+    const userMessageId = Date.now().toString();
+    const botMessageId = (Date.now() + 1).toString();
+    
     setText("");
     setIsLoading(true);
   
-    // Append user's message once
-    setConversationHistory((prev) => [...prev, `You: ${userMessage}`, "Bot: "]);
+    // Add user message
+    setMessages(prev => [
+      ...prev, 
+      { role: "user", content: userMessage, messageId: userMessageId }
+    ]);
+    
+    // Add empty bot message that will be updated
+    setMessages(prev => [
+      ...prev, 
+      { role: "bot", content: "", messageId: botMessageId, showFeedback: false }
+    ]);
   
     try {
       const res = await fetch("/api/query", {
@@ -51,19 +102,37 @@ export default function App() {
           const chunk = decoder.decode(value);
           fullText += chunk;
     
-          // Update only the last line (the bot's message)
-          setConversationHistory((prev) => [
-            ...prev.slice(0, -1),
-            `Bot: ${fullText}`,
-          ]);
+          // Update only the bot's message
+          setMessages(prev => 
+            prev.map(msg => 
+              msg.messageId === botMessageId 
+                ? {...msg, content: fullText} 
+                : msg
+            )
+          );
         }
+        
+        // Set showFeedback to false for all messages, then true only for the latest bot message
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.role === 'bot' 
+              ? {...msg, showFeedback: msg.messageId === botMessageId} 
+              : msg
+          )
+        );
       }
     } catch (error) {
       console.error('Error:', error);
-      setConversationHistory((prev) => [
-        ...prev.slice(0, -1),
-        "Bot: Sorry, I encountered an error. Please try again.",
-      ]);
+      setMessages(prev => 
+        prev.map(msg => {
+          if (msg.messageId === botMessageId) {
+            return {...msg, content: "Sorry, I encountered an error. Please try again."};
+          } else if (msg.role === 'bot') {
+            return {...msg, showFeedback: false};
+          }
+          return msg;
+        })
+      );
     } finally {
       setIsLoading(false);
     }
@@ -74,18 +143,76 @@ export default function App() {
       <h1 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#4a90e2' }}>
         Tenant First Aid
       </h1>
-      <div className="label">
-        {conversationHistory.length > 0 ? (
-          conversationHistory.map((line, i) => (
-            <p key={i}>{line}</p>
-          ))
+      <div className="conversation">
+        {messages.length > 0 ? (
+          <div className="messages">
+            {messages.map((message) => (
+              <div 
+                key={message.messageId} 
+                className={`message ${message.role === 'bot' ? 'bot-message' : 'user-message'}`}
+              >
+                <div className="message-content">
+                  <strong>{message.role === 'bot' ? 'Bot: ' : 'You: '}</strong>
+                  <span>{message.content}</span>
+                </div>
+                
+                {message.role === 'bot' && message.showFeedback && (
+                  <div className="feedback-section">
+                    {message.feedbackSubmitted ? (
+                      <div className="feedback-submitted">
+                        <span style={{ color: 'green' }}>Thank you for your feedback!</span>
+                      </div>
+                    ) : feedbackOpen === message.messageId ? (
+                      <div className="feedback-form">
+                        <textarea
+                          placeholder="What would be a better response?"
+                          value={betterResponse}
+                          onChange={(e) => setBetterResponse(e.target.value)}
+                          rows={4}
+                          style={{ width: '100%', marginBottom: '8px' }}
+                        />
+                        <div>
+                          <button
+                            onClick={() => handleFeedback(message.messageId, betterResponse)}
+                            disabled={!betterResponse.trim()}
+                            style={{ marginRight: '8px' }}
+                          >
+                            Submit
+                          </button>
+                          <button onClick={() => setFeedbackOpen(null)}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setFeedbackOpen(message.messageId)}
+                        className="thumbs-down"
+                        title="Provide better response"
+                        style={{ 
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '16px',
+                          padding: '4px',
+                          color: '#888'
+                        }}
+                      >
+                        👎 This response could be better
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         ) : (
           <p style={{ textAlign: 'center', color: '#888' }}>
             Ask me anything about tenant rights and assistance.
           </p>
         )}
       </div>
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
         <input
           type="text"
           value={text}

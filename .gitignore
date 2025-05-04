@@ -49,3 +49,8 @@ build/
 
 # Local data
 chatlog.jsonl
+/backend/chatlog.jsonl
+/backend/combined_training.jsonl
+/backend/combined_training_gpt-4.1.jsonl
+/backend/feedback.jsonl
+combined_training_gpt-4_1.jsonl
