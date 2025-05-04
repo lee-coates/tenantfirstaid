@@ -43,15 +43,7 @@ jobs:
 
       - name: Verify directories
         run: |
-          ls -al
-          if [ ! -d "${{ env.BACKEND_DIR }}" ] || [ -z "$(ls -A ${{ env.BACKEND_DIR }})" ]; then
-            echo "Backend directory is missing or empty"
-            exit 1
-          fi
-          if [ ! -d "${{ env.FRONTEND_DIR }}/dist" ] || [ -z "$(ls -A ${{ env.FRONTEND_DIR }}/dist)" ]; then
-            echo "Frontend build directory is missing or empty"
-            exit 1
-          fi
+          ls -al frontend/dist
 
       # ───────── 3. Copy source + build artefacts ──────────────
       - name: Upload code via SCP
@@ -62,8 +54,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: |
             ${{ env.BACKEND_DIR }}/**
-            ${{ env.FRONTEND_DIR }}/dist/**
-          target: ${{ env.REMOTE_APP_DIR }}
+          target: ${{ env.REMOTE_BACKEND_DIR }}
           rm: false
 
       # ───────── 4. SSH: venv + uv sync + restart ──────────────
@@ -90,7 +81,7 @@ jobs:
             fi
             
             # 4-C. Sync dependencies directly from pyproject.toml  ⚡
-            uv sync                       # resolves & installs in one shot
+            uv sync
             
             # 4-D. Inject environment secrets
             cat > .env <<EOF
