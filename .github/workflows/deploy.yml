@@ -19,7 +19,6 @@ jobs:
       FRONTEND_DIR: frontend
       # remote paths
       REMOTE_APP_DIR: /var/www/tenantfirstaid
-      REMOTE_BACKEND_DIR: /var/www/tenantfirstaid/backend
       SERVICE_NAME: tenantfirstaid-backend
 
     steps:
@@ -66,7 +65,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            cd $REMOTE_BACKEND_DIR
+            ls -al
+            cd $REMOTE_APP_DIR/backend/
             
             # Install uv (fast installer from Astral) if it isn't there
             if ! command -v uv >/dev/null 2>&1; then
@@ -75,6 +75,7 @@ jobs:
             fi
             
             # Sync dependencies directly from pyproject.toml
+            ls -al
             uv sync
             
             # Inject environment secrets
