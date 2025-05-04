@@ -41,6 +41,18 @@ jobs:
           npm ci
           npm run build
 
+      - name: Verify directories
+        run: |
+          ls -al
+          if [ ! -d "${{ env.BACKEND_DIR }}" ] || [ -z "$(ls -A ${{ env.BACKEND_DIR }})" ]; then
+            echo "Backend directory is missing or empty"
+            exit 1
+          fi
+          if [ ! -d "${{ env.FRONTEND_DIR }}/dist" ] || [ -z "$(ls -A ${{ env.FRONTEND_DIR }}/dist)" ]; then
+            echo "Frontend build directory is missing or empty"
+            exit 1
+          fi
+
       # ───────── 3. Copy source + build artefacts ──────────────
       - name: Upload code via SCP
         uses: appleboy/scp-action@v0.1.7
