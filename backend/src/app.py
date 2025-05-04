@@ -48,7 +48,7 @@ def _ensure_context(session_id):
         print("Found an already cached session:", session_id)
 
 
-@app.post("/query")
+@app.post("/api/query")
 def chat():
     data = request.json
     session_id = data.get("session_id") or str(uuid.uuid4())
@@ -75,12 +75,12 @@ def chat():
     return Response(stream_with_context(generate()), mimetype="text/plain")
 
 
-@app.get("/history/<session_id>")
+@app.get("/api/history/<session_id>")
 def history(session_id):
     return jsonify(CACHE.get(session_id, []))
 
 
-@app.post("/retrain")
+@app.post("/api/retrain")
 def retrain():
     asyncio.create_task(_run_pipeline())
     return {"status": "started"}, 202
