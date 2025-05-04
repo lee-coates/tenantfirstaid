@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: |
-            ${{ env.BACKEND_DIR }}/**
+            ${{ env.BACKEND_DIR }}
           target: ${{ env.REMOTE_BACKEND_DIR }}
           rm: true
 
@@ -57,8 +57,8 @@ jobs:
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: |
-            ${{ env.FRONTEND_DIR }}/dist/**
-          target: ${{ env.REMOTE_FRONTEND_DIR }}
+            ${{ env.FRONTEND_DIR }}/dist
+          target: ${{ env.REMOTE_FRONTEND_DIR }}/dist
           rm: true
 
       - name: Bootstrap on droplet
