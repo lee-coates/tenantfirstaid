@@ -65,8 +65,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            ls -al
-            cd $REMOTE_APP_DIR/backend/
+            
+            # Unfortunately, we need to hardcode the path
+            cd /var/www/tenantfirstaid/backend/
             
             # Install uv (fast installer from Astral) if it isn't there
             if ! command -v uv >/dev/null 2>&1; then
@@ -75,7 +76,6 @@ jobs:
             fi
             
             # Sync dependencies directly from pyproject.toml
-            ls -al
             uv sync
             
             # Inject environment secrets
