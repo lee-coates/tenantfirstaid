@@ -24,10 +24,8 @@ jobs:
       SERVICE_NAME: tenantfirstaid-backend
 
     steps:
-      # ───────── 1. Checkout ───────────────────────────────────
       - uses: actions/checkout@v4
 
-      # ───────── 2. Build React SPA ────────────────────────────
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -41,12 +39,7 @@ jobs:
           npm ci
           npm run build
 
-      - name: Verify directories
-        run: |
-          ls -al frontend/dist
-
-      # ───────── 3. Copy source + build artefacts ──────────────
-      - name: Upload code via SCP
+      - name: Upload backend code via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DO_HOST }}
@@ -55,9 +48,19 @@ jobs:
           source: |
             ${{ env.BACKEND_DIR }}/**
           target: ${{ env.REMOTE_BACKEND_DIR }}
-          rm: false
+          rm: true
 
-      # ───────── 4. SSH: venv + uv sync + restart ──────────────
+      - name: Upload frontend code via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: |
+            ${{ env.FRONTEND_DIR }}/dist/**
+          target: ${{ env.REMOTE_FRONTEND_DIR }}
+          rm: true
+
       - name: Bootstrap on droplet
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -68,28 +71,22 @@ jobs:
             set -e
             cd $REMOTE_BACKEND_DIR
             
-            # 4-A. Create venv once
-            if [ ! -d venv ]; then
-              python3 -m venv venv
-            fi
-            source venv/bin/activate
-            
-            # 4-B. Install uv (fast installer from Astral) if it isn't there
+            # Install uv (fast installer from Astral) if it isn't there
             if ! command -v uv >/dev/null 2>&1; then
               curl -LsSf https://astral.sh/uv/install.sh | sh
               export PATH="$HOME/.local/bin:$PATH"
             fi
             
-            # 4-C. Sync dependencies directly from pyproject.toml  ⚡
+            # Sync dependencies directly from pyproject.toml
             uv sync
             
-            # 4-D. Inject environment secrets
+            # Inject environment secrets
             cat > .env <<EOF
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             EOF
             chmod 600 .env
             
-            # 4-E. Ownership, restart, reload
+            # Ownership, restart, reload
             sudo chown -R $USER:www-data $REMOTE_APP_DIR
             sudo systemctl restart $SERVICE_NAME
             sudo systemctl reload nginx
