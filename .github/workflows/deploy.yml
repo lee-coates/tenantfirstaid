@@ -65,9 +65,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            
-            # Unfortunately, we need to hardcode the path
-            cd /var/www/tenantfirstaid/backend/
+            cd ${{ env.REMOTE_APP_DIR }}/backend/
             
             # Install uv (fast installer from Astral) if it isn't there
             if ! command -v uv >/dev/null 2>&1; then
@@ -85,6 +83,6 @@ jobs:
             chmod 600 .env
             
             # Ownership, restart, reload
-            sudo chown -R $USER:www-data $REMOTE_APP_DIR
-            sudo systemctl restart $SERVICE_NAME
+            sudo chown -R $USER:www-data ${{ env.REMOTE_APP_DIR }}
+            sudo systemctl restart ${{ env.SERVICE_NAME }}
             sudo systemctl reload nginx
