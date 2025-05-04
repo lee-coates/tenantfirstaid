@@ -1,12 +1,10 @@
 import uuid
-import json
 import datetime
-import asyncio
 import os
 from collections import defaultdict
 from dotenv import load_dotenv
 
-import openai
+from openai import OpenAI
 import jsonlines
 from flask import Flask, request, stream_with_context, Response, jsonify
 
@@ -28,6 +26,9 @@ SYSTEM_PROMPT = (
     "in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. "
 )
 
+# Initialize OpenAI client
+client = OpenAI()
+
 CACHE = defaultdict(list)
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
 
@@ -48,20 +49,41 @@ def _append_training_example(session_id, user_msg, assistant_msg):
         })
 
 
-def _ensure_context(session_id):
-    if not CACHE[session_id]:
-        CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT})
-    else:
-        print("Found an already cached session:", session_id)
-
-
 @app.post("/api/query")
 def chat():
     data = request.json
     session_id = data.get("session_id") or str(uuid.uuid4())
     user_msg = data["message"]
     message_id = data.get("message_id") or str(uuid.uuid4())
-    _ensure_context(session_id)
+    
+    # Initialize new sessions with system prompt
+    if not CACHE[session_id]:
+        CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT})
+    
+    # Format messages for the new Responses API
+    input_messages = []
+    
+    # Add system prompt
+    if CACHE[session_id] and CACHE[session_id][0]["role"] == "system":
+        input_messages.append({
+            "role": "system",
+            "content": CACHE[session_id][0]["content"]
+        })
+    
+    # Add conversation history (excluding system prompt)
+    for msg in CACHE[session_id][1:]:
+        input_messages.append({
+            "role": msg["role"],
+            "content": msg["content"]
+        })
+    
+    # Add current user message
+    input_messages.append({
+        "role": "user",
+        "content": user_msg
+    })
+    
+    # Update our cache with the user message
     CACHE[session_id].append({"role": "user", "content": user_msg})
     
     # Store user message in MESSAGE_CACHE with message_id
@@ -70,26 +92,35 @@ def chat():
     MESSAGE_CACHE[session_id][message_id] = {"role": "user", "content": user_msg}
 
     def generate():
-        resp = openai.chat.completions.create(
-            model=MODEL,
-            messages=CACHE[session_id],
-            stream=True
-        )
-        assistant_chunks = []
-        for chunk in resp:
-            token = chunk.choices[0].delta.content or ""
-            assistant_chunks.append(token)
-            yield token
+        try:
+            # Use the new Responses API with streaming
+            response_stream = client.responses.create(
+                model=MODEL,
+                input=input_messages,
+                stream=True
+            )
 
-        assistant_msg = "".join(assistant_chunks)
-        CACHE[session_id].append({"role": "assistant", "content": assistant_msg})
+            assistant_chunks = []
+            for chunk in response_stream:
+                if hasattr(chunk, 'text'):
+                    token = chunk.text or ""
+                    assistant_chunks.append(token)
+                    yield token
 
-        # Generate a response message ID and store in cache
-        response_id = str(uuid.uuid4())
-        MESSAGE_CACHE[session_id][response_id] = {"role": "assistant", "content": assistant_msg}
+            # Join the complete response
+            assistant_msg = "".join(assistant_chunks)
+            CACHE[session_id].append({"role": "assistant", "content": assistant_msg})
 
-        # Add this as a training example
-        _append_training_example(session_id, user_msg, assistant_msg)
+            # Generate a response message ID and store in cache
+            response_id = str(uuid.uuid4())
+            MESSAGE_CACHE[session_id][response_id] = {"role": "assistant", "content": assistant_msg}
+
+            # Add this as a training example
+            _append_training_example(session_id, user_msg, assistant_msg)
+            
+        except Exception as e:
+            print(f"Error generating response: {e}")
+            yield f"Error: {str(e)}"
 
     return Response(stream_with_context(generate()), mimetype="text/plain")
 
