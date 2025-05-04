@@ -166,7 +166,7 @@ export default function App() {
                 
                 {message.role === 'bot' && message.showFeedback && (
                   <div className="feedback-section">
-                    {message.feedbackSubmitted ? (
+                    {message.feedbackSubmitted === true ? (
                       <div className="feedback-submitted">
                         <span style={{ color: 'green' }}>Thank you for your feedback!</span>
                       </div>
