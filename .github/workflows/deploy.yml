@@ -44,7 +44,7 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: ${{ env.BACKEND_DIR }}
+          source: ${{ env.BACKEND_DIR }}/
           target: ${{ env.REMOTE_APP_DIR }}
           rm: true
 
