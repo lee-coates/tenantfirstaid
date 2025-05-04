@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Generate a random session ID
+const generateSessionId = (): string => {
+  // Use crypto API if available for better randomness
+  if (window.crypto && 'randomUUID' in window.crypto) {
+    return window.crypto.randomUUID();
+  }
+  
+  // Fallback to a simple random string
+  return Math.random().toString(36).substring(2, 15) + 
+         Math.random().toString(36).substring(2, 15);
+};
 
 export default function App() {
   const [text, setText] = useState("");
   const [conversationHistory, setConversationHistory] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string>("");
+  
+  // Initialize session ID when component mounts
+  useEffect(() => {
+    setSessionId(generateSessionId());
+  }, []);
 
   const handleSend = async () => {
     if (!text.trim()) return;
@@ -19,7 +37,7 @@ export default function App() {
       const res = await fetch("/api/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, session_id: 1 }),
+        body: JSON.stringify({ message: userMessage, session_id: sessionId }),
       });
     
       const reader = res.body?.getReader();
