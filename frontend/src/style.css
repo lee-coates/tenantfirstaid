@@ -70,3 +70,15 @@ body {
   .button:hover {
     background: #3a7bc8;
   }
+  
+  .dot-pulse {
+    display: inline-block;
+    position: relative;
+    animation: dotPulse 1.5s infinite linear;
+  }
+  
+  @keyframes dotPulse {
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+  }

@@ -11,7 +11,7 @@ import jsonlines
 from flask import Flask, request, stream_with_context, Response, jsonify
 
 load_dotenv(override=True)
-MODEL = "gpt-4.1"
+MODEL = "o3"
 DATA_FILE = "chatlog.jsonl"
 FEEDBACK_FILE = "feedback.jsonl"
 

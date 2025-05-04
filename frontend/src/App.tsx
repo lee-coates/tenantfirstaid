@@ -161,7 +161,11 @@ export default function App() {
               >
                 <div className="message-content">
                   <strong>{message.role === 'bot' ? 'Bot: ' : 'You: '}</strong>
-                  <span>{message.content}</span>
+                  {message.role === 'bot' && message.content === "" && isLoading ? (
+                    <span className="dot-pulse">...</span>
+                  ) : (
+                    <span>{message.content}</span>
+                  )}
                 </div>
                 
                 {message.role === 'bot' && message.showFeedback && (
@@ -220,7 +224,7 @@ export default function App() {
           </p>
         )}
       </div>
-      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', alignItems: 'stretch' }}>
         <input
           type="text"
           value={text}
@@ -232,6 +236,7 @@ export default function App() {
             }
           }}
           className="input"
+          style={{ margin: 0 }}
           placeholder={feedbackSubmitted ? "Please refresh the page to start a new conversation" : "Type your message here..."}
           disabled={isLoading || feedbackSubmitted}
         />
