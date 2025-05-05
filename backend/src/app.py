@@ -9,7 +9,7 @@ import jsonlines
 from flask import Flask, request, stream_with_context, Response, jsonify
 
 load_dotenv(override=True)
-MODEL = "o3"
+MODEL = "gpt-4o"
 DATA_FILE = "chatlog.jsonl"
 FEEDBACK_FILE = "feedback.jsonl"
 
@@ -97,7 +97,7 @@ def chat():
             response_stream = client.responses.create(
                 model=MODEL,
                 input=input_messages,
-                reasoning={"effort": "high"},
+                # reasoning={"effort": "high"},
                 stream=True
             )
 
