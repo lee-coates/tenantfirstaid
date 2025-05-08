@@ -97,7 +97,7 @@ def chat():
             response_stream = client.responses.create(
                 model=MODEL,
                 input=input_messages,
-                reasoning={"effort": "high"},
+                reasoning={"effort": "medium"},
                 stream=True
             )
 
