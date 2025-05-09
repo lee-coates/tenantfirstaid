@@ -4,7 +4,7 @@ A chatbot that provides legal advice related to housing and eviction
 
 ## Local Development
 
-1. copy `.env.example` to a new file named `.env` in the same directory and populate it with your `OPENAI_API_KEY`.
+1. copy `backend/.env.example` to a new file named `.env` in the same directory and populate it with your `OPENAI_API_KEY`.
 2. cd backend
 3. brew install uv
 4. uv sync
