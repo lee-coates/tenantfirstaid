@@ -6,6 +6,7 @@ After=network.target
 User=root
 Group=root
 WorkingDirectory=/var/www/tenantfirstaid/backend
+EnvironmentFile=/etc/tenantfirstaid/env
 
 # ── main line ─────────────────────────────────────────────
 ExecStart=/root/.local/bin/uv run --no-sync gunicorn -w 1 -b unix:/run/tenantfirstaid.sock tenantfirstaid.app:app

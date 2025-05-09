@@ -1,11 +1,9 @@
-from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 
 from .chat import chat
 from .shared import CACHE
 from .submit_feedback import submit_feedback
 from .get_feedback import get_feedback
-load_dotenv(override=True)
 
 app = Flask(__name__)
 
