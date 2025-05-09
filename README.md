@@ -1,7 +1,8 @@
 # Tenant First Aid
 
-Live at https://tenantfirstaid.com/
 A chatbot that provides legal advice related to housing and eviction
+
+Live at https://tenantfirstaid.com/
 
 ## Local Development
 
