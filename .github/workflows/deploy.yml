@@ -83,7 +83,7 @@ jobs:
             cat > /etc/tenantfirstaid/env <<EOF
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             EOF
-            chmod 600 /etc/tenantfirstaid/env
+            chmod 640 /etc/tenantfirstaid/env
             
             # Ownership, restart, reload
             sudo chown -R $USER:www-data ${{ env.REMOTE_APP_DIR }}
