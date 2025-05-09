@@ -5,7 +5,7 @@ from openai import OpenAI
 import jsonlines
 from flask import request, stream_with_context, Response, jsonify
 
-from shared import CACHE
+from .shared import CACHE
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
 MODEL = "o3"

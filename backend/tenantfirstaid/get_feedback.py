@@ -2,7 +2,7 @@ import jsonlines
 from collections import defaultdict
 from flask import jsonify, request
 import os
-from shared import FEEDBACK_FILE
+from .shared import FEEDBACK_FILE
 
 PASSWORD = os.getenv("FEEDBACK_PASSWORD")
 
