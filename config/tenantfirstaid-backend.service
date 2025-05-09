@@ -8,7 +8,7 @@ Group=root
 WorkingDirectory=/var/www/tenantfirstaid/backend
 
 # ── main line ─────────────────────────────────────────────
-ExecStart=/root/.local/bin/uv run --no-sync gunicorn -w 3 -b unix:/run/tenantfirstaid.sock src.app:app
+ExecStart=/root/.local/bin/uv run --no-sync gunicorn -w 1 -b unix:/run/tenantfirstaid.sock tenantfirstaid.app:app
 
 Restart=on-failure
 KillSignal=SIGQUIT
