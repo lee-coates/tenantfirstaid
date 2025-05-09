@@ -148,6 +148,12 @@ export default function FeedbackGate() {
             type="password"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // prevent form submission or newline
+                handleSubmit();
+              }
+            }}
           />
         </label>
         <button className="button" onClick={handleSubmit}>

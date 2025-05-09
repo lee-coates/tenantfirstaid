@@ -4,8 +4,13 @@ import datetime
 from openai import OpenAI
 import jsonlines
 from flask import request, stream_with_context, Response, jsonify
+import os
+from pathlib import Path
+from .shared import CACHE, SYSTEM_PROMPT
 
-from .shared import CACHE
+if Path(".env").exists():
+     from dotenv import load_dotenv
+     load_dotenv(override=True)
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
 MODEL = "o3"
@@ -18,22 +23,18 @@ client = OpenAI()
 # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
 
 
-SYSTEM_PROMPT = (
-    "Pretend you're a lawyer who giving advice about eviction notices in Oregon. "
-    "Please give shorter answers. Please only ask one question at a time so that the user isn't confused. "
-    "If the user is being evicted for non-payment of rent and they are too poor to pay the rent and you have confirmed "
-    "in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. "
-)
 
 def chat():
     data = request.json
     session_id = data.get("session_id") or str(uuid.uuid4())
     user_msg = data["message"]
     message_id = data.get("message_id") or str(uuid.uuid4())
-    
+    print('SYSTEM_PROMPT["prompt"]', SYSTEM_PROMPT["prompt"])
+    print("os.getenv('OPENAI_API_KEY')", os.getenv("OPENAI_API_KEY"))
+
     # Initialize new sessions with system prompt
     if not CACHE[session_id]:
-        CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT})
+        CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT["prompt"]})
     
     # Format messages for the new Responses API
     input_messages = []
@@ -85,6 +86,7 @@ def chat():
 
             # Join the complete response
             assistant_msg = "".join(assistant_chunks)
+            print("assistant_msg", assistant_msg)
             CACHE[session_id].append({"role": "assistant", "content": assistant_msg})
 
             # Generate a response message ID and store in cache

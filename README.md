@@ -4,6 +4,8 @@ A chatbot that provides legal advice related to housing and eviction
 
 ## Local Development
 
+2. create a .env file in `backend/`. Populate it with `OPENAI_API_KEY=XXXX`
+
 1. cd backend
 2. brew install uv
 3. uv sync
