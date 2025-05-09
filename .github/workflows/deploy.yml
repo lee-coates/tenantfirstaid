@@ -77,6 +77,9 @@ jobs:
             uv sync
             
             # Inject environment secrets
+            sudo mkdir -p /etc/tenantfirstaid
+            sudo chmod 750 /etc/tenantfirstaid
+            sudo chown root:root /etc/tenantfirstaid
             cat > /etc/tenantfirstaid/env <<EOF
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             EOF
