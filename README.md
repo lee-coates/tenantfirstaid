@@ -7,7 +7,7 @@ A chatbot that provides legal advice related to housing and eviction
 1. cd backend
 2. brew install uv
 3. uv sync
-4. uv run python ./src/app.py 
+4. uv run python -m tenantfirstaid.app
 4. (in another terminal) cd ../frontend
 5. npm install
 6. npm run dev
