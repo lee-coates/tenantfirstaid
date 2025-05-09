@@ -9,8 +9,9 @@ from pathlib import Path
 from .shared import CACHE, SYSTEM_PROMPT
 
 if Path(".env").exists():
-     from dotenv import load_dotenv
-     load_dotenv(override=True)
+    from dotenv import load_dotenv
+
+    load_dotenv(override=True)
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
 MODEL = "o3"
@@ -21,7 +22,6 @@ client = OpenAI()
 
 # Prompt iteration idea
 # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
-
 
 
 def chat():
@@ -35,33 +35,26 @@ def chat():
     # Initialize new sessions with system prompt
     if not CACHE[session_id]:
         CACHE[session_id].append({"role": "system", "content": SYSTEM_PROMPT["prompt"]})
-    
+
     # Format messages for the new Responses API
     input_messages = []
-    
+
     # Add system prompt
     if CACHE[session_id] and CACHE[session_id][0]["role"] == "system":
-        input_messages.append({
-            "role": "system",
-            "content": CACHE[session_id][0]["content"]
-        })
-    
+        input_messages.append(
+            {"role": "system", "content": CACHE[session_id][0]["content"]}
+        )
+
     # Add conversation history (excluding system prompt)
     for msg in CACHE[session_id][1:]:
-        input_messages.append({
-            "role": msg["role"],
-            "content": msg["content"]
-        })
-    
+        input_messages.append({"role": msg["role"], "content": msg["content"]})
+
     # Add current user message
-    input_messages.append({
-        "role": "user",
-        "content": user_msg
-    })
-    
+    input_messages.append({"role": "user", "content": user_msg})
+
     # Update our cache with the user message
     CACHE[session_id].append({"role": "user", "content": user_msg})
-    
+
     # Store user message in MESSAGE_CACHE with message_id
     if session_id not in MESSAGE_CACHE:
         MESSAGE_CACHE[session_id] = {}
@@ -74,12 +67,12 @@ def chat():
                 model=MODEL,
                 input=input_messages,
                 reasoning={"effort": "medium"},
-                stream=True
+                stream=True,
             )
 
             assistant_chunks = []
             for chunk in response_stream:
-                if hasattr(chunk, 'text'):
+                if hasattr(chunk, "text"):
                     token = chunk.text or ""
                     assistant_chunks.append(token)
                     yield token
@@ -91,11 +84,14 @@ def chat():
 
             # Generate a response message ID and store in cache
             response_id = str(uuid.uuid4())
-            MESSAGE_CACHE[session_id][response_id] = {"role": "assistant", "content": assistant_msg}
+            MESSAGE_CACHE[session_id][response_id] = {
+                "role": "assistant",
+                "content": assistant_msg,
+            }
 
             # Add this as a training example
             _append_training_example(session_id, user_msg, assistant_msg)
-            
+
         except Exception as e:
             print(f"Error generating response: {e}")
             yield f"Error: {str(e)}"
@@ -105,13 +101,15 @@ def chat():
 
 def _append_training_example(session_id, user_msg, assistant_msg):
     with jsonlines.open(DATA_FILE, mode="a") as f:
-        f.write({
-            "messages": [
-                {"role": "user", "content": user_msg},
-                {"role": "assistant", "content": assistant_msg}
-            ],
-            "metadata": {
-                "session_id": session_id,
-                "ts": datetime.datetime.utcnow().isoformat()
+        f.write(
+            {
+                "messages": [
+                    {"role": "user", "content": user_msg},
+                    {"role": "assistant", "content": assistant_msg},
+                ],
+                "metadata": {
+                    "session_id": session_id,
+                    "ts": datetime.datetime.utcnow().isoformat(),
+                },
             }
-        })
+        )

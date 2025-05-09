@@ -11,6 +11,6 @@ DEFAULT_PROMPT = (
     "in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. "
 )
 
-SYSTEM_PROMPT = {"prompt":DEFAULT_PROMPT}
+SYSTEM_PROMPT = {"prompt": DEFAULT_PROMPT}
 
 PASSWORD = os.getenv("FEEDBACK_PASSWORD")
