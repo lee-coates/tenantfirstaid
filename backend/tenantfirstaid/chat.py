@@ -6,7 +6,7 @@ import jsonlines
 from flask import request, stream_with_context, Response, jsonify
 import os
 from pathlib import Path
-from .shared import CACHE, SYSTEM_PROMPT
+from .shared import CACHE, SYSTEM_PROMPT, DATA_DIR
 
 if Path(".env").exists():
     from dotenv import load_dotenv
@@ -15,7 +15,7 @@ if Path(".env").exists():
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
 MODEL = "gpt-4.1"
-DATA_FILE = "chatlog.jsonl"
+DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
 client = OpenAI()
 
@@ -100,6 +100,9 @@ def chat():
 
 
 def _append_training_example(session_id, user_msg, assistant_msg):
+    # Ensure the parent directory exists
+    DATA_FILE.parent.mkdir(exist_ok=True)
+
     with jsonlines.open(DATA_FILE, mode="a") as f:
         f.write(
             {

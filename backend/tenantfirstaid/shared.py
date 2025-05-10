@@ -1,8 +1,14 @@
 from collections import defaultdict
 import os
+from pathlib import Path
 
 CACHE = defaultdict(list)
-FEEDBACK_FILE = "feedback.jsonl"
+
+# Create a dedicated directory for persistent data in root's home directory
+DATA_DIR = Path("/root/tenantfirstaid_data")
+DATA_DIR.mkdir(exist_ok=True)
+
+FEEDBACK_FILE = DATA_DIR / "feedback.jsonl"
 
 DEFAULT_PROMPT = (
     "Pretend you're a lawyer who giving advice about eviction notices in Oregon. "

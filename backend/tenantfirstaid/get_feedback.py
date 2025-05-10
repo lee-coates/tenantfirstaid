@@ -2,7 +2,7 @@ import jsonlines
 from collections import defaultdict
 from flask import jsonify, request
 import os
-from .shared import FEEDBACK_FILE, PASSWORD
+from .shared import FEEDBACK_FILE, PASSWORD, DATA_DIR
 
 
 def get_feedback():

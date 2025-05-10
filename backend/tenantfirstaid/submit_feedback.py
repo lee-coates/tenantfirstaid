@@ -3,13 +3,10 @@ import os
 import jsonlines
 import datetime
 
-from .shared import CACHE, FEEDBACK_FILE
+from .shared import CACHE, FEEDBACK_FILE, DATA_DIR
 
-# Ensure feedback directory exists
-os.makedirs(
-    os.path.dirname(FEEDBACK_FILE) if os.path.dirname(FEEDBACK_FILE) else ".",
-    exist_ok=True,
-)
+# Ensure data directory exists
+DATA_DIR.mkdir(exist_ok=True, parents=True)
 
 
 def submit_feedback():
