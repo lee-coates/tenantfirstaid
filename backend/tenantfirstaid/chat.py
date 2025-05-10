@@ -14,7 +14,7 @@ if Path(".env").exists():
     load_dotenv(override=True)
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
-MODEL = "gpt-4.1"
+MODEL = "o3"
 DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
 client = OpenAI()
@@ -66,8 +66,8 @@ def chat():
             response_stream = client.responses.create(
                 model=MODEL,
                 input=input_messages,
+                reasoning={"effort": "high"},
                 stream=True,
-                timeout=120.0,  # 2 minutes timeout
             )
 
             assistant_chunks = []
