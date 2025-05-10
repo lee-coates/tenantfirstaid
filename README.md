@@ -6,7 +6,7 @@ Live at https://tenantfirstaid.com/
 
 ## Local Development
 
-1. copy `backend/.env.example` to a new file named `.env` in the same directory and populate it with your `OPENAI_API_KEY`.
+1. copy `backend/.env.example` to a new file named `.env` in the same directory and populate it with your `OPENAI_API_KEY`. You can set an invalid key, in which case the bot will return error messages. This may still be useful for developing other features.
 2. cd backend
 3. brew install uv
 4. uv sync
