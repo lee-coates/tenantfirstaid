@@ -17,6 +17,10 @@ Live at https://tenantfirstaid.com/
 9. Go to http://localhost:5173
 10. Start chatting
 
+## Contributing
+
+We currently have regular project meetups: https://www.meetup.com/codepdx/ . Also check out https://www.codepdx.org/ to find our Discord server.
+
 ## Remote server setup
 On DO, we:
 1. added our ssh public keys
