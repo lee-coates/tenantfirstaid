@@ -14,7 +14,7 @@ if Path(".env").exists():
     load_dotenv(override=True)
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
-MODEL = "o3"
+MODEL = "gpt-4.1"
 DATA_FILE = "chatlog.jsonl"
 
 client = OpenAI()
@@ -66,7 +66,6 @@ def chat():
             response_stream = client.responses.create(
                 model=MODEL,
                 input=input_messages,
-                reasoning={"effort": "medium"},
                 stream=True,
             )
 
