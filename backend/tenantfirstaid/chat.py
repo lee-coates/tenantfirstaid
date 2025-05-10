@@ -67,6 +67,7 @@ def chat():
                 model=MODEL,
                 input=input_messages,
                 stream=True,
+                timeout=120.0,  # 2 minutes timeout
             )
 
             assistant_chunks = []
