@@ -12,15 +12,12 @@
         window.DD_RUM && window.DD_RUM.init({
             clientToken: 'pub14aa0f102cb53f847ac602ce8c2e14b2',
             applicationId: '51dade6d-207e-4a25-b659-fbbbe95a48b6',
-            // `site` refers to the Datadog site parameter of your organization
-            // see https://docs.datadoghq.com/getting_started/site/
             site: 'us5.datadoghq.com',
             service: 'tenant-first-aid',
             env: 'prod',
-            // Specify a version number to identify the deployed version of your application in Datadog
-            // version: '1.0.0',
+            version: '1.0.0',
             sessionSampleRate: 100,
-            sessionReplaySampleRate: 20,
+            sessionReplaySampleRate: 100,
             defaultPrivacyLevel: 'allow',
         });
     </script>
