@@ -7,6 +7,8 @@ User=root
 Group=root
 WorkingDirectory=/var/www/tenantfirstaid/backend
 EnvironmentFile=/etc/tenantfirstaid/env
+Environment=DD_SERVICE=tenant-first-aid
+Environment=DD_ENV=prod
 
 # ── main line ─────────────────────────────────────────────
 ExecStart=/root/.local/bin/uv run --no-sync gunicorn -w 1 -b unix:/run/tenantfirstaid.sock tenantfirstaid.app:app
