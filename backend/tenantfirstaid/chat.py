@@ -14,10 +14,16 @@ if Path(".env").exists():
     load_dotenv(override=True)
 
 MESSAGE_CACHE = {}  # Store message content by session_id and message_id
-MODEL = "o3"
 DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
-client = OpenAI()
+API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
+BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
+MODEL = os.getenv("MODEL_NAME", "o3")
+
+client = OpenAI(
+    api_key=API_KEY,
+    base_url=BASE_URL,
+)
 
 
 # Prompt iteration idea
@@ -31,6 +37,8 @@ def chat():
     message_id = data.get("message_id") or str(uuid.uuid4())
     print('SYSTEM_PROMPT["prompt"]', SYSTEM_PROMPT["prompt"])
     print("os.getenv('OPENAI_API_KEY')", os.getenv("OPENAI_API_KEY"))
+    print("os.getenv('MODEL_ENDPOINT')", os.getenv("MODEL_ENDPOINT"))
+    print("os.getenv('MODEL_NAME')", os.getenv("MODEL_NAME"))
 
     # Initialize new sessions with system prompt
     if not CACHE[session_id]:

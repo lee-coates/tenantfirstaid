@@ -10,7 +10,7 @@ if Path(".env").exists():
 
     load_dotenv(override=True)
 
-DATA_DIR = Path(os.getenv("PERSISTENT_STORAGE_DIR") or "/root/tenantfirstaid_data")
+DATA_DIR = Path(os.getenv("PERSISTENT_STORAGE_DIR", "/root/tenantfirstaid_data"))
 DATA_DIR.mkdir(exist_ok=True)
 
 FEEDBACK_FILE = DATA_DIR / "feedback.jsonl"
