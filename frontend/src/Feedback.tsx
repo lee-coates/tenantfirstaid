@@ -25,24 +25,19 @@ function FeedbackContent({ feedbackData }: Props) {
   );
 
   return (
-    <div style={{ display: "flex", gap: "2rem" }}>
+    <div className="flex gap-8">
       {/* Prompt list */}
-      <div style={{ width: "300px", overflowY: "auto" }}>
+      <div className="w-[300px] overflow-y-auto">
         <h3>Prompts</h3>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="p-0 list-none">
           {feedbackData.map((entry, index) => (
             <li
               key={index}
-              style={{
-                cursor: "pointer",
-                padding: "0.5rem",
-                background:
-                  selectedPromptIndex === index ? "#eee" : "transparent",
-                whiteSpace: "normal",
-                overflowWrap: "anywhere",
-                wordBreak: "break-word",
-                display: "block", // not inline or flex
-              }}
+              className={`cursor-pointer p-2 whitespace-normal wrap-anywhere break-all block
+                ${
+                  selectedPromptIndex === index ? "bg-[#eee]" : "bg-transparent"
+                }
+                `}
               onClick={() => setSelectedPromptIndex(index)}
             >
               {entry.prompt}
@@ -52,20 +47,13 @@ function FeedbackContent({ feedbackData }: Props) {
       </div>
 
       {/* Conversations */}
-      <div style={{ flex: 1 }}>
+      <div className="flex-1">
         <h3>Conversations</h3>
         {selectedPromptIndex === null ? (
           <p>Select a prompt to view conversations.</p>
         ) : (
           feedbackData[selectedPromptIndex].conversations.map((conv, i) => (
-            <div
-              key={i}
-              style={{
-                marginBottom: "1rem",
-                borderBottom: "1px solid #ccc",
-                paddingBottom: "0.5rem",
-              }}
-            >
+            <div key={i} className="mb-4 border-b-1 border-[#ccc] pb-2">
               <div>
                 <strong>Conversation:</strong>{" "}
                 {conv.conversation
@@ -145,6 +133,7 @@ export default function FeedbackGate() {
         <label>
           Password:
           <input
+            className="border-1"
             type="password"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -156,7 +145,10 @@ export default function FeedbackGate() {
             }}
           />
         </label>
-        <button className="button" onClick={handleSubmit}>
+        <button
+          className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>
