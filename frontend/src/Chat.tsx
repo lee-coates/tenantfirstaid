@@ -32,7 +32,7 @@ export default function Chat() {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // initialize session id when component mounts
+  // Initialize session ID when component mounts
   useEffect(() => {
     const cachedSessionId = localStorage.getItem("sessionId");
     if (cachedSessionId === null) {
