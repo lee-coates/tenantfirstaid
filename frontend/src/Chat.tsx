@@ -164,14 +164,8 @@ export default function Chat() {
 
   return (
     <div className="container">
-      <h1
-        style={{
-          textAlign: "center",
-          marginBottom: "1.5rem",
-          color: "#4a90e2",
-        }}
-      >
-        Tenant First Aid
+      <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
+        <strong>Tenant First Aid</strong>
       </h1>
       <div className="conversation">
         {messages.length > 0 ? (
@@ -190,7 +184,7 @@ export default function Chat() {
                   isLoading ? (
                     <span className="dot-pulse">...</span>
                   ) : (
-                    <span style={{ whiteSpace: "pre-wrap" }}>
+                    <span className="whitespace-pre-wrap">
                       {message.content}
                     </span>
                   )}
@@ -200,30 +194,33 @@ export default function Chat() {
                   <div className="feedback-section">
                     {message.feedbackSubmitted === true ? (
                       <div className="feedback-submitted">
-                        <span style={{ color: "green" }}>
+                        <span className="text-green-700">
                           Thank you for your feedback!
                         </span>
                       </div>
                     ) : feedbackOpen === message.messageId ? (
                       <div className="feedback-form">
                         <textarea
+                          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
                           placeholder="Describe the preferred behavior"
                           value={betterResponse}
                           onChange={(e) => setBetterResponse(e.target.value)}
                           rows={4}
-                          style={{ width: "100%", marginBottom: "8px" }}
                         />
-                        <div>
+                        <div className="flex gap-2">
                           <button
+                            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
                             onClick={() =>
                               handleFeedback(message.messageId, betterResponse)
                             }
                             disabled={!betterResponse.trim()}
-                            style={{ marginRight: "8px" }}
                           >
                             Submit
                           </button>
-                          <button onClick={() => setFeedbackOpen(null)}>
+                          <button
+                            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
+                            onClick={() => setFeedbackOpen(null)}
+                          >
                             Cancel
                           </button>
                         </div>
@@ -231,16 +228,8 @@ export default function Chat() {
                     ) : (
                       <button
                         onClick={() => setFeedbackOpen(message.messageId)}
-                        className="thumbs-down"
+                        className="bg-none border-none cursor-pointer p-1 text-[#888]"
                         title="Provide better response"
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          fontSize: "16px",
-                          padding: "4px",
-                          color: "#888",
-                        }}
                       >
                         👎 This response could be better
                       </button>
@@ -251,19 +240,12 @@ export default function Chat() {
             ))}
           </div>
         ) : (
-          <p style={{ textAlign: "center", color: "#888" }}>
+          <p className="text-center text-[#888]">
             Ask me anything about tenant rights and assistance.
           </p>
         )}
       </div>
-      <div
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginTop: "1rem",
-          alignItems: "stretch",
-        }}
-      >
+      <div className="flex gap-2 mt-4 h-11 items-stretch">
         <input
           type="text"
           value={text}
@@ -274,8 +256,7 @@ export default function Chat() {
               handleSend();
             }
           }}
-          className="input"
-          style={{ margin: 0 }}
+          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
           placeholder={
             feedbackSubmitted
               ? "Please refresh the page to start a new conversation"
@@ -285,7 +266,7 @@ export default function Chat() {
           ref={inputRef}
         />
         <button
-          className="button"
+          className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
           onClick={handleSend}
           disabled={isLoading || !text.trim() || feedbackSubmitted}
         >
