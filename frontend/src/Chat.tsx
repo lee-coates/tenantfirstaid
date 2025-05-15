@@ -201,23 +201,26 @@ export default function Chat() {
                     ) : feedbackOpen === message.messageId ? (
                       <div className="feedback-form">
                         <textarea
+                          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
                           placeholder="Describe the preferred behavior"
                           value={betterResponse}
                           onChange={(e) => setBetterResponse(e.target.value)}
                           rows={4}
-                          className="w-full mb-2"
                         />
-                        <div>
+                        <div className="flex gap-2">
                           <button
+                            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
                             onClick={() =>
                               handleFeedback(message.messageId, betterResponse)
                             }
                             disabled={!betterResponse.trim()}
-                            className="mr-2"
                           >
                             Submit
                           </button>
-                          <button onClick={() => setFeedbackOpen(null)}>
+                          <button
+                            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
+                            onClick={() => setFeedbackOpen(null)}
+                          >
                             Cancel
                           </button>
                         </div>
