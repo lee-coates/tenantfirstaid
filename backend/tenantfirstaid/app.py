@@ -1,12 +1,22 @@
-from flask import Flask, request, jsonify
+from pathlib import Path
+from flask import Flask, jsonify
 
-from .chat import chat
+
+if Path(".env").exists():
+    from dotenv import load_dotenv
+
+    load_dotenv(override=True)
+
+from .chat import ChatView
 from .shared import CACHE
 from .submit_feedback import submit_feedback
 from .get_feedback import get_feedback
 from .prompt import get_prompt, set_prompt
+from .session import TenantSession
 
 app = Flask(__name__)
+
+session = TenantSession()
 
 
 @app.get("/api/history/<session_id>")
@@ -14,7 +24,9 @@ def history(session_id):
     return jsonify(CACHE.get(session_id, []))
 
 
-app.add_url_rule("/api/query", view_func=chat, methods=["POST"])
+app.add_url_rule(
+    "/api/query", view_func=ChatView.as_view("chat", session), methods=["POST"]
+)
 app.add_url_rule("/api/get_feedback", view_func=get_feedback, methods=["POST"])
 app.add_url_rule("/api/feedback", view_func=submit_feedback, methods=["POST"])
 app.add_url_rule(
