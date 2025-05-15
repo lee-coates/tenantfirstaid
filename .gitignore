@@ -55,5 +55,3 @@ chatlog.jsonl
 /backend/feedback.jsonl
 combined_training_gpt-4_1.jsonl
 combined_training_o3.jsonl
-
-backed/storage
