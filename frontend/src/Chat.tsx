@@ -110,6 +110,13 @@ export default function Chat() {
     }
   };
 
+  const handleClearSession = async () => {
+    const newSessionId = generateSessionId();
+    localStorage.setItem("sessionId", newSessionId);
+    setSessionId(newSessionId);
+    setMessages([]);
+  }
+
   const handleSend = async () => {
     // If feedback was submitted, disable further interaction
     if (feedbackSubmitted) return;
@@ -203,6 +210,11 @@ export default function Chat() {
 
   return (
     <div className="container">
+      <button
+        className="px-6 bg-[#E3574B] hover:bg-[#B8473D] text-white rounded-md cursor-pointer transition-color duration-300"
+        onClick={handleClearSession}
+        title="Clear Session"
+      >X</button>
       <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
         <strong>Tenant First Aid</strong>
       </h1>
