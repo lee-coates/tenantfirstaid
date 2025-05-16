@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 
 # Import the model from app.py
-from .chat import MODEL, SYSTEM_PROMPT
+from .chat import MODEL
+from .shared import SYSTEM_PROMPT
 
 # Define file paths (relative to the script location)
 SCRIPT_DIR = Path(__file__).parent.parent  # Go up one level to backend directory

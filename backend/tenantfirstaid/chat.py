@@ -2,18 +2,17 @@ import uuid
 import datetime
 
 from openai import OpenAI
-import simplejson as json
 import jsonlines
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-import tiktoken
 from .shared import SYSTEM_PROMPT, DATA_DIR
+
+MODEL = "o3"
 
 
 class ChatView(View):
-    MODEL = "o3"
     DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
     MAX_TOKENS = os.getenv("MAX_TOKENS")
@@ -50,7 +49,7 @@ class ChatView(View):
             try:
                 # Use the new Responses API with streaming
                 response_stream = self.client.responses.create(
-                    model=self.MODEL,
+                    model=MODEL,
                     input=input_messages,
                     instructions=SYSTEM_PROMPT["prompt"],
                     reasoning={"effort": "high"},
