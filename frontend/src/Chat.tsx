@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import ExportMessagesButton from "./pages/Chat/components/ExportMessagesButton";
 
 // Generate a random session ID
 const generateSessionId = (): string => {
@@ -14,7 +15,7 @@ const generateSessionId = (): string => {
   );
 };
 
-interface Message {
+export interface IMessage {
   role: "user" | "bot";
   content: string;
   messageId: string;
@@ -24,7 +25,7 @@ interface Message {
 
 export default function Chat() {
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
   const [feedbackOpen, setFeedbackOpen] = useState<string | null>(null);
@@ -171,9 +172,12 @@ export default function Chat() {
 
   return (
     <div className="container">
-      <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
-        <strong>Tenant First Aid</strong>
-      </h1>
+      <div className="relative">
+        <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
+          <strong>Tenant First Aid</strong>
+        </h1>
+        <ExportMessagesButton messages={messages} />
+      </div>
       <div className="conversation">
         {messages.length > 0 ? (
           <div className="messages">
