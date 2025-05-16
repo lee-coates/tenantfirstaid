@@ -85,87 +85,72 @@ export default function PromptEditor() {
   return (
     <div className="container">
       {/* header row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h2 style={{ margin: 0 }}>Prompt Editing</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="m-0">Prompt Editing</h2>
         <Link
           to="/"
-          className="button"
-          style={{ padding: "0.4rem 1rem", textDecoration: "none" }}
+          className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
         >
           Chat
         </Link>
       </div>
 
       {/* prompt display / editor */}
-      <label
-        style={{ fontWeight: 600, display: "block", margin: "1rem 0 0.25rem" }}
-      >
+      <label className="font-semibold block my-4 ml-0 mr-1">
         Current prompt
       </label>
 
       {isEditing ? (
         <textarea
-          className="input"
+          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
           rows={4}
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
         />
       ) : (
-        <div
-          className="label"
-          style={{ minHeight: "4rem", display: "flex", alignItems: "center" }}
-        >
+        <div className="mb-4 overflow-y-auto max-h-[400px] p-2 rounded-md bg-[#fafafa] flex min-h-16 items-center">
           {loading ? (
-            <span className="dot-pulse" style={{ fontStyle: "italic" }}>
-              Loading…
-            </span>
+            <span className="dot-pulse italic">Loading…</span>
           ) : (
-            <p style={{ margin: 0 }}>{prompt}</p>
+            <p className="p-2 mt-8 mb-0 rounded-sm">{prompt}</p>
           )}
         </div>
       )}
 
       {error && (
-        <p style={{ color: "red", marginTop: "0.5rem" }}>
-          Server error. Please try again.
-        </p>
+        <p className="text-red-500 mt-1">Server error. Please try again.</p>
       )}
 
       {/* action buttons */}
       {isEditing ? (
-        <div
-          style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}
-        >
+        <div className="flex gap-1 justify-end">
           <button
-            className="button"
-            style={{ background: "#ddd", color: "#333" }}
+            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
             onClick={cancelEditing}
           >
             Cancel
           </button>
-          <button className="button" onClick={applyEdit}>
+          <button
+            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+            onClick={applyEdit}
+          >
             Apply
           </button>
         </div>
       ) : (
-        <div
-          style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}
-        >
+        <div className="flex gap-1 justify-end">
           <button
-            className="button"
-            style={{ background: "#ddd", color: "#333" }}
+            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
             onClick={restoreDefault}
             disabled={loading}
           >
             Restore default
           </button>
-          <button className="button" onClick={startEditing} disabled={loading}>
+          <button
+            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+            onClick={startEditing}
+            disabled={loading}
+          >
             Edit
           </button>
         </div>
