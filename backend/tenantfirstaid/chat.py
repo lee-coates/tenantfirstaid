@@ -9,7 +9,11 @@ import os
 
 from .shared import SYSTEM_PROMPT, DATA_DIR
 
-MODEL = "o3"
+DATA_FILE = DATA_DIR / "chatlog.jsonl"
+
+API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
+BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
+MODEL = os.getenv("MODEL_NAME", "o3")
 
 
 class ChatView(View):
@@ -17,7 +21,10 @@ class ChatView(View):
 
     MAX_TOKENS = os.getenv("MAX_TOKENS")
 
-    client = OpenAI()
+    client = OpenAI(
+        api_key=API_KEY,
+        base_url=BASE_URL,
+    )
 
     def __init__(self, session):
         self.session = session

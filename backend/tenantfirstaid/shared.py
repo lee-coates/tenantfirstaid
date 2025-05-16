@@ -5,7 +5,12 @@ from pathlib import Path
 CACHE = defaultdict(list)
 
 # Create a dedicated directory for persistent data in root's home directory
-DATA_DIR = Path("/root/tenantfirstaid_data")
+if Path(".env").exists():
+    from dotenv import load_dotenv
+
+    load_dotenv(override=True)
+
+DATA_DIR = Path(os.getenv("PERSISTENT_STORAGE_DIR", "/root/tenantfirstaid_data"))
 DATA_DIR.mkdir(exist_ok=True)
 
 FEEDBACK_FILE = DATA_DIR / "feedback.jsonl"

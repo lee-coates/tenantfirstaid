@@ -6,6 +6,8 @@ The application now stores persistent data (chatlog.jsonl and feedback.jsonl) in
 /root/tenantfirstaid_data/
 ```
 
+You can override this by setting `PERSISTENT_STORAGE_DIR` in `.env`.
+
 ## Data Files
 
 The following files are stored persistently:
