@@ -34,6 +34,37 @@ export default function Chat() {
 
   // Initialize session ID when component mounts
   useEffect(() => {
+    // Get chat history
+    const fetchChatHistory = async (sessionId: string) => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/history/${sessionId}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+        })
+
+        if (!res.ok) {
+          console.error('Failed to fetch chat history.', res.status, res.statusText);
+        }
+
+        // `messageId` is not currently used by the backend,
+        // so let's generate some dummy IDs to play nice with React.
+        // We increment each time to avoid duplicate keys.
+        let history: Message[] = await res.json();
+        let messageId = Date.now();
+        history = history.map((message: Message) => {
+          messageId++;
+          message.messageId = messageId.toString();
+          return message;
+        });
+        setMessages(history);
+      } catch (err) {
+        console.error("Error fetching chat history", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     const cachedSessionId = localStorage.getItem("sessionId");
     if (cachedSessionId === null) {
       const newSessionId = generateSessionId();
@@ -41,6 +72,7 @@ export default function Chat() {
       setSessionId(newSessionId);
     } else {
       setSessionId(cachedSessionId);
+      fetchChatHistory(cachedSessionId);
     }
   }, []);
 
@@ -180,15 +212,14 @@ export default function Chat() {
             {messages.map((message) => (
               <div
                 key={message.messageId}
-                className={`message ${
-                  message.role === "bot" ? "bot-message" : "user-message"
-                }`}
+                className={`message ${message.role === "bot" ? "bot-message" : "user-message"
+                  }`}
               >
                 <div className="message-content">
                   <strong>{message.role === "bot" ? "Bot: " : "You: "}</strong>
                   {message.role === "bot" &&
-                  message.content === "" &&
-                  isLoading ? (
+                    message.content === "" &&
+                    isLoading ? (
                     <span className="dot-pulse">...</span>
                   ) : (
                     <span className="whitespace-pre-wrap">
