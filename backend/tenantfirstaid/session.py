@@ -5,6 +5,11 @@ import simplejson as json
 
 class TenantSession:
     def __init__(self):
+        print("Connecting to Valkey:", {
+            "host": os.getenv("DB_HOST"),
+            "port": os.getenv("DB_PORT"),
+            "ssl": os.getenv("DB_USE_SSL"),
+        })
         try:
             self.db_con = Valkey(
                 host=os.getenv("DB_HOST", "127.0.0.1"),
