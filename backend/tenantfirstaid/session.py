@@ -23,6 +23,12 @@ class TenantSession:
             print(e)
 
     def get(self, session_id):
+        print("Connection to Valkey:", {
+            "host": os.getenv("DB_HOST"),
+            "port": os.getenv("DB_PORT"),
+            "ssl": os.getenv("DB_USE_SSL"),
+        })
+        print("self.db_con", self.db_con)
         return json.loads(self.db_con.get(session_id) or "[]")
 
     def set(self, session_id, value):
