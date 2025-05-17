@@ -51,9 +51,9 @@ export default function Chat() {
         // `messageId` is not currently used by the backend,
         // so let's generate some dummy IDs to play nice with React.
         // We increment each time to avoid duplicate keys.
-        let history: Message[] = await res.json();
+        let history: IMessage[] = await res.json();
         let messageId = Date.now();
-        history = history.map((message: Message) => {
+        history = history.map((message: IMessage) => {
           messageId++;
           message.messageId = messageId.toString();
           return message;
