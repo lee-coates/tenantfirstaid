@@ -15,7 +15,7 @@ class TenantSession:
                 host=os.getenv("DB_HOST", "127.0.0.1"),
                 port=os.getenv("DB_PORT", 6379),
                 password=os.getenv("DB_PASSWORD"),
-                ssl=True if os.getenv("DB_USE_SSL") == "true" else False,
+                ssl=False if os.getenv("DB_USE_SSL") == "false" else True,
             )
             self.db_con.ping()
 
