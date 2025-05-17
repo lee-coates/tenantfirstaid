@@ -209,9 +209,9 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="container">
+    <div className="container relative">
       <button
-        className="px-6 bg-[#E3574B] hover:bg-[#B8473D] text-white rounded-md cursor-pointer transition-color duration-300"
+        className="px-2 bg-[#E3574B] hover:bg-[#B8473D] text-white rounded-md cursor-pointer transition-color duration-300 absolute top-6 right-6 font-bold"
         onClick={handleClearSession}
         title="Clear Session"
       >X</button>
