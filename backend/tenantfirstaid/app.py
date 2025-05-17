@@ -21,7 +21,7 @@ session = TenantSession()
 
 @app.get("/api/history/<session_id>")
 def history(session_id):
-    return jsonify(CACHE.get(session_id, []))
+    return jsonify(session.get(session_id))
 
 
 app.add_url_rule(

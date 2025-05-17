@@ -35,6 +35,37 @@ export default function Chat() {
 
   // Initialize session ID when component mounts
   useEffect(() => {
+    // Get chat history
+    const fetchChatHistory = async (sessionId: string) => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/history/${sessionId}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+        })
+
+        if (!res.ok) {
+          console.error('Failed to fetch chat history.', res.status, res.statusText);
+        }
+
+        // `messageId` is not currently used by the backend,
+        // so let's generate some dummy IDs to play nice with React.
+        // We increment each time to avoid duplicate keys.
+        let history: Message[] = await res.json();
+        let messageId = Date.now();
+        history = history.map((message: Message) => {
+          messageId++;
+          message.messageId = messageId.toString();
+          return message;
+        });
+        setMessages(history);
+      } catch (err) {
+        console.error("Error fetching chat history", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     const cachedSessionId = localStorage.getItem("sessionId");
     if (cachedSessionId === null) {
       const newSessionId = generateSessionId();
@@ -42,6 +73,7 @@ export default function Chat() {
       setSessionId(newSessionId);
     } else {
       setSessionId(cachedSessionId);
+      fetchChatHistory(cachedSessionId);
     }
   }, []);
 
@@ -78,6 +110,13 @@ export default function Chat() {
       console.error("Error submitting feedback:", error);
     }
   };
+
+  const handleClearSession = async () => {
+    const newSessionId = generateSessionId();
+    localStorage.setItem("sessionId", newSessionId);
+    setSessionId(newSessionId);
+    setMessages([]);
+  }
 
   const handleSend = async () => {
     // If feedback was submitted, disable further interaction
@@ -171,119 +210,128 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="container">
-      <div className="relative">
-        <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
-          <strong>Tenant First Aid</strong>
-        </h1>
-        <ExportMessagesButton messages={messages} />
-      </div>
-      <div className="conversation">
-        {messages.length > 0 ? (
-          <div className="messages">
-            {messages.map((message) => (
-              <div
-                key={message.messageId}
-                className={`message ${
-                  message.role === "bot" ? "bot-message" : "user-message"
-                }`}
-              >
-                <div className="message-content">
-                  <strong>{message.role === "bot" ? "Bot: " : "You: "}</strong>
-                  {message.role === "bot" &&
-                  message.content === "" &&
-                  isLoading ? (
-                    <span className="dot-pulse">...</span>
-                  ) : (
-                    <span className="whitespace-pre-wrap">
-                      {message.content}
-                    </span>
-                  )}
-                </div>
-
-                {message.role === "bot" && message.showFeedback && (
-                  <div className="feedback-section">
-                    {message.feedbackSubmitted === true ? (
-                      <div className="feedback-submitted">
-                        <span className="text-green-700">
-                          Thank you for your feedback!
-                        </span>
-                      </div>
-                    ) : feedbackOpen === message.messageId ? (
-                      <div className="feedback-form">
-                        <textarea
-                          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-                          placeholder="Describe the preferred behavior"
-                          value={betterResponse}
-                          onChange={(e) => setBetterResponse(e.target.value)}
-                          rows={4}
-                        />
-                        <div className="flex gap-2">
-                          <button
-                            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
-                            onClick={() =>
-                              handleFeedback(message.messageId, betterResponse)
-                            }
-                            disabled={!betterResponse.trim()}
-                          >
-                            Submit
-                          </button>
-                          <button
-                            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
-                            onClick={() => setFeedbackOpen(null)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+    <>
+      <div className="container">
+        <div className="relative">
+          <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
+            <strong>Tenant First Aid</strong>
+          </h1>
+          <ExportMessagesButton messages={messages} />
+        </div>
+        <div className="conversation">
+          {messages.length > 0 ? (
+            <div className="messages">
+              {messages.map((message) => (
+                <div
+                  key={message.messageId}
+                  className={`message ${message.role === "bot" ? "bot-message" : "user-message"
+                    }`}
+                >
+                  <div className="message-content">
+                    <strong>{message.role === "bot" ? "Bot: " : "You: "}</strong>
+                    {message.role === "bot" &&
+                      message.content === "" &&
+                      isLoading ? (
+                      <span className="dot-pulse">...</span>
                     ) : (
-                      <button
-                        onClick={() => setFeedbackOpen(message.messageId)}
-                        className="bg-none border-none cursor-pointer p-1 text-[#888]"
-                        title="Provide better response"
-                      >
-                        👎 This response could be better
-                      </button>
+                      <span className="whitespace-pre-wrap">
+                        {message.content}
+                      </span>
                     )}
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-[#888]">
-            Ask me anything about tenant rights and assistance.
-          </p>
-        )}
-      </div>
-      <div className="flex gap-2 mt-4 h-11 items-stretch">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault(); // prevent form submission or newline
-              handleSend();
+
+                  {message.role === "bot" && message.showFeedback && (
+                    <div className="feedback-section">
+                      {message.feedbackSubmitted === true ? (
+                        <div className="feedback-submitted">
+                          <span className="text-green-700">
+                            Thank you for your feedback!
+                          </span>
+                        </div>
+                      ) : feedbackOpen === message.messageId ? (
+                        <div className="feedback-form">
+                          <textarea
+                            className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+                            placeholder="Describe the preferred behavior"
+                            value={betterResponse}
+                            onChange={(e) => setBetterResponse(e.target.value)}
+                            rows={4}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+                              onClick={() =>
+                                handleFeedback(message.messageId, betterResponse)
+                              }
+                              disabled={!betterResponse.trim()}
+                            >
+                              Submit
+                            </button>
+                            <button
+                              className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
+                              onClick={() => setFeedbackOpen(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setFeedbackOpen(message.messageId)}
+                          className="bg-none border-none cursor-pointer p-1 text-[#888]"
+                          title="Provide better response"
+                        >
+                          👎 This response could be better
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-[#888]">
+              Ask me anything about tenant rights and assistance.
+            </p>
+          )}
+        </div>
+        <div className="flex gap-2 mt-4 h-11 items-stretch">
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // prevent form submission or newline
+                handleSend();
+              }
+            }}
+            className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+            placeholder={
+              feedbackSubmitted
+                ? "Please refresh the page to start a new conversation"
+                : "Type your message here..."
             }
-          }}
-          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-          placeholder={
-            feedbackSubmitted
-              ? "Please refresh the page to start a new conversation"
-              : "Type your message here..."
-          }
-          disabled={isLoading || feedbackSubmitted}
-          ref={inputRef}
-        />
-        <button
-          className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
-          onClick={handleSend}
-          disabled={isLoading || !text.trim() || feedbackSubmitted}
-        >
-          {isLoading ? "..." : "Send"}
-        </button>
+            disabled={isLoading || feedbackSubmitted}
+            ref={inputRef}
+          />
+          <button
+            className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+            onClick={handleSend}
+            disabled={isLoading || !text.trim() || feedbackSubmitted}
+          >
+            {isLoading ? "..." : "Send"}
+          </button>
+        </div>
       </div>
-    </div>
+      
+      <div className="flex justify-center">
+        <a
+            className="cursor-pointer font-bold underline text-[#E3574B] hover:text-[#B8473D] "
+            onClick={handleClearSession}
+            title="Clear Chat"
+          >Clear Chat</a>
+      </div>
+    </>
   );
 }
