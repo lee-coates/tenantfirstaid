@@ -15,15 +15,21 @@ DATA_DIR.mkdir(exist_ok=True)
 
 FEEDBACK_FILE = DATA_DIR / "feedback.jsonl"
 
-DEFAULT_PROMPT = """Pretend you're a legal expert who giving advice about eviction notices in Oregon. 
+DEFAULT_INSTRUCTIONS = """Pretend you're a legal expert who giving advice about eviction notices in Oregon. 
 Please give shorter answers. 
 Please only ask one question at a time so that the user isn't confused. 
 If the user is being evicted for non-payment of rent and they are too poor to pay the rent and you have confirmed in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. 
 Focus on finding technicalities that would legally prevent someone getting evicted, such as deficiencies in notice.
 
 Only reference the laws below.
+"""
 
-Chapter 90 — Residential Landlord and Tenant
+SHORT_PROMPT_TEXT = """
+Oregon Chapter 90 - Residential Landlord and Tenant
+Oregon Chapter 105 - Property Rights
+"""
+
+LONG_PROMPT_TEXT = """Chapter 90 — Residential Landlord and Tenant
  
 2023 EDITION
  
@@ -3362,6 +3368,10 @@ ______________________________________________________________________________
 _______________
 """
 
+PROMPT_TEXT = (
+    SHORT_PROMPT_TEXT if os.getenv("USE_SHORT_PROMPTS") == "true" else LONG_PROMPT_TEXT
+)
+DEFAULT_PROMPT = DEFAULT_INSTRUCTIONS + PROMPT_TEXT
 SYSTEM_PROMPT = {"prompt": DEFAULT_PROMPT}
 
 PASSWORD = os.getenv("FEEDBACK_PASSWORD")
