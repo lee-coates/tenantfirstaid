@@ -29,7 +29,12 @@ class TenantSession:
 {os.getenv("DB_PORT")} 
 {os.getenv("DB_USE_SSL")
         }""")
-        
+        print(f"""self.db_con: {self.db_con} \n 
+{os.getenv("DB_HOST")} 
+{os.getenv("DB_PORT")} 
+{os.getenv("DB_USE_SSL")
+        }""")
+        print("self.db_con", self.db_con)
         return json.loads(self.db_con.get(session_id) or "[]")
 
     def set(self, session_id, value):
