@@ -12,3 +12,6 @@ dependencies = [
   "ipdb>=0.13.13",
   "python-dotenv",
 ]
+
+[tool.setuptools.packages.find]
+exclude = ["data*"]
