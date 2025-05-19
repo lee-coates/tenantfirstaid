@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import ExportMessagesButton from "./pages/Chat/components/ExportMessagesButton";
 import { useNavigate } from "react-router-dom";
 
-
 // Generate a random session ID
 const generateSessionId = (): string => {
   // Use crypto API if available for better randomness
@@ -34,6 +33,9 @@ export default function Chat() {
   const [betterResponse, setBetterResponse] = useState("");
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+  const isOngoing = messages.length > 0;
+
   const navigate = useNavigate();
   // Initialize session ID when component mounts
   useEffect(() => {
@@ -43,11 +45,15 @@ export default function Chat() {
       try {
         const res = await fetch(`/api/history/${sessionId}`, {
           method: "GET",
-          headers: { "Content-Type": "application/json" }
-        })
+          headers: { "Content-Type": "application/json" },
+        });
 
         if (!res.ok) {
-          console.error('Failed to fetch chat history.', res.status, res.statusText);
+          console.error(
+            "Failed to fetch chat history.",
+            res.status,
+            res.statusText
+          );
         }
 
         // `messageId` is not currently used by the backend,
@@ -66,7 +72,7 @@ export default function Chat() {
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
     const cachedSessionId = localStorage.getItem("sessionId");
     if (cachedSessionId === null) {
@@ -118,7 +124,7 @@ export default function Chat() {
     localStorage.setItem("sessionId", newSessionId);
     setSessionId(newSessionId);
     setMessages([]);
-  }
+  };
 
   const handleSend = async () => {
     // If feedback was submitted, disable further interaction
@@ -209,129 +215,155 @@ export default function Chat() {
 
   useEffect(() => {
     inputRef.current?.focus();
+    const messagesElement = messagesRef.current;
+    if (messagesElement) {
+      messagesElement.scrollTo({
+        top: messagesElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages]);
 
   return (
-    <div className="container relative mx-auto flex flex-col">
-      <div className="relative">
-        <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
-          <strong>Tenant First Aid</strong>
-        </h1>
+    <div className="h-screen flex items-center">
+      <div
+        className={`container relative flex flex-col my-20 mx-auto p-6 bg-white rounded-lg max-w-[600px] shadow-[0_4px_6px_rgba(0,0,0,0.1)]
+          ${
+            isOngoing
+              ? "justify-between h-[calc(100vh-10rem)]"
+              : "justify-center"
+          }`}
+      >
         <ExportMessagesButton messages={messages} />
-      </div>
-      <div className="conversation">
-        {messages.length > 0 ? (
-          <div className="messages">
-            {messages.map((message) => (
-              <div
-                key={message.messageId}
-                className={`message ${message.role === "bot" ? "bot-message" : "user-message"
+        <div className="relative">
+          <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
+            <strong>Tenant First Aid</strong>
+          </h1>
+        </div>
+        <div
+          className={`max-h-full ${
+            isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+          }`}
+          ref={messagesRef}
+        >
+          {isOngoing ? (
+            <div className="messages">
+              {messages.map((message) => (
+                <div
+                  key={message.messageId}
+                  className={`message ${
+                    message.role === "bot" ? "bot-message" : "user-message"
                   }`}
-              >
-                <div className="message-content">
-                  <strong>{message.role === "bot" ? "Bot: " : "You: "}</strong>
-                  {message.role === "bot" &&
+                >
+                  <div className="message-content">
+                    <strong>
+                      {message.role === "bot" ? "Bot: " : "You: "}
+                    </strong>
+                    {message.role === "bot" &&
                     message.content === "" &&
                     isLoading ? (
-                    <span className="dot-pulse">...</span>
-                  ) : (
-                    <span className="whitespace-pre-wrap">
-                      {message.content}
-                    </span>
-                  )}
-                </div>
-
-                {message.role === "bot" && message.showFeedback && (
-                  <div className="feedback-section">
-                    {message.feedbackSubmitted === true ? (
-                      <div className="feedback-submitted">
-                        <span className="text-green-700">
-                          Thank you for your feedback!
-                        </span>
-                      </div>
-                    ) : feedbackOpen === message.messageId ? (
-                      <div className="feedback-form">
-                        <textarea
-                          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-                          placeholder="Describe the preferred behavior"
-                          value={betterResponse}
-                          onChange={(e) => setBetterResponse(e.target.value)}
-                          rows={4}
-                        />
-                        <div className="flex gap-2">
-                          <button
-                            className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
-                            onClick={() =>
-                              handleFeedback(message.messageId, betterResponse)
-                            }
-                            disabled={!betterResponse.trim()}
-                          >
-                            Submit
-                          </button>
-                          <button
-                            className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
-                            onClick={() => setFeedbackOpen(null)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <span className="dot-pulse">...</span>
                     ) : (
-                      <button
-                        onClick={() => setFeedbackOpen(message.messageId)}
-                        className="bg-none border-none cursor-pointer p-1 text-[#888]"
-                        title="Provide better response"
-                      >
-                        👎 This response could be better
-                      </button>
+                      <span className="whitespace-pre-wrap break-all">
+                        {message.content}
+                      </span>
                     )}
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-[#888]">
-            Ask me anything about tenant rights and assistance.
-          </p>
-        )}
-      </div>
-      <div className="flex gap-2 mt-4 h-11 items-stretch">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault(); // prevent form submission or newline
-              handleSend();
+
+                  {message.role === "bot" && message.showFeedback && (
+                    <div className="feedback-section">
+                      {message.feedbackSubmitted === true ? (
+                        <div className="feedback-submitted">
+                          <span className="text-green-700">
+                            Thank you for your feedback!
+                          </span>
+                        </div>
+                      ) : feedbackOpen === message.messageId ? (
+                        <div className="feedback-form">
+                          <textarea
+                            className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+                            placeholder="Describe the preferred behavior"
+                            value={betterResponse}
+                            onChange={(e) => setBetterResponse(e.target.value)}
+                            rows={4}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+                              onClick={() =>
+                                handleFeedback(
+                                  message.messageId,
+                                  betterResponse
+                                )
+                              }
+                              disabled={!betterResponse.trim()}
+                            >
+                              Submit
+                            </button>
+                            <button
+                              className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
+                              onClick={() => setFeedbackOpen(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setFeedbackOpen(message.messageId)}
+                          className="bg-none border-none cursor-pointer p-1 text-[#888]"
+                          title="Provide better response"
+                        >
+                          👎 This response could be better
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-[#888]">
+              Ask me anything about tenant rights and assistance.
+            </p>
+          )}
+        </div>
+        <div className="flex gap-2 mt-4 h-11 items-stretch">
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // prevent form submission or newline
+                handleSend();
+              }
+            }}
+            className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+            placeholder={
+              feedbackSubmitted
+                ? "Please refresh the page to start a new conversation"
+                : "Type your message here..."
             }
-          }}
-          className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-          placeholder={
-            feedbackSubmitted
-              ? "Please refresh the page to start a new conversation"
-              : "Type your message here..."
-          }
-          disabled={isLoading || feedbackSubmitted}
-          ref={inputRef}
-        />
+            disabled={isLoading || feedbackSubmitted}
+            ref={inputRef}
+          />
+          <button
+            className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+            onClick={handleSend}
+            disabled={isLoading || !text.trim() || feedbackSubmitted}
+          >
+            {isLoading ? "..." : "Send"}
+          </button>
+        </div>
         <button
-          className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
-          onClick={handleSend}
-          disabled={isLoading || !text.trim() || feedbackSubmitted}
+          className="fixed bottom-6 right-1/4 translate-x-1/2 sm:right-8 sm:translate-x-0 bg-white border border-[#4a90e2] text-[#4a90e2] hover:bg-[#4a90e2] hover:text-white rounded-full shadow-lg px-6 py-3 font-semibold transition-colors duration-300 cursor-pointer z-50"
+          onClick={() => navigate("/about")}
+          title="About Us"
         >
-          {isLoading ? "..." : "Send"}
+          About Tenant First Aid
         </button>
       </div>
-      <button
-        className="fixed bottom-6 right-1/4 translate-x-1/2 sm:right-8 sm:translate-x-0 bg-white border border-[#4a90e2] text-[#4a90e2] hover:bg-[#4a90e2] hover:text-white rounded-full shadow-lg px-6 py-3 font-semibold transition-colors duration-300 cursor-pointer z-50"
-        onClick={() => navigate("/about")}
-        title="About Us"
-
-      >
-        About Tenant First Aid
-      </button>
     </div>
   );
 }

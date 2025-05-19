@@ -129,7 +129,7 @@ export default function FeedbackGate() {
 
   if (!password) {
     return (
-      <div className="container">
+      <div className="container my-10 mx-auto p-6 bg-white rounded-lg max-w-[600px] shadow-[0_4px_6px_rgba(0,0,0,0.1)]">
         <label>
           Password:
           <input
