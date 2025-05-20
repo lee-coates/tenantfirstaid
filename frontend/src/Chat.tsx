@@ -242,7 +242,7 @@ export default function Chat() {
             </h1>
           </div>
           <div
-            className={`max-h-full ${
+            className={`max-h-[calc(100vh-25rem)] ${
               isOngoing ? "overflow-y-scroll" : "overflow-y-none"
             }`}
             ref={messagesRef}
