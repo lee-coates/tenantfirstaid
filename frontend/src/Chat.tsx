@@ -17,7 +17,7 @@ const generateSessionId = (): string => {
 };
 
 export interface IMessage {
-  role: "user" | "bot";
+  role: "user" | "assistant";
   content: string;
   messageId: string;
   showFeedback?: boolean;
@@ -107,7 +107,7 @@ export default function Chat() {
       setMessages((prev) => [
         ...prev,
         {
-          role: "bot",
+          role: "assistant",
           content:
             "Thank you for your feedback! Please refresh the page to start a new conversation.",
           messageId: Date.now().toString(),
@@ -149,7 +149,7 @@ export default function Chat() {
     setMessages((prev) => [
       ...prev,
       {
-        role: "bot",
+        role: "assistant",
         content: "",
         messageId: botMessageId,
         showFeedback: false,
@@ -187,7 +187,7 @@ export default function Chat() {
         // Set showFeedback to false for all messages, then true only for the latest bot message
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.role === "bot"
+            msg.role === "assistant"
               ? { ...msg, showFeedback: msg.messageId === botMessageId }
               : msg
           )
@@ -202,7 +202,7 @@ export default function Chat() {
               ...msg,
               content: "Sorry, I encountered an error. Please try again.",
             };
-          } else if (msg.role === "bot") {
+          } else if (msg.role === "assistant") {
             return { ...msg, showFeedback: false };
           }
           return msg;
@@ -227,11 +227,11 @@ export default function Chat() {
   return (
     <div className="h-screen flex items-center">
       <div
-        className={`container relative flex flex-col my-20 mx-auto p-6 bg-white rounded-lg max-w-[600px] shadow-[0_4px_6px_rgba(0,0,0,0.1)]
+        className={`container relative flex flex-col my-20 mx-auto p-6 bg-white rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
           ${
             isOngoing
               ? "justify-between h-[calc(100vh-10rem)]"
-              : "justify-center"
+              : "justify-center max-w-[600px]"
           }`}
       >
         <ExportMessagesButton messages={messages} />
@@ -253,14 +253,16 @@ export default function Chat() {
                   <div
                     key={message.messageId}
                     className={`message ${
-                      message.role === "bot" ? "bot-message" : "user-message"
+                      message.role === "assistant"
+                        ? "bot-message"
+                        : "user-message"
                     }`}
                   >
                     <div className="message-content">
                       <strong>
-                        {message.role === "bot" ? "Bot: " : "You: "}
+                        {message.role === "assistant" ? "Bot: " : "You: "}
                       </strong>
-                      {message.role === "bot" &&
+                      {message.role === "assistant" &&
                       message.content === "" &&
                       isLoading ? (
                         <span className="dot-pulse">...</span>
@@ -271,7 +273,7 @@ export default function Chat() {
                       )}
                     </div>
 
-                    {message.role === "bot" && message.showFeedback && (
+                    {message.role === "assistant" && message.showFeedback && (
                       <div className="feedback-section">
                         {message.feedbackSubmitted === true ? (
                           <div className="feedback-submitted">
