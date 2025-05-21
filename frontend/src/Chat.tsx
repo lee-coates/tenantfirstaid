@@ -243,29 +243,35 @@ export default function Chat() {
           </div>
           <div
             className={`max-h-[calc(100vh-25rem)] ${
-              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-            }`}
+              isOngoing ? "overflow-y-auto" : "overflow-y-hidden"
+            } px-4 py-2`}
             ref={messagesRef}
           >
             {isOngoing ? (
-              <div className="messages">
+              <div className="flex flex-col gap-4">
                 {messages.map((message) => (
                   <div
                     key={message.messageId}
-                    className={`message ${
+                    className={`flex flex-col max-w-[85%] ${
                       message.role === "assistant"
-                        ? "bot-message"
-                        : "user-message"
+                        ? "self-start"
+                        : "self-end"
                     }`}
                   >
-                    <div className="message-content">
+                    <div
+                      className={`p-3 rounded-2xl ${
+                        message.role === "assistant"
+                          ? "bg-gray-100 rounded-tl-sm"
+                          : "bg-[#4a90e2] text-white rounded-tr-sm"
+                      }`}
+                    >
                       <strong>
                         {message.role === "assistant" ? "Bot: " : "You: "}
                       </strong>
                       {message.role === "assistant" &&
                       message.content === "" &&
                       isLoading ? (
-                        <span className="dot-pulse">...</span>
+                        <span className="animate-dot-pulse">...</span>
                       ) : (
                         <span className="whitespace-pre-wrap break-all">
                           {message.content}
@@ -274,17 +280,17 @@ export default function Chat() {
                     </div>
 
                     {message.role === "assistant" && message.showFeedback && (
-                      <div className="feedback-section">
+                      <div className="mt-2 text-sm self-start ml-2">
                         {message.feedbackSubmitted === true ? (
-                          <div className="feedback-submitted">
+                          <div className="p-2 bg-blue-50 rounded-md">
                             <span className="text-green-700">
                               Thank you for your feedback!
                             </span>
                           </div>
                         ) : feedbackOpen === message.messageId ? (
-                          <div className="feedback-form">
+                          <div className="bg-gray-50 p-3 rounded-md border border-gray-200 w-full max-w-md">
                             <textarea
-                              className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+                              className="w-full p-3 border border-gray-300 rounded-md box-border transition-colors duration-300 focus:outline-none focus:border-[#4a90e2] focus:ring-2 focus:ring-[#4a90e2]/20"
                               placeholder="Describe the preferred behavior"
                               value={betterResponse}
                               onChange={(e) =>
@@ -292,9 +298,9 @@ export default function Chat() {
                               }
                               rows={4}
                             />
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 mt-2">
                               <button
-                                className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+                                className="py-1.5 px-4 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 onClick={() =>
                                   handleFeedback(
                                     message.messageId,
@@ -306,7 +312,7 @@ export default function Chat() {
                                 Submit
                               </button>
                               <button
-                                className="py-1.5 px-4 bg-[#ddd] text-[#333] rounded-md cursor-pointer transition-color duration-300"
+                                className="py-1.5 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md cursor-pointer transition-colors duration-300"
                                 onClick={() => setFeedbackOpen(null)}
                               >
                                 Cancel
@@ -315,8 +321,8 @@ export default function Chat() {
                           </div>
                         ) : (
                           <button
+                            className="bg-transparent border-none cursor-pointer p-1 text-gray-500 hover:text-gray-700 transition-colors duration-300"
                             onClick={() => setFeedbackOpen(message.messageId)}
-                            className="bg-none border-none cursor-pointer p-1 text-[#888]"
                             title="Provide better response"
                           >
                             👎 This response could be better
