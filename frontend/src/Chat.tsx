@@ -242,7 +242,7 @@ export default function Chat() {
             </h1>
           </div>
           <div
-            className={`max-h-[calc(100vh-25rem)] ${
+            className={`max-h-[calc(100vh-25rem)] mx-auto max-w-[700px] ${
               isOngoing ? "overflow-y-scroll" : "overflow-y-none"
             }`}
             ref={messagesRef}
@@ -267,7 +267,7 @@ export default function Chat() {
                       isLoading ? (
                         <span className="dot-pulse">...</span>
                       ) : (
-                        <span className="whitespace-pre-wrap break-all">
+                        <span className="whitespace-pre-wrap">
                           {message.content}
                         </span>
                       )}
@@ -335,7 +335,7 @@ export default function Chat() {
           </div>
         </div>
         <div>
-          <div className="flex gap-2 mt-4 h-11 items-stretch">
+          <div className="flex gap-2 mt-4 h-11 items-stretch mx-auto max-w-[700px]">
             <input
               type="text"
               value={text}
