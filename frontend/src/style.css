@@ -9,12 +9,6 @@ body {
   line-height: 1.6;
 }
 
-.dot-pulse {
-  display: inline-block;
-  position: relative;
-  animation: dotPulse 1.5s infinite linear;
-}
-
 @keyframes dotPulse {
   0% {
     opacity: 0.2;
@@ -25,4 +19,10 @@ body {
   100% {
     opacity: 0.2;
   }
+}
+
+.animate-dot-pulse {
+  display: inline-block;
+  position: relative;
+  animation: dotPulse 1.5s infinite linear;
 }
