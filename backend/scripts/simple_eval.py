@@ -99,8 +99,7 @@ print("\nIndividual scores:")
 for i, score in enumerate(scores):
     print(f"Sample {i+1}: {score}/10")
 
-# Optionally save the detailed results to a file - updated to use a relative path
-results_path = os.path.join(script_dir, "..", "eval_results.json")
+results_path = os.path.join(script_dir, "eval_results.json")
 with open(results_path, "w") as f:
     json.dump({
         "model": MODEL,
