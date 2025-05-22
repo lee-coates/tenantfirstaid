@@ -163,6 +163,7 @@ export default function Chat() {
             setIsLoading={setIsLoading}
             feedbackSubmitted={feedbackSubmitted}
             sessionId={sessionId}
+            inputRef={inputRef}
           />
           <div className="flex justify-center mt-4">
             <button

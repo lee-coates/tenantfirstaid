@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { IMessage } from "../../../Chat";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   isLoading: boolean;
   feedbackSubmitted: boolean;
   sessionId: string;
+  inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function InputField({
@@ -15,8 +16,8 @@ export default function InputField({
   setIsLoading,
   feedbackSubmitted,
   sessionId,
+  inputRef,
 }: Props) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const [text, setText] = useState("");
 
   const handleSend = async () => {
