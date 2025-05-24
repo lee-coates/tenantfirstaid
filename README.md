@@ -22,6 +22,10 @@ Live at https://tenantfirstaid.com/
 1. Go to http://localhost:5173
 1. Start chatting
 
+### Run backend tests
+
+In the `backend/` directory, run `uv run pytest`
+
 ## Contributing
 
 We currently have regular project meetups: https://www.meetup.com/codepdx/ . Also check out https://www.codepdx.org/ to find our Discord server.
