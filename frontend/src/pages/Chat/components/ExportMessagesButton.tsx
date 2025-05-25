@@ -8,7 +8,7 @@ interface Props {
 export default function ExportMessagesButton({ messages }: Props) {
   return (
     <button
-      className="fixed top-6 right-[10vw] translate-x-1/2 px-6 py-1.5 bg-[#ddd] rounded-md border-1 cursor-pointer"
+      className="fixed top-6 right-[8vw] px-6 py-1.5 bg-[#ddd] rounded-full shadow-lg border cursor-pointer z-50"
       onClick={() => exportMessages(messages)}
     >
       Export

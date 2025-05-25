@@ -88,7 +88,11 @@ export default function MessageWindow({
     <>
       <div>
         <div className="relative">
-          <h1 className="text-3xl text-center mb-6 mt-5 text-[#4a90e2] hover:bd-[#3a7bc8]">
+          <h1
+            className={`${
+              isOngoing ? "text-2xl" : "text-3xl"
+            } text-center mb-5 text-[#4a90e2]`}
+          >
             <strong>Tenant First Aid</strong>
           </h1>
         </div>
