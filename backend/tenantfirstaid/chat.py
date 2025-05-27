@@ -7,7 +7,7 @@ from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-from .shared import SYSTEM_PROMPT, DATA_DIR
+from .shared import DEFAULT_INSTRUCTIONS, DATA_DIR
 
 DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
@@ -58,9 +58,13 @@ class ChatView(View):
                 response_stream = self.client.responses.create(
                     model=MODEL,
                     input=input_messages,
-                    instructions=SYSTEM_PROMPT["prompt"],
+                    instructions=DEFAULT_INSTRUCTIONS,
                     reasoning={"effort": "high"},
                     stream=True,
+                    tools=[{
+                        "type": "file_search",
+                        "vector_store_ids": [os.getenv("VECTOR_STORE_ID", "default_vector_store_id")],
+                    }]
                 )
 
                 assistant_chunks = []
