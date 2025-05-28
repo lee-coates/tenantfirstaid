@@ -58,8 +58,12 @@ export default function useMessages() {
   });
 
   useEffect(() => {
-    if (messages.length === 0 && data && data.length !== 0) setMessages(data);
-  }, [messages, data, sessionId]);
+    setMessages([]);
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (data && data.length !== 0) setMessages(data);
+  }, [data]);
 
   return {
     messages,
