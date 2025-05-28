@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IMessage } from "../../../Chat";
+import type { IMessage } from "../../../hooks/useMessages";
 import useSession from "../../../hooks/useSession";
 
 interface Props {
