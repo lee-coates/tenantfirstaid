@@ -20,13 +20,14 @@ export default function Chat() {
       >
         {isLoading ? (
           <div className={`${isLoading && "animate-dot-pulse"} text-center`}>
-            {isError ? "Error fetching chat history..." : "Loading..."}
+            Loading...
           </div>
         ) : (
           <MessageWindow
             messages={messages}
             setMessages={setMessages}
             isOngoing={isOngoing}
+            isError={isError}
           />
         )}
       </div>

@@ -9,12 +9,14 @@ interface Props {
   messages: IMessage[];
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isOngoing: boolean;
+  isError: boolean;
 }
 
 export default function MessageWindow({
   messages,
   setMessages,
   isOngoing,
+  isError,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const { setSessionId, handleNewSession } = useSession();
@@ -60,48 +62,54 @@ export default function MessageWindow({
             <strong>Tenant First Aid</strong>
           </h1>
         </div>
-        <div
-          className={`max-h-[calc(100vh-25rem)] mx-auto max-w-[700px] ${
-            isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-          }`}
-          ref={messagesRef}
-        >
-          {isOngoing ? (
-            <div className="flex flex-col gap-4">
-              {messages.map((message) => (
-                <div
-                  className={`flex w-full ${
-                    message.role === "assistant"
-                      ? "justify-start"
-                      : "justify-end"
-                  }`}
-                  key={message.messageId}
-                >
+        {isError ? (
+          <div className="flex items-center justify-center h-full text-center">
+            Error fetching chat history. Try refreshing...
+          </div>
+        ) : (
+          <div
+            className={`max-h-[calc(100vh-25rem)] mx-auto max-w-[700px] ${
+              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+            }`}
+            ref={messagesRef}
+          >
+            {isOngoing ? (
+              <div className="flex flex-col gap-4">
+                {messages.map((message) => (
                   <div
-                    className={`p-3 rounded-2xl max-w-[95%] ${
+                    className={`flex w-full ${
                       message.role === "assistant"
-                        ? "bg-gray-100 rounded-tl-sm"
-                        : "bg-[#4a90e2] text-white rounded-tr-sm"
+                        ? "justify-start"
+                        : "justify-end"
                     }`}
+                    key={message.messageId}
                   >
-                    <MessageContent message={message} isLoading={isLoading} />
-                    {message.role === "assistant" && message.showFeedback && (
-                      <MessageFeedback
-                        message={message}
-                        setMessages={setMessages}
-                        setFeedbackSubmitted={setFeedbackSubmitted}
-                      />
-                    )}
+                    <div
+                      className={`p-3 rounded-2xl max-w-[95%] ${
+                        message.role === "assistant"
+                          ? "bg-gray-100 rounded-tl-sm"
+                          : "bg-[#4a90e2] text-white rounded-tr-sm"
+                      }`}
+                    >
+                      <MessageContent message={message} isLoading={isLoading} />
+                      {message.role === "assistant" && message.showFeedback && (
+                        <MessageFeedback
+                          message={message}
+                          setMessages={setMessages}
+                          setFeedbackSubmitted={setFeedbackSubmitted}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-[#888]">
-              Ask me anything about tenant rights and assistance.
-            </p>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-[#888]">
+                Ask me anything about tenant rights and assistance.
+              </p>
+            )}
+          </div>
+        )}
       </div>
       <div>
         <InputField
