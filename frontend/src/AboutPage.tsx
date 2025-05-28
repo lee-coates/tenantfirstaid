@@ -4,7 +4,7 @@ export default function AboutPage() {
     const navigate = useNavigate();
 
     return (
-        <div className="max-w-2xl mx-auto my-8 p-8 bg-white rounded-lg shadow-md relative ">
+        <div className="mt-26 max-w-2xl mx-auto my-8 p-8 bg-white rounded-lg shadow-md relative ">
             <button
                 className="absolute top-2 left-4 flex items-center text-[#4a90e2] hover:text-[#3a7bc8] font-semibold cursor-pointer"
                 onClick={() => navigate(-1)}
