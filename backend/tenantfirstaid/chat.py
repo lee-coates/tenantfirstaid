@@ -19,8 +19,6 @@ MODEL = os.getenv("MODEL_NAME", "o3")
 class ChatView(View):
     DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
-    MAX_TOKENS = os.getenv("MAX_TOKENS")
-
     client = OpenAI(
         api_key=API_KEY,
         base_url=BASE_URL,
@@ -28,6 +26,14 @@ class ChatView(View):
 
     def __init__(self, session):
         self.session = session
+
+        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
+        self.openai_tools = []
+
+        if VECTOR_STORE_ID:
+            self.openai_tools.append(
+                {"type": "file_search", "vector_store_ids": [VECTOR_STORE_ID]}
+            )
 
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
@@ -61,10 +67,7 @@ class ChatView(View):
                     instructions=DEFAULT_INSTRUCTIONS,
                     reasoning={"effort": "high"},
                     stream=True,
-                    tools=[{
-                        "type": "file_search",
-                        "vector_store_ids": [os.getenv("VECTOR_STORE_ID", "default_vector_store_id")],
-                    }]
+                    tools=self.openai_tools,
                 )
 
                 assistant_chunks = []
