@@ -105,6 +105,7 @@ export default function MessageWindow({
       </div>
       <div>
         <InputField
+          setMessages={setMessages}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           feedbackSubmitted={feedbackSubmitted}
