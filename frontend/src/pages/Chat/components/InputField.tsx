@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { IMessage } from "../../../Chat";
-import useSession from "../../../hooks/useSession";
+import useMessages, { type IMessage } from "../../../hooks/useMessages";
 
 interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   feedbackSubmitted: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
 }
@@ -18,12 +17,11 @@ export default function InputField({
   inputRef,
 }: Props) {
   const [text, setText] = useState("");
-  const { sessionId } = useSession();
+  const { addMessage } = useMessages();
 
   const handleSend = async () => {
     // If feedback was submitted, disable further interaction
     if (feedbackSubmitted) return;
-
     if (!text.trim()) return;
 
     const userMessage = text;
@@ -51,42 +49,33 @@ export default function InputField({
     ]);
 
     try {
-      const res = await fetch("/api/query", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, session_id: sessionId }),
-      });
-
-      const reader = res.body?.getReader();
+      const reader = await addMessage(text);
+      if (!reader) return;
       const decoder = new TextDecoder();
       let fullText = "";
 
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value);
-          fullText += chunk;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        fullText += chunk;
 
-          // Update only the bot's message
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.messageId === botMessageId
-                ? { ...msg, content: fullText }
-                : msg
-            )
-          );
-        }
-
-        // Set showFeedback to false for all messages, then true only for the latest bot message
+        // Update only the bot's message
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.role === "assistant"
-              ? { ...msg, showFeedback: msg.messageId === botMessageId }
-              : msg
+            msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
           )
         );
       }
+
+      // Set showFeedback to false for all messages, then true only for the latest bot message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.role === "assistant"
+            ? { ...msg, showFeedback: msg.messageId === botMessageId }
+            : msg
+        )
+      );
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) =>

@@ -1,4 +1,4 @@
-import { IMessage } from "../../../Chat";
+import type { IMessage } from "../../../hooks/useMessages";
 
 interface Props {
   message: IMessage;
