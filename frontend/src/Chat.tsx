@@ -4,13 +4,12 @@ import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
 
 export default function Chat() {
-  const { messages, setMessages, isLoading } = useMessages();
+  const { messages, setMessages, isLoading, isError } = useMessages();
   const isOngoing = messages.length > 0;
 
   return (
     <div className="h-dvh flex items-center">
       <ExportMessagesButton messages={messages} />
-
       <div
         className={`container relative flex flex-col mx-auto p-6 bg-white rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
           ${
@@ -20,7 +19,9 @@ export default function Chat() {
           }`}
       >
         {isLoading ? (
-          <div className="animate-dot-pulse text-center">Loading...</div>
+          <div className={`${isLoading && "animate-dot-pulse"} text-center`}>
+            {isError ? "Error fetching chat history..." : "Loading..."}
+          </div>
         ) : (
           <MessageWindow
             messages={messages}
@@ -29,7 +30,6 @@ export default function Chat() {
           />
         )}
       </div>
-
       <Link
         className="fixed bottom-6 right-[8vw] px-6 py-1.5 bg-white border border-[#4a90e2] text-[#4a90e2] hover:bg-[#4a90e2] hover:text-white rounded-full shadow-lg font-semibold transition-colors duration-300 cursor-pointer z-50"
         to="/about"

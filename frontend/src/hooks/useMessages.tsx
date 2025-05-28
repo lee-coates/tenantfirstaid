@@ -40,7 +40,7 @@ export default function useMessages() {
 
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { sessionId } = useSession();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["messages", sessionId],
     queryFn: () => {
       return fetchChatHistory(sessionId);
@@ -66,5 +66,6 @@ export default function useMessages() {
     setMessages,
     addMessage: addMessage.mutateAsync,
     isLoading,
+    isError,
   };
 }

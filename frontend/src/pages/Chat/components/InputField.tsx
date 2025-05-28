@@ -1,8 +1,7 @@
 import { useState } from "react";
-import useMessages, { type IMessage } from "../../../hooks/useMessages";
+import useMessages from "../../../hooks/useMessages";
 
 interface Props {
-  setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   feedbackSubmitted: boolean;
@@ -10,14 +9,13 @@ interface Props {
 }
 
 export default function InputField({
-  setMessages,
   isLoading,
   setIsLoading,
   feedbackSubmitted,
   inputRef,
 }: Props) {
   const [text, setText] = useState("");
-  const { addMessage } = useMessages();
+  const { addMessage, setMessages } = useMessages();
 
   const handleSend = async () => {
     // If feedback was submitted, disable further interaction
