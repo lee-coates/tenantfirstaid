@@ -1,4 +1,4 @@
-import type { IMessage } from "../../../Chat";
+import { IMessage } from "../../../hooks/useMessages";
 import exportMessages from "../utils/exportHelper";
 
 interface Props {

@@ -1,4 +1,4 @@
-import type { IMessage } from "../../../Chat";
+import type { IMessage } from "../../../hooks/useMessages";
 
 export default function exportMessages(messages: IMessage[]) {
   if (messages.length < 2) return;
