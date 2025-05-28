@@ -40,16 +40,13 @@ export default function useMessages() {
   const { sessionId } = useSession();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["messages", sessionId],
-    queryFn: () => {
-      return fetchChatHistory(sessionId);
-    },
+    queryFn: async () => await fetchChatHistory(sessionId),
     enabled: !!sessionId,
   });
 
   const addMessage = useMutation({
-    mutationFn: async (userMessage: string) => {
-      return await addNewMessage(userMessage, sessionId);
-    },
+    mutationFn: async (userMessage: string) =>
+      await addNewMessage(userMessage, sessionId),
   });
 
   useEffect(() => {
