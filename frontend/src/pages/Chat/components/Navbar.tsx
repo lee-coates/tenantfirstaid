@@ -6,15 +6,9 @@ export default function Navbar() {
 
     return (
         <nav className="fixed top-0 left-0 w-full bg-white shadow-md py-3 px-6  z-50">
-            <div className="mx-auto flex items-center justify-between">
-                <div className="m-auto flex items-center gap-3">
-                    <Link to="/" className="flex items-center">
-                        <img
-                            src="/WebsiteLogo.png"
-                            alt="Tenant First Aid Logo"
-                            className="h-16 w-16 object-contain"
-                        />
-                    </Link>
+            <div className="mx-auto flex items-center ">
+                <div className="m-auto flex items-center ">
+
                     <Link to="/" className="text-2xl font-bold text-[#4a90e2]">
                         Tenant First Aid
                     </Link>
@@ -34,7 +28,7 @@ export default function Navbar() {
                 className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "translate-x-full"
                     }`}
             >
-                <div className="flex flex-col p-8 gap-6">
+                <div className="flex flex-col p-8 gap-6 mt-10">
                     <Link
                         to="/"
                         className="block px-3 py-2 rounded text-gray-700 font-medium transition-colors hover:bg-[#eaf4fb] hover:text-[#4a90e2]"
