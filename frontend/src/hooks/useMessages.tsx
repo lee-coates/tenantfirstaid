@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import useSession from "./useSession";
 
@@ -36,25 +36,17 @@ async function addNewMessage(userMessage: string, sessionId: string) {
 }
 
 export default function useMessages() {
-  const queryClient = useQueryClient();
-
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { sessionId } = useSession();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["messages", sessionId],
-    queryFn: () => {
-      return fetchChatHistory(sessionId);
-    },
+    queryFn: async () => await fetchChatHistory(sessionId),
     enabled: !!sessionId,
   });
 
   const addMessage = useMutation({
-    mutationFn: async (userMessage: string) => {
-      return await addNewMessage(userMessage, sessionId);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["messages", sessionId] });
-    },
+    mutationFn: async (userMessage: string) =>
+      await addNewMessage(userMessage, sessionId),
   });
 
   useEffect(() => {
