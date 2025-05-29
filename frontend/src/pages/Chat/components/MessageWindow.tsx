@@ -55,14 +55,7 @@ export default function MessageWindow({
   return (
     <>
       <div>
-        <div className="relative">
-          <h1
-            className={`${isOngoing ? "text-2xl" : "text-3xl"
-              } text-center mb-5 text-[#4a90e2]`}
-          >
-            <strong>Tenant First Aid</strong>
-          </h1>
-        </div>
+       
         {isError ? (
           <div className="flex items-center justify-center h-full text-center">
             Error fetching chat history. Try refreshing...
