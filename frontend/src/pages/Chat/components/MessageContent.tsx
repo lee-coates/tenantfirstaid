@@ -9,11 +9,11 @@ interface ORSProps {
 
 function HighlightORS({ text }: ORSProps) {
   const parts = [];
+  const matches = Array.from(text.matchAll(orsRegex));
   let lastIndex = 0;
 
-  for (const match of text.matchAll(orsRegex)) {
-    const { index } = match;
-    if (index === null) continue;
+  matches.forEach((match) => {
+    const index = match.index!;
     if (lastIndex < index) {
       parts.push(text.slice(lastIndex, index));
     }
@@ -35,7 +35,7 @@ function HighlightORS({ text }: ORSProps) {
     );
 
     lastIndex = index + match[0].length;
-  }
+  });
 
   if (lastIndex < text.length) {
     parts.push(text.slice(lastIndex));
