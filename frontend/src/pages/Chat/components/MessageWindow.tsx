@@ -135,24 +135,7 @@ export default function MessageWindow({
             </div>
           </div>
         ) : null}
-        {messages.length > 0 ? (
-          <div className="flex justify-center gap-4 mt-4">
-            <button
-              className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
-              onClick={handleClearSession}
-              title="Clear Chat"
-            >
 
-              Clear Chat
-            </button>
-            <div className="">
-              <ExportMessagesButton
-                messages={messages}
-
-              />
-            </div>
-          </div>
-        ) : null}
       </div>
     </>
   );
