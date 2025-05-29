@@ -6,6 +6,7 @@ import MessageFeedback from "./MessageFeedback";
 import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
 
+
 interface Props {
   messages: IMessage[];
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
@@ -77,15 +78,15 @@ export default function MessageWindow({
                 {messages.map((message) => (
                   <div
                     className={`flex w-full ${message.role === "assistant"
-                        ? "justify-start"
-                        : "justify-end"
+                      ? "justify-start"
+                      : "justify-end"
                       }`}
                     key={message.messageId}
                   >
                     <div
                       className={`p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
-                          ? "bg-gray-100 rounded-tl-sm"
-                          : "bg-[#4a90e2] text-white rounded-tr-sm"
+                        ? "bg-gray-100 rounded-tl-sm"
+                        : "bg-[#4a90e2] text-white rounded-tr-sm"
                         }`}
                     >
                       <MessageContent message={message} isLoading={isLoading} />
@@ -116,6 +117,24 @@ export default function MessageWindow({
           feedbackSubmitted={feedbackSubmitted}
           inputRef={inputRef}
         />
+        {messages.length > 0 ? (
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
+              onClick={handleClearSession}
+              title="Clear Chat"
+            >
+
+              Clear Chat
+            </button>
+            <div className="">
+              <ExportMessagesButton
+                messages={messages}
+
+              />
+            </div>
+          </div>
+        ) : null}
         {messages.length > 0 ? (
           <div className="flex justify-center gap-4 mt-4">
             <button
