@@ -17,17 +17,21 @@ function HighlightORS({ text }: ORSProps) {
     if (lastIndex < index) {
       parts.push(text.slice(lastIndex, index));
     }
+    const baseStatuteMatch = match[0].match(/ORS\s(\d{2,3}\.\d+)/);
+    const baseStatute = baseStatuteMatch ? baseStatuteMatch[1] : "";
 
     parts.push(
-      <button
+      <a
         key={index}
         className="text-blue-600 underline cursor-pointer"
         onClick={() => {
           console.log(match[0]);
         }}
+        href={`https://oregon.public.law/statutes/ors_${baseStatute}`}
+        target="_blank"
       >
         {match[0]}
-      </button>
+      </a>
     );
 
     lastIndex = index + match[0].length;
