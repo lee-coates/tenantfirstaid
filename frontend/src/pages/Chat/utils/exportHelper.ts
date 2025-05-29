@@ -16,6 +16,7 @@ export default function exportMessages(messages: IMessage[]) {
   newDocument?.document.writeln(`
     <html>
     <head>
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self';">
       <title>Conversation History</title>
       <style>
         body {
