@@ -1,3 +1,4 @@
+import time
 import json
 import re
 import os
@@ -8,6 +9,7 @@ from tenantfirstaid.shared import DEFAULT_INSTRUCTIONS
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
+MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
 
 client = OpenAI(
     api_key=API_KEY,
@@ -30,6 +32,7 @@ with open(dataset_path, "r") as f:
 # 3. Run the evaluation manually
 results = []
 scores = []
+times = []
 
 for i, sample in enumerate(samples):
     print(f"Processing sample {i + 1}/{len(samples)}...")
@@ -39,25 +42,27 @@ for i, sample in enumerate(samples):
     for msg in sample["messages"]:
         input_messages.append({"role": msg["role"], "content": msg["content"]})
 
+    # get the start time for response time measurement
+    start_time = time.time()
+
     # Use the Responses API with streaming
-    response_stream = client.responses.create(
+    response = client.responses.create(
         model=MODEL,
         input=input_messages,
         instructions=DEFAULT_INSTRUCTIONS,
-        reasoning={"effort": "high"},
-        stream=True,
+        reasoning={"effort": MODEL_REASONING_EFFORT},
         tools=openai_tools,
     )
 
+    end_time = time.time()
+    duration = end_time - start_time
+    times.append(duration)
+    print(f"Response time: {duration:.2f} seconds")
+
     # Collect the full response
-    assistant_chunks = []
-    for chunk in response_stream:
-        if hasattr(chunk, "text"):
-            token = chunk.text or ""
-            assistant_chunks.append(token)
 
     # Join the complete response
-    model_answer = "".join(assistant_chunks)
+    model_answer = response.output_text
     ideal_answer = sample["ideal"]
 
     # Use o3 as a judge to evaluate the model's response - asking only for numerical score
@@ -98,17 +103,22 @@ for i, sample in enumerate(samples):
             "model_answer": model_answer,
             "ideal_answer": ideal_answer,
             "score": score,
+            "response_time": duration,
         }
     )
 
 # Calculate average score
 average_score = sum(scores) / len(scores) if scores else 0
 
+# Calculate average response time
+average_time = sum(times) / len(times) if times else 0
+
 # 4. Print summary
 print("\n===== EVALUATION SUMMARY =====")
 print(f"Model evaluated: {MODEL}")
 print(f"Number of samples: {len(samples)}")
 print(f"Average score: {average_score:.2f}/10")
+print(f"Average response time: {average_time:.2f} seconds")
 
 # Individual scores
 print("\nIndividual scores:")
@@ -118,7 +128,12 @@ for i, score in enumerate(scores):
 results_path = os.path.join(script_dir, "eval_results.json")
 with open(results_path, "w") as f:
     json.dump(
-        {"model": MODEL, "average_score": average_score, "samples": results},
+        {
+            "model": MODEL,
+            "reasoning_effort": MODEL_REASONING_EFFORT,
+            "average_score": average_score,
+            "samples": results,
+        },
         f,
         indent=2,
     )

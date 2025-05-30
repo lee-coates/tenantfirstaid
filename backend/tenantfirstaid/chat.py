@@ -14,6 +14,7 @@ DATA_FILE = DATA_DIR / "chatlog.jsonl"
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
+MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
 
 
 class ChatView(View):
@@ -32,7 +33,11 @@ class ChatView(View):
 
         if VECTOR_STORE_ID:
             self.openai_tools.append(
-                {"type": "file_search", "vector_store_ids": [VECTOR_STORE_ID]}
+                {
+                    "type": "file_search",
+                    "vector_store_ids": [VECTOR_STORE_ID],
+                    "max_num_results": 5,
+                }
             )
 
     # Prompt iteration idea
@@ -65,21 +70,21 @@ class ChatView(View):
                     model=MODEL,
                     input=input_messages,
                     instructions=DEFAULT_INSTRUCTIONS,
-                    reasoning={"effort": "high"},
+                    reasoning={"effort": MODEL_REASONING_EFFORT},
                     stream=True,
                     tools=self.openai_tools,
                 )
 
                 assistant_chunks = []
                 for chunk in response_stream:
-                    if hasattr(chunk, "text"):
-                        token = chunk.text or ""
+                    if hasattr(chunk, "delta"):
+                        token = chunk.delta or ""
                         assistant_chunks.append(token)
                         yield token
 
                 # Join the complete response
                 assistant_msg = "".join(assistant_chunks)
-                print("assistant_msg", assistant_msg)
+                # print("assistant_msg", assistant_msg)
 
                 # Add this as a training example
                 self._append_training_example(session_id, user_msg, assistant_msg)
