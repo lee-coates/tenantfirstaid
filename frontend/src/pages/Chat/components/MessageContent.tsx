@@ -1,7 +1,7 @@
 import type { IMessage } from "../../../hooks/useMessages";
 
 const orsRegex =
-  /ORS\s\d{2,3}\.\d+[A-Za-z]?(?:\(\d+\)(?:\([a-zA-Z0-9]+\))*)?(?:[-&]\d+[A-Za-z]?(?:\(\d+\)(?:\([a-zA-Z0-9]+\))*)?)?/g;
+  /(?:ORS\s*)?\d{2,3}\.\d+[A-Za-z]?(?:\(\d+\)(?:\([a-zA-Z0-9]+\))*)?(?:[-&](?:ORS\s*)?\d{2,3}\.\d+[A-Za-z]?(?:\(\d+\)(?:\([a-zA-Z0-9]+\))*)?)?/g;
 
 interface ORSProps {
   text: string;
@@ -17,7 +17,7 @@ function HighlightORS({ text }: ORSProps) {
     if (lastIndex < index) {
       parts.push(text.slice(lastIndex, index));
     }
-    const baseStatuteMatch = match[0].match(/ORS\s(\d{2,3}\.\d+)/);
+    const baseStatuteMatch = match[0].match(/(?:ORS\s*)?(\d{2,3}\.\d+)/);
     const baseStatute = baseStatuteMatch ? baseStatuteMatch[1] : "";
 
     parts.push(
