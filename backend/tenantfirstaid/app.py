@@ -18,10 +18,7 @@ session = TenantSession()
 
 @app.get("/api/history/<session_id>")
 def history(session_id):
-    session_data = session.get(session_id)
-    messages = [item for item in session_data if item["type"] == "message"]
-    print(f"History for session {session_id}: {messages}")
-    return jsonify(messages)
+    return jsonify(session.get(session_id))
 
 
 app.add_url_rule(

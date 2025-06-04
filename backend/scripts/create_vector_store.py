@@ -18,6 +18,7 @@ client = OpenAI(api_key=API_KEY)
 # already exist in the vector store.
 # If you want to update the vector store, delete it first
 # and then run this script again.
+# TODO: Would be nice to have a better way to check for the vector store than just the name.
 vector_stores = client.vector_stores.list()
 if any(store.name == "Oregon Housing Law" for store in vector_stores):
     vector_store = next(
