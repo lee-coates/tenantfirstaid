@@ -1,4 +1,4 @@
-import type { IMessage } from "../../../Chat";
+import type { IMessage } from "../../../hooks/useMessages";
 
 export default function exportMessages(messages: IMessage[]) {
   if (messages.length < 2) return;
@@ -16,6 +16,7 @@ export default function exportMessages(messages: IMessage[]) {
   newDocument?.document.writeln(`
     <html>
     <head>
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self';">
       <title>Conversation History</title>
       <style>
         body {

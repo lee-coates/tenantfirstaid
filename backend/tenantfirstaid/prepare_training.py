@@ -10,41 +10,36 @@ from .shared import DEFAULT_INSTRUCTIONS
 # Define file paths (relative to the script location)
 SCRIPT_DIR = Path(__file__).parent.parent  # Go up one level to backend directory
 DATA_FILE = SCRIPT_DIR / "chatlog.jsonl"
-FEEDBACK_FILE = SCRIPT_DIR / "feedback.jsonl"
 OUTPUT_FILE = SCRIPT_DIR / f"combined_training_{MODEL.replace('.', '_')}.jsonl"
 
 
 def prepare_training_data():
     """
-    Combine and process training data from chatlog.jsonl and feedback.jsonl
-    to create a clean combined_training.jsonl file suitable for model training.
+    Process training data from chatlog.jsonl to create a clean combined_training.jsonl 
+    file suitable for model training.
 
     This script fixes several issues with the data format:
     1. Removes the 'metadata' field from each entry (causing API errors)
     2. Ensures each conversation includes the system prompt
     3. Organizes messages by session to create proper conversation flows
-    4. Handles feedback examples correctly
-    5. Uses a sliding window approach to create multiple training examples from each conversation
+    4. Uses a sliding window approach to create multiple training examples from each conversation
        at different points, which helps the model learn to respond appropriately at various stages
 
     The approach:
-    - For regular conversations: [system, assistant, user, assistant, user, assistant, ...]
+    - For conversations: [system, assistant, user, assistant, user, assistant, ...]
       - Creates the full conversation example
       - Plus intermediate examples ending with assistant responses:
         1. [system, assistant, user, assistant]
         2. [system, assistant, user, assistant, user, assistant]
         3. And so on
-    - For feedback examples, we always include the full conversation to ensure the corrected
-      assistant response is properly included
     - This helps the model learn to respond appropriately at different
-      points in a conversation while ensuring feedback is fully preserved
+      points in a conversation
 
     Returns:
         Path: The path to the generated training file
     """
     print("Preparing training data...")
     print(f"- Data file: {DATA_FILE}")
-    print(f"- Feedback file: {FEEDBACK_FILE}")
     print(f"- Output file: {OUTPUT_FILE}")
 
     # List to collect all processed training examples
@@ -133,9 +128,6 @@ def prepare_training_data():
 
     # Convert sessions to training examples using sliding window approach
     for session_id, messages in sessions.items():
-        # Skip sessions that came from feedback to avoid duplication
-        if session_id in feedback_session_ids:
-            continue
 
         # Only use examples with at least one exchange
         if len(messages) >= 3:  # system + user + assistant
@@ -162,8 +154,6 @@ def prepare_training_data():
             if not added_full:
                 processed_examples.append({"messages": messages})
 
-    # Add separate feedback examples (with normal weighting)
-    processed_examples.extend(separate_feedback_examples)
 
     # Write the processed data to the output file
     print(f"Writing {len(processed_examples)} examples to {OUTPUT_FILE}")
@@ -180,5 +170,5 @@ if __name__ == "__main__":
     print(f"\nSuccess! Your training file is ready at:\n{output_file}")
     print("\nTo use this file for training, run:")
     print(
-        f"openai fine-tuning create -t {output_file} -m {MODEL} --suffix law_chat_with_feedback"
+        f"openai fine-tuning create -t {output_file} -m {MODEL} --suffix law_chat"
     )
