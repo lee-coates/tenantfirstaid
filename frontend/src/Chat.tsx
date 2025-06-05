@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import ExportMessagesButton from "./pages/Chat/components/ExportMessagesButton";
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import StatuteDrawer from "./pages/Chat/components/StatuteDrawer";
 import useMessages from "./hooks/useMessages";
@@ -24,7 +22,7 @@ export default function Chat() {
   return (
     <div className="h-dvh pt-16 flex items-center">
 
-      <div className="flex w-full h-full">
+      <div className="flex w-full ">
         <div className="flex-1 transition-all duration-300">
           <div
             className={`container relative flex flex-col mx-auto p-6 bg-white rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
