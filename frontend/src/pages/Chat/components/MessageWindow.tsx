@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import type { IMessage } from "../../../hooks/useMessages";
 import InputField from "./InputField";
 import MessageContent from "./MessageContent";
-import MessageFeedback from "./MessageFeedback";
 import useSession from "../../../hooks/useSession";
+import ExportMessagesButton from "./ExportMessagesButton";
 
 
 interface Props {
@@ -23,7 +23,6 @@ export default function MessageWindow({
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const { setSessionId, handleNewSession } = useSession();
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,14 +55,7 @@ export default function MessageWindow({
   return (
     <>
       <div>
-        <div className="relative">
-          <h1
-            className={`${isOngoing ? "text-2xl" : "text-3xl"
-              } text-center mb-5 text-[#4a90e2]`}
-          >
-            <strong>Tenant First Aid</strong>
-          </h1>
-        </div>
+
         {isError ? (
           <div className="flex items-center justify-center h-full text-center">
             Error fetching chat history. Try refreshing...
@@ -79,29 +71,18 @@ export default function MessageWindow({
                 {messages.map((message) => (
                   <div
                     className={`flex w-full ${message.role === "assistant"
-                        ? "justify-start"
-                        : "justify-end"
+                      ? "justify-start"
+                      : "justify-end"
                       }`}
                     key={message.messageId}
                   >
                     <div
                       className={`p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
-                          ? "bg-gray-100 rounded-tl-sm"
-                          : "bg-[#4a90e2] text-white rounded-tr-sm"
+                        ? "bg-gray-100 rounded-tl-sm"
+                        : "bg-[#4a90e2] text-white rounded-tr-sm"
                         }`}
                     >
-                      <MessageContent
-                        message={message}
-                        isLoading={isLoading}
-                        onStatuteClick={onStatuteClick}
-                      />
-                      {message.role === "assistant" && message.showFeedback && (
-                        <MessageFeedback
-                          message={message}
-                          setMessages={setMessages}
-                          setFeedbackSubmitted={setFeedbackSubmitted}
-                        />
-                      )}
+                      <MessageContent message={message} isLoading={isLoading} onStatuteClick={onStatuteClick} />
                     </div>
                   </div>
                 ))}
@@ -119,18 +100,27 @@ export default function MessageWindow({
           setMessages={setMessages}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
-          feedbackSubmitted={feedbackSubmitted}
           inputRef={inputRef}
         />
-        <div className="flex justify-center mt-4">
-          <button
-            className="cursor-pointer font-bold underline text-[#E3574B] hover:text-[#B8473D]"
-            onClick={handleClearSession}
-            title="Clear Chat"
-          >
-            Clear Chat
-          </button>
-        </div>
+        {messages.length > 0 ? (
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
+              onClick={handleClearSession}
+              title="Clear Chat"
+            >
+
+              Clear Chat
+            </button>
+            <div className="">
+              <ExportMessagesButton
+                messages={messages}
+
+              />
+            </div>
+          </div>
+        ) : null}
+
       </div>
     </>
   );

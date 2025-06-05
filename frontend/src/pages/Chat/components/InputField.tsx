@@ -5,7 +5,6 @@ interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  feedbackSubmitted: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
@@ -13,15 +12,12 @@ export default function InputField({
   setMessages,
   isLoading,
   setIsLoading,
-  feedbackSubmitted,
   inputRef,
 }: Props) {
   const [text, setText] = useState("");
   const { addMessage } = useMessages();
 
   const handleSend = async () => {
-    // If feedback was submitted, disable further interaction
-    if (feedbackSubmitted) return;
     if (!text.trim()) return;
 
     const userMessage = text;
@@ -44,7 +40,6 @@ export default function InputField({
         role: "assistant",
         content: "",
         messageId: botMessageId,
-        showFeedback: false,
       },
     ]);
 
@@ -68,28 +63,17 @@ export default function InputField({
         );
       }
 
-      // Set showFeedback to false for all messages, then true only for the latest bot message
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.role === "assistant"
-            ? { ...msg, showFeedback: msg.messageId === botMessageId }
-            : msg
-        )
-      );
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) =>
-        prev.map((msg) => {
-          if (msg.messageId === botMessageId) {
-            return {
-              ...msg,
-              content: "Sorry, I encountered an error. Please try again.",
-            };
-          } else if (msg.role === "assistant") {
-            return { ...msg, showFeedback: false };
-          }
-          return msg;
-        })
+        prev.map((msg) =>
+          msg.messageId === botMessageId
+            ? {
+                ...msg,
+                content: "Sorry, I encountered an error. Please try again.",
+              }
+            : msg
+        )
       );
     } finally {
       setIsLoading(false);
@@ -109,12 +93,8 @@ export default function InputField({
           }
         }}
         className="w-full p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-        placeholder={
-          feedbackSubmitted
-            ? "Please refresh the page to start a new conversation"
-            : "Type your message here..."
-        }
-        disabled={isLoading || feedbackSubmitted}
+        placeholder="Type your message here..."
+        disabled={isLoading}
         ref={inputRef}
       />
       <button

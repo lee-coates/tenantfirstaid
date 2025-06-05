@@ -23,7 +23,7 @@ export default function Chat() {
 
   return (
     <div className="h-dvh pt-16 flex items-center">
-      <ExportMessagesButton messages={messages} />
+
       <div className="flex w-full h-full">
         <div className="flex-1 transition-all duration-300">
           <div
@@ -50,13 +50,7 @@ export default function Chat() {
         </div>
         <StatuteDrawer open={drawerOpen} statute={selectedStatute} onClose={closeDrawer} />
       </div>
-      <Link
-        className="fixed bottom-6 right-[8vw] px-6 py-1.5 bg-white border border-[#4a90e2] text-[#4a90e2] hover:bg-[#4a90e2] hover:text-white rounded-full shadow-lg font-semibold transition-colors duration-300 cursor-pointer z-50"
-        to="/about"
-        title="About Us"
-      >
-        About Tenant First Aid
-      </Link>
+
     </div>
   );
 }

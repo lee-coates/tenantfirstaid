@@ -6,8 +6,6 @@ export interface IMessage {
   role: "user" | "assistant";
   content: string;
   messageId: string;
-  showFeedback?: boolean;
-  feedbackSubmitted?: boolean;
 }
 
 async function fetchChatHistory(sessionId: string) {
