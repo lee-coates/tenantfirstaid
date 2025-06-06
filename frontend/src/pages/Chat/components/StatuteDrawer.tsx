@@ -25,7 +25,7 @@ export default function StatuteDrawer({ open, statute, onClose }: StatuteDrawerP
           ${open ? "sm:w-96 pointer-events-auto" : "sm:w-0 pointer-events-none"}
           w-full
           fixed sm:static bottom-0 right-0
-          z-50
+          z-40
         `}
             >
 

@@ -14,7 +14,7 @@ export default function Navbar() {
                     </Link>
                 </div>
                 <button
-                    className="flex flex-col justify-center items-center w-10 h-10 relative z-50 cursor-pointer"
+                    className="flex flex-col justify-center items-center w-10 h-10 relative z-60 cursor-pointer"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                     aria-label="Open menu"
                 >
@@ -25,7 +25,7 @@ export default function Navbar() {
             </div>
 
             <div
-                className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex flex-col p-8 gap-6 mt-10">
