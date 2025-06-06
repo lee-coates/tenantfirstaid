@@ -22,7 +22,7 @@ export default function Chat() {
   return (
     <div className="h-dvh pt-16 flex items-center">
 
-      <div className="flex w-full ">
+      <div className="flex w-full items-center ">
         <div className="flex-1 transition-all duration-300">
           <div
             className={`container relative flex flex-col mx-auto p-6 bg-white rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
@@ -48,6 +48,7 @@ export default function Chat() {
         </div>
         <StatuteDrawer open={drawerOpen} statute={selectedStatute} onClose={closeDrawer} />
       </div>
+
 
     </div>
   );
