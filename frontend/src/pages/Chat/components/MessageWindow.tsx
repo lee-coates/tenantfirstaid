@@ -11,6 +11,7 @@ interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isOngoing: boolean;
   isError: boolean;
+  onStatuteClick: (statute: string) => void;
 }
 
 export default function MessageWindow({
@@ -18,6 +19,7 @@ export default function MessageWindow({
   setMessages,
   isOngoing,
   isError,
+  onStatuteClick,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const { setSessionId, handleNewSession } = useSession();
@@ -53,7 +55,7 @@ export default function MessageWindow({
   return (
     <>
       <div>
-       
+
         {isError ? (
           <div className="flex items-center justify-center h-full text-center">
             Error fetching chat history. Try refreshing...
@@ -80,7 +82,7 @@ export default function MessageWindow({
                         : "bg-[#4a90e2] text-white rounded-tr-sm"
                         }`}
                     >
-                      <MessageContent message={message} isLoading={isLoading} />
+                      <MessageContent message={message} isLoading={isLoading} onStatuteClick={onStatuteClick} />
                     </div>
                   </div>
                 ))}
