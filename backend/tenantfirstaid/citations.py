@@ -1,4 +1,3 @@
-
 import json
 import pathlib
 from flask import request, jsonify, abort
