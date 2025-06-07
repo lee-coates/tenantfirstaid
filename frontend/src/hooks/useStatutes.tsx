@@ -11,12 +11,12 @@ async function fetchStatute(statute: string): Promise<IStatuteDetails> {
     const results = await response.json();
     return results;
   } catch (err) {
-    throw new Error(`Failed to fetch statute. ${err}`);
+    throw new Error(`Failed to fetch statute ${statute}. ${err}`);
   }
 }
 
 export default function useStatutes(statute: string) {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["statute", statute],
     queryFn: async () => fetchStatute(statute),
     enabled: !!statute,
@@ -25,5 +25,6 @@ export default function useStatutes(statute: string) {
   return {
     statuteDetails: data,
     isLoading,
+    isError,
   };
 }

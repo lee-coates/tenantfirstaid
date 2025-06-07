@@ -1,4 +1,3 @@
-import React from "react";
 import useStatutes from "../../../hooks/useStatutes";
 
 interface StatuteDrawerProps {
@@ -14,7 +13,7 @@ export default function StatuteDrawer({
 }: StatuteDrawerProps) {
   const baseStatuteMatch = statute?.match(/(?:ORS\s*)?(\d{2,3}\.\d+)/);
   const baseStatute = baseStatuteMatch ? baseStatuteMatch[1] : "";
-  const { statuteDetails, isLoading } = useStatutes(baseStatute);
+  const { statuteDetails, isLoading, isError } = useStatutes(baseStatute);
 
   return (
     <>
@@ -81,16 +80,15 @@ export default function StatuteDrawer({
                 <p className="my-4">
                   See details below for <strong>{statute}</strong>.
                 </p>
-                <p>
+                <div className="space-y-2">
                   {isLoading
                     ? "Loading details..."
-                    : statuteDetails?.text.split("\n").map((line, i) => (
-                        <React.Fragment key={i}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      )) ?? "Unable to fetch details..."}
-                </p>
+                    : isError
+                    ? "Unable to fetch details..."
+                    : statuteDetails?.text
+                        .split("\n")
+                        .map((line, i) => <p key={i}>{line}</p>)}
+                </div>
               </>
             )}
           </div>
