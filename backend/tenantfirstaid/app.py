@@ -11,6 +11,7 @@ from .chat import ChatView
 from .shared import CACHE
 from .prompt import get_prompt, set_prompt
 from .session import TenantSession
+from .citations import get_citation
 
 app = Flask(__name__)
 
@@ -29,6 +30,9 @@ app.add_url_rule(
 )
 app.add_url_rule(
     "/api/prompt", endpoint="prompt_post", view_func=set_prompt, methods=["POST"]
+)
+app.add_url_rule(
+    "/api/citation", endpoint="citation", view_func=get_citation, methods=["GET"]
 )
 
 if __name__ == "__main__":
