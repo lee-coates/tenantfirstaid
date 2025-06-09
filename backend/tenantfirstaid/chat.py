@@ -29,6 +29,8 @@ class ChatView(View):
         self.session = session
 
         VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
+        NUM_FILE_SEARCH_RESULTS = os.getenv("NUM_FILE_SEARCH_RESULTS", 10)
+
         self.openai_tools = []
 
         if VECTOR_STORE_ID:
@@ -36,7 +38,7 @@ class ChatView(View):
                 {
                     "type": "file_search",
                     "vector_store_ids": [VECTOR_STORE_ID],
-                    "max_num_results": 5,
+                    "max_num_results": NUM_FILE_SEARCH_RESULTS,
                 }
             )
 
