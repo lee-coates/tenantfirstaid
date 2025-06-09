@@ -19,13 +19,11 @@ function HighlightORS({ text, onStatuteClick }: ORSProps) {
       parts.push(text.slice(lastIndex, index));
     }
 
-
     parts.push(
       <p
         key={index}
         className="inline text-blue-600 underline cursor-pointer transition-colors hover:bg-blue-200 rounded"
         onClick={() => onStatuteClick(match[0])}
-
       >
         {match[0]}
       </p>
@@ -47,11 +45,11 @@ interface Props {
   onStatuteClick: (statute: string) => void;
 }
 
-export default function MessageContent({ message, isLoading, onStatuteClick }: Props) {
-
-
-
-
+export default function MessageContent({
+  message,
+  isLoading,
+  onStatuteClick,
+}: Props) {
   return (
     <>
       <strong>{message.role === "assistant" ? "Bot: " : "You: "}</strong>
@@ -59,10 +57,12 @@ export default function MessageContent({ message, isLoading, onStatuteClick }: P
         <span className="animate-dot-pulse">...</span>
       ) : (
         <span className="whitespace-pre-wrap">
-          <HighlightORS text={message.content} onStatuteClick={onStatuteClick} />
+          <HighlightORS
+            text={message.content}
+            onStatuteClick={onStatuteClick}
+          />
         </span>
       )}
-
     </>
   );
 }
