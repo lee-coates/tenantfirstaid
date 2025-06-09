@@ -5,9 +5,10 @@ const orsRegex =
 
 interface ORSProps {
   text: string;
+  onStatuteClick: (statute: string) => void;
 }
 
-function HighlightORS({ text }: ORSProps) {
+function HighlightORS({ text, onStatuteClick }: ORSProps) {
   const parts = [];
   const matches = Array.from(text.matchAll(orsRegex));
   let lastIndex = 0;
@@ -17,21 +18,17 @@ function HighlightORS({ text }: ORSProps) {
     if (lastIndex < index) {
       parts.push(text.slice(lastIndex, index));
     }
-    const baseStatuteMatch = match[0].match(/(?:ORS\s*)?(\d{2,3}\.\d+)/);
-    const baseStatute = baseStatuteMatch ? baseStatuteMatch[1] : "";
+
 
     parts.push(
-      <a
+      <p
         key={index}
-        className="text-blue-600 underline cursor-pointer"
-        onClick={() => {
-          console.log(match[0]);
-        }}
-        href={`https://oregon.public.law/statutes/ors_${baseStatute}`}
-        target="_blank"
+        className="inline text-blue-600 underline cursor-pointer transition-colors hover:bg-blue-200 rounded"
+        onClick={() => onStatuteClick(match[0])}
+
       >
         {match[0]}
-      </a>
+      </p>
     );
 
     lastIndex = index + match[0].length;
@@ -47,9 +44,14 @@ function HighlightORS({ text }: ORSProps) {
 interface Props {
   message: IMessage;
   isLoading: boolean;
+  onStatuteClick: (statute: string) => void;
 }
 
-export default function MessageContent({ message, isLoading }: Props) {
+export default function MessageContent({ message, isLoading, onStatuteClick }: Props) {
+
+
+
+
   return (
     <>
       <strong>{message.role === "assistant" ? "Bot: " : "You: "}</strong>
@@ -57,9 +59,10 @@ export default function MessageContent({ message, isLoading }: Props) {
         <span className="animate-dot-pulse">...</span>
       ) : (
         <span className="whitespace-pre-wrap">
-          <HighlightORS text={message.content} />
+          <HighlightORS text={message.content} onStatuteClick={onStatuteClick} />
         </span>
       )}
+
     </>
   );
 }

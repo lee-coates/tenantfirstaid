@@ -10,6 +10,7 @@ if Path(".env").exists():
 from .chat import ChatView
 
 from .session import TenantSession
+from .citations import get_citation
 
 app = Flask(__name__)
 
@@ -23,6 +24,10 @@ def history(session_id):
 
 app.add_url_rule(
     "/api/query", view_func=ChatView.as_view("chat", session), methods=["POST"]
+)
+
+app.add_url_rule(
+    "/api/citation", endpoint="citation", view_func=get_citation, methods=["GET"]
 )
 
 if __name__ == "__main__":

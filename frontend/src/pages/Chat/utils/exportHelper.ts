@@ -1,5 +1,14 @@
 import type { IMessage } from "../../../hooks/useMessages";
 
+function sanitizeText(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export default function exportMessages(messages: IMessage[]) {
   if (messages.length < 2) return;
 
@@ -9,14 +18,14 @@ export default function exportMessages(messages: IMessage[]) {
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${content}</p>`
+        }</strong>: ${sanitizeText(content)}</p>`
     )
     .join("");
 
   newDocument?.document.writeln(`
     <html>
     <head>
-      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self';">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; object-src 'none'; base-uri 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; form-action 'none';">
       <title>Conversation History</title>
       <style>
         body {
