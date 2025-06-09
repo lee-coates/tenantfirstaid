@@ -87,6 +87,8 @@ jobs:
             DB_PASSWORD=${{secrets.DB_PASSWORD}}
             DB_PORT=${{secrets.DB_PORT}}
             DB_USER=default
+            MODEL_REASONING_EFFORT=high
+            VECTOR_STORE_ID={{secrets.VECTOR_STORE_ID}}
             EOF
             chmod 640 /etc/tenantfirstaid/env
             
