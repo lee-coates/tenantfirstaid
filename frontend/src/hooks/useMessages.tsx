@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import useSession from "./useSession";
 
 export interface IMessage {
   role: "user" | "assistant";
@@ -8,9 +7,11 @@ export interface IMessage {
   messageId: string;
 }
 
-async function fetchChatHistory(sessionId: string) {
+async function fetchChatHistory() {
   try {
-    const response = await fetch(`/api/history/${sessionId}`);
+    const response = await fetch('/api/history', {
+      credentials: 'include'
+    });
     let history: IMessage[] = await response.json();
     let messageId = Date.now();
     history = history.map((message: IMessage) => {
@@ -25,11 +26,12 @@ async function fetchChatHistory(sessionId: string) {
   }
 }
 
-async function addNewMessage(userMessage: string, sessionId: string) {
+async function addNewMessage(userMessage: string) {
   const response = await fetch("/api/query", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: userMessage, session_id: sessionId }),
+    credentials: 'include',
+    body: JSON.stringify({ message: userMessage }),
   });
   return response.body?.getReader();
 }
@@ -45,16 +47,14 @@ async function initNewSession(city: string | null, state: string, sessionId: str
 
 export default function useMessages() {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { sessionId } = useSession();
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["messages", sessionId],
-    queryFn: async () => await fetchChatHistory(sessionId),
-    enabled: !!sessionId,
+    queryKey: ["messages"],
+    queryFn: async () => await fetchChatHistory(),
   });
 
   const addMessage = useMutation({
     mutationFn: async (userMessage: string) =>
-      await addNewMessage(userMessage, sessionId),
+      await addNewMessage(userMessage),
   });
 
   const initSession = useMutation({
@@ -63,11 +63,11 @@ export default function useMessages() {
   })
 
   useEffect(() => {
-    setMessages([]);
-  }, [sessionId]);
-
-  useEffect(() => {
-    if (data && data.length !== 0) setMessages(data);
+    if (data && data.length !== 0) {
+      setMessages(data);
+    } else if (data && data.length === 0) {
+      setMessages([]);
+    }
   }, [data]);
 
   return {
