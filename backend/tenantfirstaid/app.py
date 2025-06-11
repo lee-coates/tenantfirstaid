@@ -21,7 +21,6 @@ session = TenantSession()
 def history(session_id):
     try:
         saved_session = session.get(session_id)
-        print(saved_session)
         return jsonify(saved_session["messages"]), 200
     except KeyError:
         return jsonify({"error": "Session not found"}), 404

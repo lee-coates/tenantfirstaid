@@ -45,8 +45,11 @@ for dirpath, dirnames, filenames in os.walk(documents_path):
         )  # Ensure we have at least two subdirs
 
         attributes = {}
+        # Openai doesn't allow querying by empty attributes, so we set them to "null"
         if subdirs[1]:
             attributes["city"] = subdirs[1]
+        else:
+            attributes["city"] = "null"
         if subdirs[0]:
             attributes["state"] = subdirs[0]
 

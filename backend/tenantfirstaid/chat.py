@@ -28,18 +28,6 @@ class ChatView(View):
     def __init__(self, session):
         self.session = session
 
-        self.VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
-        NUM_FILE_SEARCH_RESULTS = os.getenv("NUM_FILE_SEARCH_RESULTS", 10)
-        self.openai_tools_file_search = {
-            "type": "file_search",
-            "vector_store_ids": [self.VECTOR_STORE_ID],
-            "max_num_results": NUM_FILE_SEARCH_RESULTS,
-            "filters": {
-                "type": "and",
-                "filters": [],
-            },
-        }
-
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
 
@@ -49,7 +37,6 @@ class ChatView(View):
         user_msg = data["message"]
 
         current_session = self.session.get(session_id)
-        print(current_session)
 
         # Format messages for the new Responses API
         input_messages = []
@@ -66,18 +53,64 @@ class ChatView(View):
 
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
+        instructions += f"\nThe user is in {current_session['city']} {current_session['state'].upper()}.\n"
 
-        if current_session["city"] != "":
-            self.openai_tools_file_search["filters"]["filters"].append(
-                {"type": "eq", "key": "city", "value": current_session["city"]}
-            )
-            instructions += f" The user is in {current_session['city']}."
+        # We either want to use both city and state, or just state.
+        # This filters out other cities in the same state.
+        # The user is gated into selecting a city in Oregon so we don't worry about
+        # whether the relevant documents exist or not.
+        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
 
-        if current_session["state"] != "":
-            self.openai_tools_file_search["filters"]["filters"].append(
-                {"type": "eq", "key": "state", "value": current_session["state"]}
-            )
-            instructions += f" The user is in the state of {current_session['state']}."
+        tools = (
+            [
+                {
+                    "type": "file_search",
+                    "vector_store_ids": [VECTOR_STORE_ID],
+                    "max_num_results": os.getenv("NUM_FILE_SEARCH_RESULTS", 5),
+                    "filters": {
+                        "type": "or",
+                        "filters": [
+                            {
+                                "type": "and",
+                                "filters": [
+                                    {
+                                        "type": "eq",
+                                        "key": "city",
+                                        "value": current_session["city"],
+                                    },
+                                    {
+                                        "type": "eq",
+                                        "key": "state",
+                                        "value": current_session["state"],
+                                    },
+                                ],
+                            }
+                            if current_session["city"]
+                            else None,
+                            {
+                                "type": "and",
+                                "filters": [
+                                    {
+                                        "type": "eq",
+                                        "key": "city",
+                                        "value": "null",
+                                    },
+                                    {
+                                        "type": "eq",
+                                        "key": "state",
+                                        "value": current_session["state"],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                }
+            ]
+            if VECTOR_STORE_ID
+            else None
+        )
+
+        print("TOOLS", tools if tools else None)
 
         def generate():
             try:
@@ -89,14 +122,11 @@ class ChatView(View):
                     reasoning={"effort": MODEL_REASONING_EFFORT},
                     stream=True,
                     include=["file_search_call.results"],
-                    tools=[self.openai_tools_file_search]
-                    if self.VECTOR_STORE_ID
-                    else None,
+                    tools=tools if tools else None,
                 )
 
                 assistant_chunks = []
                 for chunk in response_stream:
-                    print(chunk)
                     if hasattr(chunk, "delta"):
                         token = chunk.delta or ""
                         assistant_chunks.append(token)
@@ -104,7 +134,6 @@ class ChatView(View):
 
                 # Join the complete response
                 assistant_msg = "".join(assistant_chunks)
-                # print("assistant_msg", assistant_msg)
 
                 # Add this as a training example
                 self._append_training_example(session_id, user_msg, assistant_msg)
