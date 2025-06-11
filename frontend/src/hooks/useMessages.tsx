@@ -20,6 +20,7 @@ async function fetchChatHistory(sessionId: string) {
     });
     return history;
   } catch (err) {
+    console.error("Error fetching chat history:", err);
     throw new Error(`Failed to fetch chat history. ${err}`);
   }
 }
@@ -29,6 +30,15 @@ async function addNewMessage(userMessage: string, sessionId: string) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: userMessage, session_id: sessionId }),
+  });
+  return response.body?.getReader();
+}
+
+async function initNewSession(city: string | null, state: string, sessionId: string) {
+  const response = await fetch("/api/init", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ city, state, session_id: sessionId }),
   });
   return response.body?.getReader();
 }
@@ -47,6 +57,11 @@ export default function useMessages() {
       await addNewMessage(userMessage, sessionId),
   });
 
+  const initSession = useMutation({
+    mutationFn: async ({ city, state }: { city: string | null; state: string }) =>
+      await initNewSession(city, state, sessionId),
+  })
+
   useEffect(() => {
     setMessages([]);
   }, [sessionId]);
@@ -59,6 +74,7 @@ export default function useMessages() {
     messages,
     setMessages,
     addMessage: addMessage.mutateAsync,
+    initSession: initSession.mutateAsync,
     isLoading,
     isError,
   };

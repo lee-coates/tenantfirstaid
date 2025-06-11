@@ -28,19 +28,17 @@ class ChatView(View):
     def __init__(self, session):
         self.session = session
 
-        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
+        self.VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
         NUM_FILE_SEARCH_RESULTS = os.getenv("NUM_FILE_SEARCH_RESULTS", 10)
-
-        self.openai_tools = []
-
-        if VECTOR_STORE_ID:
-            self.openai_tools.append(
-                {
-                    "type": "file_search",
-                    "vector_store_ids": [VECTOR_STORE_ID],
-                    "max_num_results": NUM_FILE_SEARCH_RESULTS,
-                }
-            )
+        self.openai_tools_file_search = {
+            "type": "file_search",
+            "vector_store_ids": [self.VECTOR_STORE_ID],
+            "max_num_results": NUM_FILE_SEARCH_RESULTS,
+            "filters": {
+                "type": "and",
+                "filters": [],
+            },
+        }
 
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
@@ -51,19 +49,35 @@ class ChatView(View):
         user_msg = data["message"]
 
         current_session = self.session.get(session_id)
+        print(current_session)
 
         # Format messages for the new Responses API
         input_messages = []
 
         # Add conversation history (excluding system prompt)
-        for msg in current_session[0:]:
+        for msg in current_session["messages"][0:]:
             input_messages.append({"role": msg["role"], "content": msg["content"]})
 
         # Add current user message
         input_messages.append({"role": "user", "content": user_msg})
 
         # Update our cache with the user message
-        current_session.append({"role": "user", "content": user_msg})
+        current_session["messages"].append({"role": "user", "content": user_msg})
+
+        # Add city and state filters if they are set
+        instructions = DEFAULT_INSTRUCTIONS
+
+        if current_session["city"] != "":
+            self.openai_tools_file_search["filters"]["filters"].append(
+                {"type": "eq", "key": "city", "value": current_session["city"]}
+            )
+            instructions += f" The user is in {current_session['city']}."
+
+        if current_session["state"] != "":
+            self.openai_tools_file_search["filters"]["filters"].append(
+                {"type": "eq", "key": "state", "value": current_session["state"]}
+            )
+            instructions += f" The user is in the state of {current_session['state']}."
 
         def generate():
             try:
@@ -71,14 +85,18 @@ class ChatView(View):
                 response_stream = self.client.responses.create(
                     model=MODEL,
                     input=input_messages,
-                    instructions=DEFAULT_INSTRUCTIONS,
+                    instructions=instructions,
                     reasoning={"effort": MODEL_REASONING_EFFORT},
                     stream=True,
-                    tools=self.openai_tools,
+                    include=["file_search_call.results"],
+                    tools=[self.openai_tools_file_search]
+                    if self.VECTOR_STORE_ID
+                    else None,
                 )
 
                 assistant_chunks = []
                 for chunk in response_stream:
+                    print(chunk)
                     if hasattr(chunk, "delta"):
                         token = chunk.delta or ""
                         assistant_chunks.append(token)
@@ -90,12 +108,16 @@ class ChatView(View):
 
                 # Add this as a training example
                 self._append_training_example(session_id, user_msg, assistant_msg)
-                current_session.append({"role": "assistant", "content": assistant_msg})
+                current_session["messages"].append(
+                    {"role": "assistant", "content": assistant_msg}
+                )
 
             except Exception as e:
                 error_msg = f"Error generating response: {e}"
                 print(error_msg)
-                current_session.append({"role": "assistant", "content": error_msg})
+                current_session["messages"].append(
+                    {"role": "assistant", "content": error_msg}
+                )
                 yield f"Error: {str(e)}"
 
             finally:

@@ -48,7 +48,6 @@ interface Props {
 export default function MessageContent({
   message,
   isLoading,
-  onStatuteClick,
 }: Props) {
   return (
     <>
@@ -56,12 +55,7 @@ export default function MessageContent({
       {message.role === "assistant" && message.content === "" && isLoading ? (
         <span className="animate-dot-pulse">...</span>
       ) : (
-        <span className="whitespace-pre-wrap">
-          <HighlightORS
-            text={message.content}
-            onStatuteClick={onStatuteClick}
-          />
-        </span>
+        <span className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: message.content }}></span>
       )}
     </>
   );

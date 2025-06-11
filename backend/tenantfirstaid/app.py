@@ -9,7 +9,7 @@ if Path(".env").exists():
 
 from .chat import ChatView
 
-from .session import TenantSession
+from .session import InitSessionView, TenantSession
 from .citations import get_citation
 
 app = Flask(__name__)
@@ -19,8 +19,17 @@ session = TenantSession()
 
 @app.get("/api/history/<session_id>")
 def history(session_id):
-    return jsonify(session.get(session_id))
+    try:
+        saved_session = session.get(session_id)
+        print(saved_session)
+        return jsonify(saved_session["messages"]), 200
+    except KeyError:
+        return jsonify({"error": "Session not found"}), 404
 
+
+app.add_url_rule(
+    "/api/init", view_func=InitSessionView.as_view("init", session), methods=["POST"]
+)
 
 app.add_url_rule(
     "/api/query", view_func=ChatView.as_view("chat", session), methods=["POST"]
