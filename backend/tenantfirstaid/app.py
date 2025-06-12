@@ -40,13 +40,17 @@ def history():
     except KeyError:
         return jsonify({"error": "Session not found"}), 404
 
+
 @app.post("/api/clear-session")
 def clear_session():
     session.clear()
     return jsonify({"success": True})
 
+
 app.add_url_rule(
-    "/api/init", view_func=InitSessionView.as_view("init", tenant_session), methods=["POST"]
+    "/api/init",
+    view_func=InitSessionView.as_view("init", tenant_session),
+    methods=["POST"],
 )
 
 app.add_url_rule(
