@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Response, request
+from flask import Response, request, session
 from flask.views import View
 from valkey import Valkey
 import simplejson as json
@@ -29,6 +29,7 @@ class TenantSession:
             print(e)
 
     def get(self, session_id):
+        print("SESSION_ID", session_id)
         return json.loads(
             self.db_con.get(session_id) or '{"city": "", "state": "", "messages": []}'
         )
@@ -43,7 +44,10 @@ class InitSessionView(View):
 
     def dispatch_request(self):
         data = request.json
-        session_id = data.get("session_id") or str(uuid.uuid4())
+        session_id = session.get("session_id")
+        if not session_id:
+            session_id = str(uuid.uuid4())
+            session["session_id"] = session_id
         city = data["city"]
         state = data["state"]
 

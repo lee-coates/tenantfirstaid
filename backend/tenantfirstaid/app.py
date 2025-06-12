@@ -22,13 +22,20 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
+
 tenant_session = TenantSession()
 
 
 @app.get("/api/history")
 def history():
     try:
-        saved_session = session.get("session_id")
+        session_id = session.get("session_id")
+        if not session_id:
+            return jsonify([]), 200
+        saved_session = tenant_session.get(session_id)
+        if not saved_session:
+            return jsonify({"error": "No session found"}), 404
+        print(saved_session)
         return jsonify(saved_session["messages"]), 200
     except KeyError:
         return jsonify({"error": "Session not found"}), 404
@@ -39,7 +46,7 @@ def clear_session():
     return jsonify({"success": True})
 
 app.add_url_rule(
-    "/api/init", view_func=InitSessionView.as_view("init", session), methods=["POST"]
+    "/api/init", view_func=InitSessionView.as_view("init", tenant_session), methods=["POST"]
 )
 
 app.add_url_rule(

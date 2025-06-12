@@ -36,11 +36,11 @@ async function addNewMessage(userMessage: string) {
   return response.body?.getReader();
 }
 
-async function initNewSession(city: string | null, state: string, sessionId: string) {
+async function initNewSession(city: string | null, state: string) {
   const response = await fetch("/api/init", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ city, state, session_id: sessionId }),
+    body: JSON.stringify({ city, state }),
   });
   return response.body?.getReader();
 }
@@ -59,7 +59,7 @@ export default function useMessages() {
 
   const initSession = useMutation({
     mutationFn: async ({ city, state }: { city: string | null; state: string }) =>
-      await initNewSession(city, state, sessionId),
+      await initNewSession(city, state),
   })
 
   useEffect(() => {

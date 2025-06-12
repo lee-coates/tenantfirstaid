@@ -90,7 +90,7 @@ class ChatView(View):
                                     },
                                 ],
                             }
-                            if current_session["city"]
+                            if current_session["city"] != "null"
                             else None,
                             {
                                 "type": "and",
