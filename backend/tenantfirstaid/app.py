@@ -19,7 +19,7 @@ app = Flask(__name__)
 # Configure Flask sessions
 app.secret_key = os.getenv("FLASK_SECRET_KEY", secrets.token_hex(32))
 app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SECURE"] = os.getenv("env", "dev") == "prod"  # True in production with HTTPS
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("ENV", "dev") == "prod"
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 tenant_session = TenantSession()
