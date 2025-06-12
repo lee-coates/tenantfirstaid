@@ -24,7 +24,7 @@ export default function Chat() {
       <div className="flex w-full items-center ">
         <div className="flex-1 transition-all duration-300">
           <div
-            className={`container relative flex flex-col mx-auto p-6 bg-white rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
+            className={`container relative flex flex-col mx-auto p-6 bg-[#F4F4F2] rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
               ${
                 isOngoing
                   ? "justify-between h-[calc(100dvh-10rem)]"

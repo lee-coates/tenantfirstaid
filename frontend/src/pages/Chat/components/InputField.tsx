@@ -62,7 +62,6 @@ export default function InputField({
           )
         );
       }
-
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) =>
@@ -98,7 +97,7 @@ export default function InputField({
         ref={inputRef}
       />
       <button
-        className="px-6 bg-[#4a90e2] hover:bg-[#3a7bc8] text-white rounded-md cursor-pointer transition-color duration-300"
+        className="px-6 bg-[#1F584F] hover:bg-[#4F8B82] text-white rounded-md cursor-pointer transition-color duration-300"
         onClick={handleSend}
         disabled={isLoading || !text.trim()}
       >
