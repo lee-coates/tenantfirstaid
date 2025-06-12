@@ -11,7 +11,9 @@ dependencies = [
   "simplejson",
   "ipdb>=0.13.13",
   "python-dotenv",
-]
+  "pandas",
+  "pandarallel",
+  ]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -29,3 +31,9 @@ dev = [
     "ty>=0.0.1a8",
     "types-Flask>=1.1.6",
 ]
+
+gen_convo = [
+      "pandas",
+      "openai",
+]
+
