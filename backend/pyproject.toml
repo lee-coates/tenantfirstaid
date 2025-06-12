@@ -11,8 +11,6 @@ dependencies = [
   "simplejson",
   "ipdb>=0.13.13",
   "python-dotenv",
-  "pandas",
-  "pandarallel",
   ]
 
 [tool.setuptools.packages.find]
