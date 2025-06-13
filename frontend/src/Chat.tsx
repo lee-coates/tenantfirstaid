@@ -10,8 +10,13 @@ export default function Chat() {
   const [selectedStatute, setSelectedStatute] = useState<string | null>(null);
 
   const handleStatuteClick = (statute: string) => {
-    setSelectedStatute(statute);
-    setDrawerOpen(true);
+    if (statute === selectedStatute && drawerOpen) {
+      closeDrawer();
+    } else {
+      setSelectedStatute(statute);
+      setDrawerOpen(true);
+    }
+
   };
 
   const closeDrawer = () => {
