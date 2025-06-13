@@ -81,12 +81,15 @@ jobs:
             sudo chmod 750 /etc/tenantfirstaid
             sudo chown root:root /etc/tenantfirstaid
             cat > /etc/tenantfirstaid/env <<EOF
+            ENV=prod
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             FEEDBACK_PASSWORD=${{ secrets.FEEDBACK_PASSWORD }}
             DB_HOST=${{secrets.DB_HOST}}
             DB_PASSWORD=${{secrets.DB_PASSWORD}}
             DB_PORT=${{secrets.DB_PORT}}
             DB_USER=default
+            MODEL_REASONING_EFFORT=high
+            VECTOR_STORE_ID=${{secrets.VECTOR_STORE_ID}}
             EOF
             chmod 640 /etc/tenantfirstaid/env
             

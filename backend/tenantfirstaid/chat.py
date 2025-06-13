@@ -3,23 +3,22 @@ import datetime
 
 from openai import OpenAI
 import jsonlines
-from flask import request, stream_with_context, Response
+from flask import request, stream_with_context, Response, session, after_this_request
 from flask.views import View
 import os
 
-from .shared import SYSTEM_PROMPT, DATA_DIR
+from .shared import DEFAULT_INSTRUCTIONS, DATA_DIR
 
 DATA_FILE = DATA_DIR / "chatlog.jsonl"
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
+MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
 
 
 class ChatView(View):
     DATA_FILE = DATA_DIR / "chatlog.jsonl"
-
-    MAX_TOKENS = os.getenv("MAX_TOKENS")
 
     client = OpenAI(
         api_key=API_KEY,
@@ -29,13 +28,37 @@ class ChatView(View):
     def __init__(self, session):
         self.session = session
 
+        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
+        NUM_FILE_SEARCH_RESULTS = os.getenv("NUM_FILE_SEARCH_RESULTS", 10)
+
+        self.openai_tools = []
+
+        if VECTOR_STORE_ID:
+            self.openai_tools.append(
+                {
+                    "type": "file_search",
+                    "vector_store_ids": [VECTOR_STORE_ID],
+                    "max_num_results": NUM_FILE_SEARCH_RESULTS,
+                }
+            )
+
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
 
     def dispatch_request(self):
         data = request.json
-        session_id = data.get("session_id") or str(uuid.uuid4())
         user_msg = data["message"]
+
+        # Get or create session ID using Flask sessions
+        session_id = session.get("session_id")
+        if not session_id:
+            session_id = str(uuid.uuid4())
+            session["session_id"] = session_id
+
+            @after_this_request
+            def save_session(response):
+                session.modified = True
+                return response
 
         current_session = self.session.get(session_id)
 
@@ -58,21 +81,22 @@ class ChatView(View):
                 response_stream = self.client.responses.create(
                     model=MODEL,
                     input=input_messages,
-                    instructions=SYSTEM_PROMPT["prompt"],
-                    reasoning={"effort": "high"},
+                    instructions=DEFAULT_INSTRUCTIONS,
+                    reasoning={"effort": MODEL_REASONING_EFFORT},
                     stream=True,
+                    tools=self.openai_tools,
                 )
 
                 assistant_chunks = []
                 for chunk in response_stream:
-                    if hasattr(chunk, "text"):
-                        token = chunk.text or ""
+                    if hasattr(chunk, "delta"):
+                        token = chunk.delta or ""
                         assistant_chunks.append(token)
                         yield token
 
                 # Join the complete response
                 assistant_msg = "".join(assistant_chunks)
-                print("assistant_msg", assistant_msg)
+                # print("assistant_msg", assistant_msg)
 
                 # Add this as a training example
                 self._append_training_example(session_id, user_msg, assistant_msg)
