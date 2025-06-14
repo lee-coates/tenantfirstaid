@@ -36,7 +36,7 @@ export default function StatuteDrawer({
         <div
           className={`
             transition-transform duration-500 ease-[cubic-bezier(.22,1.5,.36,1)]
-            bg-white shadow-lg rounded
+            bg-[#F4F4F2] shadow-lg rounded
             h-[70vh] sm:h-full
             w-full
             ${
@@ -54,7 +54,7 @@ export default function StatuteDrawer({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-10 h-10 text-[#4a90e2]"
+                className="w-10 h-10 text-[#1F584F]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
