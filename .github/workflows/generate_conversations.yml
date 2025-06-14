@@ -53,7 +53,6 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           MODEL_NAME: ${{ inputs.model }}
           MODEL_REASONING_EFFORT: ${{ inputs.reasoning_effort }}
-          MODEL_ENDPOINT: ${{ secrets.MODEL_ENDPOINT }}
           VECTOR_STORE_ID: ${{ secrets.VECTOR_STORE_ID }}
         run: |
           python chat.py --num-turns ${{ inputs.num_turns }} --num-rows ${{ inputs.num_rows }}
