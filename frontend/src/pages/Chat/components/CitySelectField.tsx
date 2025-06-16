@@ -31,7 +31,7 @@ interface Props {
 export default function CitySelectField({ setMessages }: Props) {
     const [city, setCity] = useState<string | null>(null);
     let invalidCity: boolean = false;
-    const { initSession } = useMessages();
+    const { initChat } = useMessages();
 
     const handleCityChange = async (key: string | null) => {
         setCity(key);
@@ -40,7 +40,7 @@ export default function CitySelectField({ setMessages }: Props) {
             invalidCity = false; // Reset invalid city state
 
             try {
-                await initSession({ city: selectedCity.city, state: selectedCity.state });
+                await initChat({ city: selectedCity.city, state: selectedCity.state });
 
                 // Initial bot message that's not included in history
                 const botMessageId = (Date.now() + 1).toString();

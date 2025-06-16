@@ -28,17 +28,8 @@ tenant_session = TenantSession()
 
 @app.get("/api/history")
 def history():
-    try:
-        session_id = session.get("session_id")
-        if not session_id:
-            return jsonify([]), 200
-        saved_session = tenant_session.get(session_id)
-        if not saved_session:
-            return jsonify({"error": "No session found"}), 404
-        print(saved_session)
-        return jsonify(saved_session["messages"]), 200
-    except KeyError:
-        return jsonify({"error": "Session not found"}), 404
+    saved_session = tenant_session.get()
+    return jsonify(saved_session["messages"])
 
 
 @app.post("/api/clear-session")

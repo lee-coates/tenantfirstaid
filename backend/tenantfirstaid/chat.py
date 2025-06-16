@@ -25,8 +25,8 @@ class ChatView(View):
         base_url=BASE_URL,
     )
 
-    def __init__(self, session):
-        self.session = session
+    def __init__(self, tenant_session):
+        self.tenant_session = tenant_session
 
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
@@ -46,7 +46,7 @@ class ChatView(View):
                 session.modified = True
                 return response
 
-        current_session = self.session.get(session_id)
+        current_session = self.tenant_session.get()
 
         # Format messages for the new Responses API
         input_messages = []
@@ -120,8 +120,6 @@ class ChatView(View):
             else None
         )
 
-        print("TOOLS", tools if tools else None)
-
         def generate():
             try:
                 # Use the new Responses API with streaming
@@ -145,8 +143,6 @@ class ChatView(View):
                 # Join the complete response
                 assistant_msg = "".join(assistant_chunks)
 
-                # Add this as a training example
-                self._append_training_example(session_id, user_msg, assistant_msg)
                 current_session["messages"].append(
                     {"role": "assistant", "content": assistant_msg}
                 )
@@ -160,27 +156,9 @@ class ChatView(View):
                 yield f"Error: {str(e)}"
 
             finally:
-                self.session.set(session_id, current_session)
+                self.tenant_session.set(session_id, current_session)
 
         return Response(
             stream_with_context(generate()),
             mimetype="text/plain",
         )
-
-    def _append_training_example(self, session_id, user_msg, assistant_msg):
-        # Ensure the parent directory exists
-        self.DATA_FILE.parent.mkdir(exist_ok=True)
-
-        with jsonlines.open(self.DATA_FILE, mode="a") as f:
-            f.write(
-                {
-                    "messages": [
-                        {"role": "user", "content": user_msg},
-                        {"role": "assistant", "content": assistant_msg},
-                    ],
-                    "metadata": {
-                        "session_id": session_id,
-                        "ts": datetime.datetime.utcnow().isoformat(),
-                    },
-                }
-            )

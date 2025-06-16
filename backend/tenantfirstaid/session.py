@@ -28,14 +28,26 @@ class TenantSession:
         except Exception as e:
             print(e)
 
-    def get(self, session_id):
-        print("SESSION_ID", session_id)
-        return json.loads(
-            self.db_con.get(session_id) or '{"city": "", "state": "", "messages": []}'
-        )
+    def get(self):
+        session_id = session.get("session_id")
+        if not session_id:
+            return self.getNewSessionData()
+
+        saved_session = self.db_con.get(session_id)
+        if not saved_session:
+            return self.getNewSessionData()
+
+        return json.loads(saved_session)
 
     def set(self, session_id, value):
         self.db_con.set(session_id, json.dumps(value))
+
+    def getNewSessionData(self):
+        return {
+            "city": "",
+            "state": "",
+            "messages": [],
+        }
 
 
 class InitSessionView(View):
@@ -48,7 +60,7 @@ class InitSessionView(View):
         if not session_id:
             session_id = str(uuid.uuid4())
             session["session_id"] = session_id
-        city = data["city"]
+        city = data["city"] or "null"
         state = data["state"]
 
         # Initialize the session with city and state
