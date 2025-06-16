@@ -6,7 +6,6 @@ import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
 import CitySelectField from "./CitySelectField";
 
-
 interface Props {
   messages: IMessage[];
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
@@ -45,15 +44,14 @@ export default function MessageWindow({
 
   return (
     <>
-      <div>
-
+      <div className="flex-1">
         {isError ? (
           <div className="flex items-center justify-center h-full text-center">
             Error fetching chat history. Try refreshing...
           </div>
         ) : (
           <div
-            className={`max-h-[calc(100vh-25rem)] mx-auto max-w-[700px] ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+            className={`max-h-[calc(100vh-20rem)] mx-auto max-w-[700px] ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
               }`}
             ref={messagesRef}
           >
@@ -62,18 +60,22 @@ export default function MessageWindow({
                 {messages.map((message) => (
                   <div
                     className={`flex w-full ${message.role === "assistant"
-                      ? "justify-start"
-                      : "justify-end"
+                        ? "justify-start"
+                        : "justify-end"
                       }`}
                     key={message.messageId}
                   >
                     <div
                       className={`message-bubble p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
-                        ? "bg-gray-100 rounded-tl-sm"
-                        : "bg-[#4a90e2] text-white rounded-tr-sm"
+                          ? "bg-slate-200 rounded-tl-sm"
+                          : "bg-[#1F584F] text-white rounded-tr-sm"
                         }`}
                     >
-                      <MessageContent message={message} isLoading={isLoading} onStatuteClick={onStatuteClick} />
+                      <MessageContent
+                        message={message}
+                        isLoading={isLoading}
+                        onStatuteClick={onStatuteClick}
+                      />
                     </div>
                   </div>
                 ))}
@@ -93,7 +95,7 @@ export default function MessageWindow({
             />
             <div className="flex justify-center gap-4 mt-4">
               <button
-                className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors cursor-pointer"
                 onClick={handleClearSession}
                 title="Clear Chat"
               >

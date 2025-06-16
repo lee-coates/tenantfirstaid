@@ -3,7 +3,7 @@ import datetime
 
 from openai import OpenAI
 import jsonlines
-from flask import request, stream_with_context, Response, session
+from flask import request, stream_with_context, Response, session, after_this_request
 from flask.views import View
 import os
 
@@ -40,6 +40,11 @@ class ChatView(View):
         if not session_id:
             session_id = str(uuid.uuid4())
             session["session_id"] = session_id
+
+            @after_this_request
+            def save_session(response):
+                session.modified = True
+                return response
 
         current_session = self.session.get(session_id)
 
