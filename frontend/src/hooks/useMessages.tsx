@@ -36,7 +36,7 @@ async function addNewMessage(userMessage: string) {
   return response.body?.getReader();
 }
 
-async function initNewSession(city: string | null, state: string) {
+async function initNewChat(city: string | null, state: string) {
   const response = await fetch("/api/init", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -57,9 +57,9 @@ export default function useMessages() {
       await addNewMessage(userMessage),
   });
 
-  const initSession = useMutation({
+  const initChat = useMutation({
     mutationFn: async ({ city, state }: { city: string | null; state: string }) =>
-      await initNewSession(city, state),
+      await initNewChat(city, state),
   })
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function useMessages() {
     messages,
     setMessages,
     addMessage: addMessage.mutateAsync,
-    initSession: initSession.mutateAsync,
+    initChat: initChat.mutateAsync,
     isLoading,
     isError,
   };

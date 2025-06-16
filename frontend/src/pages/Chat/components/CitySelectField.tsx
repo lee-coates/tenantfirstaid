@@ -29,18 +29,18 @@ interface Props {
 }
 
 export default function CitySelectField({ setMessages }: Props) {
-    const [value, setCity] = useState<string | null>(null);
-    const [invalidCity, setInvalidCity] = useState<boolean>(false);
+    const [city, setCity] = useState<string | null>(null);
+    let invalidCity: boolean = false;
     const { initSession } = useMessages();
 
     const handleCityChange = async (key: string | null) => {
         setCity(key);
-        const city = CitySelectOptions[key as keyof typeof CitySelectOptions];
-        if (city && city.state) {
-            setInvalidCity(false);
+        const selectedCity = CitySelectOptions[key as keyof typeof CitySelectOptions];
+        if (selectedCity && selectedCity.state) {
+            invalidCity = false; // Reset invalid city state
 
             try {
-                await initSession({ city: city.city, state: city.state });
+                await initSession({ city: selectedCity.city, state: selectedCity.state });
 
                 // Initial bot message that's not included in history
                 const botMessageId = (Date.now() + 1).toString();
@@ -54,10 +54,10 @@ export default function CitySelectField({ setMessages }: Props) {
                 ]);
             } catch (error) {
                 console.error("Error initializing session:", error);
-                setInvalidCity(true);
+                invalidCity = true;
             }
         } else {
-            setInvalidCity(true);
+            invalidCity = true;
         }
     };
 
@@ -71,7 +71,7 @@ export default function CitySelectField({ setMessages }: Props) {
             </p>
             <select
                 name="city"
-                value={value || ""}
+                value={city || ""}
                 onChange={e => handleCityChange(e.target.value)}
                 className="p-3 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
             >
