@@ -31,13 +31,15 @@ export default function MessageWindow({
   };
 
   useEffect(() => {
-    inputRef.current?.focus();
     const messagesElement = messagesRef.current;
     if (messagesElement) {
       messagesElement.scrollTo({
         top: messagesElement.scrollHeight,
         behavior: "smooth",
       });
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 500);
     }
   }, [messages]);
 
@@ -106,9 +108,7 @@ export default function MessageWindow({
             >
               Clear Chat
             </button>
-            <div className="">
-              <ExportMessagesButton messages={messages} />
-            </div>
+            <ExportMessagesButton messages={messages} />
           </div>
         ) : null}
       </div>
