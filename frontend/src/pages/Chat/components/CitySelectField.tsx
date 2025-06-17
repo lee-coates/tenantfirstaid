@@ -30,14 +30,14 @@ interface Props {
 
 export default function CitySelectField({ setMessages }: Props) {
     const [city, setCity] = useState<string | null>(null);
-    let invalidCity: boolean = false;
+    let [invalidCity, setInvalidCity] = useState<boolean>(false);
     const { initChat } = useMessages();
 
     const handleCityChange = async (key: string | null) => {
         setCity(key);
         const selectedCity = CitySelectOptions[key as keyof typeof CitySelectOptions];
         if (selectedCity && selectedCity.state) {
-            invalidCity = false; // Reset invalid city state
+            setInvalidCity(false);
 
             try {
                 await initChat({ city: selectedCity.city, state: selectedCity.state });
@@ -54,10 +54,10 @@ export default function CitySelectField({ setMessages }: Props) {
                 ]);
             } catch (error) {
                 console.error("Error initializing session:", error);
-                invalidCity = true;
+                setInvalidCity(true);
             }
         } else {
-            invalidCity = true;
+            setInvalidCity(true);
         }
     };
 
