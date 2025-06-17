@@ -71,3 +71,6 @@ jobs:
 
       - name: Run linting checks
         run: npm run lint
+
+      - name: Run format checks
+        run: npx prettier --check .
