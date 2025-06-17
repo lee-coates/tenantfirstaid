@@ -16,7 +16,6 @@ export default function Chat() {
       setSelectedStatute(statute);
       setDrawerOpen(true);
     }
-
   };
 
   const closeDrawer = () => {

@@ -1,4 +1,3 @@
-
 import useStatutes from "../../../hooks/useStatutes";
 
 interface StatuteDrawerProps {
@@ -15,7 +14,6 @@ export default function StatuteDrawer({
   const baseStatuteMatch = statute?.match(/(?:ORS\s*)?(\d{2,3}\.\d+)/);
   const baseStatute = baseStatuteMatch ? baseStatuteMatch[1] : "";
   const { statuteDetails, isLoading, isError } = useStatutes(baseStatute);
-
 
   return (
     <>
@@ -86,11 +84,10 @@ export default function StatuteDrawer({
                   {isLoading
                     ? "Loading details..."
                     : isError
-                    ? "Unable to fetch details..."
-                    : statuteDetails?.text
-                        .split("\n")
-                        .map((line, i) => <p key={i}>{line}</p>)}
-
+                      ? "Unable to fetch details..."
+                      : statuteDetails?.text
+                          .split("\n")
+                          .map((line, i) => <p key={i}>{line}</p>)}
                 </div>
               </>
             )}
