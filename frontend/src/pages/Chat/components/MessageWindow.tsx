@@ -50,7 +50,7 @@ export default function MessageWindow({
           </div>
         ) : (
           <div
-            className={`max-h-[calc(100dvh-240px)] mx-auto max-w-[700px] ${
+            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${
               isOngoing ? "overflow-y-scroll" : "overflow-y-none"
             }`}
             ref={messagesRef}
