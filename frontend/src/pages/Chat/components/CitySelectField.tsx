@@ -30,7 +30,7 @@ interface Props {
 
 export default function CitySelectField({ setMessages }: Props) {
     const [city, setCity] = useState<string | null>(null);
-    let [invalidCity, setInvalidCity] = useState<boolean>(false);
+    const [invalidCity, setInvalidCity] = useState<boolean>(false);
     const { initChat } = useMessages();
 
     const handleCityChange = async (key: string | null) => {
