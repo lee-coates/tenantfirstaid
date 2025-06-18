@@ -53,25 +53,28 @@ export default function MessageWindow({
           </div>
         ) : (
           <div
-            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-              }`}
+            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${
+              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+            }`}
             ref={messagesRef}
           >
             {isOngoing ? (
               <div className="flex flex-col gap-4">
                 {messages.map((message) => (
                   <div
-                    className={`flex w-full ${message.role === "assistant"
-                      ? "justify-start"
-                      : "justify-end"
-                      }`}
+                    className={`flex w-full ${
+                      message.role === "assistant"
+                        ? "justify-start"
+                        : "justify-end"
+                    }`}
                     key={message.messageId}
                   >
                     <div
-                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
-                        ? "bg-slate-200 rounded-tl-sm"
-                        : "bg-[#1F584F] text-white rounded-tr-sm"
-                        }`}
+                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
+                        message.role === "assistant"
+                          ? "bg-slate-200 rounded-tl-sm"
+                          : "bg-[#1F584F] text-white rounded-tr-sm"
+                      }`}
                     >
                       <MessageContent
                         message={message}
@@ -101,21 +104,16 @@ export default function MessageWindow({
                 onClick={handleClearSession}
                 title="Clear Chat"
               >
-
                 Clear Chat
               </button>
               <div className="">
-                <ExportMessagesButton
-                  messages={messages}
-
-                />
+                <ExportMessagesButton messages={messages} />
               </div>
             </div>
           </>
         ) : (
           <CitySelectField setMessages={setMessages} />
         )}
-
       </div>
     </>
   );

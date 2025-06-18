@@ -57,9 +57,14 @@ export default function useMessages() {
   });
 
   const initChat = useMutation({
-    mutationFn: async ({ city, state }: { city: string | null; state: string }) =>
-      await initNewChat(city, state),
-  })
+    mutationFn: async ({
+      city,
+      state,
+    }: {
+      city: string | null;
+      state: string;
+    }) => await initNewChat(city, state),
+  });
 
   useEffect(() => {
     if (data && data.length !== 0) {

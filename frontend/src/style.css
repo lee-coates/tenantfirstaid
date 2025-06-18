@@ -37,5 +37,5 @@ body {
 }
 
 .message-bubble a {
-  @apply inline text-blue-600 underline cursor-pointer transition-colors hover:bg-blue-200 rounded
+  @apply inline text-blue-600 underline cursor-pointer transition-colors hover:bg-blue-200 rounded;
 }
