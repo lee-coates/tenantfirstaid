@@ -1,6 +1,5 @@
 import type { IMessage } from "../../../hooks/useMessages";
 
-
 /* This was commented out because with new laws added (e.g. ORS Ch. 105)
  * and different municipal codes (e.g. Portland's code),
  * citation hightlighting was becoming too complex. We should revisit this
@@ -33,7 +32,7 @@ function HighlightORS({ text, onStatuteClick }: ORSProps) {
         onClick={() => onStatuteClick(match[0])}
       >
         {match[0]}
-      </p>
+      </p>,
     );
 
     lastIndex = index + match[0].length;
@@ -53,17 +52,17 @@ interface Props {
   onStatuteClick: (statute: string) => void;
 }
 
-export default function MessageContent({
-  message,
-  isLoading,
-}: Props) {
+export default function MessageContent({ message, isLoading }: Props) {
   return (
     <>
       <strong>{message.role === "assistant" ? "Bot: " : "You: "}</strong>
       {message.role === "assistant" && message.content === "" && isLoading ? (
         <span className="animate-dot-pulse">...</span>
       ) : (
-        <span className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: message.content }}></span>
+        <span
+          className="whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{ __html: message.content }}
+        ></span>
       )}
     </>
   );
