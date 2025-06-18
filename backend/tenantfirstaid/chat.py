@@ -3,7 +3,7 @@ from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-from backend.tenantfirstaid.session import TenantSessionData
+from .session import TenantSessionData
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
@@ -31,11 +31,12 @@ Include the links inline in your answer, with the attribute target="_blank" so t
 
 
 class ChatManager:
-    def __init__(self):
+    def __init__(self, tenant_session: TenantSessionData = None):
         self.client = OpenAI(
             api_key=API_KEY,
             base_url=BASE_URL,
         )
+        self.tenant_session = tenant_session
 
     def get_client(self):
         return self.client
@@ -55,50 +56,91 @@ class ChatManager:
         # This filters out other cities in the same state.
         # The user is gated into selecting a city in Oregon so we don't worry about
         # whether the relevant documents exist or not.
+        filters = (
+            {
+                "type": "or",
+                "filters": [
+                    {
+                        "type": "and",
+                        "filters": [
+                            {
+                                "type": "eq",
+                                "key": "city",
+                                "value": current_session["city"],
+                            },
+                            {
+                                "type": "eq",
+                                "key": "state",
+                                "value": current_session["state"],
+                            },
+                        ],
+                    },
+                    {
+                        "type": "and",
+                        "filters": [
+                            {
+                                "type": "eq",
+                                "key": "city",
+                                "value": "null",
+                            },
+                            {
+                                "type": "eq",
+                                "key": "state",
+                                "value": current_session["state"],
+                            },
+                        ],
+                    },
+                ],
+            }
+            if current_session["city"] != "null"
+            else {
+                # If city is null, we only filter by state
+                "type": "and",
+                "filters": [
+                    {
+                        "type": "eq",
+                        "key": "city",
+                        "value": "null",
+                    },
+                    {
+                        "type": "eq",
+                        "key": "state",
+                        "value": current_session["state"],
+                    },
+                ],
+            }
+        )
+
         return [
             {
                 "type": "file_search",
                 "vector_store_ids": [VECTOR_STORE_ID],
                 "max_num_results": os.getenv("NUM_FILE_SEARCH_RESULTS", 10),
-                "filters": {
-                    "type": "or",
-                    "filters": [
-                        {
-                            "type": "and",
-                            "filters": [
-                                {
-                                    "type": "eq",
-                                    "key": "city",
-                                    "value": current_session["city"],
-                                },
-                                {
-                                    "type": "eq",
-                                    "key": "state",
-                                    "value": current_session["state"],
-                                },
-                            ],
-                        }
-                        if current_session["city"] != "null"
-                        else None,
-                        {
-                            "type": "and",
-                            "filters": [
-                                {
-                                    "type": "eq",
-                                    "key": "city",
-                                    "value": "null",
-                                },
-                                {
-                                    "type": "eq",
-                                    "key": "state",
-                                    "value": current_session["state"],
-                                },
-                            ],
-                        },
-                    ],
-                },
+                "filters": filters,
             }
         ]
+
+    def generate_chat_response(
+        self, current_session: TenantSessionData, user_msg: str, stream=False
+    ):
+        # Update the session with the user message
+        current_session["messages"].append({"role": "user", "content": user_msg})
+
+        instructions = self.prepare_developer_instructions(current_session)
+        tools = self.prepare_openai_tools(current_session)
+
+        # Use the OpenAI client to generate a response
+        response_stream = self.client.responses.create(
+            model=MODEL,
+            input=current_session["messages"],
+            instructions=instructions,
+            reasoning={"effort": MODEL_REASONING_EFFORT},
+            stream=stream,
+            include=["file_search_call.results"],
+            tools=tools if tools else None,
+        )
+
+        return response_stream
 
 
 class ChatView(View):
@@ -117,23 +159,11 @@ class ChatView(View):
 
         current_session = self.tenant_session.get()
 
-        # Update our cache with the user message
-        current_session["messages"].append({"role": "user", "content": user_msg})
-
-        instructions = self.chat_manager.prepare_developer_instructions(current_session)
-        tools = self.chat_manager.prepare_openai_tools(current_session)
-
         def generate():
             try:
                 # Use the new Responses API with streaming
-                response_stream = self.client.responses.create(
-                    model=MODEL,
-                    input=current_session["messages"],
-                    instructions=instructions,
-                    reasoning={"effort": MODEL_REASONING_EFFORT},
-                    stream=True,
-                    include=["file_search_call.results"],
-                    tools=tools if tools else None,
+                response_stream = self.chat_manager.generate_chat_response(
+                    current_session, user_msg, stream=True
                 )
 
                 assistant_chunks = []
