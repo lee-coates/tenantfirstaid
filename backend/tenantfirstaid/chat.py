@@ -1,9 +1,10 @@
+from pathlib import Path
 from openai import OpenAI
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-from .session import TenantSessionData
+from .session import TenantSessionData, TenantSessionMessage
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
@@ -41,13 +42,13 @@ class ChatManager:
     def get_client(self):
         return self.client
 
-    def prepare_developer_instructions(self, current_session: TenantSessionData):
+    def prepare_developer_instructions(self, city: str, state: str):
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
-        instructions += f"\nThe user is in {current_session['city']} {current_session['state'].upper()}.\n"
+        instructions += f"\nThe user is in {city} {state.upper()}.\n"
         return instructions
 
-    def prepare_openai_tools(self, current_session: TenantSessionData):
+    def prepare_openai_tools(self, city: str, state: str):
         VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
         if not VECTOR_STORE_ID:
             return None
@@ -66,12 +67,12 @@ class ChatManager:
                             {
                                 "type": "eq",
                                 "key": "city",
-                                "value": current_session["city"],
+                                "value": city,
                             },
                             {
                                 "type": "eq",
                                 "key": "state",
-                                "value": current_session["state"],
+                                "value": state,
                             },
                         ],
                     },
@@ -86,13 +87,13 @@ class ChatManager:
                             {
                                 "type": "eq",
                                 "key": "state",
-                                "value": current_session["state"],
+                                "value": state,
                             },
                         ],
                     },
                 ],
             }
-            if current_session["city"] != "null"
+            if city != "null"
             else {
                 # If city is null, we only filter by state
                 "type": "and",
@@ -105,7 +106,7 @@ class ChatManager:
                     {
                         "type": "eq",
                         "key": "state",
-                        "value": current_session["state"],
+                        "value": state,
                     },
                 ],
             }
@@ -121,18 +122,15 @@ class ChatManager:
         ]
 
     def generate_chat_response(
-        self, current_session: TenantSessionData, user_msg: str, stream=False
+        self, messages: list[TenantSessionMessage], city: str, state: str, stream=False
     ):
-        # Update the session with the user message
-        current_session["messages"].append({"role": "user", "content": user_msg})
-
-        instructions = self.prepare_developer_instructions(current_session)
-        tools = self.prepare_openai_tools(current_session)
+        instructions = self.prepare_developer_instructions(city, state)
+        tools = self.prepare_openai_tools(city, state)
 
         # Use the OpenAI client to generate a response
         response_stream = self.client.responses.create(
             model=MODEL,
-            input=current_session["messages"],
+            input=messages,
             instructions=instructions,
             reasoning={"effort": MODEL_REASONING_EFFORT},
             stream=stream,
@@ -158,12 +156,16 @@ class ChatView(View):
         user_msg = data["message"]
 
         current_session = self.tenant_session.get()
+        current_session["messages"].append({"role": "user", "content": user_msg})
 
         def generate():
             try:
                 # Use the new Responses API with streaming
                 response_stream = self.chat_manager.generate_chat_response(
-                    current_session, user_msg, stream=True
+                    current_session["messages"],
+                    current_session["city"],
+                    current_session["state"],
+                    stream=True,
                 )
 
                 assistant_chunks = []
