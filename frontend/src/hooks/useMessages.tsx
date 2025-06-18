@@ -9,8 +9,8 @@ export interface IMessage {
 
 async function fetchChatHistory() {
   try {
-    const response = await fetch('/api/history', {
-      credentials: 'include'
+    const response = await fetch("/api/history", {
+      credentials: "include",
     });
     let history: IMessage[] = await response.json();
     let messageId = Date.now();
@@ -30,7 +30,7 @@ async function addNewMessage(userMessage: string) {
   const response = await fetch("/api/query", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify({ message: userMessage }),
   });
   return response.body?.getReader();
@@ -53,8 +53,7 @@ export default function useMessages() {
   });
 
   const addMessage = useMutation({
-    mutationFn: async (userMessage: string) =>
-      await addNewMessage(userMessage),
+    mutationFn: async (userMessage: string) => await addNewMessage(userMessage),
   });
 
   const initChat = useMutation({

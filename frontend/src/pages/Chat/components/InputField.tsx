@@ -58,8 +58,10 @@ export default function InputField({
         // Update only the bot's message
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
-          )
+            msg.messageId === botMessageId
+              ? { ...msg, content: fullText }
+              : msg,
+          ),
         );
       }
     } catch (error) {
@@ -71,8 +73,8 @@ export default function InputField({
               ...msg,
               content: "Sorry, I encountered an error. Please try again.",
             }
-            : msg
-        )
+            : msg,
+        ),
       );
     } finally {
       setIsLoading(false);

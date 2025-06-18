@@ -33,7 +33,7 @@ function HighlightORS({ text, onStatuteClick }: ORSProps) {
         onClick={() => onStatuteClick(match[0])}
       >
         {match[0]}
-      </p>
+      </p>,
     );
 
     lastIndex = index + match[0].length;
