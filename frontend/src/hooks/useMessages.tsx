@@ -21,6 +21,7 @@ async function fetchChatHistory() {
     });
     return history;
   } catch (err) {
+    console.error("Error fetching chat history:", err);
     throw new Error(`Failed to fetch chat history. ${err}`);
   }
 }
@@ -31,6 +32,15 @@ async function addNewMessage(userMessage: string) {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({ message: userMessage }),
+  });
+  return response.body?.getReader();
+}
+
+async function initNewChat(city: string | null, state: string) {
+  const response = await fetch("/api/init", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ city, state }),
   });
   return response.body?.getReader();
 }
@@ -46,6 +56,16 @@ export default function useMessages() {
     mutationFn: async (userMessage: string) => await addNewMessage(userMessage),
   });
 
+  const initChat = useMutation({
+    mutationFn: async ({
+      city,
+      state,
+    }: {
+      city: string | null;
+      state: string;
+    }) => await initNewChat(city, state),
+  });
+
   useEffect(() => {
     if (data && data.length !== 0) {
       setMessages(data);
@@ -58,6 +78,7 @@ export default function useMessages() {
     messages,
     setMessages,
     addMessage: addMessage.mutateAsync,
+    initChat: initChat.mutateAsync,
     isLoading,
     isError,
   };

@@ -11,7 +11,7 @@ if Path(".env").exists():
 
 from .chat import ChatView
 
-from .session import TenantSession
+from .session import InitSessionView, TenantSession
 from .citations import get_citation
 
 app = Flask(__name__)
@@ -22,15 +22,14 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("ENV", "dev") == "prod"
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
+
 tenant_session = TenantSession()
 
 
 @app.get("/api/history")
 def history():
-    session_id = session.get("session_id")
-    if not session_id:
-        return jsonify([])
-    return jsonify(tenant_session.get(session_id))
+    saved_session = tenant_session.get()
+    return jsonify(saved_session["messages"])
 
 
 @app.post("/api/clear-session")
@@ -38,6 +37,12 @@ def clear_session():
     session.clear()
     return jsonify({"success": True})
 
+
+app.add_url_rule(
+    "/api/init",
+    view_func=InitSessionView.as_view("init", tenant_session),
+    methods=["POST"],
+)
 
 app.add_url_rule(
     "/api/query", view_func=ChatView.as_view("chat", tenant_session), methods=["POST"]

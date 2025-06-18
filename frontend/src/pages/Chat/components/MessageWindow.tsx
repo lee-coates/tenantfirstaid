@@ -4,6 +4,7 @@ import InputField from "./InputField";
 import MessageContent from "./MessageContent";
 import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
+import CitySelectField from "./CitySelectField";
 
 interface Props {
   messages: IMessage[];
@@ -69,7 +70,7 @@ export default function MessageWindow({
                     key={message.messageId}
                   >
                     <div
-                      className={`p-3 rounded-2xl max-w-[95%] ${
+                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
                         message.role === "assistant"
                           ? "bg-slate-200 rounded-tl-sm"
                           : "bg-[#1F584F] text-white rounded-tr-sm"
@@ -84,33 +85,35 @@ export default function MessageWindow({
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-center">
-                Ask me anything about tenant rights and assistance.
-              </p>
-            )}
+            ) : null}
           </div>
         )}
       </div>
       <div>
-        <InputField
-          setMessages={setMessages}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          inputRef={inputRef}
-        />
         {messages.length > 0 ? (
-          <div className="flex justify-center gap-4 mt-4">
-            <button
-              className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors cursor-pointer"
-              onClick={handleClearSession}
-              title="Clear Chat"
-            >
-              Clear Chat
-            </button>
-            <ExportMessagesButton messages={messages} />
-          </div>
-        ) : null}
+          <>
+            <InputField
+              setMessages={setMessages}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              inputRef={inputRef}
+            />
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                className="flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 text-[#E3574B] font-semibold shadow-sm hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors cursor-pointer"
+                onClick={handleClearSession}
+                title="Clear Chat"
+              >
+                Clear Chat
+              </button>
+              <div className="">
+                <ExportMessagesButton messages={messages} />
+              </div>
+            </div>
+          </>
+        ) : (
+          <CitySelectField setMessages={setMessages} />
+        )}
       </div>
     </>
   );
