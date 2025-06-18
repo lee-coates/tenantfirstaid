@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Chat from "./Chat.tsx";
-import AboutPage from "./AboutPage.tsx";
-import SessionContextProvider from "./contexts/SessionContext.tsx";
-import Navbar from "./pages/Chat/components/Navbar.tsx";
+import Chat from "./Chat";
+import About from "./About";
+import SessionContextProvider from "./contexts/SessionContext";
+import Navbar from "./pages/Chat/components/Navbar";
 
 export default function App() {
   return (
@@ -11,7 +11,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Chat />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </SessionContextProvider>
