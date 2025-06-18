@@ -3,6 +3,8 @@ from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
+from backend.tenantfirstaid.session import TenantSessionData
+
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
@@ -38,6 +40,66 @@ class ChatManager:
     def get_client(self):
         return self.client
 
+    def prepare_developer_instructions(self, current_session: TenantSessionData):
+        # Add city and state filters if they are set
+        instructions = DEFAULT_INSTRUCTIONS
+        instructions += f"\nThe user is in {current_session['city']} {current_session['state'].upper()}.\n"
+        return instructions
+
+    def prepare_openai_tools(self, current_session: TenantSessionData):
+        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
+        if not VECTOR_STORE_ID:
+            return None
+
+        # We either want to use both city and state, or just state.
+        # This filters out other cities in the same state.
+        # The user is gated into selecting a city in Oregon so we don't worry about
+        # whether the relevant documents exist or not.
+        return [
+            {
+                "type": "file_search",
+                "vector_store_ids": [VECTOR_STORE_ID],
+                "max_num_results": os.getenv("NUM_FILE_SEARCH_RESULTS", 10),
+                "filters": {
+                    "type": "or",
+                    "filters": [
+                        {
+                            "type": "and",
+                            "filters": [
+                                {
+                                    "type": "eq",
+                                    "key": "city",
+                                    "value": current_session["city"],
+                                },
+                                {
+                                    "type": "eq",
+                                    "key": "state",
+                                    "value": current_session["state"],
+                                },
+                            ],
+                        }
+                        if current_session["city"] != "null"
+                        else None,
+                        {
+                            "type": "and",
+                            "filters": [
+                                {
+                                    "type": "eq",
+                                    "key": "city",
+                                    "value": "null",
+                                },
+                                {
+                                    "type": "eq",
+                                    "key": "state",
+                                    "value": current_session["state"],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            }
+        ]
+
 
 class ChatView(View):
     client = OpenAI(
@@ -47,94 +109,26 @@ class ChatView(View):
 
     def __init__(self, tenant_session):
         self.tenant_session = tenant_session
+        self.chat_manager = ChatManager()
 
     def dispatch_request(self):
         data = request.json
         user_msg = data["message"]
 
-        # Get or create session ID using Flask sessions
-        session_id = self.tenant_session.get_flask_session_id()
-
         current_session = self.tenant_session.get()
-
-        # Format messages for the new Responses API
-        input_messages = []
-
-        # Add conversation history (excluding system prompt)
-        for msg in current_session["messages"][0:]:
-            input_messages.append({"role": msg["role"], "content": msg["content"]})
-
-        # Add current user message
-        input_messages.append({"role": "user", "content": user_msg})
 
         # Update our cache with the user message
         current_session["messages"].append({"role": "user", "content": user_msg})
 
-        # Add city and state filters if they are set
-        instructions = DEFAULT_INSTRUCTIONS
-        instructions += f"\nThe user is in {current_session['city']} {current_session['state'].upper()}.\n"
-
-        # We either want to use both city and state, or just state.
-        # This filters out other cities in the same state.
-        # The user is gated into selecting a city in Oregon so we don't worry about
-        # whether the relevant documents exist or not.
-        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
-
-        tools = (
-            [
-                {
-                    "type": "file_search",
-                    "vector_store_ids": [VECTOR_STORE_ID],
-                    "max_num_results": os.getenv("NUM_FILE_SEARCH_RESULTS", 5),
-                    "filters": {
-                        "type": "or",
-                        "filters": [
-                            {
-                                "type": "and",
-                                "filters": [
-                                    {
-                                        "type": "eq",
-                                        "key": "city",
-                                        "value": current_session["city"],
-                                    },
-                                    {
-                                        "type": "eq",
-                                        "key": "state",
-                                        "value": current_session["state"],
-                                    },
-                                ],
-                            }
-                            if current_session["city"] != "null"
-                            else None,
-                            {
-                                "type": "and",
-                                "filters": [
-                                    {
-                                        "type": "eq",
-                                        "key": "city",
-                                        "value": "null",
-                                    },
-                                    {
-                                        "type": "eq",
-                                        "key": "state",
-                                        "value": current_session["state"],
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                }
-            ]
-            if VECTOR_STORE_ID
-            else None
-        )
+        instructions = self.chat_manager.prepare_developer_instructions(current_session)
+        tools = self.chat_manager.prepare_openai_tools(current_session)
 
         def generate():
             try:
                 # Use the new Responses API with streaming
                 response_stream = self.client.responses.create(
                     model=MODEL,
-                    input=input_messages,
+                    input=current_session["messages"],
                     instructions=instructions,
                     reasoning={"effort": MODEL_REASONING_EFFORT},
                     stream=True,
@@ -165,7 +159,7 @@ class ChatView(View):
                 yield f"Error: {str(e)}"
 
             finally:
-                self.tenant_session.set(session_id, current_session)
+                self.tenant_session.set(current_session)
 
         return Response(
             stream_with_context(generate()),

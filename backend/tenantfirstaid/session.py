@@ -2,8 +2,20 @@ import os
 import uuid
 from flask import Response, after_this_request, request, session
 from flask.views import View
+from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
+
+
+class TenantSessionMessage(TypedDict):
+    role: str  # 'user' or 'assistant'
+    content: str  # The content of the message
+
+
+class TenantSessionData(TypedDict):
+    city: str
+    state: str
+    messages: list[TenantSessionMessage]  # List of messages with role and content
 
 
 # The class to manage tenant sessions using Valkey and Flask sessions
@@ -30,7 +42,7 @@ class TenantSession:
             print(e)
 
     # Retrieves the session ID from Flask session or creates a new one
-    def get_flask_session_id(self):
+    def get_flask_session_id(self) -> str:
         session_id = session.get("session_id")
         if not session_id:
             session_id = str(uuid.uuid4())
@@ -43,10 +55,8 @@ class TenantSession:
 
         return session_id
 
-    def get(self):
-        session_id = session.get("session_id")
-        if not session_id:
-            return self.getNewSessionData()
+    def get(self) -> TenantSessionData:
+        session_id = self.get_flask_session_id()
 
         saved_session = self.db_con.get(session_id)
         if not saved_session:
@@ -54,10 +64,11 @@ class TenantSession:
 
         return json.loads(saved_session)
 
-    def set(self, session_id, value):
+    def set(self, value: TenantSessionData):
+        session_id = self.get_flask_session_id()
         self.db_con.set(session_id, json.dumps(value))
 
-    def getNewSessionData(self):
+    def getNewSessionData(self) -> TenantSessionData:
         return {
             "city": "",
             "state": "",
@@ -78,8 +89,8 @@ class InitSessionView(View):
         state = data["state"]
 
         # Initialize the session with city and state
-        initial_data = {"city": city, "state": state, "messages": []}
-        self.tenant_session.set(session_id, initial_data)
+        initial_data: TenantSessionData = {"city": city, "state": state, "messages": []}
+        self.tenant_session.set(initial_data)
 
         return Response(
             status=200,
