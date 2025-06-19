@@ -21,7 +21,7 @@ export default function exportMessages(messages: IMessage[]) {
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${sanitizeText(content)}</p>`
+        }</strong>: ${sanitizeText(content)}</p>`,
     )
     .join("");
 
