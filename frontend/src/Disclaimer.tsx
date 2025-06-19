@@ -1,29 +1,11 @@
 import { Link } from "react-router-dom";
+import BackLink from "./shared/components/BackLink";
 
 export default function Disclaimer() {
   return (
     <div className="flex items-center mt-16 sm:mt-26 sm:mb-10">
       <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-lg shadow-md">
-        <Link
-          className="absolute top-4 left-4 flex text-[#4a90e2] hover:text-[#3a7bc8] font-semibold cursor-pointer"
-          to="/"
-          aria-label="Go back"
-        >
-          <svg
-            className="w-6 h-6 mr-2"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back
-        </Link>
+        <BackLink />
         <h2 className="text-2xl font-semibold mt-6 mb-2">Disclaimer</h2>
         <p>
           These Terms of Service ("<span className="underline">Terms</span>")
