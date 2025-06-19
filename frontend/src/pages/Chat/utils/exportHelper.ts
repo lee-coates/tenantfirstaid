@@ -1,6 +1,9 @@
 import type { IMessage } from "../../../hooks/useMessages";
 
 function sanitizeText(str: string) {
+  // Strips anchor tags
+  str = str.replace(/<a\b[^>]*>(.*?)<\/a>/gi, "$1");
+
   return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -18,7 +21,7 @@ export default function exportMessages(messages: IMessage[]) {
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${sanitizeText(content)}</p>`,
+        }</strong>: ${sanitizeText(content)}</p>`
     )
     .join("");
 
