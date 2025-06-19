@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import BackLink from "./shared/components/BackLink";
+import { useEffect } from "react";
 
 export default function Disclaimer() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <div className="flex items-center mt-16 sm:mt-26 sm:mb-10">
       <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-lg shadow-md">
@@ -44,7 +49,7 @@ export default function Disclaimer() {
         <h3 className="text-xl font-semibold my-4">2. Privacy</h3>
         <p>
           Please refer to our{" "}
-          <Link to="/disclaimer" className="underline text-blue-600">
+          <Link to="/privacy-policy" className="underline text-blue-600">
             Privacy Policy
           </Link>{" "}
           for information about how we collect, use and disclose information

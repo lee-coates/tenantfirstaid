@@ -23,22 +23,21 @@ export default function Navbar() {
                 ? "rotate-45 translate-y-2 bg-[#1F584F]"
                 : "bg-[#BACAB2]"
             }`}
-          ></span>
+          />
           <span
             className={`block w-7 h-1 bg-[#BACAB2] rounded my-1 transition-all duration-300 ${
               sidebarOpen ? "opacity-0" : ""
             }`}
-          ></span>
+          />
           <span
             className={`block w-7 h-1 rounded transition-all duration-300 ${
               sidebarOpen
                 ? "-rotate-45 -translate-y-2 bg-[#1F584F]"
                 : "bg-[#BACAB2]"
             }`}
-          ></span>
+          />
         </button>
       </div>
-
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-[#F4F4F2] shadow-lg z-50 transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "translate-x-full"
@@ -65,6 +64,13 @@ export default function Navbar() {
             onClick={() => setSidebarOpen(false)}
           >
             Disclaimer
+          </Link>
+          <Link
+            to="/privacy-policy"
+            className="block px-3 py-2 rounded text-gray-700 font-medium transition-colors hover:bg-[#4F8B82] hover:text-[#F4F4F2]"
+            onClick={() => setSidebarOpen(false)}
+          >
+            Privacy Policy
           </Link>
           <hr className="my-2 border-t border-gray-300" />
         </div>
