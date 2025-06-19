@@ -1,14 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function About() {
-  const navigate = useNavigate();
-
   return (
-    <div className="flex items-center h-dvh pt-16 sm:pt-0">
+    <div className="flex items-center pt-16 sm:mt-26 sm:pt-0">
       <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-lg shadow-md">
-        <button
+        <Link
           className="absolute top-4 left-4 flex text-[#4a90e2] hover:text-[#3a7bc8] font-semibold cursor-pointer"
-          onClick={() => navigate(-1)}
+          to="/"
           aria-label="Go back"
         >
           <svg
@@ -25,7 +23,7 @@ export default function About() {
             />
           </svg>
           Back
-        </button>
+        </Link>
         <p className="my-6">
           <strong>Tenant First Aid</strong> is an AI-powered chatbot designed to
           help tenants navigate rental issues, answer questions, and provides

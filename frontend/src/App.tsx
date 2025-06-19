@@ -3,6 +3,7 @@ import Chat from "./Chat";
 import About from "./About";
 import SessionContextProvider from "./contexts/SessionContext";
 import Navbar from "./pages/Chat/components/Navbar";
+import Disclaimer from "./Disclaimer";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Chat />} />
           <Route path="/about" element={<About />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
         </Routes>
       </Router>
     </SessionContextProvider>
