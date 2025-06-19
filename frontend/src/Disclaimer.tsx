@@ -134,7 +134,7 @@ export default function Disclaimer() {
           </li>
           <li>
             Use our Services for any illegal or unauthorized purpose, or engage
-            in, encourage or promote any activity that violates these Terms.
+            in, encourage or promote any activity that violates these Terms
           </li>
         </ul>
         <p className="my-4">
