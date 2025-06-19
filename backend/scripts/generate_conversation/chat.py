@@ -27,6 +27,9 @@ You are seeking legal advice about tenant rights in Oregon.
 You should speak in plain, straightforward language like a real user.
 You have a list of facts about your situation that you can reference to respond to the bot.
 If the bot asks you a question, you should answer it to the best of your ability, if you do not know the answer you should make something up that is plausible.
+Do not try to answer legal questions, let the bot handle those. Only act as a user who is seeking help.
+If the bot says something is not possible, do not argue with it, just accept it and move on.
+Only ask the questions given in the list of facts, do not come up with new questions.
 """
 
 USER_MODEL = os.getenv("USER_MODEL_NAME", "gpt-4o-2024-11-20")
@@ -76,17 +79,17 @@ class ChatView:
         while tries < 3:
             try:
                 # Use the BOT_INSTRUCTIONS for bot responses
-                response = self.chat_manager.generate_chat_response(
+                response = self.chat_manager.generate_gemini_chat_response(
                     self.input_messages,
                     city=self.city,
                     state=self.state,
                     stream=False,
                 )
                 self.input_messages.append(
-                    {"role": "assistant", "content": response.output_text}
+                    {"role": "assistant", "content": response.text}
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
-                return response.output_text
+                return response.text
             except Exception as e:
                 print(f"Error generating bot response: {e}")
                 tries += 1
@@ -100,17 +103,20 @@ class ChatView:
         tries = 0
         while tries < 3:
             try:
+                print("\nGenerating user response...")
                 # Use the USER_MODEL for user responses
-                response = self.client.responses.create(
-                    model=USER_MODEL,
-                    input=self.input_messages,
-                    instructions=self.USER_INSTRUCTIONS,
+                response = self.chat_manager.generate_gemini_chat_response(
+                    self.input_messages,
+                    city=self.city,
+                    state=self.state,
                     stream=False,
+                    instructions=self.USER_INSTRUCTIONS,
+                    use_tools=False,
+                    model_name="gemini-2.0-flash-lite",
                 )
-                self.input_messages.append(
-                    {"role": "user", "content": response.output_text}
-                )
-                return response.output_text
+                self.input_messages.append({"role": "user", "content": response.text})
+                # self.input_messages = self._reverse_message_roles(self.input_messages)
+                return response.text
             except Exception as e:
                 print(f"Error generating user response: {e}")
                 tries += 1
@@ -125,13 +131,14 @@ class ChatView:
         print("Starting conversation...")
         print(f"USER: {self.starting_message}")
         for _ in range(num_turns):
+            print("\n--- New Turn ---")
             response = self.bot_response()
             chat_history += f"BOT: {response}\n"
-            print(f"BOT: {response}")
+            print(f"\nBOT: {response}")
 
             user_response = self.user_response()
             chat_history += f"USER: {user_response}\n"
-            print(f"USER: {user_response}")
+            print(f"\nUSER: {user_response}")
         self.input_messages = self.input_messages[
             0
         ]  # Reset input messages to the first message only

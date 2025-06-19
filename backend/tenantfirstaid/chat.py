@@ -1,5 +1,15 @@
-from pathlib import Path
 from openai import OpenAI
+import vertexai
+from vertexai.preview import rag
+from vertexai.generative_models import (
+    GenerativeModel,
+    GenerationConfig,
+    Tool,
+)
+from google import genai
+from google.oauth2 import service_account
+from google.genai import types
+
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
@@ -10,8 +20,13 @@ API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
 MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
+USER_MODEL = os.getenv("USER_MODEL_NAME", "gpt-4o-2024-11-20")
+GOOGLE_CLOUD_PROJECT = "tenantfirstaid"
+GOOGLE_CLOUD_LOCATION = "global"
+GOOGLE_GENAI_USE_VERTEXAI = True
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", os.getenv("GITHUB_API_KEY"))
 
-DEFAULT_INSTRUCTIONS = """Pretend you're a legal expert who giving advice about eviction notices in Oregon. 
+DEFAULT_INSTRUCTIONS = """Pretend you're a legal expert who giving advice about housing law in Oregon. 
 Please give shorter answers. 
 Please only ask one question at a time so that the user isn't confused. 
 If the user is being evicted for non-payment of rent and they are too poor to pay the rent and you have confirmed in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. 
@@ -45,7 +60,9 @@ class ChatManager:
     def prepare_developer_instructions(self, city: str, state: str):
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
-        instructions += f"\nThe user is in {city} {state.upper()}.\n"
+        instructions += (
+            f"\nThe user is in {city if city != 'null' else ''} {state.upper()}.\n"
+        )
         return instructions
 
     def prepare_openai_tools(self, city: str, state: str):
@@ -122,7 +139,11 @@ class ChatManager:
         ]
 
     def generate_chat_response(
-        self, messages: list[TenantSessionMessage], city: str, state: str, stream=False
+        self,
+        messages: list[TenantSessionMessage],
+        city: str,
+        state: str,
+        stream=False,
     ):
         instructions = self.prepare_developer_instructions(city, state)
         tools = self.prepare_openai_tools(city, state)
@@ -139,6 +160,67 @@ class ChatManager:
         )
 
         return response_stream
+
+    def generate_gemini_chat_response(
+        self,
+        messages: list[TenantSessionMessage],
+        city: str,
+        state: str,
+        stream=False,
+        use_tools=True,
+        instructions=None,
+        model_name=USER_MODEL,
+    ):
+        creds = service_account.Credentials.from_service_account_file(
+            "google-service-account.json"
+        )
+        vertexai.init(
+            project="tenantfirstaid",
+            location="us-west1",
+            credentials=creds,
+        )
+
+        instructions = (
+            instructions
+            if instructions
+            else self.prepare_developer_instructions(city, state)
+        )
+
+        model = GenerativeModel(
+            model_name=model_name,
+            system_instruction=instructions,
+        )
+
+        formatted_messages = []
+
+        for message in messages:
+            formatted_messages.append(
+                {
+                    "role": "model" if message["role"] == "assistant" else "user",
+                    "parts": [{"text": message["content"]}],
+                }
+            )
+
+        rag_retrieval_tool = Tool.from_retrieval(
+            retrieval=rag.Retrieval(
+                source=rag.VertexRagStore(
+                    rag_resources=[
+                        rag.RagResource(
+                            rag_corpus="projects/tenantfirstaid/locations/us-central1/ragCorpora/2305843009213693952"
+                        )
+                    ]
+                )
+            )
+        )
+
+        response = model.generate_content(
+            contents=formatted_messages,
+            stream=stream,
+            generation_config=GenerationConfig(temperature=0.2),
+            tools=[rag_retrieval_tool] if use_tools else None,
+        )
+
+        return response
 
 
 class ChatView(View):
@@ -161,7 +243,7 @@ class ChatView(View):
         def generate():
             try:
                 # Use the new Responses API with streaming
-                response_stream = self.chat_manager.generate_chat_response(
+                response_stream = self.chat_manager.generate_gemini_chat_response(
                     current_session["messages"],
                     current_session["city"],
                     current_session["state"],
@@ -174,6 +256,10 @@ class ChatView(View):
                         token = chunk.delta or ""
                         assistant_chunks.append(token)
                         yield token
+
+                    if hasattr(chunk, "text"):
+                        assistant_chunks.append(chunk.text)
+                        yield chunk.text
 
                 # Join the complete response
                 assistant_msg = "".join(assistant_chunks)
