@@ -3,7 +3,7 @@ interface SuggestedPromptsProps {
 }
 
 const prompts = [
-    "Do I qualify for Section 8?",
+    "Do I qualify for a rental subsidy, such as Section 8/HomeForward?",
     "I have a leak in my roof. Help me address this with my landlord.",
     "I received an eviction notice for non-payment of rent. What should I do?",
     "I received a 'no-cause' eviction notice. How much money is my landlord required to pay me to move out?",
