@@ -26,7 +26,6 @@ export default function InputField({
     const userMessageId = Date.now().toString();
     const botMessageId = (Date.now() + 1).toString();
 
-
     onChange({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>);
     setIsLoading(true);
 
@@ -73,9 +72,9 @@ export default function InputField({
         prev.map((msg) =>
           msg.messageId === botMessageId
             ? {
-              ...msg,
-              content: "Sorry, I encountered an error. Please try again.",
-            }
+                ...msg,
+                content: "Sorry, I encountered an error. Please try again.",
+              }
             : msg,
         ),
       );

@@ -63,25 +63,28 @@ export default function MessageWindow({
           </div>
         ) : (
           <div
-            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-              }`}
+            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${
+              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+            }`}
             ref={messagesRef}
           >
             {isOngoing ? (
               <div className="flex flex-col gap-4">
                 {messages.map((message) => (
                   <div
-                    className={`flex w-full ${message.role === "assistant"
-                      ? "justify-start"
-                      : "justify-end"
-                      }`}
+                    className={`flex w-full ${
+                      message.role === "assistant"
+                        ? "justify-start"
+                        : "justify-end"
+                    }`}
                     key={message.messageId}
                   >
                     <div
-                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
-                        ? "bg-slate-200 rounded-tl-sm"
-                        : "bg-[#1F584F] text-white rounded-tr-sm"
-                        }`}
+                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
+                        message.role === "assistant"
+                          ? "bg-slate-200 rounded-tl-sm"
+                          : "bg-[#1F584F] text-white rounded-tr-sm"
+                      }`}
                     >
                       <MessageContent
                         message={message}
@@ -108,7 +111,7 @@ export default function MessageWindow({
               setIsLoading={setIsLoading}
               inputRef={inputRef}
               value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
+              onChange={(e) => setInputValue(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
               <button
@@ -124,9 +127,7 @@ export default function MessageWindow({
             </div>
           </>
         ) : (
-
           <CitySelectField setMessages={setMessages} />
-
         )}
       </div>
     </>
