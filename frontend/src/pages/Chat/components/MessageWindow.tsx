@@ -5,6 +5,7 @@ import MessageContent from "./MessageContent";
 import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
 import CitySelectField from "./CitySelectField";
+import SuggestedPrompts from "./SuggestedPrompts";
 
 interface Props {
   messages: IMessage[];
@@ -22,6 +23,7 @@ export default function MessageWindow({
   onStatuteClick,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { handleNewSession } = useSession();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
@@ -44,6 +46,14 @@ export default function MessageWindow({
     }
   }, [messages]);
 
+  const handlePromptClick = (prompt: string) => {
+    setInputValue(prompt);
+    if (inputRef.current) {
+      inputRef.current.value = prompt;
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <>
       <div className="flex-1">
@@ -53,28 +63,25 @@ export default function MessageWindow({
           </div>
         ) : (
           <div
-            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${
-              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-            }`}
+            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+              }`}
             ref={messagesRef}
           >
             {isOngoing ? (
               <div className="flex flex-col gap-4">
                 {messages.map((message) => (
                   <div
-                    className={`flex w-full ${
-                      message.role === "assistant"
-                        ? "justify-start"
-                        : "justify-end"
-                    }`}
+                    className={`flex w-full ${message.role === "assistant"
+                      ? "justify-start"
+                      : "justify-end"
+                      }`}
                     key={message.messageId}
                   >
                     <div
-                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
-                        message.role === "assistant"
-                          ? "bg-slate-200 rounded-tl-sm"
-                          : "bg-[#1F584F] text-white rounded-tr-sm"
-                      }`}
+                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${message.role === "assistant"
+                        ? "bg-slate-200 rounded-tl-sm"
+                        : "bg-[#1F584F] text-white rounded-tr-sm"
+                        }`}
                     >
                       <MessageContent
                         message={message}
@@ -92,11 +99,16 @@ export default function MessageWindow({
       <div>
         {messages.length > 0 ? (
           <>
+            {messages.length === 1 && inputValue === "" && (
+              <SuggestedPrompts onPromptClick={handlePromptClick} />
+            )}
             <InputField
               setMessages={setMessages}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               inputRef={inputRef}
+              value={inputValue}
+              onChange={e => setInputValue(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
               <button
@@ -112,7 +124,9 @@ export default function MessageWindow({
             </div>
           </>
         ) : (
-          <CitySelectField setMessages={setMessages} />
+          <>
+            <CitySelectField setMessages={setMessages} />
+          </>
         )}
       </div>
     </>
