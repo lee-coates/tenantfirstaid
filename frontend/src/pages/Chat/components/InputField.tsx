@@ -26,7 +26,7 @@ export default function InputField({
     const userMessageId = Date.now().toString();
     const botMessageId = (Date.now() + 1).toString();
 
-    // Clear the input in parent
+
     onChange({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>);
     setIsLoading(true);
 

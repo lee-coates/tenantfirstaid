@@ -124,9 +124,9 @@ export default function MessageWindow({
             </div>
           </>
         ) : (
-          <>
-            <CitySelectField setMessages={setMessages} />
-          </>
+
+          <CitySelectField setMessages={setMessages} />
+
         )}
       </div>
     </>
