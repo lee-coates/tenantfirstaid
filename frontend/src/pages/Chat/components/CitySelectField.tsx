@@ -60,7 +60,7 @@ export default function CitySelectField({ setMessages }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-center text-[#888] mb-10">
-        {city
+        {city === "other"
           ? "Unfortunately we can only answer questions about tenant rights in Oregon right now."
           : "Welcome to Tenant First Aid! I can answer your questions about tenant rights in Oregon. To get started, what city are you located in?"}
       </p>
