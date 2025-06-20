@@ -59,6 +59,13 @@ export default function Navbar() {
           >
             About Tenant First Aid
           </Link>
+          <Link
+            to="/disclaimer"
+            className="block px-3 py-2 rounded text-gray-700 font-medium transition-colors hover:bg-[#4F8B82] hover:text-[#F4F4F2]"
+            onClick={() => setSidebarOpen(false)}
+          >
+            Disclaimer
+          </Link>
           <hr className="my-2 border-t border-gray-300" />
         </div>
       </div>
