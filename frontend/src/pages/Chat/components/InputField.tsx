@@ -1,11 +1,12 @@
-import { useState } from "react";
 import useMessages, { type IMessage } from "../../../hooks/useMessages";
 
 interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  value: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField({
@@ -13,18 +14,19 @@ export default function InputField({
   isLoading,
   setIsLoading,
   inputRef,
+  value,
+  onChange,
 }: Props) {
-  const [text, setText] = useState("");
   const { addMessage } = useMessages();
 
   const handleSend = async () => {
-    if (!text.trim()) return;
+    if (!value.trim()) return;
 
-    const userMessage = text;
+    const userMessage = value;
     const userMessageId = Date.now().toString();
     const botMessageId = (Date.now() + 1).toString();
 
-    setText("");
+    onChange({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>);
     setIsLoading(true);
 
     // Add user message
@@ -44,7 +46,7 @@ export default function InputField({
     ]);
 
     try {
-      const reader = await addMessage(text);
+      const reader = await addMessage(userMessage);
       if (!reader) return;
       const decoder = new TextDecoder();
       let fullText = "";
@@ -85,11 +87,11 @@ export default function InputField({
     <div className="flex gap-2 mt-4 h-11 items-stretch mx-auto max-w-[700px]">
       <input
         type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={value}
+        onChange={onChange}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            e.preventDefault(); // prevent form submission or newline
+            e.preventDefault();
             handleSend();
           }
         }}
@@ -101,7 +103,7 @@ export default function InputField({
       <button
         className="px-6 bg-[#1F584F] hover:bg-[#4F8B82] text-white rounded-md cursor-pointer transition-color duration-300"
         onClick={handleSend}
-        disabled={isLoading || !text.trim()}
+        disabled={isLoading || !value.trim()}
       >
         {isLoading ? "..." : "Send"}
       </button>
