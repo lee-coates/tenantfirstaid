@@ -5,6 +5,7 @@ import MessageContent from "./MessageContent";
 import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
 import CitySelectField from "./CitySelectField";
+import SuggestedPrompts from "./SuggestedPrompts";
 
 interface Props {
   messages: IMessage[];
@@ -22,6 +23,7 @@ export default function MessageWindow({
   onStatuteClick,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { handleNewSession } = useSession();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
@@ -43,6 +45,14 @@ export default function MessageWindow({
       }, 500);
     }
   }, [messages]);
+
+  const handlePromptClick = (prompt: string) => {
+    setInputValue(prompt);
+    if (inputRef.current) {
+      inputRef.current.value = prompt;
+      inputRef.current.focus();
+    }
+  };
 
   return (
     <>
@@ -92,11 +102,16 @@ export default function MessageWindow({
       <div>
         {messages.length > 0 ? (
           <>
+            {messages.length === 1 && inputValue === "" && (
+              <SuggestedPrompts onPromptClick={handlePromptClick} />
+            )}
             <InputField
               setMessages={setMessages}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               inputRef={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
               <button

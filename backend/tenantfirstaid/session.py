@@ -5,6 +5,7 @@ from flask.views import View
 from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
+from typing import Any, Dict
 
 
 class TenantSessionMessage(TypedDict):
@@ -82,15 +83,28 @@ class InitSessionView(View):
         self.tenant_session = tenant_session
 
     def dispatch_request(self):
+<<<<<<< HEAD
         data = request.json
         session_id = self.tenant_session.get_flask_session_id()
 
+=======
+        data: Dict[str, Any] = request.json
+        session_id = session.get("session_id")
+        if not session_id:
+            session_id = str(uuid.uuid4())
+            session["session_id"] = session_id
+>>>>>>> d00250a3c6e48f071c4f7ca0cca4dc686225247a
         city = data["city"] or "null"
         state = data["state"]
 
         # Initialize the session with city and state
+<<<<<<< HEAD
         initial_data: TenantSessionData = {"city": city, "state": state, "messages": []}
         self.tenant_session.set(initial_data)
+=======
+        initial_data = {"city": city, "state": state, "messages": []}
+        self.tenant_session.set(session_id, initial_data)
+>>>>>>> d00250a3c6e48f071c4f7ca0cca4dc686225247a
 
         return Response(
             status=200,
