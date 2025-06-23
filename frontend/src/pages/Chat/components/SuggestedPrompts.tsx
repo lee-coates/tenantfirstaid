@@ -13,7 +13,7 @@ export default function SuggestedPrompts({
   onPromptClick,
 }: SuggestedPromptsProps) {
   return (
-    <div className="items-center m-auto">
+    <div className="items-center m-auto max-w-[650px]">
       <div className="flex flex-col gap-4 fade-in-up items-center">
         {prompts.map((prompt, idx) => (
           <button
