@@ -1,4 +1,3 @@
-from pathlib import Path
 from openai import OpenAI
 from flask import request, stream_with_context, Response
 from flask.views import View
