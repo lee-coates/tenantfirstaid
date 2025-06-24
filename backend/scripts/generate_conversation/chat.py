@@ -5,7 +5,6 @@
 #     "pandas",
 # ]
 # ///
-from openai import OpenAI
 import os
 import ast
 import argparse
@@ -13,12 +12,14 @@ from pathlib import Path
 import pandas as pd
 from typing import Self
 
+from openai.types.responses.response_input_param import Message
+
 if Path("../../.env").exists():
     from dotenv import load_dotenv
 
     load_dotenv(override=True)
 
-from tenantfirstaid.chat import API_KEY, BASE_URL, DEFAULT_INSTRUCTIONS, ChatManager
+from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
 
 BOT_INSTRUCTIONS = DEFAULT_INSTRUCTIONS
 
@@ -36,15 +37,14 @@ class ChatView:
     client: Self
 
     def __init__(self, starting_message, user_facts, city, state):
-        self.client = OpenAI(
-            api_key=API_KEY,
-            base_url=BASE_URL,
-        )
         self.chat_manager = ChatManager()
+        self.client = self.chat_manager.get_client()
         self.city = city
         self.state = state
 
-        self.input_messages = [{"role": "user", "content": starting_message}]
+        self.input_messages: list[Message] = [
+            Message(role="user", content=starting_message)
+        ]
         self.starting_message = starting_message  # Store the starting message
 
         self.openai_tools = []
@@ -60,11 +60,11 @@ class ChatView:
         for message in messages:
             if message["role"] == "user":
                 reversed_messages.append(
-                    {"role": "assistant", "content": message["content"]}
+                    Message(role="assistant", content=message["content"])
                 )
             elif message["role"] == "assistant":
                 reversed_messages.append(
-                    {"role": "user", "content": message["content"]}
+                    Message(role="user", content=message["content"])
                 )
             else:
                 reversed_messages.append(message)
@@ -83,7 +83,7 @@ class ChatView:
                     stream=False,
                 )
                 self.input_messages.append(
-                    {"role": "assistant", "content": response.output_text}
+                    Message(role="assistant", content=response.output_text)
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
                 return response.output_text
@@ -92,7 +92,7 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
-        self.input_messages.append({"role": "assistant", "content": failure_message})
+        self.input_messages.append(Message(role="assistant", content=failure_message))
         return failure_message
 
     def user_response(self):
@@ -108,7 +108,7 @@ class ChatView:
                     stream=False,
                 )
                 self.input_messages.append(
-                    {"role": "user", "content": response.output_text}
+                    Message(role="user", content=response.output_text)
                 )
                 return response.output_text
             except Exception as e:
@@ -116,7 +116,7 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a user response at this time. Please try again later."
-        self.input_messages.append({"role": "user", "content": failure_message})
+        self.input_messages.append(Message(role="user", content=failure_message))
         return failure_message
 
     def generate_conversation(self, num_turns=5):

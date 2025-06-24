@@ -6,17 +6,20 @@ from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
 from typing import Any, Dict
-
-
-class TenantSessionMessage(TypedDict):
-    role: str  # 'user' or 'assistant'
-    content: str  # The content of the message
+from openai.types.responses.response_input_param import Message
 
 
 class TenantSessionData(TypedDict):
     city: str
     state: str
-    messages: list[TenantSessionMessage]  # List of messages with role and content
+    messages: list[Message]  # List of messages with role and content
+
+
+new_session_data = {
+    "city": "null",
+    "state": "or",
+    "messages": [],
+}
 
 
 # The class to manage tenant sessions using Valkey and Flask sessions
@@ -70,13 +73,7 @@ class TenantSession:
         self.db_con.set(session_id, json.dumps(value))
 
     def getNewSessionData(self) -> TenantSessionData:
-        return TenantSessionData(
-            {
-                "city": "",
-                "state": "",
-                "messages": [],
-            }
-        )
+        return TenantSessionData(new_session_data)
 
 
 # The Flask view to initialize a session
@@ -92,7 +89,7 @@ class InitSessionView(View):
         state = data["state"]
 
         # Initialize the session with city and state
-        initial_data = TenantSessionData({"city": city, "state": state, "messages": []})
+        initial_data = TenantSessionData(city=city, state=state, messages=[])
         self.tenant_session.set(initial_data)
 
         return Response(
