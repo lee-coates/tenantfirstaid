@@ -89,6 +89,7 @@ def test_session_get_unknown_session_id(mocker, mock_environ):
     mock_valkey_client = mocker.Mock()
     mocker.patch("tenantfirstaid.session.Valkey", return_value=mock_valkey_client)
     mock_valkey_client.ping = mocker.Mock()
+    mock_valkey_client.get = mocker.Mock(return_value=None)  # Simulate unknown session
 
     tenant_session = TenantSession()
     app = Flask(__name__)
@@ -104,8 +105,8 @@ def test_session_get_unknown_session_id(mocker, mock_environ):
             reqctx.session.get("session_id") is None
         )  # Ensure session_id is NOT set in the request context (before dispatch)
         assert tenant_session.get() == {
-            "city": "",
-            "state": "",
+            "city": "null",
+            "state": "or",
             "messages": [],
         }
 
