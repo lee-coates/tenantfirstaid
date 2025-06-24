@@ -2,12 +2,15 @@ name: PR Checks
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+
+  push:
+    branches:
+      - main
+      - 'releases/*'
 
 jobs:
   backend-test:
-    # skip this check for closed PRs that are not merged
-    if: ${{ github.event.action != 'closed' || github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -46,8 +49,6 @@ jobs:
         run: uv run pytest -v -s
 
   frontend-build:
-    # skip this check for closed PRs that are not merged
-    if: ${{ github.event.action != 'closed' || github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     defaults:
       run:
