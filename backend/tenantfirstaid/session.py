@@ -58,11 +58,11 @@ class TenantSession:
     def get(self) -> TenantSessionData:
         session_id = self.get_flask_session_id()
 
-        saved_session = self.db_con.get(session_id)
+        saved_session: Optional[str] = self.db_con.get(session_id)  # type: ignore # known issue https://github.com/valkey-io/valkey-py/issues/164
         if not saved_session:
             return self.getNewSessionData()
 
-        return json.loads(saved_session)
+        return json.loads(s=saved_session)
 
     def set(self, value: TenantSessionData):
         session_id = self.get_flask_session_id()
@@ -79,10 +79,10 @@ class InitSessionView(View):
 
     def dispatch_request(self):
         data: Dict[str, Any] = request.json
-        session_id = self.tenant_session.get_flask_session_id()
+        session_id: Optional[str] = self.tenant_session.get_flask_session_id()
 
-        city = data["city"] or "null"
-        state = data["state"]
+        city: str | Literal["null"] = data["city"] or "null"
+        state: str = data["state"]
 
         # Initialize the session with city and state
         initial_data = TenantSessionData(city=city, state=state, messages=[])

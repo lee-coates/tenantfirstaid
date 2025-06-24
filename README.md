@@ -57,6 +57,24 @@ Live at https://tenantfirstaid.com/
        ```sh
        % make typecheck
        ```
+
+       *typecheck* with other Python typecheckers which are not protected in [PR Checks](.github/workflows/pr-check.yml) - useful for completeness & a 2nd opinion
+       1. *typecheck* Python code with `mypy`
+          ```sh
+          % uv run mypy -p tenantfirstaid --python-executable .venv/bin/python3 --check-untyped-defs
+          ```
+          or
+          ```sh
+          % make typecheck-mypy
+          ```
+       1. *typecheck* Python code with `pyrefly`
+          ```sh
+          % uv run pyrefly check --python-interpreter .venv/bin/python3
+          ```
+          or
+          ```sh
+          % make typecheck-pyrefly
+          ```
     1. *test* Python code with `pytest`
        ```sh
        % uv run pytest
