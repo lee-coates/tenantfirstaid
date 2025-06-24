@@ -3,7 +3,7 @@ from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-from .session import TenantSessionData, TenantSessionMessage
+from .session import TenantSessionMessage
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
@@ -31,12 +31,11 @@ Include the links inline in your answer, with the attribute target="_blank" so t
 
 
 class ChatManager:
-    def __init__(self, tenant_session: TenantSessionData = None):
+    def __init__(self):
         self.client = OpenAI(
             api_key=API_KEY,
             base_url=BASE_URL,
         )
-        self.tenant_session = tenant_session
 
     def get_client(self):
         return self.client

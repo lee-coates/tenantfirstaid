@@ -70,11 +70,13 @@ class TenantSession:
         self.db_con.set(session_id, json.dumps(value))
 
     def getNewSessionData(self) -> TenantSessionData:
-        return {
-            "city": "",
-            "state": "",
-            "messages": [],
-        }
+        return TenantSessionData(
+            {
+                "city": "",
+                "state": "",
+                "messages": [],
+            }
+        )
 
 
 # The Flask view to initialize a session
@@ -90,7 +92,7 @@ class InitSessionView(View):
         state = data["state"]
 
         # Initialize the session with city and state
-        initial_data: TenantSessionData = {"city": city, "state": state, "messages": []}
+        initial_data = TenantSessionData({"city": city, "state": state, "messages": []})
         self.tenant_session.set(initial_data)
 
         return Response(
