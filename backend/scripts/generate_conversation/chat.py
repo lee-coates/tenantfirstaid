@@ -3,30 +3,27 @@
 # dependencies = [
 #     "openai",
 #     "pandas",
+#     "python-dotenv",
 # ]
 # ///
-from openai import OpenAI
 import os
 import ast
 import argparse
 from pathlib import Path
 import pandas as pd
 from typing import Self
+from openai.types.responses.response_input_param import Message
 
+from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
 
-BOT_INSTRUCTIONS = """Pretend you're a legal expert who giving advice about eviction notices in Oregon. 
-Please give shorter answers. 
-Please only ask one question at a time so that the user isn't confused. 
-If the user is being evicted for non-payment of rent and they are too poor to pay the rent and you have confirmed in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at 5131234567. 
-Focus on finding technicalities that would legally prevent someone getting evicted, such as deficiencies in notice.
-Make sure to inclue a citation to the relevant law in your answer.
+dot_env_path = Path(__file__).parent.parent.parent / ".env"
+print(f"Loading environment variables from {dot_env_path}")
+if dot_env_path.exists():
+    from dotenv import load_dotenv
 
-Only reference the laws below.
-Oregon Chapter 90 - Residential Landlord and Tenant
-Oregon Chapter 91 - Tenancy
-Oregon Chapter 105 - Property Rights
-Portland City Code Chapter 30.01 - Affordable Housing Preservation and Portland Renter Protections
-"""
+    load_dotenv(dotenv_path=dot_env_path, override=True)
+
+BOT_INSTRUCTIONS = DEFAULT_INSTRUCTIONS
 
 USER_INSTRUCTIONS_BASE = """You are a user of the Oregon Tenant First Aid chatbot. 
 You are seeking legal advice about tenant rights in Oregon. 
@@ -35,40 +32,27 @@ You have a list of facts about your situation that you can reference to respond 
 If the bot asks you a question, you should answer it to the best of your ability, if you do not know the answer you should make something up that is plausible.
 """
 
-API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
-BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
-
-MODEL = os.getenv("MODEL_NAME", "o3")
-MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
 USER_MODEL = os.getenv("USER_MODEL_NAME", "gpt-4o-2024-11-20")
 
 
 class ChatView:
     client: Self
 
-    def __init__(self, starting_message, user_facts):
-        self.client = OpenAI(
-            api_key=API_KEY,
-            base_url=BASE_URL,
-        )
-        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
-        NUM_FILE_SEARCH_RESULTS = os.getenv("NUM_FILE_SEARCH_RESULTS", 10)
-        self.input_messages = [{"role": "user", "content": starting_message}]
+    def __init__(self, starting_message, user_facts, city, state):
+        self.chat_manager = ChatManager()
+        self.client = self.chat_manager.get_client()
+        self.city = city
+        self.state = state
+
+        self.input_messages: list[Message] = [
+            Message(role="user", content=starting_message)
+        ]
         self.starting_message = starting_message  # Store the starting message
 
         self.openai_tools = []
         self.USER_INSTRUCTIONS = (
             USER_INSTRUCTIONS_BASE + "\n" + "Facts: " + "\n".join(user_facts)
         )
-
-        if VECTOR_STORE_ID:
-            self.openai_tools.append(
-                {
-                    "type": "file_search",
-                    "vector_store_ids": [VECTOR_STORE_ID],
-                    "max_num_results": NUM_FILE_SEARCH_RESULTS,
-                }
-            )
 
     # Prompt iteration idea
     # If the user starts off by saying something unclear, start off by asking me \"What are you here for?\"
@@ -78,11 +62,11 @@ class ChatView:
         for message in messages:
             if message["role"] == "user":
                 reversed_messages.append(
-                    {"role": "assistant", "content": message["content"]}
+                    Message(role="assistant", content=message["content"])
                 )
             elif message["role"] == "assistant":
                 reversed_messages.append(
-                    {"role": "user", "content": message["content"]}
+                    Message(role="user", content=message["content"])
                 )
             else:
                 reversed_messages.append(message)
@@ -93,16 +77,15 @@ class ChatView:
         tries = 0
         while tries < 3:
             try:
-                response = self.client.responses.create(
-                    model=MODEL,
-                    input=self.input_messages,
-                    instructions=BOT_INSTRUCTIONS,
-                    reasoning={"effort": MODEL_REASONING_EFFORT},
+                # Use the BOT_INSTRUCTIONS for bot responses
+                response = self.chat_manager.generate_chat_response(
+                    self.input_messages,
+                    city=self.city,
+                    state=self.state,
                     stream=False,
-                    tools=self.openai_tools,
                 )
                 self.input_messages.append(
-                    {"role": "assistant", "content": response.output_text}
+                    Message(role="assistant", content=response.output_text)
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
                 return response.output_text
@@ -111,7 +94,7 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
-        self.input_messages.append({"role": "assistant", "content": failure_message})
+        self.input_messages.append(Message(role="assistant", content=failure_message))
         return failure_message
 
     def user_response(self):
@@ -127,7 +110,7 @@ class ChatView:
                     stream=False,
                 )
                 self.input_messages.append(
-                    {"role": "user", "content": response.output_text}
+                    Message(role="user", content=response.output_text)
                 )
                 return response.output_text
             except Exception as e:
@@ -135,7 +118,7 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a user response at this time. Please try again later."
-        self.input_messages.append({"role": "user", "content": failure_message})
+        self.input_messages.append(Message(role="user", content=failure_message))
         return failure_message
 
     def generate_conversation(self, num_turns=5):
@@ -163,9 +146,12 @@ def process_conversation(row, num_turns=5):
 
     # Convert string representation of list to actual list
     facts = ast.literal_eval(row["facts"])
+    # if row["city"] is NaN, set it to "null"
+    if pd.isna(row["city"]):
+        row["city"] = "null"
 
     # Create chat view with the starting question and facts
-    chat = ChatView(row["first_question"], facts)
+    chat = ChatView(row["first_question"], facts, row["city"], row["state"])
 
     # Generate a new conversation
     return chat.generate_conversation(num_turns)

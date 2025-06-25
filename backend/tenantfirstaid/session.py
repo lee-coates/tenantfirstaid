@@ -1,12 +1,24 @@
 import os
 import uuid
-from flask import Response, request, session
+from flask import Response, after_this_request, request, session
 from flask.views import View
+from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
 from typing import Any, Dict
+from openai.types.responses.response_input_param import Message
 
 
+class TenantSessionData(TypedDict):
+    city: str
+    state: str
+    messages: list[Message]  # List of messages with role and content
+
+
+NEW_SESSION_DATA = TenantSessionData(city="null", state="or", messages=[])
+
+
+# The class to manage tenant sessions using Valkey and Flask sessions
 class TenantSession:
     def __init__(self):
         print(
@@ -29,10 +41,22 @@ class TenantSession:
         except Exception as e:
             print(e)
 
-    def get(self):
+    # Retrieves the session ID from Flask session or creates a new one
+    def get_flask_session_id(self) -> str:
         session_id = session.get("session_id")
         if not session_id:
-            return self.getNewSessionData()
+            session_id = str(uuid.uuid4())
+            session["session_id"] = session_id
+
+            @after_this_request
+            def save_session(response):
+                session.modified = True
+                return response
+
+        return session_id
+
+    def get(self) -> TenantSessionData:
+        session_id = self.get_flask_session_id()
 
         saved_session = self.db_con.get(session_id)
         if not saved_session:
@@ -40,33 +64,29 @@ class TenantSession:
 
         return json.loads(saved_session)
 
-    def set(self, session_id, value):
+    def set(self, value: TenantSessionData):
+        session_id = self.get_flask_session_id()
         self.db_con.set(session_id, json.dumps(value))
 
-    def getNewSessionData(self):
-        return {
-            "city": "",
-            "state": "",
-            "messages": [],
-        }
+    def getNewSessionData(self) -> TenantSessionData:
+        return TenantSessionData(NEW_SESSION_DATA.copy())
 
 
+# The Flask view to initialize a session
 class InitSessionView(View):
     def __init__(self, tenant_session: TenantSession):
         self.tenant_session = tenant_session
 
     def dispatch_request(self):
         data: Dict[str, Any] = request.json
-        session_id = session.get("session_id")
-        if not session_id:
-            session_id = str(uuid.uuid4())
-            session["session_id"] = session_id
+        session_id = self.tenant_session.get_flask_session_id()
+
         city = data["city"] or "null"
         state = data["state"]
 
         # Initialize the session with city and state
-        initial_data = {"city": city, "state": state, "messages": []}
-        self.tenant_session.set(session_id, initial_data)
+        initial_data = TenantSessionData(city=city, state=state, messages=[])
+        self.tenant_session.set(initial_data)
 
         return Response(
             status=200,

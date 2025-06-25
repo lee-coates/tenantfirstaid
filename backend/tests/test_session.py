@@ -1,7 +1,7 @@
 import pytest
 from flask import Flask
-from tenantfirstaid.session import TenantSession, InitSessionView
-from typing import Dict, Any
+from tenantfirstaid.session import TenantSession, InitSessionView, TenantSessionData
+from typing import Dict
 
 
 @pytest.fixture
@@ -81,6 +81,7 @@ def test_session_get_unknown_session_id(mocker, mock_environ):
     mock_valkey_client = mocker.Mock()
     mocker.patch("tenantfirstaid.session.Valkey", return_value=mock_valkey_client)
     mock_valkey_client.ping = mocker.Mock()
+    mock_valkey_client.get = mocker.Mock(return_value=None)  # Simulate unknown session
 
     tenant_session = TenantSession()
     app = Flask(__name__)
@@ -96,18 +97,18 @@ def test_session_get_unknown_session_id(mocker, mock_environ):
             reqctx.session.get("session_id") is None
         )  # Ensure session_id is NOT set in the request context (before dispatch)
         assert tenant_session.get() == {
-            "city": "",
-            "state": "",
+            "city": "null",
+            "state": "or",
             "messages": [],
         }
 
 
 def test_session_set_and_get(mocker, mock_environ, mock_valkey):
-    test_data_obj: Dict[str, Any] = {
-        "city": "Test City",
-        "state": "Test State",
-        "messages": ["this is message 1", "this is message 2"],
-    }
+    test_data_obj = TenantSessionData(
+        city="Test City",
+        state="Test State",
+        messages=[],
+    )
 
     tenant_session = TenantSession()
     app = Flask(__name__)
@@ -125,16 +126,16 @@ def test_session_set_and_get(mocker, mock_environ, mock_valkey):
         assert session_id is not None  # Ensure session_id is set
         assert isinstance(session_id, str)  # Ensure session_id is a string
 
-        tenant_session.set(session_id, test_data_obj)
+        tenant_session.set(test_data_obj)
         assert tenant_session.get() == test_data_obj
 
 
 def test_session_set_some_and_get_none(mocker, mock_environ, mock_valkey):
-    test_data_obj: Dict[str, Any] = {
-        "city": "Test City",
-        "state": "Test State",
-        "messages": ["this is message 1", "this is message 2"],
-    }
+    test_data_obj = TenantSessionData(
+        city="Test City",
+        state="Test State",
+        messages=[],
+    )
 
     tenant_session = TenantSession()
     app = Flask(__name__)
@@ -155,9 +156,9 @@ def test_session_set_some_and_get_none(mocker, mock_environ, mock_valkey):
         assert session_id is not None  # Ensure session_id is set
         assert isinstance(session_id, str)  # Ensure session_id is a string
 
-        tenant_session.set(session_id, test_data_obj)
+        tenant_session.set(test_data_obj)
         assert tenant_session.get() == {
-            "city": "",
-            "state": "",
+            "city": "null",
+            "state": "or",
             "messages": [],
         }
