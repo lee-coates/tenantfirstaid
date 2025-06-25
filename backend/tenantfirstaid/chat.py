@@ -2,6 +2,7 @@ from openai import OpenAI
 from openai.types.shared import Reasoning
 from openai.types.responses import (
     FileSearchToolParam,
+    Response as ResponseEvent,
     ResponseStreamEvent,
 )
 from openai.types.responses.response_input_param import Message
@@ -126,7 +127,7 @@ class ChatManager:
 
     def generate_chat_response(
         self, messages: list[Message], city: str, state: str, stream=False
-    ) -> ResponseStreamEvent:
+    ) -> ResponseStreamEvent | ResponseEvent:
         instructions = self.prepare_developer_instructions(city, state)
         tools = self.prepare_openai_tools(city, state)
 

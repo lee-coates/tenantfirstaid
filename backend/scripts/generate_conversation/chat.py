@@ -3,6 +3,7 @@
 # dependencies = [
 #     "openai",
 #     "pandas",
+#     "python-dotenv",
 # ]
 # ///
 import os
@@ -11,15 +12,16 @@ import argparse
 from pathlib import Path
 import pandas as pd
 from typing import Self
-
 from openai.types.responses.response_input_param import Message
 
-if Path("../../.env").exists():
+from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
+
+dot_env_path = Path(__file__).parent.parent.parent / ".env"
+print(f"Loading environment variables from {dot_env_path}")
+if dot_env_path.exists():
     from dotenv import load_dotenv
 
-    load_dotenv(override=True)
-
-from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
+    load_dotenv(dotenv_path=dot_env_path, override=True)
 
 BOT_INSTRUCTIONS = DEFAULT_INSTRUCTIONS
 

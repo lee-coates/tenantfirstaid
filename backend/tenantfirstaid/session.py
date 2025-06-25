@@ -15,11 +15,7 @@ class TenantSessionData(TypedDict):
     messages: list[Message]  # List of messages with role and content
 
 
-new_session_data = {
-    "city": "null",
-    "state": "or",
-    "messages": [],
-}
+NEW_SESSION_DATA = TenantSessionData(city="null", state="or", messages=[])
 
 
 # The class to manage tenant sessions using Valkey and Flask sessions
@@ -73,7 +69,7 @@ class TenantSession:
         self.db_con.set(session_id, json.dumps(value))
 
     def getNewSessionData(self) -> TenantSessionData:
-        return TenantSessionData(new_session_data)
+        return TenantSessionData(NEW_SESSION_DATA.copy())
 
 
 # The Flask view to initialize a session
