@@ -5,7 +5,7 @@ from flask.views import View
 from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
-from typing import Any, Dict
+from typing import Any, Dict, Optional, Literal
 from openai.types.responses.response_input_param import Message
 
 
