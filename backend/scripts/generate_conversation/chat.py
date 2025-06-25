@@ -6,13 +6,14 @@
 #     "python-dotenv",
 # ]
 # ///
+from openai.types.responses.response_input_param import ResponseInputParam
+from openai._client import OpenAI
 import os
 import ast
 import argparse
 from pathlib import Path
 import pandas as pd
-from typing import Self
-from openai.types.responses.response_input_param import Message
+from openai.types.responses.easy_input_message_param import EasyInputMessageParam
 
 from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
 
@@ -36,7 +37,7 @@ USER_MODEL = os.getenv("USER_MODEL_NAME", "gpt-4o-2024-11-20")
 
 
 class ChatView:
-    client: Self
+    client: OpenAI
 
     def __init__(self, starting_message, user_facts, city, state):
         self.chat_manager = ChatManager()
@@ -44,8 +45,8 @@ class ChatView:
         self.city = city
         self.state = state
 
-        self.input_messages: list[Message] = [
-            Message(role="user", content=starting_message)
+        self.input_messages: ResponseInputParam = [
+            EasyInputMessageParam(role="user", content=starting_message)
         ]
         self.starting_message = starting_message  # Store the starting message
 
@@ -62,11 +63,11 @@ class ChatView:
         for message in messages:
             if message["role"] == "user":
                 reversed_messages.append(
-                    Message(role="assistant", content=message["content"])
+                    EasyInputMessageParam(role="system", content=message["content"])
                 )
             elif message["role"] == "assistant":
                 reversed_messages.append(
-                    Message(role="user", content=message["content"])
+                    EasyInputMessageParam(role="user", content=message["content"])
                 )
             else:
                 reversed_messages.append(message)
@@ -85,7 +86,9 @@ class ChatView:
                     stream=False,
                 )
                 self.input_messages.append(
-                    Message(role="assistant", content=response.output_text)
+                    EasyInputMessageParam(
+                        role="assistant", content=response.output_text
+                    )
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
                 return response.output_text
@@ -94,7 +97,9 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
-        self.input_messages.append(Message(role="assistant", content=failure_message))
+        self.input_messages.append(
+            EasyInputMessageParam(role="assistant", content=failure_message)
+        )
         return failure_message
 
     def user_response(self):
@@ -110,7 +115,7 @@ class ChatView:
                     stream=False,
                 )
                 self.input_messages.append(
-                    Message(role="user", content=response.output_text)
+                    EasyInputMessageParam(role="user", content=response.output_text)
                 )
                 return response.output_text
             except Exception as e:
@@ -118,7 +123,9 @@ class ChatView:
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a user response at this time. Please try again later."
-        self.input_messages.append(Message(role="user", content=failure_message))
+        self.input_messages.append(
+            EasyInputMessageParam(role="user", content=failure_message)
+        )
         return failure_message
 
     def generate_conversation(self, num_turns=5):
@@ -134,8 +141,8 @@ class ChatView:
             user_response = self.user_response()
             chat_history += f"USER: {user_response}\n"
             print(f"USER: {user_response}")
-        self.input_messages = self.input_messages[
-            0
+        self.input_messages = [
+            self.input_messages[0]
         ]  # Reset input messages to the first message only
         return chat_history
 

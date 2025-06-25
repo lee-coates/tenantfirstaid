@@ -1,19 +1,36 @@
+from openai.types.responses.easy_input_message_param import EasyInputMessageParam
 from openai import OpenAI
-from openai.types.shared import Reasoning
+from openai.types.shared_params import (
+    ComparisonFilter,
+    CompoundFilter,
+    Reasoning,
+    ReasoningEffort,
+)
 from openai.types.responses import (
     FileSearchToolParam,
     Response as ResponseEvent,
+    ResponseIncludable,
+    ResponseInputParam,
     ResponseStreamEvent,
+    ResponseTextDeltaEvent,
 )
-from openai.types.responses.response_input_param import Message
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
+from typing_extensions import Literal, overload
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "o3")
-MODEL_REASONING_EFFORT = os.getenv("MODEL_REASONING_EFFORT", "medium")
+reasoning_effort = os.getenv("MODEL_REASONING_EFFORT")
+MODEL_REASONING_EFFORT: ReasoningEffort = "medium"
+match reasoning_effort:
+    case "low":
+        MODEL_REASONING_EFFORT = "low"
+    case "medium":
+        MODEL_REASONING_EFFORT = "medium"
+    case "high":
+        MODEL_REASONING_EFFORT = "high"
 
 DEFAULT_INSTRUCTIONS = """Pretend you're a legal expert who is giving advice about eviction notices in Oregon. 
 Please give shorter answers. 
@@ -51,7 +68,7 @@ class ChatManager:
         instructions += f"\nThe user is in {city} {state.upper()}.\n"
         return instructions
 
-    def prepare_openai_tools(self, city: str, state: str):
+    def prepare_openai_tools(self, city: str, state: str) -> list | None:
         VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
         if not VECTOR_STORE_ID:
             return None
@@ -60,76 +77,94 @@ class ChatManager:
         # This filters out other cities in the same state.
         # The user is gated into selecting a city in Oregon so we don't worry about
         # whether the relevant documents exist or not.
-        # TODO: use CompoundFilter and ComparisonFilter from openai.types.shared
-        filters = (
-            {
-                "type": "or",
-                "filters": [
-                    {
-                        "type": "and",
-                        "filters": [
-                            {
-                                "type": "eq",
-                                "key": "city",
-                                "value": city,
-                            },
-                            {
-                                "type": "eq",
-                                "key": "state",
-                                "value": state,
-                            },
+        if city != "null":
+            filters = CompoundFilter(
+                type="or",
+                filters=[
+                    CompoundFilter(
+                        type="and",
+                        filters=[
+                            ComparisonFilter(
+                                type="eq",
+                                key="city",
+                                value=city,
+                            ),
+                            ComparisonFilter(
+                                type="eq",
+                                key="state",
+                                value=state,
+                            ),
                         ],
-                    },
-                    {
-                        "type": "and",
-                        "filters": [
-                            {
-                                "type": "eq",
-                                "key": "city",
-                                "value": "null",
-                            },
-                            {
-                                "type": "eq",
-                                "key": "state",
-                                "value": state,
-                            },
+                    ),
+                    CompoundFilter(
+                        type="and",
+                        filters=[
+                            ComparisonFilter(
+                                type="eq",
+                                key="city",
+                                value="null",
+                            ),
+                            ComparisonFilter(
+                                type="eq",
+                                key="state",
+                                value=state,
+                            ),
                         ],
-                    },
+                    ),
                 ],
-            }
-            if city != "null"
-            else {
-                # If city is null, we only filter by state
-                "type": "and",
-                "filters": [
-                    {
-                        "type": "eq",
-                        "key": "city",
-                        "value": "null",
-                    },
-                    {
-                        "type": "eq",
-                        "key": "state",
-                        "value": state,
-                    },
+            )
+        else:
+            filters = CompoundFilter(
+                type="and",
+                filters=[
+                    ComparisonFilter(
+                        type="eq",
+                        key="city",
+                        value="null",
+                    ),
+                    ComparisonFilter(
+                        type="eq",
+                        key="state",
+                        value=state,
+                    ),
                 ],
-            }
-        )
+            )
+
+        max_num_results = int(os.getenv("NUM_FILE_SEARCH_RESULTS", 10))
 
         return [
             FileSearchToolParam(
                 type="file_search",
                 vector_store_ids=[VECTOR_STORE_ID],
-                max_num_results=os.getenv("NUM_FILE_SEARCH_RESULTS", 10),
+                max_num_results=max_num_results,
                 filters=filters,
             )
         ]
 
+    from typing import Iterator, Union
+
+    # With streaming response
+    @overload
     def generate_chat_response(
-        self, messages: list[Message], city: str, state: str, stream=False
-    ) -> ResponseStreamEvent | ResponseEvent:
+        self, messages: ResponseInputParam, city: str, state: str, stream: Literal[True]
+    ) -> Iterator[ResponseStreamEvent]: ...
+
+    # No streaming response
+    @overload
+    def generate_chat_response(
+        self,
+        messages: ResponseInputParam,
+        city: str,
+        state: str,
+        stream: Literal[False],
+    ) -> ResponseEvent: ...
+
+    def generate_chat_response(
+        self, messages: ResponseInputParam, city: str, state: str, stream: bool
+    ):
         instructions = self.prepare_developer_instructions(city, state)
         tools = self.prepare_openai_tools(city, state)
+        param_includes: list[ResponseIncludable] = ["file_search_call.results"]
 
         # Use the OpenAI client to generate a response
         response_stream = self.client.responses.create(
@@ -138,8 +173,8 @@ class ChatManager:
             instructions=instructions,
             reasoning=Reasoning(effort=MODEL_REASONING_EFFORT),
             stream=stream,
-            include=["file_search_call.results"],
-            tools=tools,
+            include=param_includes,
+            tools=tools if tools else [],
         )
 
         return response_stream
@@ -150,12 +185,14 @@ class ChatView(View):
         self.tenant_session = tenant_session
         self.chat_manager = ChatManager()
 
-    def dispatch_request(self):
+    def dispatch_request(self, *args, **kwargs):
         data = request.json
         user_msg = data["message"]
 
         current_session = self.tenant_session.get()
-        current_session["messages"].append(Message(role="user", content=user_msg))
+        current_session["messages"].append(
+            EasyInputMessageParam(role="user", content=user_msg)
+        )
 
         def generate():
             # Use the new Responses API with streaming
@@ -167,17 +204,17 @@ class ChatView(View):
             )
 
             assistant_chunks = []
-            for chunk in response_stream:
-                if hasattr(chunk, "delta"):
-                    token = chunk.delta or ""
-                    assistant_chunks.append(token)
-                    yield token
+            for event in response_stream:
+                if isinstance(event, ResponseTextDeltaEvent):
+                    # Append the content of the assistant message chunk
+                    assistant_chunks.append(event.delta)
+                    yield event.delta
 
             # Join the complete response
             assistant_msg = "".join(assistant_chunks)
 
             current_session["messages"].append(
-                Message(role="assistant", content=assistant_msg)
+                {"role": "system", "content": assistant_msg}
             )
 
             self.tenant_session.set(current_session)
