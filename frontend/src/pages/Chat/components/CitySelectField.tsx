@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useMessages, { IMessage } from "../../../hooks/useMessages";
+import BeaverIcon from "../../../shared/components/BeaverIcon";
 
 const CitySelectOptions = {
   portland: {
@@ -59,11 +60,18 @@ export default function CitySelectField({ setMessages }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-center text-[#888] mb-10">
-        {city === "other"
-          ? "Unfortunately we can only answer questions about tenant rights in Oregon right now."
-          : "Welcome to Tenant First Aid! I can answer your questions about tenant rights in Oregon. To get started, what city are you located in?"}
-      </p>
+      <div className="flex px-4 gap-4 items-center">
+        <div>
+          <BeaverIcon />
+        </div>
+        <div>
+          <p className="text-center text-[#888]">
+            {city === "other"
+              ? "Unfortunately we can only answer questions about tenant rights in Oregon right now."
+              : "Welcome to Tenant First Aid! I can answer your questions about tenant rights in Oregon. To get started, what city are you located in?"}
+          </p>
+        </div>
+      </div>
       <select
         name="city"
         value={city || ""}
