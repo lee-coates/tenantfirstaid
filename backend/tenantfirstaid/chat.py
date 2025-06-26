@@ -44,6 +44,8 @@ Assume the user is on a month-to-month lease unless they specify otherwise.
 Use only the information from the file search results to answer the question.
 City codes will override the state codes if there is a conflict.
 
+Only answer questions about housing law in Oregon, do not answer questions about other states or topics unrelated to housing law.
+
 Make sure to include a citation to the relevant law in your answer, with a link to the actual web page the law is on using HTML.
 Use the following websites for citation links:
 https://oregon.public.law/statutes
@@ -96,8 +98,6 @@ class ChatManager:
             filters = FILTER_UNION
         else:
             filters = FILTER_OREGON_AND_NULL_CITY
-
-        print("Preparing OpenAI tools with filters:", filters)
 
         max_num_results = int(os.getenv("NUM_FILE_SEARCH_RESULTS", 10))
 
