@@ -77,58 +77,25 @@ class ChatManager:
         # This filters out other cities in the same state.
         # The user is gated into selecting a city in Oregon so we don't worry about
         # whether the relevant documents exist or not.
+        FILTER_STATE_IS_OREGON = ComparisonFilter(type="eq", key="state", value="or")
+        FILTER_CITY_IS_NULL = ComparisonFilter(type="eq", key="city", value="null")
+        FILTER_CITY_IS_GIVEN = ComparisonFilter(type="eq", key="city", value=city)
+        FILTER_OREGON_AND_NULL_CITY = CompoundFilter(
+            type="and", filters=[FILTER_STATE_IS_OREGON, FILTER_CITY_IS_NULL]
+        )
+        FILTER_OREGON_AND_SOME_CITY = CompoundFilter(
+            type="and", filters=[FILTER_STATE_IS_OREGON, FILTER_CITY_IS_GIVEN]
+        )
+        FILTER_UNION = CompoundFilter(
+            type="or",
+            filters=[FILTER_OREGON_AND_NULL_CITY, FILTER_OREGON_AND_SOME_CITY],
+        )
         if city != "null":
-            filters = CompoundFilter(
-                type="or",
-                filters=[
-                    CompoundFilter(
-                        type="and",
-                        filters=[
-                            ComparisonFilter(
-                                type="eq",
-                                key="city",
-                                value=city,
-                            ),
-                            ComparisonFilter(
-                                type="eq",
-                                key="state",
-                                value=state,
-                            ),
-                        ],
-                    ),
-                    CompoundFilter(
-                        type="and",
-                        filters=[
-                            ComparisonFilter(
-                                type="eq",
-                                key="city",
-                                value="null",
-                            ),
-                            ComparisonFilter(
-                                type="eq",
-                                key="state",
-                                value=state,
-                            ),
-                        ],
-                    ),
-                ],
-            )
+            filters = FILTER_UNION
         else:
-            filters = CompoundFilter(
-                type="and",
-                filters=[
-                    ComparisonFilter(
-                        type="eq",
-                        key="city",
-                        value="null",
-                    ),
-                    ComparisonFilter(
-                        type="eq",
-                        key="state",
-                        value=state,
-                    ),
-                ],
-            )
+            filters = FILTER_OREGON_AND_NULL_CITY
+
+        print("Preparing OpenAI tools with filters:", filters)
 
         max_num_results = int(os.getenv("NUM_FILE_SEARCH_RESULTS", 10))
 
