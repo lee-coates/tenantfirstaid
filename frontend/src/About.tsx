@@ -2,10 +2,10 @@ import BackLink from "./shared/components/BackLink";
 
 export default function About() {
   return (
-    <div className="flex items-center pt-16 sm:mt-26 sm:pt-0">
-      <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-lg shadow-md">
+    <div className="flex items-center my-16 mb-0 sm:mt-26 sm:mb-10">
+      <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-none sm:rounded-lg shadow-md">
         <BackLink />
-        <p className="mb-6 text-gray-700">
+        <p className="my-6">
         <strong>Tenant First Aid</strong> is an AI-powered chatbot designed to
         help Oregon tenants navigate housing and eviction issues. It is a
         volunteer-built program by{" "}
@@ -29,33 +29,33 @@ export default function About() {
         essential legal info they need to understand an eviction notice, respond
         on time, and avoid mistakes that could cost them their home.
       </p>
-      <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-800">
+      <h2 className="text-2xl font-semibold mt-6 mb-2">
         Contact:
       </h2>
       <p>Michael Zhang</p>
       <p>Attorney, licensed in Oregon and Washington</p>
       <p>michael@qiu-qiulaw.com</p>
-      <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-800">
+      <h2 className="text-2xl font-semibold mt-6 mb-2">
         Features
       </h2>
-      <ul className="list-disc list-inside mb-6 text-gray-700">
+      <ul className="list-disc list-inside">
         <li>Instant answers to common rental questions</li>
         <li>Guidance on tenant rights and landlord obligations</li>
         <li>Easy-to-use chat interface</li>
         <li>Available 24/7</li>
       </ul>
-      <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-800">
+      <h2 className="text-2xl font-semibold mt-6 mb-2">
         How It Works
       </h2>
-      <p className="mb-6 text-gray-700">
+      <p className="mb-6">
         Simply type your question or describe your situation, and Tenant First
         Aid will provide helpful information or direct you to relevant
         resources.
       </p>
-      <h2 className="text-2xl font-semibold mt-6 mb-2 text-gray-800">
+      <h2 className="text-2xl font-semibold mt-6 mb-2">
         Quick Facts:
       </h2>
-      <ul className="list-disc list-inside mb-6 text-gray-700">
+      <ul className="list-disc list-inside mb-6">
         <li>Uses openAI ChatGPT o3 model</li>
         <li>
           Reference library:
