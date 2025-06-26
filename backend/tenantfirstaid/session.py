@@ -1,3 +1,4 @@
+from openai.types.responses.easy_input_message import EasyInputMessage
 import os
 import uuid
 from flask import Response, after_this_request, request, session
@@ -6,13 +7,12 @@ from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
 from typing import Any, Dict, Optional, Literal
-from openai.types.responses.response_input_param import Message
 
 
 class TenantSessionData(TypedDict):
     city: str
     state: str
-    messages: list[Message]  # List of messages with role and content
+    messages: list[EasyInputMessage]  # List of messages with role and content
 
 
 NEW_SESSION_DATA = TenantSessionData(city="null", state="or", messages=[])
@@ -69,7 +69,7 @@ class TenantSession:
         self.db_con.set(session_id, json.dumps(value))
 
     def getNewSessionData(self) -> TenantSessionData:
-        return TenantSessionData(NEW_SESSION_DATA.copy())
+        return TenantSessionData(**NEW_SESSION_DATA.copy())
 
 
 # The Flask view to initialize a session
@@ -77,7 +77,7 @@ class InitSessionView(View):
     def __init__(self, tenant_session: TenantSession):
         self.tenant_session = tenant_session
 
-    def dispatch_request(self):
+    def dispatch_request(self, *args, **kwargs):
         data: Dict[str, Any] = request.json
         session_id: Optional[str] = self.tenant_session.get_flask_session_id()
 
