@@ -5,6 +5,7 @@ import MessageContent from "./MessageContent";
 import useSession from "../../../hooks/useSession";
 import ExportMessagesButton from "./ExportMessagesButton";
 import CitySelectField from "./CitySelectField";
+import SuggestedPrompts from "./SuggestedPrompts";
 
 interface Props {
   messages: IMessage[];
@@ -22,13 +23,14 @@ export default function MessageWindow({
   onStatuteClick,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { handleNewSession } = useSession();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
   const handleClearSession = () => {
     handleNewSession();
-    setMessages([]);
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -44,20 +46,28 @@ export default function MessageWindow({
     }
   }, [messages]);
 
+  const handlePromptClick = (prompt: string) => {
+    setInputValue(prompt);
+    if (inputRef.current) {
+      inputRef.current.value = prompt;
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <>
-      <div className="flex-1">
+      <div
+        className={`flex-1 ${
+          isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+        }`}
+        ref={messagesRef}
+      >
         {isError ? (
           <div className="flex items-center justify-center h-full text-center">
             Error fetching chat history. Try refreshing...
           </div>
         ) : (
-          <div
-            className={`max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px] ${
-              isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-            }`}
-            ref={messagesRef}
-          >
+          <div className="max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px]">
             {isOngoing ? (
               <div className="flex flex-col gap-4">
                 {messages.map((message) => (
@@ -92,11 +102,16 @@ export default function MessageWindow({
       <div>
         {messages.length > 0 ? (
           <>
+            {messages.length === 1 && inputValue === "" && (
+              <SuggestedPrompts onPromptClick={handlePromptClick} />
+            )}
             <InputField
               setMessages={setMessages}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               inputRef={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
               <button

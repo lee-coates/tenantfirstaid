@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useMessages, { IMessage } from "../../../hooks/useMessages";
+import BeaverIcon from "../../../shared/components/BeaverIcon";
 
 const CitySelectOptions = {
   portland: {
@@ -30,7 +31,6 @@ interface Props {
 
 export default function CitySelectField({ setMessages }: Props) {
   const [city, setCity] = useState<string | null>(null);
-  const [invalidCity, setInvalidCity] = useState<boolean>(false);
   const { initChat } = useMessages();
 
   const handleCityChange = async (key: string | null) => {
@@ -38,8 +38,6 @@ export default function CitySelectField({ setMessages }: Props) {
     const selectedCity =
       CitySelectOptions[key as keyof typeof CitySelectOptions];
     if (selectedCity && selectedCity.state) {
-      setInvalidCity(false);
-
       try {
         await initChat({ city: selectedCity.city, state: selectedCity.state });
 
@@ -56,20 +54,24 @@ export default function CitySelectField({ setMessages }: Props) {
         ]);
       } catch (error) {
         console.error("Error initializing session:", error);
-        setInvalidCity(true);
       }
-    } else {
-      setInvalidCity(true);
     }
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-center text-[#888] mb-10">
-        {invalidCity
-          ? "Unfortunately we can only answer questions about tenant rights in Oregon right now."
-          : "Welcome to Tenant First Aid! I can answer your questions about tenant rights in Oregon. To get started, what city are you located in?"}
-      </p>
+      <div className="flex px-4 gap-4 items-center">
+        <div>
+          <BeaverIcon />
+        </div>
+        <div>
+          <p className="text-center text-[#888]">
+            {city === "other"
+              ? "Unfortunately we can only answer questions about tenant rights in Oregon right now."
+              : "Welcome to Tenant First Aid! I can answer your questions about tenant rights in Oregon. To get started, what city are you located in?"}
+          </p>
+        </div>
+      </div>
       <select
         name="city"
         value={city || ""}

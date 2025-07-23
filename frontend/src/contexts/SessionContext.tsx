@@ -20,8 +20,6 @@ export default function SessionContextProvider({ children }: Props) {
         method: "POST",
         credentials: "include",
       });
-      // Refresh the page to start fresh
-      window.location.reload();
     } catch (error) {
       console.error("Failed to clear session:", error);
       // Fallback: just refresh the page

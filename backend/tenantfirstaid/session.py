@@ -1,3 +1,4 @@
+from openai.types.responses.easy_input_message import EasyInputMessage
 import os
 import uuid
 from flask import Response, after_this_request, request, session
@@ -5,17 +6,16 @@ from flask.views import View
 from typing import TypedDict
 from valkey import Valkey
 import simplejson as json
-
-
-class TenantSessionMessage(TypedDict):
-    role: str  # 'user' or 'assistant'
-    content: str  # The content of the message
+from typing import Any, Dict, Optional, Literal
 
 
 class TenantSessionData(TypedDict):
     city: str
     state: str
-    messages: list[TenantSessionMessage]  # List of messages with role and content
+    messages: list[EasyInputMessage]  # List of messages with role and content
+
+
+NEW_SESSION_DATA = TenantSessionData(city="null", state="or", messages=[])
 
 
 # The class to manage tenant sessions using Valkey and Flask sessions
@@ -58,22 +58,18 @@ class TenantSession:
     def get(self) -> TenantSessionData:
         session_id = self.get_flask_session_id()
 
-        saved_session = self.db_con.get(session_id)
+        saved_session: Optional[str] = self.db_con.get(session_id)  # type: ignore # known issue https://github.com/valkey-io/valkey-py/issues/164
         if not saved_session:
             return self.getNewSessionData()
 
-        return json.loads(saved_session)
+        return json.loads(s=saved_session)
 
     def set(self, value: TenantSessionData):
         session_id = self.get_flask_session_id()
         self.db_con.set(session_id, json.dumps(value))
 
     def getNewSessionData(self) -> TenantSessionData:
-        return {
-            "city": "",
-            "state": "",
-            "messages": [],
-        }
+        return TenantSessionData(**NEW_SESSION_DATA.copy())
 
 
 # The Flask view to initialize a session
@@ -81,15 +77,15 @@ class InitSessionView(View):
     def __init__(self, tenant_session: TenantSession):
         self.tenant_session = tenant_session
 
-    def dispatch_request(self):
-        data = request.json
-        session_id = self.tenant_session.get_flask_session_id()
+    def dispatch_request(self, *args, **kwargs):
+        data: Dict[str, Any] = request.json
+        session_id: Optional[str] = self.tenant_session.get_flask_session_id()
 
-        city = data["city"] or "null"
-        state = data["state"]
+        city: str | Literal["null"] = data["city"] or "null"
+        state: str = data["state"]
 
         # Initialize the session with city and state
-        initial_data: TenantSessionData = {"city": city, "state": state, "messages": []}
+        initial_data = TenantSessionData(city=city, state=state, messages=[])
         self.tenant_session.set(initial_data)
 
         return Response(
