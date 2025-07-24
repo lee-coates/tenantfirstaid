@@ -6,6 +6,8 @@
 #     "python-dotenv",
 # ]
 # ///
+from numbers import Number
+from time import time
 from openai.types.responses.response_input_param import ResponseInputParam
 from openai._client import OpenAI
 import os
@@ -66,9 +68,9 @@ class ChatView:
         for message in messages:
             if message["role"] == "user":
                 reversed_messages.append(
-                    EasyInputMessageParam(role="system", content=message["content"])
+                    EasyInputMessageParam(role="model", content=message["content"])
                 )
-            elif message["role"] == "assistant":
+            elif message["role"] == "model":
                 reversed_messages.append(
                     EasyInputMessageParam(role="user", content=message["content"])
                 )
@@ -82,28 +84,30 @@ class ChatView:
         while tries < 3:
             try:
                 # Use the BOT_INSTRUCTIONS for bot responses
+                start = time()
                 response = self.chat_manager.generate_gemini_chat_response(
                     self.input_messages,
                     city=self.city,
                     state=self.state,
                     stream=False,
+                    model_name="gemini-2.5-flash",
                 )
+                end = time()
                 self.input_messages.append(
-                    EasyInputMessageParam(
-                        role="assistant", content=response.output_text
-                    )
+                    EasyInputMessageParam(role="model", content=response.text)
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
-                return response.text
+                print(f"RESPONSE TIME: {end - start}")
+                return response.text, end - start
             except Exception as e:
                 print(f"Error generating bot response: {e}")
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
         self.input_messages.append(
-            EasyInputMessageParam(role="assistant", content=failure_message)
+            EasyInputMessageParam(role="model", content=failure_message)
         )
-        return failure_message
+        return failure_message, None
 
     def user_response(self):
         """Generates a response from the user using the OpenAI API."""
@@ -122,9 +126,9 @@ class ChatView:
                     model_name="gemini-2.0-flash-lite",
                 )
                 self.input_messages.append(
-                    EasyInputMessageParam(role="user", content=response.output_text)
+                    EasyInputMessageParam(role="user", content=response.text)
                 )
-                return response.output_text
+                return response.text
             except Exception as e:
                 print(f"Error generating user response: {e}")
                 tries += 1
@@ -140,9 +144,12 @@ class ChatView:
         chat_history = ""
         print("Starting conversation...")
         print(f"USER: {self.starting_message}")
+        times = []
         for _ in range(num_turns):
-            print("\n--- New Turn ---")
-            response = self.bot_response()
+            print(f"\n--- New Turn ({_}) ---")
+            response, run_time = self.bot_response()
+            if run_time is not None:
+                times.append(run_time)
             chat_history += f"BOT: {response}\n"
             print(f"\nBOT: {response}")
 
@@ -152,6 +159,13 @@ class ChatView:
         self.input_messages = [
             self.input_messages[0]
         ]  # Reset input messages to the first message only
+
+        # Catch when times has not populated
+        try:
+            average = sum(times) / len(times)
+            chat_history += f"\nAverage bot response time: {round(average, 2)}s"
+        except Exception as e:
+            print(e)
         return chat_history
 
 
@@ -180,6 +194,8 @@ def process_csv(input_file=None, output_file=None, num_turns=5, num_rows=None):
         output_file = (
             Path(__file__).parent / "tenant_questions_facts_with_new_conversations.csv"
         )
+    else:
+        output_file = Path(__file__).parent / output_file
 
     print(f"\nProcessing conversations from {input_file}")
 
@@ -214,7 +230,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--num-rows", type=int, default=None, help="Number of rows to process"
     )
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=None,
+        help="The file name to save the output CSV to",
+    )
     args = parser.parse_args()
 
-    process_csv(num_turns=args.num_turns, num_rows=args.num_rows)
+    process_csv(
+        num_turns=args.num_turns, num_rows=args.num_rows, output_file=args.output_file
+    )
 # This script generates conversations between a user and a bot using the OpenAI API.

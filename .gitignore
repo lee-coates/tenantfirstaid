@@ -58,5 +58,7 @@ chatlog.jsonl
 /backend/feedback.jsonl
 /backend/data
 /backend/scripts/eval_results.json
+/backend/scripts/generate_conversation/*.csv
+!/backend/scripts/generate_conversation/tenant_questions_facts_full.csv
 combined_training_gpt-4_1.jsonl
 combined_training_o3.jsonl

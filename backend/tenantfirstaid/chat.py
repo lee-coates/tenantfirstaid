@@ -14,6 +14,16 @@ from openai.types.responses import (
     ResponseStreamEvent,
     ResponseTextDeltaEvent,
 )
+import vertexai
+from vertexai.preview import rag
+from vertexai.generative_models import (
+    GenerativeModel,
+    GenerationConfig,
+    Tool,
+)
+from google import genai
+from google.oauth2 import service_account
+from google.genai import types
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
@@ -152,13 +162,13 @@ class ChatManager:
 
     def generate_gemini_chat_response(
         self,
-        messages: list[TenantSessionMessage],
+        messages: list[ResponseInputParam],
         city: str,
         state: str,
         stream=False,
         use_tools=True,
         instructions=None,
-        model_name=USER_MODEL,
+        model_name=MODEL,
     ):
         creds = service_account.Credentials.from_service_account_file(
             "google-service-account.json"
@@ -228,7 +238,7 @@ class ChatView(View):
 
         def generate():
             # Use the new Responses API with streaming
-            response_stream = self.chat_manager.generate_chat_response(
+            response_stream = self.chat_manager.generate_gemini_chat_response(
                 current_session["messages"],
                 current_session["city"],
                 current_session["state"],
@@ -237,10 +247,9 @@ class ChatView(View):
 
             assistant_chunks = []
             for event in response_stream:
-                if isinstance(event, ResponseTextDeltaEvent):
-                    # Append the content of the assistant message chunk
-                    assistant_chunks.append(event.delta)
-                    yield event.delta
+                print("Event response: ", event.candidates[0].content.parts[0])
+                assistant_chunks.append(event.candidates[0].content.parts[0].text)
+                yield event.candidates[0].content.parts[0].text
 
             # Join the complete response
             assistant_msg = "".join(assistant_chunks)
