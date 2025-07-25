@@ -14,7 +14,7 @@ function sanitizeText(str: string) {
 
 export default async function sendFeedback(
   messages: IMessage[],
-  userFeedback: string
+  userFeedback: string,
 ) {
   if (messages.length < 2) return;
 
@@ -23,7 +23,7 @@ export default async function sendFeedback(
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${sanitizeText(content)}</p>`
+        }</strong>: ${sanitizeText(content)}</p>`,
     )
     .join("");
 
