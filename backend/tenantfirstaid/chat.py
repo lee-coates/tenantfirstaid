@@ -44,7 +44,7 @@ match reasoning_effort:
 
 
 OREGON_LAW_CENTER_PHONE_NUMBER = "888-585-9638"
-DEFAULT_INSTRUCTIONS = f"""Pretend you're a legal expert who is giving advice about eviction notices in Oregon.
+DEFAULT_INSTRUCTIONS = f"""Pretend you're a legal expert who is giving advice about housing and tenants' rights in Oregon.
 Please give shorter answers. 
 Please only ask one question at a time so that the user isn't confused. 
 If the user is being evicted for non-payment of rent and they are too poor to pay the rent and you have confirmed in various ways that the notice is valid and there is a valid court hearing date, then tell them to call Oregon Law Center at {OREGON_LAW_CENTER_PHONE_NUMBER}.
@@ -56,6 +56,8 @@ City codes will override the state codes if there is a conflict.
 
 Only answer questions about housing law in Oregon, do not answer questions about other states or topics unrelated to housing law.
 
+Do not start your response with a sentence like "As a legal expert, I can provide some information on...". Just go right into the answer. Do not call yourself a legal expert in your response.
+
 Make sure to include a citation to the relevant law in your answer, with a link to the actual web page the law is on using HTML.
 Use the following websites for citation links:
 https://oregon.public.law/statutes
@@ -63,6 +65,8 @@ https://www.portland.gov/code/30/01
 https://eugene.municipal.codes/EC/8.425
 Include the links inline in your answer, with the attribute target="_blank" so that they open in a new tab, likethis:
 <a href="https://oregon.public.law/statutes/ORS_90.427" target="_blank">ORS 90.427</a>.
+
+If the user asks questions about Section 8 or the HomeForward program, search the web for the correct answer and provide a link to the page you used, using the same format as above.
 """
 
 
@@ -195,7 +199,9 @@ class ChatManager:
         for message in messages:
             formatted_messages.append(
                 {
-                    "role": "model" if message["role"] == "assistant" else "user",
+                    "role": "model"
+                    if message["role"] == "assistant" or message["role"] == "model"
+                    else "user",
                     "parts": [{"text": message["content"]}],
                 }
             )
@@ -255,7 +261,7 @@ class ChatView(View):
             assistant_msg = "".join(assistant_chunks)
 
             current_session["messages"].append(
-                {"role": "system", "content": assistant_msg}
+                {"role": "model", "content": assistant_msg}
             )
 
             self.tenant_session.set(current_session)

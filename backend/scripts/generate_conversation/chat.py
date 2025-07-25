@@ -90,7 +90,7 @@ class ChatView:
                     city=self.city,
                     state=self.state,
                     stream=False,
-                    model_name="gemini-2.5-flash",
+                    model_name="gemini-2.5-pro",
                 )
                 end = time()
                 self.input_messages.append(
@@ -146,7 +146,7 @@ class ChatView:
         print(f"USER: {self.starting_message}")
         times = []
         for _ in range(num_turns):
-            print(f"\n--- New Turn ({_}) ---")
+            print(f"\n--- New Turn ({_ + 1}) ---")
             response, run_time = self.bot_response()
             if run_time is not None:
                 times.append(run_time)
