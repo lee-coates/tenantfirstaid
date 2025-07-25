@@ -52,9 +52,9 @@ def send_feedback():
         html_content = f.read()
 
     msg = Message(
-        subject="New Feedback with Transcript",
+        subject="Feedback with Transcript",
         sender=os.getenv("MAIL_USERNAME"),
-        recipients=["lee.kahung414@gmail.com"],
+        recipients=["michael@qiu-qiulaw.com"],
         body=f"User feedback:\n\n{feedback}",
     )
     msg.attach(
