@@ -1,7 +1,6 @@
 from pathlib import Path
-from flask import Flask, jsonify, session, request
-from flask_mail import Mail, Message
-from werkzeug.utils import secure_filename
+from flask import Flask, jsonify, session
+from flask_mail import Mail
 import os
 import secrets
 
@@ -15,6 +14,7 @@ from .chat import ChatView
 
 from .session import InitSessionView, TenantSession
 from .citations import get_citation
+from .feedback import send_feedback
 
 app = Flask(__name__)
 mail = Mail(app)
@@ -35,38 +35,6 @@ app.config.update(
 )
 
 mail.init_app(app)
-
-
-def send_feedback():
-    feedback = request.form.get("feedback")
-    file = request.files.get("transcript")
-
-    if not file:
-        return "No file provided", 400
-
-    filename = secure_filename(file.filename)
-    filepath = os.path.join("/tmp", filename)
-    file.save(filepath)
-
-    with open(filepath, "r", encoding="utf-8") as f:
-        html_content = f.read()
-
-    msg = Message(
-        subject="Feedback with Transcript",
-        sender=os.getenv("MAIL_USERNAME"),
-        recipients=["michael@qiu-qiulaw.com"],
-        body=f"User feedback:\n\n{feedback}",
-    )
-    msg.attach(
-        filename="transcript.html",
-        content_type="text/html",
-        data=html_content.encode("utf-8"),
-    )
-
-    mail.send(msg)
-    os.remove(filepath)
-
-    return "Email sent", 200
 
 
 tenant_session = TenantSession()
@@ -99,7 +67,10 @@ app.add_url_rule(
 )
 
 app.add_url_rule(
-    "/api/feedback", endpoint="feedback", view_func=send_feedback, methods=["POST"]
+    "/api/feedback",
+    endpoint="feedback",
+    view_func=lambda: send_feedback(mail),
+    methods=["POST"],
 )
 
 if __name__ == "__main__":
