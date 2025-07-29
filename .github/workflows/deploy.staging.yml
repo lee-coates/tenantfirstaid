@@ -1,16 +1,7 @@
-name: CI-CD (Production)
+name: CI-CD (Staging)
 
 on:
   workflow_dispatch:
-    inputs:
-        logLevel:
-            description: 'Log Level'
-            required: false
-            default: 'warning'
-        environment:
-            description: 'Environment to deploy'
-            required: false
-            default: 'staging'
 
 concurrency:
   group: deploy-to-droplet
