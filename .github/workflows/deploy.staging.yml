@@ -1,0 +1,100 @@
+name: CI-CD (Production)
+
+on:
+  workflow_dispatch:
+    inputs:
+        logLevel:
+            description: 'Log Level'
+            required: false
+            default: 'warning'
+        environment:
+            description: 'Environment to deploy'
+            required: false
+            default: 'staging'
+
+concurrency:
+  group: deploy-to-droplet
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment: staging
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ vars.FRONTEND_DIR }}/package-lock.json
+
+      - name: Build UI
+        working-directory: ${{ vars.FRONTEND_DIR }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload backend code via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.URL }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: ${{ vars.BACKEND_DIR }}/
+          target: ${{ vars.REMOTE_APP_DIR }}
+          rm: true
+
+      - name: Upload frontend code via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.URL }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: ${{ vars.FRONTEND_DIR }}/dist
+          target: ${{ vars.REMOTE_APP_DIR }}
+          rm: false  # Otherwise we wipe out the backend code
+
+      - name: Bootstrap on droplet
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ vars.URL }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            cd ${{ vars.REMOTE_APP_DIR }}/backend/
+            
+            # Install uv (fast installer from Astral) if it isn't there
+            if ! command -v uv >/dev/null 2>&1; then
+              curl -LsSf https://astral.sh/uv/install.sh | sh
+              export PATH="$HOME/.local/bin:$PATH"
+            fi
+            
+            # Sync dependencies directly from pyproject.toml
+            uv sync
+            
+            # Inject environment secrets
+            sudo mkdir -p /etc/tenantfirstaid
+            sudo chmod 750 /etc/tenantfirstaid
+            sudo chown root:root /etc/tenantfirstaid
+            cat > /etc/tenantfirstaid/env <<EOF
+            ENV=${{ vars.ENV }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            FLASK_SECRET_KEY=${{ secrets.FLASK_SECRET_KEY }}
+            DB_HOST=${{secrets.DB_HOST}}
+            DB_PASSWORD=${{secrets.DB_PASSWORD}}
+            DB_PORT=${{vars.DB_PORT}}
+            DB_USER=default
+            MODEL_REASONING_EFFORT=high
+            VECTOR_STORE_ID=${{secrets.VECTOR_STORE_ID}}
+            EOF
+            chmod 640 /etc/tenantfirstaid/env
+            
+            # Ownership, restart, reload
+            sudo chown -R $USER:www-data ${{ vars.REMOTE_APP_DIR }}
+            sudo systemctl restart ${{ vars.SERVICE_NAME }}
+            sudo systemctl reload nginx
