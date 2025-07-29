@@ -6,16 +6,13 @@
 #     "python-dotenv",
 # ]
 # ///
-from numbers import Number
 from time import time
-from openai.types.responses.response_input_param import ResponseInputParam
-from openai._client import OpenAI
 import os
 import ast
 import argparse
 from pathlib import Path
 import pandas as pd
-from openai.types.responses.easy_input_message_param import EasyInputMessageParam
+from google.oauth2 import service_account
 
 from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
 
@@ -38,20 +35,22 @@ If the bot says something is not possible, do not argue with it, just accept it 
 Only ask the questions given in the list of facts, do not come up with new questions.
 """
 
-USER_MODEL = os.getenv("USER_MODEL_NAME", "gpt-4o-2024-11-20")
+USER_MODEL = os.getenv("USER_MODEL_NAME", "gemini-2.5-flash")
+GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
+print("CORPUS: ", GEMINI_RAG_CORPUS)
 
 
 class ChatView:
-    client: OpenAI
-
     def __init__(self, starting_message, user_facts, city, state):
-        self.chat_manager = ChatManager()
-        self.client = self.chat_manager.get_client()
+        creds = service_account.Credentials.from_service_account_file(
+            Path(__file__).parent.parent.parent / "google-service-account.json"
+        )
+        self.chat_manager = ChatManager(creds)
         self.city = city
         self.state = state
 
-        self.input_messages: ResponseInputParam = [
-            EasyInputMessageParam(role="user", content=starting_message)
+        self.input_messages = [
+            dict(role="user", content=starting_message)
         ]
         self.starting_message = starting_message  # Store the starting message
 
@@ -68,11 +67,11 @@ class ChatView:
         for message in messages:
             if message["role"] == "user":
                 reversed_messages.append(
-                    EasyInputMessageParam(role="model", content=message["content"])
+                    dict(role="model", content=message["content"])
                 )
             elif message["role"] == "model":
                 reversed_messages.append(
-                    EasyInputMessageParam(role="user", content=message["content"])
+                    dict(role="user", content=message["content"])
                 )
             else:
                 reversed_messages.append(message)
@@ -82,7 +81,6 @@ class ChatView:
         """Generates a response from the bot using the OpenAI API."""
         tries = 0
         while tries < 3:
-            try:
                 # Use the BOT_INSTRUCTIONS for bot responses
                 start = time()
                 response = self.chat_manager.generate_gemini_chat_response(
@@ -94,18 +92,14 @@ class ChatView:
                 )
                 end = time()
                 self.input_messages.append(
-                    EasyInputMessageParam(role="model", content=response.text)
+                    dict(role="model", content=response.text)
                 )
                 self.input_messages = self._reverse_message_roles(self.input_messages)
-                print(f"RESPONSE TIME: {end - start}")
                 return response.text, end - start
-            except Exception as e:
-                print(f"Error generating bot response: {e}")
-                tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
         self.input_messages.append(
-            EasyInputMessageParam(role="model", content=failure_message)
+            dict(role="model", content=failure_message)
         )
         return failure_message, None
 
@@ -126,7 +120,7 @@ class ChatView:
                     model_name="gemini-2.0-flash-lite",
                 )
                 self.input_messages.append(
-                    EasyInputMessageParam(role="user", content=response.text)
+                    dict(role="user", content=response.text)
                 )
                 return response.text
             except Exception as e:
@@ -135,7 +129,7 @@ class ChatView:
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a user response at this time. Please try again later."
         self.input_messages.append(
-            EasyInputMessageParam(role="user", content=failure_message)
+            dict(role="user", content=failure_message)
         )
         return failure_message
 

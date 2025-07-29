@@ -1,19 +1,3 @@
-from openai.types.responses.easy_input_message_param import EasyInputMessageParam
-from openai import OpenAI
-from openai.types.shared_params import (
-    ComparisonFilter,
-    CompoundFilter,
-    Reasoning,
-    ReasoningEffort,
-)
-from openai.types.responses import (
-    FileSearchToolParam,
-    Response as ResponseEvent,
-    ResponseIncludable,
-    ResponseInputParam,
-    ResponseStreamEvent,
-    ResponseTextDeltaEvent,
-)
 import vertexai
 from vertexai.preview import rag
 from vertexai.generative_models import (
@@ -21,27 +5,14 @@ from vertexai.generative_models import (
     GenerationConfig,
     Tool,
 )
-from google import genai
 from google.oauth2 import service_account
-from google.genai import types
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
-from typing_extensions import Literal, overload
 
 API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
 BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
-MODEL = os.getenv("MODEL_NAME", "o3")
-reasoning_effort = os.getenv("MODEL_REASONING_EFFORT")
-MODEL_REASONING_EFFORT: ReasoningEffort = "medium"
-match reasoning_effort:
-    case "low":
-        MODEL_REASONING_EFFORT = "low"
-    case "medium":
-        MODEL_REASONING_EFFORT = "medium"
-    case "high":
-        MODEL_REASONING_EFFORT = "high"
-
+MODEL = os.getenv("MODEL_NAME", "gemini-2.5-pro")
 
 OREGON_LAW_CENTER_PHONE_NUMBER = "888-585-9638"
 DEFAULT_INSTRUCTIONS = f"""Pretend you're a legal expert who is giving advice about housing and tenants' rights in Oregon.
@@ -71,14 +42,15 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 
 class ChatManager:
-    def __init__(self):
-        self.client = OpenAI(
-            api_key=API_KEY,
-            base_url=BASE_URL,
+    def __init__(self, creds):
+        creds = creds or service_account.Credentials.from_service_account_file(
+            "google-service-account.json"
         )
-
-    def get_client(self):
-        return self.client
+        vertexai.init(
+            project="tenantfirstaid",
+            location="us-west1",
+            credentials=creds,
+        )
 
     def prepare_developer_instructions(self, city: str, state: str):
         # Add city and state filters if they are set
@@ -88,85 +60,9 @@ class ChatManager:
         )
         return instructions
 
-    def prepare_openai_tools(self, city: str, state: str) -> list | None:
-        VECTOR_STORE_ID = os.getenv("VECTOR_STORE_ID")
-        if not VECTOR_STORE_ID:
-            return None
-
-        # We either want to use both city and state, or just state.
-        # This filters out other cities in the same state.
-        # The user is gated into selecting a city in Oregon so we don't worry about
-        # whether the relevant documents exist or not.
-        FILTER_STATE_IS_OREGON = ComparisonFilter(type="eq", key="state", value="or")
-        FILTER_CITY_IS_NULL = ComparisonFilter(type="eq", key="city", value="null")
-        FILTER_CITY_IS_GIVEN = ComparisonFilter(type="eq", key="city", value=city)
-        FILTER_OREGON_AND_NULL_CITY = CompoundFilter(
-            type="and", filters=[FILTER_STATE_IS_OREGON, FILTER_CITY_IS_NULL]
-        )
-        FILTER_OREGON_AND_SOME_CITY = CompoundFilter(
-            type="and", filters=[FILTER_STATE_IS_OREGON, FILTER_CITY_IS_GIVEN]
-        )
-        FILTER_UNION = CompoundFilter(
-            type="or",
-            filters=[FILTER_OREGON_AND_NULL_CITY, FILTER_OREGON_AND_SOME_CITY],
-        )
-        if city != "null":
-            filters = FILTER_UNION
-        else:
-            filters = FILTER_OREGON_AND_NULL_CITY
-
-        max_num_results = int(os.getenv("NUM_FILE_SEARCH_RESULTS", 10))
-
-        return [
-            FileSearchToolParam(
-                type="file_search",
-                vector_store_ids=[VECTOR_STORE_ID],
-                max_num_results=max_num_results,
-                filters=filters,
-            )
-        ]
-
-    from typing import Iterator, Union
-
-    # With streaming response
-    @overload
-    def generate_chat_response(
-        self, messages: ResponseInputParam, city: str, state: str, stream: Literal[True]
-    ) -> Iterator[ResponseStreamEvent]: ...
-
-    # No streaming response
-    @overload
-    def generate_chat_response(
-        self,
-        messages: ResponseInputParam,
-        city: str,
-        state: str,
-        stream: Literal[False],
-    ) -> ResponseEvent: ...
-
-    def generate_chat_response(
-        self, messages: ResponseInputParam, city: str, state: str, stream: bool
-    ):
-        instructions = self.prepare_developer_instructions(city, state)
-        tools = self.prepare_openai_tools(city, state)
-        param_includes: list[ResponseIncludable] = ["file_search_call.results"]
-
-        # Use the OpenAI client to generate a response
-        response_stream = self.client.responses.create(
-            model=MODEL,
-            input=messages,
-            instructions=instructions,
-            reasoning=Reasoning(effort=MODEL_REASONING_EFFORT),
-            stream=stream,
-            include=param_includes,
-            tools=tools if tools else [],
-        )
-
-        return response_stream
-
     def generate_gemini_chat_response(
         self,
-        messages: list[ResponseInputParam],
+        messages: list,
         city: str,
         state: str,
         stream=False,
@@ -174,15 +70,6 @@ class ChatManager:
         instructions=None,
         model_name=MODEL,
     ):
-        creds = service_account.Credentials.from_service_account_file(
-            "google-service-account.json"
-        )
-        vertexai.init(
-            project="tenantfirstaid",
-            location="us-west1",
-            credentials=creds,
-        )
-
         instructions = (
             instructions
             if instructions
@@ -206,12 +93,14 @@ class ChatManager:
                 }
             )
 
+        
+        GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
         rag_retrieval_tool = Tool.from_retrieval(
             retrieval=rag.Retrieval(
                 source=rag.VertexRagStore(
                     rag_resources=[
                         rag.RagResource(
-                            rag_corpus="projects/tenantfirstaid/locations/us-central1/ragCorpora/2305843009213693952"
+                            rag_corpus=GEMINI_RAG_CORPUS
                         )
                     ]
                 )
@@ -238,9 +127,7 @@ class ChatView(View):
         user_msg = data["message"]
 
         current_session = self.tenant_session.get()
-        current_session["messages"].append(
-            EasyInputMessageParam(role="user", content=user_msg)
-        )
+        current_session["messages"].append(dict(role="user", content=user_msg))
 
         def generate():
             # Use the new Responses API with streaming
@@ -250,10 +137,11 @@ class ChatView(View):
                 current_session["state"],
                 stream=True,
             )
+            
+            
 
             assistant_chunks = []
             for event in response_stream:
-                print("Event response: ", event.candidates[0].content.parts[0])
                 assistant_chunks.append(event.candidates[0].content.parts[0].text)
                 yield event.candidates[0].content.parts[0].text
 

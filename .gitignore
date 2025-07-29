@@ -14,6 +14,7 @@ venv/
 .env
 *.env
 google-service-account.json
+.python-version
 
 # Python tooling
 pip-log.txt
@@ -61,4 +62,3 @@ chatlog.jsonl
 /backend/scripts/generate_conversation/*.csv
 !/backend/scripts/generate_conversation/tenant_questions_facts_full.csv
 combined_training_gpt-4_1.jsonl
-combined_training_o3.jsonl
