@@ -42,10 +42,7 @@ print("CORPUS: ", GEMINI_RAG_CORPUS)
 
 class ChatView:
     def __init__(self, starting_message, user_facts, city, state):
-        creds = service_account.Credentials.from_service_account_file(
-            Path(__file__).parent.parent.parent / "google-service-account.json"
-        )
-        self.chat_manager = ChatManager(creds)
+        self.chat_manager = ChatManager()
         self.city = city
         self.state = state
 

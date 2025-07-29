@@ -42,9 +42,9 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 
 class ChatManager:
-    def __init__(self, creds):
-        creds = creds or service_account.Credentials.from_service_account_file(
-            "google-service-account.json"
+    def __init__(self):
+        creds = service_account.Credentials.from_service_account_file(
+            os.getenv("GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE", "google-service-account.json")
         )
         vertexai.init(
             project="tenantfirstaid",

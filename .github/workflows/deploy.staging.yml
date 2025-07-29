@@ -82,8 +82,14 @@ jobs:
             DB_USER=default
             MODEL_REASONING_EFFORT=high
             VECTOR_STORE_ID=${{secrets.VECTOR_STORE_ID}}
+            GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE=/etc/tenantfirstaid/google-service-account.json
             EOF
             chmod 640 /etc/tenantfirstaid/env
+
+            cat > /etc/tenantfirstaid/google-service-account.json <<EOF
+            ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS}}
+            EOF
+            chmod 640 /etc/tenantfirstaid/google-service-account.json
             
             # Ownership, restart, reload
             sudo chown -R $USER:www-data ${{ vars.REMOTE_APP_DIR }}
