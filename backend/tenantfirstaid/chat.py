@@ -10,8 +10,6 @@ from flask import request, stream_with_context, Response
 from flask.views import View
 import os
 
-API_KEY = os.getenv("OPENAI_API_KEY", os.getenv("GITHUB_API_KEY"))
-BASE_URL = os.getenv("MODEL_ENDPOINT", "https://api.openai.com/v1")
 MODEL = os.getenv("MODEL_NAME", "gemini-2.5-pro")
 
 OREGON_LAW_CENTER_PHONE_NUMBER = "888-585-9638"
