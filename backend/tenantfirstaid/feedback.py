@@ -1,11 +1,12 @@
 from xhtml2pdf import pisa
 from io import BytesIO
 from flask import request
-from flask_mail import Message
+from flask_mailman import EmailMessage
 import os
+from typing import Optional, Tuple
 
 
-def convert_html_to_pdf(html_content):
+def convert_html_to_pdf(html_content: str) -> Optional[bytes]:
     pdf_buffer = BytesIO()
     pisa_status = pisa.CreatePDF(html_content, dest=pdf_buffer)
     if pisa_status.err:
@@ -13,30 +14,32 @@ def convert_html_to_pdf(html_content):
     return pdf_buffer.getvalue()
 
 
-def send_feedback(mail):
+def send_feedback() -> Tuple[str, int]:
     feedback = request.form.get("feedback")
     file = request.files.get("transcript")
 
     if not file:
         return "No file provided", 400
 
-    html_content = file.read().decode("utf-8")
-    pdf_data = convert_html_to_pdf(html_content)
-    if pdf_data is None:
+    html_content: str = file.read().decode("utf-8")
+    pdf_content: Optional[bytes] = convert_html_to_pdf(html_content)
+    if pdf_content is None:
         return "PDF conversion failed", 500
 
-    msg = Message(
-        subject="Feedback with Transcript",
-        sender=os.getenv("MAIL_USERNAME"),
-        recipients=["michael@qiu-qiulaw.com"],
-        body=f"User feedback:\n\n{feedback}",
-    )
-    msg.attach(
-        filename="transcript.pdf",
-        content_type="application/pdf",
-        data=pdf_data,
-    )
+    try:
+        msg = EmailMessage(
+            subject="Feedback with Transcript",
+            from_email=os.getenv("SENDER_EMAIL"),
+            to=[os.getenv("RECIPIENT_EMAIL")],
+            body=f"User feedback:\n\n{feedback}\n\nTranscript is attached below",
+        )
+        msg.attach(
+            "transcript.pdf",
+            pdf_content,
+            "application/pdf",
+        )
 
-    mail.send(msg)
-
-    return "Email sent", 200
+        msg.send()
+        return "Message sent", 200
+    except Exception as e:
+        return f"Send failed: {str(e)}", 500

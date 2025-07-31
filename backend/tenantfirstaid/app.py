@@ -1,6 +1,6 @@
 from pathlib import Path
 from flask import Flask, jsonify, session
-from flask_mail import Mail
+from flask_mailman import Mail
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import os
@@ -19,7 +19,6 @@ from .citations import get_citation
 from .feedback import send_feedback
 
 app = Flask(__name__)
-mail = Mail(app)
 
 
 def build_valkey_uri():
@@ -47,16 +46,14 @@ app.config["SESSION_COOKIE_SECURE"] = os.getenv("ENV", "dev") == "prod"
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 # Configure Flask Mail
-app.config.update(
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_PORT=587,
-    MAIL_USE_TLS=True,
-    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
-    MAIL_PASSWORD=os.getenv("APP_PASSWORD"),
-)
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("SENDER_EMAIL")
+app.config["MAIL_PASSWORD"] = os.getenv("APP_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("SENDER_EMAIL")
 
-mail.init_app(app)
-
+mail = Mail(app)
 
 tenant_session = TenantSession()
 
