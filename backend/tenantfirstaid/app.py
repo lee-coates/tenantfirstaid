@@ -1,6 +1,8 @@
 from pathlib import Path
 from flask import Flask, jsonify, session
 from flask_mail import Mail
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 import secrets
 
@@ -18,6 +20,25 @@ from .feedback import send_feedback
 
 app = Flask(__name__)
 mail = Mail(app)
+
+
+def build_valkey_uri():
+    host = os.getenv("DB_HOST", "127.0.0.1")
+    port = os.getenv("DB_PORT", 6379)
+    password = os.getenv("DB_PASSWORD")
+    ssl = False if os.getenv("DB_USE_SSL") == "false" else True
+    scheme = "rediss" if ssl else "redis"
+
+    if password:
+        return f"{scheme}://:{password}@{host}:{port}"
+    return f"{scheme}://{host}:{port}"
+
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri=build_valkey_uri(),
+)
 
 # Configure Flask sessions
 app.secret_key = os.getenv("FLASK_SECRET_KEY", secrets.token_hex(32))
@@ -66,10 +87,16 @@ app.add_url_rule(
     "/api/citation", endpoint="citation", view_func=get_citation, methods=["GET"]
 )
 
+
+@limiter.limit("3 per minute")
+def feedback_route():
+    return send_feedback(mail)
+
+
 app.add_url_rule(
     "/api/feedback",
     endpoint="feedback",
-    view_func=lambda: send_feedback(mail),
+    view_func=feedback_route,
     methods=["POST"],
 )
 
