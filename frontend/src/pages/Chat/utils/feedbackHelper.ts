@@ -35,13 +35,13 @@ export default async function sendFeedback(
       <style>
         body {
           font-family: sans-serif;
-          padding: 20px;
         }
         strong {
           font-weight: bold;
         }
         p {
-          margin: 12px;
+          margin: 6px 0;
+          line-height: 1.2;
         }
       </style>
     </head>

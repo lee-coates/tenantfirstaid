@@ -1,7 +1,16 @@
+from xhtml2pdf import pisa
+from io import BytesIO
 from flask import request
 from flask_mail import Message
-from werkzeug.utils import secure_filename
 import os
+
+
+def convert_html_to_pdf(html_content):
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(html_content, dest=pdf_buffer)
+    if pisa_status.err:
+        return None
+    return pdf_buffer.getvalue()
 
 
 def send_feedback(mail):
@@ -11,12 +20,10 @@ def send_feedback(mail):
     if not file:
         return "No file provided", 400
 
-    filename = secure_filename(file.filename)
-    filepath = os.path.join("/tmp", filename)
-    file.save(filepath)
-
-    with open(filepath, "r", encoding="utf-8") as f:
-        html_content = f.read()
+    html_content = file.read().decode("utf-8")
+    pdf_data = convert_html_to_pdf(html_content)
+    if pdf_data is None:
+        return "PDF conversion failed", 500
 
     msg = Message(
         subject="Feedback with Transcript",
@@ -25,12 +32,11 @@ def send_feedback(mail):
         body=f"User feedback:\n\n{feedback}",
     )
     msg.attach(
-        filename="transcript.html",
-        content_type="text/html",
-        data=html_content.encode("utf-8"),
+        filename="transcript.pdf",
+        content_type="application/pdf",
+        data=pdf_data,
     )
 
     mail.send(msg)
-    os.remove(filepath)
 
     return "Email sent", 200

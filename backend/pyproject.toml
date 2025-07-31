@@ -5,6 +5,7 @@ requires-python = ">=3.12"
 dependencies = [
   "flask",
   "Flask-Mail",
+  "xhtml2pdf",
   "valkey",
   "gunicorn",
   "openai==1.89",
