@@ -87,7 +87,7 @@ app.add_url_rule(
 
 @limiter.limit("3 per minute")
 def feedback_route():
-    return send_feedback(mail)
+    return send_feedback()
 
 
 app.add_url_rule(
