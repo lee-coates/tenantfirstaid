@@ -21,7 +21,7 @@ def send_feedback() -> Tuple[str, int]:
     file = request.files.get("transcript")
 
     if not file:
-        return "No file provided", 400
+        return "No file provided", 404
 
     html_content: str = file.read().decode("utf-8")
     pdf_content: Optional[bytes] = convert_html_to_pdf(html_content)
@@ -29,7 +29,7 @@ def send_feedback() -> Tuple[str, int]:
         return "PDF conversion failed", 500
 
     if len(pdf_content) > MAX_ATTACHMENT_SIZE:
-        return "Attachment too large", 400
+        return "Attachment too large", 413
 
     try:
         msg = EmailMessage(
