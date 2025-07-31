@@ -5,6 +5,8 @@ from flask_mailman import EmailMessage
 import os
 from typing import Optional, Tuple
 
+MAX_ATTACHMENT_SIZE: int = 2 * 1024 * 1024
+
 
 def convert_html_to_pdf(html_content: str) -> Optional[bytes]:
     pdf_buffer = BytesIO()
@@ -25,6 +27,9 @@ def send_feedback() -> Tuple[str, int]:
     pdf_content: Optional[bytes] = convert_html_to_pdf(html_content)
     if pdf_content is None:
         return "PDF conversion failed", 500
+
+    if len(pdf_content) > MAX_ATTACHMENT_SIZE:
+        return "Attachment too large", 400
 
     try:
         msg = EmailMessage(
