@@ -19,7 +19,7 @@ from typing import Dict
 @pytest.fixture
 def mock_vertexai(mocker):
     mock_vertexai_init = mocker.Mock(spec=vertexai)
-    mocker.patch("tenantfirstaid.chat.vertexai", return_value=mock_vertexai_init)
+    mocker.patch("tenantfirstaid.chat.vertexai.init", return_value=mock_vertexai_init)
     return mock_vertexai_init
 
 
@@ -31,14 +31,7 @@ def mock_vertexai_generative_model(mocker):
 
 
 @pytest.fixture
-def mock_vertexai_generation_config(mocker):
-    mock_gen_config = mocker.Mock(spec=GenerationConfig)
-    mocker.patch("tenantfirstaid.chat.GenerationConfig", return_value=mock_gen_config)
-    return mock_gen_config
-
-
-@pytest.fixture
-def chat_manager(mocker, mock_vertexai):
+def chat_manager(mocker, mock_vertexai, mock_vertexai_generative_model):
     return ChatManager()
 
 
@@ -136,31 +129,35 @@ def test_chat_view_dispatch_request_streams_response(
     with app.test_request_context(
         "/api/query", method="POST", json={"message": "Salutations mock openai api"}
     ) as chat_ctx:
-        chat_ctx.session["session_id"] = (
-            session_id  # Simulate session ID in request context
-        )
-        chat_response = init_ctx.app.full_dispatch_request()
-        assert chat_response.status_code == 200  # Ensure the response is successful
-        assert chat_response.mimetype == "text/plain"
+        with mocker.patch("tenantfirstaid.chat.ChatManger.model") as mock_model:
 
-        mock_vertexai_generative_model.generate_content = mocker.Mock(
-            return_value=iter(
-                [
-                    GenerationResponse.from_dict(
-                        response_dict=dict(
-                            candidates=[
-                                dict(
-                                    content=dict(
-                                        role="model",
-                                        parts=[dict(text="Greetings, test prompt!")],
-                                    )
-                                )
-                            ]
-                        )
-                    )
-                ]
+            chat_ctx.session["session_id"] = (
+                session_id  # Simulate session ID in request context
             )
-        )
+            chat_response = init_ctx.app.full_dispatch_request()
+            assert chat_response.status_code == 200  # Ensure the response is successful
+            assert chat_response.mimetype == "text/plain"
 
-        response_chunks = "".join(chat_response.response)
-        assert "Greetings, test prompt!" in response_chunks
+            mock_model.generate_content = mocker.Mock(
+                return_value=iter(
+                    [
+                        GenerationResponse.from_dict(
+                            response_dict=dict(
+                                candidates=[
+                                    dict(
+                                        content=dict(
+                                            role="model",
+                                            parts=[dict(text="Greetings, test prompt!")],
+                                        )
+                                    )
+                                ]
+                            )
+                        )
+                    ]
+                )
+            )
+
+            print("CHAT RESPONSE", chat_response, chat_response.response)
+            
+            response_chunks = "".join(chat_response.response)
+            assert "Greetings, test prompt!" in response_chunks

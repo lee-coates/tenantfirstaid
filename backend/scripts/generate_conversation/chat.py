@@ -12,7 +12,6 @@ import ast
 import argparse
 from pathlib import Path
 import pandas as pd
-from google.oauth2 import service_account
 
 from tenantfirstaid.chat import DEFAULT_INSTRUCTIONS, ChatManager
 
@@ -46,9 +45,7 @@ class ChatView:
         self.city = city
         self.state = state
 
-        self.input_messages = [
-            dict(role="user", content=starting_message)
-        ]
+        self.input_messages = [dict(role="user", content=starting_message)]
         self.starting_message = starting_message  # Store the starting message
 
         self.openai_tools = []
@@ -63,13 +60,9 @@ class ChatView:
         reversed_messages = []
         for message in messages:
             if message["role"] == "user":
-                reversed_messages.append(
-                    dict(role="model", content=message["content"])
-                )
+                reversed_messages.append(dict(role="model", content=message["content"]))
             elif message["role"] == "model":
-                reversed_messages.append(
-                    dict(role="user", content=message["content"])
-                )
+                reversed_messages.append(dict(role="user", content=message["content"]))
             else:
                 reversed_messages.append(message)
         return reversed_messages
@@ -78,26 +71,22 @@ class ChatView:
         """Generates a response from the bot using the OpenAI API."""
         tries = 0
         while tries < 3:
-                # Use the BOT_INSTRUCTIONS for bot responses
-                start = time()
-                response = self.chat_manager.generate_gemini_chat_response(
-                    self.input_messages,
-                    city=self.city,
-                    state=self.state,
-                    stream=False,
-                    model_name="gemini-2.5-pro",
-                )
-                end = time()
-                self.input_messages.append(
-                    dict(role="model", content=response.text)
-                )
-                self.input_messages = self._reverse_message_roles(self.input_messages)
-                return response.text, end - start
+            # Use the BOT_INSTRUCTIONS for bot responses
+            start = time()
+            response = self.chat_manager.generate_gemini_chat_response(
+                self.input_messages,
+                city=self.city,
+                state=self.state,
+                stream=False,
+                model_name="gemini-2.5-pro",
+            )
+            end = time()
+            self.input_messages.append(dict(role="model", content=response.text))
+            self.input_messages = self._reverse_message_roles(self.input_messages)
+            return response.text, end - start
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a response at this time. Please try again later."
-        self.input_messages.append(
-            dict(role="model", content=failure_message)
-        )
+        self.input_messages.append(dict(role="model", content=failure_message))
         return failure_message, None
 
     def user_response(self):
@@ -116,18 +105,14 @@ class ChatView:
                     use_tools=False,
                     model_name="gemini-2.0-flash-lite",
                 )
-                self.input_messages.append(
-                    dict(role="user", content=response.text)
-                )
+                self.input_messages.append(dict(role="user", content=response.text))
                 return response.text
             except Exception as e:
                 print(f"Error generating user response: {e}")
                 tries += 1
         # If all attempts fail, return a failure message
         failure_message = "I'm sorry, I am unable to generate a user response at this time. Please try again later."
-        self.input_messages.append(
-            dict(role="user", content=failure_message)
-        )
+        self.input_messages.append(dict(role="user", content=failure_message))
         return failure_message
 
     def generate_conversation(self, num_turns=5):

@@ -42,12 +42,18 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 class ChatManager:
     def __init__(self):
         creds = service_account.Credentials.from_service_account_file(
-            os.getenv("GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE", "google-service-account.json")
+            os.getenv(
+                "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE", "google-service-account.json"
+            )
         )
         vertexai.init(
             project="tenantfirstaid",
             location="us-west1",
             credentials=creds,
+        )
+        self.model = GenerativeModel(
+            model_name=MODEL,
+            system_instruction=DEFAULT_INSTRUCTIONS,
         )
 
     def prepare_developer_instructions(self, city: str, state: str):
@@ -74,7 +80,7 @@ class ChatManager:
             else self.prepare_developer_instructions(city, state)
         )
 
-        model = GenerativeModel(
+        self.model = GenerativeModel(
             model_name=model_name,
             system_instruction=instructions,
         )
@@ -91,16 +97,11 @@ class ChatManager:
                 }
             )
 
-        
         GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
         rag_retrieval_tool = Tool.from_retrieval(
             retrieval=rag.Retrieval(
                 source=rag.VertexRagStore(
-                    rag_resources=[
-                        rag.RagResource(
-                            rag_corpus=GEMINI_RAG_CORPUS
-                        )
-                    ]
+                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)]
                 )
             )
         )
@@ -135,8 +136,6 @@ class ChatView(View):
                 current_session["state"],
                 stream=True,
             )
-            
-            
 
             assistant_chunks = []
             for event in response_stream:
