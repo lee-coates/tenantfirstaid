@@ -106,7 +106,7 @@ class ChatManager:
             )
         )
 
-        response = model.generate_content(
+        response = self.model.generate_content(
             contents=formatted_messages,
             stream=stream,
             generation_config=GenerationConfig(temperature=0.2),

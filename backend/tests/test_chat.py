@@ -129,8 +129,7 @@ def test_chat_view_dispatch_request_streams_response(
     with app.test_request_context(
         "/api/query", method="POST", json={"message": "Salutations mock openai api"}
     ) as chat_ctx:
-        with mocker.patch("tenantfirstaid.chat.ChatManger.model") as mock_model:
-
+        with mocker.patch("tenantfirstaid.chat.GenerativeModel") as mock_model:
             chat_ctx.session["session_id"] = (
                 session_id  # Simulate session ID in request context
             )
@@ -147,7 +146,9 @@ def test_chat_view_dispatch_request_streams_response(
                                     dict(
                                         content=dict(
                                             role="model",
-                                            parts=[dict(text="Greetings, test prompt!")],
+                                            parts=[
+                                                dict(text="Greetings, test prompt!")
+                                            ],
                                         )
                                     )
                                 ]
@@ -157,7 +158,5 @@ def test_chat_view_dispatch_request_streams_response(
                 )
             )
 
-            print("CHAT RESPONSE", chat_response, chat_response.response)
-            
             response_chunks = "".join(chat_response.response)
             assert "Greetings, test prompt!" in response_chunks
