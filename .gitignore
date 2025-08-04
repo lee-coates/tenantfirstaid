@@ -59,3 +59,16 @@ chatlog.jsonl
 /backend/scripts/eval_results.json
 combined_training_gpt-4_1.jsonl
 combined_training_o3.jsonl
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
