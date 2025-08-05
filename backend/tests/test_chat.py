@@ -31,6 +31,10 @@ def mock_vertexai_generative_model(mocker):
 
 @pytest.fixture
 def chat_manager(mocker, mock_vertexai, mock_vertexai_generative_model):
+    # Mock Google service account credentials
+    mock_credentials = mocker.Mock()
+    mocker.patch("tenantfirstaid.chat.service_account.Credentials.from_service_account_file", 
+                 return_value=mock_credentials)
     return ChatManager()
 
 
