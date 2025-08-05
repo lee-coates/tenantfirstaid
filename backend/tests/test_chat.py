@@ -92,6 +92,13 @@ def test_chat_view_dispatch_request_streams_response(
 ):
     """Test that sends a message to the API, mocks vertexai response, and validates output."""
 
+    # Mock Google service account credentials
+    mock_credentials = mocker.Mock()
+    mocker.patch(
+        "tenantfirstaid.chat.service_account.Credentials.from_service_account_file",
+        return_value=mock_credentials,
+    )
+
     # Mock the entire RAG module components to avoid actual RAG retrieval
     mock_rag_resource = mocker.Mock()
     mock_rag_store = mocker.Mock()
