@@ -3,18 +3,18 @@ name = "tenant-first-aid"
 version = "0.2.0"
 requires-python = ">=3.12"
 dependencies = [
-  "flask",
-  "valkey",
-  "gunicorn",
-  "google-auth",
-  "google-genai",
-  "google-cloud-aiplatform",
+  "flask>=3.1.1",
+  "valkey>=6.1.0",
+  "gunicorn>=23.0.0",
+  "google-auth>=2.40.3",
+  "google-genai>=1.28.0",
+  "google-cloud-aiplatform>=1.106.0",
   "openai==1.89",
   "jsonlines",
   "simplejson",
   "python-dotenv",
   "pandas>=2.3.0",
-  "vertexai",
+  "vertexai>=1.43.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -27,16 +27,20 @@ build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
-  "ipdb>=0.13.13",
-  "mypy>=1.16.1",
-  "pyrefly>=0.21.0",
-  "pytest>=8.4.0",
-  "pytest-cov>=6.1.1",
-  "pytest-mock>=3.14.1",
-  "ruff>=0.12.0",
-  "ty>=0.0.1a11",
-  "types-Flask>=1.1.6",
-  "types-simplejson>=3.20.0.20250326",
+    "ipdb>=0.13.13",
+    "mypy>=1.16.1",
+    "pandas-stubs>=2.2.3.250527",
+    "pyrefly>=0.21.0",
+    "pytest>=8.4.0",
+    "pytest-cov>=6.1.1",
+    "pytest-mock>=3.14.1",
+    "ruff>=0.12.0",
+    "ty>=0.0.1a11",
+    "types-Flask>=1.1.6",
+    "types-simplejson>=3.20.0.20250326",
 ]
 
-gen_convo = ["pandas", "openai"]
+gen_convo = [
+      "pandas",
+      "openai",
+]
