@@ -1,28 +1,42 @@
 import pytest
+import vertexai
 from tenantfirstaid.chat import (
     ChatManager,
     DEFAULT_INSTRUCTIONS,
     OREGON_LAW_CENTER_PHONE_NUMBER,
 )
-import os
-from unittest import mock
 from flask import Flask
 from tenantfirstaid.chat import ChatView
 from tenantfirstaid.session import TenantSession, TenantSessionData, InitSessionView
-from openai import OpenAI
-from openai.types.responses import ResponseTextDeltaEvent
+from vertexai.generative_models import (
+    GenerativeModel,
+    Tool,
+)
 from typing import Dict
 
 
 @pytest.fixture
-def mock_openai(mocker):
-    mock_openai_client = mocker.Mock(spec=OpenAI)
-    mocker.patch("tenantfirstaid.chat.OpenAI", return_value=mock_openai_client)
-    return mock_openai_client
+def mock_vertexai(mocker):
+    mock_vertexai_init = mocker.Mock(spec=vertexai)
+    mocker.patch("tenantfirstaid.chat.vertexai.init", return_value=mock_vertexai_init)
+    return mock_vertexai_init
 
 
 @pytest.fixture
-def chat_manager(mocker, mock_openai):
+def mock_vertexai_generative_model(mocker):
+    mock_model = mocker.Mock(spec=GenerativeModel)
+    mocker.patch("tenantfirstaid.chat.GenerativeModel", return_value=mock_model)
+    return mock_model
+
+
+@pytest.fixture
+def chat_manager(mocker, mock_vertexai, mock_vertexai_generative_model):
+    # Mock Google service account credentials
+    mock_credentials = mocker.Mock()
+    mocker.patch(
+        "tenantfirstaid.chat.service_account.Credentials.from_service_account_file",
+        return_value=mock_credentials,
+    )
     return ChatManager()
 
 
@@ -31,41 +45,6 @@ def test_prepare_developer_instructions_includes_city_state(chat_manager):
     state = "or"
     instructions = chat_manager.prepare_developer_instructions(city, state)
     assert f"The user is in {city} {state.upper()}." in instructions
-
-
-def test_prepare_openai_tools_returns_none_if_no_vector_store_id(chat_manager):
-    with mock.patch.dict(os.environ, {}, clear=True):
-        assert chat_manager.prepare_openai_tools("Portland", "or") is None
-
-
-def test_prepare_openai_tools_returns_tools_with_vector_store_id(chat_manager):
-    with mock.patch.dict(os.environ, {"VECTOR_STORE_ID": "abc123"}):
-        tools = chat_manager.prepare_openai_tools("Portland", "or")
-        assert tools is not None
-        assert type(tools) is list
-        assert len(tools) == 1
-        assert tools[0].get("vector_store_ids") == ["abc123"]
-
-
-def test_prepare_openai_tools_city_null(chat_manager):
-    with mock.patch.dict(os.environ, {"VECTOR_STORE_ID": "abc123"}):
-        tools = chat_manager.prepare_openai_tools("null", "or")
-        assert tools is not None
-        assert tools[0].get("filters").get("type") == "and"
-
-
-def test_generate_chat_response_streaming(chat_manager):
-    with mock.patch.object(chat_manager.client.responses, "create") as mock_create:
-        mock_create.return_value = iter([])
-        result = chat_manager.generate_chat_response([], "Portland", "or", stream=True)
-        assert hasattr(result, "__iter__")
-
-
-def test_generate_chat_response_non_streaming(chat_manager):
-    with mock.patch.object(chat_manager.client.responses, "create") as mock_create:
-        mock_create.return_value = "response"
-        result = chat_manager.generate_chat_response([], "Portland", "or", stream=False)
-        assert result == "response"
 
 
 def test_default_instructions_contains_oregon_law_center_phone():
@@ -114,7 +93,29 @@ def app(mock_valkey):
     return app
 
 
-def test_chat_view_dispatch_request_streams_response(app, mocker, mock_openai):
+def test_chat_view_dispatch_request_streams_response(
+    app, mocker, mock_vertexai_generative_model, mock_valkey
+):
+    """Test that sends a message to the API, mocks vertexai response, and validates output."""
+
+    # Mock Google service account credentials
+    mock_credentials = mocker.Mock()
+    mocker.patch(
+        "tenantfirstaid.chat.service_account.Credentials.from_service_account_file",
+        return_value=mock_credentials,
+    )
+
+    # Mock the entire RAG module components to avoid actual RAG retrieval
+    mock_rag_resource = mocker.Mock()
+    mock_rag_store = mocker.Mock()
+    mock_retrieval = mocker.Mock()
+    mock_rag_tool = mocker.Mock(spec=Tool)
+
+    mocker.patch("tenantfirstaid.chat.rag.RagResource", return_value=mock_rag_resource)
+    mocker.patch("tenantfirstaid.chat.rag.VertexRagStore", return_value=mock_rag_store)
+    mocker.patch("tenantfirstaid.chat.rag.Retrieval", return_value=mock_retrieval)
+    mocker.patch("tenantfirstaid.chat.Tool.from_retrieval", return_value=mock_rag_tool)
+
     tenant_session = TenantSession()
 
     app.add_url_rule(
@@ -130,56 +131,70 @@ def test_chat_view_dispatch_request_streams_response(app, mocker, mock_openai):
     )
 
     test_data_obj = TenantSessionData(
-        city="Test City",
-        state="Test State",
+        city="Portland",
+        state="or",
         messages=[],
     )
 
-    # Initialize the session with session_id and test data
-    with app.test_request_context(
-        "/api/init", method="POST", json=test_data_obj
-    ) as init_ctx:
+    # Initialize the session
+    with app.test_request_context("/api/init", method="POST", json=test_data_obj):
         init_response = app.full_dispatch_request()
-        assert init_response.status_code == 200  # Ensure the response is successful
-
-        tenant_session.set(test_data_obj)
+        assert init_response.status_code == 200
         session_id = init_response.json["session_id"]
-        assert session_id is not None  # Ensure session_id is set
-        assert isinstance(session_id, str)  # Ensure session_id is a string
-        assert tenant_session.get() == test_data_obj
 
-    # each test-request is a new context (nesting does not do what you think)
-    # so we need to set the session_id in the request context manually
+    # Mock the GenerativeModel's generate_content method
+    mock_response_text = "This is a mocked response about tenant rights in Oregon. You should contact <a href='https://oregon.public.law/statutes/ORS_90.427' target='_blank'>ORS 90.427</a> for more information."
+
+    # Create a mock response object that mimics the streaming response
+    mock_candidate = mocker.Mock()
+    mock_candidate.content.parts = [mocker.Mock()]
+    mock_candidate.content.parts[0].text = mock_response_text
+
+    mock_event = mocker.Mock()
+    mock_event.candidates = [mock_candidate]
+
+    # Mock the generate_content method to return our mock response as a stream
+    mock_vertexai_generative_model.generate_content.return_value = iter([mock_event])
+
+    # Send a message to the chat API
+    test_message = "What are my rights as a tenant in Portland?"
+
     with app.test_request_context(
-        "/api/query", method="POST", json={"message": "Salutations mock openai api"}
+        "/api/query", method="POST", json={"message": test_message}
     ) as chat_ctx:
-        chat_ctx.session["session_id"] = (
-            session_id  # Simulate session ID in request context
-        )
-        chat_response = init_ctx.app.full_dispatch_request()
-        assert chat_response.status_code == 200  # Ensure the response is successful
+        chat_ctx.session["session_id"] = session_id
+
+        # Execute the request
+        chat_response = chat_ctx.app.full_dispatch_request()
+
+        # Verify the response
+        assert chat_response.status_code == 200
         assert chat_response.mimetype == "text/plain"
 
-        mock_openai.responses.create = mocker.Mock(
-            side_effect=lambda model,
-            input,
-            instructions,
-            reasoning,
-            stream,
-            include,
-            tools: iter(
-                [
-                    ResponseTextDeltaEvent(
-                        type="response.output_text.delta",
-                        delta="Greetings, test prompt!",
-                        content_index=-1,
-                        item_id="item-id",
-                        output_index=0,
-                        sequence_number=-1,
-                    )
-                ]
-            )
+        # Get the response data by consuming the stream
+        response_data = "".join(
+            chunk.decode("utf-8") if isinstance(chunk, bytes) else chunk
+            for chunk in chat_response.response
         )
+        assert response_data == mock_response_text
 
-        response_chunks = "".join(chat_response.response)
-        assert "Greetings, test prompt!" in response_chunks
+        # Verify that generate_content was called with correct parameters
+        mock_vertexai_generative_model.generate_content.assert_called_once()
+        call_args = mock_vertexai_generative_model.generate_content.call_args
+
+        # Check that the user message was included in the call
+        contents = call_args[1]["contents"]  # keyword arguments
+        assert len(contents) == 1
+        assert contents[0]["role"] == "user"
+        assert contents[0]["parts"][0]["text"] == test_message
+
+        # Check that streaming was enabled
+        assert call_args[1]["stream"] is True
+
+        # Verify the session was updated with both user and assistant messages
+        updated_session = tenant_session.get()
+        assert len(updated_session["messages"]) == 2
+        assert updated_session["messages"][0]["role"] == "user"
+        assert updated_session["messages"][0]["content"] == test_message
+        assert updated_session["messages"][1]["role"] == "model"
+        assert updated_session["messages"][1]["content"] == mock_response_text
