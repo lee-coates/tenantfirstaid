@@ -9,9 +9,8 @@ from flask import Flask
 from tenantfirstaid.chat import ChatView
 from tenantfirstaid.session import TenantSession, TenantSessionData, InitSessionView
 from vertexai.generative_models import (
-    GenerationConfig,
-    GenerationResponse,
     GenerativeModel,
+    Tool,
 )
 from typing import Dict
 
@@ -89,8 +88,21 @@ def app(mock_valkey):
 
 
 def test_chat_view_dispatch_request_streams_response(
-    app, mocker, mock_vertexai_generative_model
+    app, mocker, mock_vertexai_generative_model, mock_valkey
 ):
+    """Test that sends a message to the API, mocks vertexai response, and validates output."""
+
+    # Mock the entire RAG module components to avoid actual RAG retrieval
+    mock_rag_resource = mocker.Mock()
+    mock_rag_store = mocker.Mock()
+    mock_retrieval = mocker.Mock()
+    mock_rag_tool = mocker.Mock(spec=Tool)
+
+    mocker.patch("tenantfirstaid.chat.rag.RagResource", return_value=mock_rag_resource)
+    mocker.patch("tenantfirstaid.chat.rag.VertexRagStore", return_value=mock_rag_store)
+    mocker.patch("tenantfirstaid.chat.rag.Retrieval", return_value=mock_retrieval)
+    mocker.patch("tenantfirstaid.chat.Tool.from_retrieval", return_value=mock_rag_tool)
+
     tenant_session = TenantSession()
 
     app.add_url_rule(
@@ -106,57 +118,70 @@ def test_chat_view_dispatch_request_streams_response(
     )
 
     test_data_obj = TenantSessionData(
-        city="Test City",
-        state="Test State",
+        city="Portland",
+        state="or",
         messages=[],
     )
 
-    # Initialize the session with session_id and test data
-    with app.test_request_context(
-        "/api/init", method="POST", json=test_data_obj
-    ) as init_ctx:
+    # Initialize the session
+    with app.test_request_context("/api/init", method="POST", json=test_data_obj):
         init_response = app.full_dispatch_request()
-        assert init_response.status_code == 200  # Ensure the response is successful
-
-        tenant_session.set(test_data_obj)
+        assert init_response.status_code == 200
         session_id = init_response.json["session_id"]
-        assert session_id is not None  # Ensure session_id is set
-        assert isinstance(session_id, str)  # Ensure session_id is a string
-        assert tenant_session.get() == test_data_obj
 
-    # each test-request is a new context (nesting does not do what you think)
-    # so we need to set the session_id in the request context manually
+    # Mock the GenerativeModel's generate_content method
+    mock_response_text = "This is a mocked response about tenant rights in Oregon. You should contact <a href='https://oregon.public.law/statutes/ORS_90.427' target='_blank'>ORS 90.427</a> for more information."
+
+    # Create a mock response object that mimics the streaming response
+    mock_candidate = mocker.Mock()
+    mock_candidate.content.parts = [mocker.Mock()]
+    mock_candidate.content.parts[0].text = mock_response_text
+
+    mock_event = mocker.Mock()
+    mock_event.candidates = [mock_candidate]
+
+    # Mock the generate_content method to return our mock response as a stream
+    mock_vertexai_generative_model.generate_content.return_value = iter([mock_event])
+
+    # Send a message to the chat API
+    test_message = "What are my rights as a tenant in Portland?"
+
     with app.test_request_context(
-        "/api/query", method="POST", json={"message": "Salutations mock openai api"}
+        "/api/query", method="POST", json={"message": test_message}
     ) as chat_ctx:
-        with mocker.patch("tenantfirstaid.chat.GenerativeModel") as mock_model:
-            chat_ctx.session["session_id"] = (
-                session_id  # Simulate session ID in request context
-            )
-            chat_response = init_ctx.app.full_dispatch_request()
-            assert chat_response.status_code == 200  # Ensure the response is successful
-            assert chat_response.mimetype == "text/plain"
+        chat_ctx.session["session_id"] = session_id
 
-            mock_model.generate_content = mocker.Mock(
-                return_value=iter(
-                    [
-                        GenerationResponse.from_dict(
-                            response_dict=dict(
-                                candidates=[
-                                    dict(
-                                        content=dict(
-                                            role="model",
-                                            parts=[
-                                                dict(text="Greetings, test prompt!")
-                                            ],
-                                        )
-                                    )
-                                ]
-                            )
-                        )
-                    ]
-                )
-            )
+        # Execute the request
+        chat_response = chat_ctx.app.full_dispatch_request()
 
-            response_chunks = "".join(chat_response.response)
-            assert "Greetings, test prompt!" in response_chunks
+        # Verify the response
+        assert chat_response.status_code == 200
+        assert chat_response.mimetype == "text/plain"
+
+        # Get the response data by consuming the stream
+        response_data = "".join(
+            chunk.decode("utf-8") if isinstance(chunk, bytes) else chunk
+            for chunk in chat_response.response
+        )
+        assert response_data == mock_response_text
+
+        # Verify that generate_content was called with correct parameters
+        mock_vertexai_generative_model.generate_content.assert_called_once()
+        call_args = mock_vertexai_generative_model.generate_content.call_args
+
+        # Check that the user message was included in the call
+        contents = call_args[1]["contents"]  # keyword arguments
+        assert len(contents) == 1
+        assert contents[0]["role"] == "user"
+        assert contents[0]["parts"][0]["text"] == test_message
+
+        # Check that streaming was enabled
+        assert call_args[1]["stream"] is True
+
+        # Verify the session was updated with both user and assistant messages
+        updated_session = tenant_session.get()
+        assert len(updated_session["messages"]) == 2
+        assert updated_session["messages"][0]["role"] == "user"
+        assert updated_session["messages"][0]["content"] == test_message
+        assert updated_session["messages"][1]["role"] == "model"
+        assert updated_session["messages"][1]["content"] == mock_response_text
