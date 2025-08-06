@@ -1,6 +1,6 @@
-name: CI-CD
+name: CI-CD (Production)
 
-on:
+on:  
   push:
     branches: [ main ]
   workflow_dispatch:
@@ -11,15 +11,9 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    environment: production
 
-    env:
-      # local paths
-      BACKEND_DIR: backend
-      FRONTEND_DIR: frontend
-      # remote paths
-      REMOTE_APP_DIR: /var/www/tenantfirstaid
-      SERVICE_NAME: tenantfirstaid-backend
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -29,10 +23,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: ${{ env.FRONTEND_DIR }}/package-lock.json
+          cache-dependency-path: ${{ vars.FRONTEND_DIR }}/package-lock.json
 
       - name: Build UI
-        working-directory: ${{ env.FRONTEND_DIR }}
+        working-directory: ${{ vars.FRONTEND_DIR }}
         run: |
           npm ci
           npm run build
@@ -40,32 +34,32 @@ jobs:
       - name: Upload backend code via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
+          host: ${{ vars.URL }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: ${{ env.BACKEND_DIR }}/
-          target: ${{ env.REMOTE_APP_DIR }}
+          source: ${{ vars.BACKEND_DIR }}/
+          target: ${{ vars.REMOTE_APP_DIR }}
           rm: true
 
       - name: Upload frontend code via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
+          host: ${{ vars.URL }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: ${{ env.FRONTEND_DIR }}/dist
-          target: ${{ env.REMOTE_APP_DIR }}
+          source: ${{ vars.FRONTEND_DIR }}/dist
+          target: ${{ vars.REMOTE_APP_DIR }}
           rm: false  # Otherwise we wipe out the backend code
 
       - name: Bootstrap on droplet
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
+          host: ${{ vars.URL }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            cd ${{ env.REMOTE_APP_DIR }}/backend/
+            cd ${{ vars.REMOTE_APP_DIR }}/backend/
             
             # Install uv (fast installer from Astral) if it isn't there
             if ! command -v uv >/dev/null 2>&1; then
@@ -81,19 +75,23 @@ jobs:
             sudo chmod 750 /etc/tenantfirstaid
             sudo chown root:root /etc/tenantfirstaid
             cat > /etc/tenantfirstaid/env <<EOF
-            ENV=prod
-            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            ENV=${{ vars.ENV }}
             FLASK_SECRET_KEY=${{ secrets.FLASK_SECRET_KEY }}
             DB_HOST=${{secrets.DB_HOST}}
             DB_PASSWORD=${{secrets.DB_PASSWORD}}
-            DB_PORT=${{secrets.DB_PORT}}
+            DB_PORT=${{vars.DB_PORT}}
             DB_USER=default
-            MODEL_REASONING_EFFORT=high
-            VECTOR_STORE_ID=${{secrets.VECTOR_STORE_ID}}
+            GEMINI_RAG_CORPUS=${{vars.GEMINI_RAG_CORPUS}}
+            GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE=/etc/tenantfirstaid/google-service-account.json
             EOF
             chmod 640 /etc/tenantfirstaid/env
+
+            cat > /etc/tenantfirstaid/google-service-account.json <<EOF
+            ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS}}
+            EOF
+            chmod 640 /etc/tenantfirstaid/google-service-account.json
             
             # Ownership, restart, reload
-            sudo chown -R $USER:www-data ${{ env.REMOTE_APP_DIR }}
-            sudo systemctl restart ${{ env.SERVICE_NAME }}
+            sudo chown -R $USER:www-data ${{ vars.REMOTE_APP_DIR }}
+            sudo systemctl restart ${{ vars.SERVICE_NAME }}
             sudo systemctl reload nginx
