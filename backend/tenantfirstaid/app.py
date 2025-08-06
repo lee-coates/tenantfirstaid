@@ -1,5 +1,5 @@
 from pathlib import Path
-from flask import Flask, jsonify, session
+from flask import Flask, jsonify, session, abort
 from flask_mailman import Mail
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -87,6 +87,9 @@ app.add_url_rule(
 
 @limiter.limit("3 per minute")
 def feedback_route():
+    if not session.get("site_user"):
+        abort(403, "Unauthorized: session missing")
+
     return send_feedback()
 
 
