@@ -12,9 +12,27 @@ function sanitizeText(str: string) {
     .replace(/'/g, "&#039;");
 }
 
+function redactText(message: string, wordsToRedact: string) {
+  let redactedMessage = message;
+  const redactList = wordsToRedact.split(/\s*,\s*/).map((s) => s.trim());
+  redactList.forEach((word) => {
+    const regex = new RegExp(`\\b${word.replace(/\s+/g, "\\s+")}\\b`, "gi");
+    redactedMessage = redactedMessage.replace(regex, () => {
+      return `<span style="
+        background-color: black;
+        color:transparent;
+        white-space: nowrap;
+        user-select: none;
+      ">${"_".repeat(10)}</span>`;
+    });
+  });
+  return redactedMessage;
+}
+
 export default async function sendFeedback(
   messages: IMessage[],
   userFeedback: string,
+  wordsToRedact: string
 ) {
   if (messages.length < 2) return;
 
@@ -23,7 +41,7 @@ export default async function sendFeedback(
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${sanitizeText(content)}</p>`,
+        }</strong>: ${redactText(sanitizeText(content), wordsToRedact)}</p>`
     )
     .join("");
 
