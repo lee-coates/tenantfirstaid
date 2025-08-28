@@ -1,27 +1,9 @@
-import { useState } from "react";
 import MessageWindow from "./pages/Chat/components/MessageWindow";
-import StatuteDrawer from "./pages/Chat/components/StatuteDrawer";
 import useMessages from "./hooks/useMessages";
 
 export default function Chat() {
   const { messages, setMessages, isLoading, isError } = useMessages();
   const isOngoing = messages.length > 0;
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedStatute, setSelectedStatute] = useState<string | null>(null);
-
-  const handleStatuteClick = (statute: string) => {
-    if (statute === selectedStatute && drawerOpen) {
-      closeDrawer();
-    } else {
-      setSelectedStatute(statute);
-      setDrawerOpen(true);
-    }
-  };
-
-  const closeDrawer = () => {
-    setDrawerOpen(false);
-    setSelectedStatute(null);
-  };
 
   return (
     <div className="h-dvh pt-16 flex items-center">
@@ -47,7 +29,6 @@ export default function Chat() {
                 setMessages={setMessages}
                 isOngoing={isOngoing}
                 isError={isError}
-                onStatuteClick={handleStatuteClick}
               />
             )}
           </div>
@@ -62,11 +43,6 @@ export default function Chat() {
             <p>For questions, contact michael@qiu-qiulaw.com</p>
           </div>
         </div>
-        <StatuteDrawer
-          open={drawerOpen}
-          statute={selectedStatute}
-          onClose={closeDrawer}
-        />
       </div>
     </div>
   );

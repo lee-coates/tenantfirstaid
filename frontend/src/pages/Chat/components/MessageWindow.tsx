@@ -13,7 +13,6 @@ interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isOngoing: boolean;
   isError: boolean;
-  onStatuteClick: (statute: string) => void;
 }
 
 export default function MessageWindow({
@@ -21,7 +20,6 @@ export default function MessageWindow({
   setMessages,
   isOngoing,
   isError,
-  onStatuteClick,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -86,11 +84,7 @@ export default function MessageWindow({
                           : "bg-[#1F584F] text-white rounded-tr-sm"
                       }`}
                     >
-                      <MessageContent
-                        message={message}
-                        isLoading={isLoading}
-                        onStatuteClick={onStatuteClick}
-                      />
+                      <MessageContent message={message} isLoading={isLoading} />
                     </div>
                   </div>
                 ))}
