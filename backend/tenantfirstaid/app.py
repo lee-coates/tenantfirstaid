@@ -61,9 +61,7 @@ app.config["MAIL_DEFAULT_SENDER"] = os.getenv("SENDER_EMAIL")
 mail = Mail(app)
 
 
-app.add_url_rule(
-    "/api/query", view_func=ChatView.as_view("chat"), methods=["POST"]
-)
+app.add_url_rule("/api/query", view_func=ChatView.as_view("chat"), methods=["POST"])
 
 
 @limiter.limit("3 per minute")

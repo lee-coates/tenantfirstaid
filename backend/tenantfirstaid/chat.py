@@ -48,7 +48,7 @@ class ChatManager:
         )
         vertexai.init(
             project="tenantfirstaid",
-            location="us-west1",
+            location="us-central1",
             credentials=creds,
         )
         self.model = GenerativeModel(
@@ -74,7 +74,6 @@ class ChatManager:
         instructions=None,
         model_name=MODEL,
     ):
-        print(f"Generating response for messages: {messages}")
         instructions = (
             instructions
             if instructions
@@ -98,11 +97,33 @@ class ChatManager:
                 }
             )
 
+        # TODO: this is a hack to get different corpora for different cities and states,
+        # since with the current RAG implementation we can't use metadata filters for corpora documents.
+        # This sets the corpus initially to the old env var of GEMINI_RAG_CORPUS, then overrides it
+        # if the city or state matches one we have a specific corpus for. For backwards compatibility,
+        # the old GEMINI_RAG_CORPUS env var is still used as the default
         GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
+
+        if city is None:
+            GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS_OREGON", GEMINI_RAG_CORPUS)
+        elif city.lower() == "portland":
+            GEMINI_RAG_CORPUS = os.getenv(
+                "GEMINI_RAG_CORPUS_PORTLAND", GEMINI_RAG_CORPUS
+            )
+        elif city.lower() == "eugene":
+            GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS_EUGENE", GEMINI_RAG_CORPUS)
+
+        print(f"Using RAG corpus: {GEMINI_RAG_CORPUS} for city: {city}, state: {state}")
+
         rag_retrieval_tool = Tool.from_retrieval(
             retrieval=rag.Retrieval(
                 source=rag.VertexRagStore(
-                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)]
+                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)],
+                    rag_retrieval_config=rag.RagRetrievalConfig(
+                        filter=rag.Filter(
+                            metadata_filter={"city": city, "state": state}
+                        )
+                    ),
                 )
             )
         )
@@ -113,7 +134,6 @@ class ChatManager:
             generation_config=GenerationConfig(temperature=0.2),
             tools=[rag_retrieval_tool] if use_tools else None,
         )
-        print(f"Response: {response}")
 
         return response
 
@@ -125,7 +145,6 @@ class ChatView(View):
     def dispatch_request(self, *args, **kwargs) -> Response:
         data = request.json
         messages = data["messages"]
-        print(f"Received messages: {messages}")
 
         def generate():
             # Use the new Responses API with streaming
@@ -139,6 +158,9 @@ class ChatView(View):
             assistant_chunks = []
             for event in response_stream:
                 assistant_chunks.append(event.candidates[0].content.parts[0].text)
+                if event.candidates[0].grounding_metadata:
+                    for doc in event.candidates[0].grounding_metadata.grounding_chunks:
+                        print(f"Document: {doc.retrieved_context.title}")
                 yield event.candidates[0].content.parts[0].text
 
         return Response(
