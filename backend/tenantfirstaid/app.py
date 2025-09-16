@@ -44,6 +44,12 @@ if os.getenv("ENV", "dev") == "dev":
 
 CORS(app, origins=ALLOWED_ORIGINS, supports_credentials=True)
 
+# Configure Flask sessions
+app.secret_key = os.getenv("FLASK_SECRET_KEY", secrets.token_hex(32))
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("ENV", "dev") == "prod"
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
 # Configure Flask Mail
 app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
 app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
@@ -62,9 +68,6 @@ app.add_url_rule(
 
 @limiter.limit("3 per minute")
 def feedback_route():
-    if not session.get("site_user"):
-        abort(403, "Unauthorized: session missing")
-
     return send_feedback()
 
 
