@@ -6,6 +6,7 @@ import ExportMessagesButton from "./ExportMessagesButton";
 import CitySelectField from "./CitySelectField";
 import SuggestedPrompts from "./SuggestedPrompts";
 import { ILocation } from "../../../hooks/useLocation";
+import FeedbackModal from "./FeedbackModal";
 
 interface Props {
   messages: IMessage[];
@@ -29,6 +30,7 @@ export default function MessageWindow({
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [openFeedback, setOpenFeedback] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,9 +62,8 @@ export default function MessageWindow({
   return (
     <>
       <div
-        className={`flex-1 ${
-          isOngoing ? "overflow-y-scroll" : "overflow-y-none"
-        }`}
+        className={`flex-1 ${isOngoing ? "overflow-y-scroll" : "overflow-y-none"
+          }`}
         ref={messagesRef}
       >
         <div className="max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px]">
@@ -70,17 +71,15 @@ export default function MessageWindow({
             <div className="flex flex-col gap-4">
               {messages.map((message) => (
                 <div
-                  className={`flex w-full ${
-                    message.role === "model" ? "justify-start" : "justify-end"
-                  }`}
+                  className={`flex w-full ${message.role === "model" ? "justify-start" : "justify-end"
+                    }`}
                   key={message.messageId}
                 >
                   <div
-                    className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
-                      message.role === "model"
-                        ? "bg-slate-200 rounded-tl-sm"
-                        : "bg-[#1F584F] text-white rounded-tr-sm"
-                    }`}
+                    className={`message-bubble p-3 rounded-2xl max-w-[95%] ${message.role === "model"
+                      ? "bg-slate-200 rounded-tl-sm"
+                      : "bg-[#1F584F] text-white rounded-tr-sm"
+                      }`}
                   >
                     <MessageContent message={message} isLoading={isLoading} />
                   </div>
@@ -90,6 +89,9 @@ export default function MessageWindow({
           ) : null}
         </div>
       </div>
+      {openFeedback && (
+        <FeedbackModal messages={messages} setOpenFeedback={setOpenFeedback} />
+      )}
       <div>
         {messages.length > 0 ? (
           <>
@@ -114,9 +116,15 @@ export default function MessageWindow({
               >
                 Clear Chat
               </button>
-              <div className="">
-                <ExportMessagesButton messages={messages} />
-              </div>
+              <ExportMessagesButton messages={messages} />
+              <button
+                className="py-2 px-4 border rounded-md font-semibold hover:bg-gray-200 transition-colors cursor-pointer opacity-70"
+                onClick={() => {
+                  setOpenFeedback(true);
+                }}
+              >
+                Feedback
+              </button>
             </div>
           </>
         ) : (
