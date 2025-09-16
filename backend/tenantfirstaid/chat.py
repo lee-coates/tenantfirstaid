@@ -118,12 +118,7 @@ class ChatManager:
         rag_retrieval_tool = Tool.from_retrieval(
             retrieval=rag.Retrieval(
                 source=rag.VertexRagStore(
-                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)],
-                    rag_retrieval_config=rag.RagRetrievalConfig(
-                        filter=rag.Filter(
-                            metadata_filter={"city": city, "state": state}
-                        )
-                    ),
+                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)]
                 )
             )
         )
@@ -158,9 +153,6 @@ class ChatView(View):
             assistant_chunks = []
             for event in response_stream:
                 assistant_chunks.append(event.candidates[0].content.parts[0].text)
-                if event.candidates[0].grounding_metadata:
-                    for doc in event.candidates[0].grounding_metadata.grounding_chunks:
-                        print(f"Document: {doc.retrieved_context.title}")
                 yield event.candidates[0].content.parts[0].text
 
         return Response(

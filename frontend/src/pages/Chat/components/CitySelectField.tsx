@@ -37,7 +37,8 @@ export default function CitySelectField({ setMessages, setLocation }: Props) {
     setCity(key);
     setLocation((prev) => ({
       ...prev,
-      city: CitySelectOptions[key as keyof typeof CitySelectOptions]?.city || null,
+      city:
+        CitySelectOptions[key as keyof typeof CitySelectOptions]?.city || null,
       state:
         CitySelectOptions[key as keyof typeof CitySelectOptions]?.state || null,
     }));
