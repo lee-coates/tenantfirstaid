@@ -1,8 +1,10 @@
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
+import useLocation from "./hooks/useLocation";
 
 export default function Chat() {
-  const { messages, setMessages, isLoading, isError } = useMessages();
+  const { addMessage, messages, setMessages } = useMessages();
+  const { location, setLocation } = useLocation();
   const isOngoing = messages.length > 0;
 
   return (
@@ -17,20 +19,14 @@ export default function Chat() {
                   : "justify-center max-w-[600px]"
               }`}
           >
-            {isLoading ? (
-              <div
-                className={`${isLoading && "animate-dot-pulse"} text-center`}
-              >
-                Loading...
-              </div>
-            ) : (
-              <MessageWindow
-                messages={messages}
-                setMessages={setMessages}
-                isOngoing={isOngoing}
-                isError={isError}
-              />
-            )}
+            <MessageWindow
+              messages={messages}
+              addMessage={addMessage}
+              location={location}
+              setLocation={setLocation}
+              setMessages={setMessages}
+              isOngoing={isOngoing}
+            />
           </div>
           <div
             className={`container mx-auto text-xs px-4 text-center ${isOngoing ? "max-w-auto my-2" : "max-w-[600px] my-4"}`}

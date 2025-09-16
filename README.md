@@ -11,11 +11,9 @@ Live at https://tenantfirstaid.com/
 
 ### Prerequisites
  - [uv](https://docs.astral.sh/uv/getting-started/installation/)
- - [docker](https://www.docker.com/)
 
 1. copy `backend/.env.example` to a new file named `.env` in the same directory. The chatbot now uses Google Gemini instead of OpenAI.
 1. `cd backend`
-1. `docker-compose up` (use `-d` if you want to run this in the background, otherwise open a new terminal)
 1. `uv sync`
 1. `uv run python -m tenantfirstaid.app`
 1. Open a new terminal / tab
