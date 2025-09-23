@@ -6,7 +6,6 @@ from vertexai.generative_models import (
     Tool,
 )
 import google.auth
-from google.oauth2 import service_account
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
