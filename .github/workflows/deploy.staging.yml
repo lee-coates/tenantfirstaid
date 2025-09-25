@@ -85,7 +85,7 @@ jobs:
             SENDER_EMAIL=${{vars.SENDER_EMAIL}}
             RECIPIENT_EMAIL=${{vars.RECIPIENT_EMAIL}}
             GEMINI_RAG_CORPUS=${{vars.GEMINI_RAG_CORPUS}}
-            GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE=/etc/tenantfirstaid/google-service-account.json
+            GOOGLE_APPLICATION_CREDENTIALS=/etc/tenantfirstaid/google-service-account.json
             EOF
             chmod 640 /etc/tenantfirstaid/env
 
