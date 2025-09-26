@@ -1,11 +1,6 @@
-import vertexai
-from vertexai.preview import rag
-from vertexai.generative_models import (
-    GenerativeModel,
-    GenerationConfig,
-    Tool,
-)
-from google.oauth2 import service_account
+from google import genai
+from google.genai import types
+from vertexai import rag
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
@@ -21,7 +16,7 @@ Focus on finding technicalities that would legally prevent someone getting evict
 Assume the user is on a month-to-month lease unless they specify otherwise.
 
 Use only the information from the file search results to answer the question.
-City codes will override the state codes if there is a conflict.
+City laws will override the state laws if there is a conflict. Make sure that if the user is in a specific city, you check for relevant city laws.
 
 Only answer questions about housing law in Oregon, do not answer questions about other states or topics unrelated to housing law.
 
@@ -41,19 +36,8 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 class ChatManager:
     def __init__(self):
-        creds = service_account.Credentials.from_service_account_file(
-            os.getenv(
-                "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE", "google-service-account.json"
-            )
-        )
-        vertexai.init(
-            project="tenantfirstaid",
-            location="us-central1",
-            credentials=creds,
-        )
-        self.model = GenerativeModel(
-            model_name=MODEL,
-            system_instruction=DEFAULT_INSTRUCTIONS,
+        self.client = genai.Client(
+            vertexai=True
         )
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
@@ -80,11 +64,6 @@ class ChatManager:
             else self.prepare_developer_instructions(city, state)
         )
 
-        self.model = GenerativeModel(
-            model_name=model_name,
-            system_instruction=instructions,
-        )
-
         formatted_messages = []
 
         for message in messages:
@@ -97,37 +76,48 @@ class ChatManager:
                 }
             )
 
-        # TODO: this is a hack to get different corpora for different cities and states,
-        # since with the current RAG implementation we can't use metadata filters for corpora documents.
-        # This sets the corpus initially to the old env var of GEMINI_RAG_CORPUS, then overrides it
-        # if the city or state matches one we have a specific corpus for. For backwards compatibility,
-        # the old GEMINI_RAG_CORPUS env var is still used as the default
-        GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
+        city = city.lower() if city is not None else None
+        state = state.lower() if state is not None else None
 
-        if city is None:
-            GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS_OREGON", GEMINI_RAG_CORPUS)
-        elif city.lower() == "portland":
-            GEMINI_RAG_CORPUS = os.getenv(
-                "GEMINI_RAG_CORPUS_PORTLAND", GEMINI_RAG_CORPUS
-            )
-        elif city.lower() == "eugene":
-            GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS_EUGENE", GEMINI_RAG_CORPUS)
-
-        print(f"Using RAG corpus: {GEMINI_RAG_CORPUS} for city: {city}, state: {state}")
-
-        rag_retrieval_tool = Tool.from_retrieval(
-            retrieval=rag.Retrieval(
-                source=rag.VertexRagStore(
-                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)]
+        generate_content_config = types.GenerateContentConfig(
+            temperature=0,
+            top_p=0,
+            max_output_tokens=65535,
+            safety_settings=[
+                types.SafetySetting(
+                    category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"
+                ),
+                types.SafetySetting(
+                    category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"
+                ),
+                types.SafetySetting(
+                    category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"
+                ),
+                types.SafetySetting(
+                    category="HARM_CATEGORY_HARASSMENT", threshold="OFF"
+                ),
+            ],
+            system_instruction=[instructions],
+            thinking_config=types.ThinkingConfig(
+                thinking_budget=-1,
+            ),
+            tools=[
+                types.Tool(
+                    retrieval=types.Retrieval(
+                        vertex_ai_search=types.VertexAISearch(
+                            datastore=os.getenv("VERTEX_AI_DATASTORE"),
+                            filter=f"city: ANY(\"{city}\", \"null\") AND state: ANY(\"{state}\")",
+                            max_results=5
+                        )
+                    )
                 )
-            )
+            ]
         )
-
-        response = self.model.generate_content(
+        
+        response = self.client.models.generate_content_stream(
+            model=MODEL,
             contents=formatted_messages,
-            stream=stream,
-            generation_config=GenerationConfig(temperature=0.2),
-            tools=[rag_retrieval_tool] if use_tools else None,
+            config=generate_content_config,
         )
 
         return response
@@ -142,7 +132,6 @@ class ChatView(View):
         messages = data["messages"]
 
         def generate():
-            # Use the new Responses API with streaming
             response_stream = self.chat_manager.generate_gemini_chat_response(
                 messages,
                 data["city"],
@@ -152,8 +141,22 @@ class ChatView(View):
 
             assistant_chunks = []
             for event in response_stream:
-                assistant_chunks.append(event.candidates[0].content.parts[0].text)
-                yield event.candidates[0].content.parts[0].text
+                print(event)
+                return_text = ""
+                
+                if event.candidates is None:
+                    continue
+                
+                for candidate in event.candidates:
+                    for part in candidate.content.parts:
+                        return_text += f"{'<i>' if part.thought else ''}{part.text}{'</i>' if part.thought else ''}"
+
+                    if candidate.grounding_metadata.grounding_chunks:
+                        for doc in candidate.grounding_metadata.grounding_chunks:
+                            print(f"Document: {doc}")
+
+                assistant_chunks.append(return_text)
+                yield return_text
 
         return Response(
             stream_with_context(generate()),
