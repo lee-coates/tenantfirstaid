@@ -17,7 +17,7 @@ Live at https://tenantfirstaid.com/
    1. [generate application default credentials file](https://cloud.google.com/docs/authentication/application-default-credentials)
    1. `gcloud auth application-default login` 
    1. `gcloud auth application-default set-quota-project tenantfirstaid`
-   1. `export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json`  (hint: store this command in your ~/.bashrc or equivalent; this step is only necessary if credentials are stored somewhere other than ~/.config/gcloud/)
+   1. add `GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_CREDS>` to your `backend/.env` file. The default path will be something like `/home/<USERNAME>/.config/gcloud/application_default_credentials.json` on Unix systems. (HINT: don't use path shortcuts like `~` for home, python won't be able to find it).
 1. `cd backend`
 1. `uv sync`
 1. `uv run python -m tenantfirstaid.app`
