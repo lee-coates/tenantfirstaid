@@ -12,7 +12,12 @@ Live at https://tenantfirstaid.com/
 ### Prerequisites
  - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-1. copy `backend/.env.example` to a new file named `.env` in the same directory. The chatbot now uses Google Gemini instead of OpenAI.
+1. copy `backend/.env.example` to a new file named `.env` in the same directory. The chatbot now uses Google Gemini instead of OpenAI. You need to authenticate with the gcloud cli to develop, following these instructions:
+   1. [install gcloud](https://cloud.google.com/sdk/docs/install)
+   1. [generate application default credentials file](https://cloud.google.com/docs/authentication/application-default-credentials)
+   1. `gcloud auth application-default login` 
+   1. `gcloud auth application-default set-quota-project tenantfirstaid`
+   1. add `GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_CREDS>` to your `backend/.env` file. The default path will be something like `/home/<USERNAME>/.config/gcloud/application_default_credentials.json` on Unix systems. (HINT: don't use path shortcuts like `~` for home, python won't be able to find it).
 1. `cd backend`
 1. `uv sync`
 1. `uv run python -m tenantfirstaid.app`

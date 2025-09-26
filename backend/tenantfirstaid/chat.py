@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 from google import genai
 from google.genai import types
 from vertexai import rag
+=======
+import vertexai
+from vertexai.preview import rag
+from vertexai.generative_models import (
+    GenerativeModel,
+    GenerationConfig,
+    Tool,
+)
+>>>>>>> pr/lee-coates/197
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
@@ -36,8 +46,10 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 class ChatManager:
     def __init__(self):
-        self.client = genai.Client(
-            vertexai=True
+        vertexai.init(project="tenantfirstaid", location="us-west1")
+        self.model = GenerativeModel(
+            model_name=MODEL,
+            system_instruction=DEFAULT_INSTRUCTIONS,
         )
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
