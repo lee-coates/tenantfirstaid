@@ -5,7 +5,6 @@ from vertexai.generative_models import (
     GenerationConfig,
     Tool,
 )
-from google.oauth2 import service_account
 from flask import request, stream_with_context, Response
 from flask.views import View
 import os
@@ -41,16 +40,7 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 class ChatManager:
     def __init__(self):
-        creds = service_account.Credentials.from_service_account_file(
-            os.getenv(
-                "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE", "google-service-account.json"
-            )
-        )
-        vertexai.init(
-            project="tenantfirstaid",
-            location="us-west1",
-            credentials=creds,
-        )
+        vertexai.init(project="tenantfirstaid", location="us-west1")
         self.model = GenerativeModel(
             model_name=MODEL,
             system_instruction=DEFAULT_INSTRUCTIONS,
