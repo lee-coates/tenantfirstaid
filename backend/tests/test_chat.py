@@ -1,5 +1,5 @@
 import pytest
-import vertexai
+from google import genai
 from tenantfirstaid.chat import (
     ChatManager,
     DEFAULT_INSTRUCTIONS,
@@ -8,27 +8,20 @@ from tenantfirstaid.chat import (
 from flask import Flask
 from tenantfirstaid.chat import ChatView
 from vertexai.generative_models import (
-    GenerativeModel,
     Tool,
 )
 
 
 @pytest.fixture
-def mock_vertexai(mocker):
-    mock_vertexai_init = mocker.Mock(spec=vertexai)
-    mocker.patch("tenantfirstaid.chat.vertexai.init", return_value=mock_vertexai_init)
+def mock_vertexai_client(mocker):
+    mock_vertexai_init = mocker.Mock(spec=genai.Client)
+    mocker.patch("tenantfirstaid.chat.genai.Client", return_value=mock_vertexai_init)
     return mock_vertexai_init
 
 
 @pytest.fixture
-def mock_vertexai_generative_model(mocker):
-    mock_model = mocker.Mock(spec=GenerativeModel)
-    mocker.patch("tenantfirstaid.chat.GenerativeModel", return_value=mock_model)
-    return mock_model
-
-
-@pytest.fixture
-def chat_manager():
+def chat_manager(mocker):
+    mocker.patch("tenantfirstaid.chat.genai.Client")
     return ChatManager()
 
 
@@ -56,21 +49,12 @@ def app():
     return app
 
 
-def test_chat_view_dispatch_request_streams_response(
-    app, mocker, mock_vertexai_generative_model
-):
+def test_chat_view_dispatch_request_streams_response(app, mocker, mock_vertexai_client):
     """Test that sends a message to the API, mocks vertexai response, and validates output."""
 
     # Mock the entire RAG module components to avoid actual RAG retrieval
-    mock_rag_resource = mocker.Mock()
-    mock_rag_store = mocker.Mock()
-    mock_retrieval = mocker.Mock()
     mock_rag_tool = mocker.Mock(spec=Tool)
-
-    mocker.patch("tenantfirstaid.chat.rag.RagResource", return_value=mock_rag_resource)
-    mocker.patch("tenantfirstaid.chat.rag.VertexRagStore", return_value=mock_rag_store)
-    mocker.patch("tenantfirstaid.chat.rag.Retrieval", return_value=mock_retrieval)
-    mocker.patch("tenantfirstaid.chat.Tool.from_retrieval", return_value=mock_rag_tool)
+    mocker.patch("tenantfirstaid.chat.types.Tool", return_value=mock_rag_tool)
 
     app.add_url_rule(
         "/api/query",
@@ -85,12 +69,15 @@ def test_chat_view_dispatch_request_streams_response(
     mock_candidate = mocker.Mock()
     mock_candidate.content.parts = [mocker.Mock()]
     mock_candidate.content.parts[0].text = mock_response_text
+    mock_candidate.content.parts[0].thought = None  # No thought for simplicity
 
     mock_event = mocker.Mock()
     mock_event.candidates = [mock_candidate]
 
     # Mock the generate_content method to return our mock response as a stream
-    mock_vertexai_generative_model.generate_content.return_value = iter([mock_event])
+    mock_vertexai_client.models.generate_content_stream.return_value = iter(
+        [mock_event]
+    )
 
     # Send a message to the chat API
     test_message = "What are my rights as a tenant in Portland?"
@@ -119,14 +106,11 @@ def test_chat_view_dispatch_request_streams_response(
         assert response_data == mock_response_text
 
         # Verify that generate_content was called with correct parameters
-        mock_vertexai_generative_model.generate_content.assert_called_once()
-        call_args = mock_vertexai_generative_model.generate_content.call_args
+        mock_vertexai_client.models.generate_content_stream.assert_called_once()
+        call_args = mock_vertexai_client.models.generate_content_stream.call_args
 
         # Check that the user message was included in the call
         contents = call_args[1]["contents"]  # keyword arguments
         assert len(contents) == 1
         assert contents[0]["role"] == "user"
         assert contents[0]["parts"][0]["text"] == test_message
-
-        # Check that streaming was enabled
-        assert call_args[1]["stream"] is True

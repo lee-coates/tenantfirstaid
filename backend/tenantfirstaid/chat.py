@@ -1,17 +1,6 @@
-<<<<<<< HEAD
 from google import genai
 from google.genai import types
-from vertexai import rag
-=======
-import vertexai
-from vertexai.preview import rag
-from vertexai.generative_models import (
-    GenerativeModel,
-    GenerationConfig,
-    Tool,
-)
->>>>>>> pr/lee-coates/197
-from flask import request, stream_with_context, Response
+from flask import current_app, request, stream_with_context, Response
 from flask.views import View
 import os
 
@@ -46,11 +35,7 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 class ChatManager:
     def __init__(self):
-        vertexai.init(project="tenantfirstaid", location="us-west1")
-        self.model = GenerativeModel(
-            model_name=MODEL,
-            system_instruction=DEFAULT_INSTRUCTIONS,
-        )
+        self.client = genai.Client(vertexai=True)
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
         # Add city and state filters if they are set
@@ -97,20 +82,26 @@ class ChatManager:
             max_output_tokens=65535,
             safety_settings=[
                 types.SafetySetting(
-                    category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"
+                    category=types.HarmCategory("HARM_CATEGORY_HATE_SPEECH"),
+                    threshold=types.HarmBlockThreshold("OFF"),
                 ),
                 types.SafetySetting(
-                    category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"
+                    category=types.HarmCategory("HARM_CATEGORY_DANGEROUS_CONTENT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
                 ),
                 types.SafetySetting(
-                    category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"
+                    category=types.HarmCategory("HARM_CATEGORY_SEXUALLY_EXPLICIT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
                 ),
                 types.SafetySetting(
-                    category="HARM_CATEGORY_HARASSMENT", threshold="OFF"
+                    category=types.HarmCategory("HARM_CATEGORY_HARASSMENT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
                 ),
             ],
             system_instruction=[instructions],
             thinking_config=types.ThinkingConfig(
+                include_thoughts=os.getenv("SHOW_MODEL_THINKING", "false").lower()
+                == "true",
                 thinking_budget=-1,
             ),
             tools=[
@@ -118,14 +109,23 @@ class ChatManager:
                     retrieval=types.Retrieval(
                         vertex_ai_search=types.VertexAISearch(
                             datastore=os.getenv("VERTEX_AI_DATASTORE"),
-                            filter=f"city: ANY(\"{city}\", \"null\") AND state: ANY(\"{state}\")",
-                            max_results=5
+                            filter=f'city: ANY("{city}") AND state: ANY("{state}")',
+                            max_results=5,
                         )
                     )
-                )
-            ]
+                ),
+                types.Tool(
+                    retrieval=types.Retrieval(
+                        vertex_ai_search=types.VertexAISearch(
+                            datastore=os.getenv("VERTEX_AI_DATASTORE"),
+                            filter=f'city: ANY("null") AND state: ANY("{state}")',
+                            max_results=5,
+                        )
+                    )
+                ),
+            ],
         )
-        
+
         response = self.client.models.generate_content_stream(
             model=MODEL,
             contents=formatted_messages,
@@ -153,19 +153,15 @@ class ChatView(View):
 
             assistant_chunks = []
             for event in response_stream:
-                print(event)
+                current_app.logger.debug(f"Received event: {event}")
                 return_text = ""
-                
+
                 if event.candidates is None:
                     continue
-                
+
                 for candidate in event.candidates:
                     for part in candidate.content.parts:
                         return_text += f"{'<i>' if part.thought else ''}{part.text}{'</i>' if part.thought else ''}"
-
-                    if candidate.grounding_metadata.grounding_chunks:
-                        for doc in candidate.grounding_metadata.grounding_chunks:
-                            print(f"Document: {doc}")
 
                 assistant_chunks.append(return_text)
                 yield return_text
