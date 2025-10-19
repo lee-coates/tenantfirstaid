@@ -14,7 +14,11 @@ export default function MessageContent({ message, isLoading }: Props) {
       ) : (
         <span
           className="whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: message.content }}
+          dangerouslySetInnerHTML={{
+            __html: message.content
+              .split("-----generate letter-----")[0]
+              .trim(),
+          }}
         ></span>
       )}
     </>
