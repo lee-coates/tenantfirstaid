@@ -10,7 +10,7 @@ export interface IMessage {
 async function addNewMessage(
   messages: IMessage[],
   city: string | null,
-  state: string
+  state: string,
 ) {
   const response = await fetch("/api/query", {
     method: "POST",
@@ -33,7 +33,7 @@ export default function useMessages() {
       state: string;
     }) => {
       const filteredMessages = messages.filter(
-        (msg) => msg.content.trim() !== ""
+        (msg) => msg.content.trim() !== "",
       ); // Filters out empty bot message
       return await addNewMessage(filteredMessages, city, state);
     },

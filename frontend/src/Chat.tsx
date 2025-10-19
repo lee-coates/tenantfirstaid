@@ -12,12 +12,12 @@ export default function Chat() {
   useEffect(() => {
     const messageLetters = messages?.filter(
       (message) =>
-        message.content.split("-----generate letter-----").length === 2
+        message.content.split("-----generate letter-----").length === 2,
     );
     const latestLetter = messageLetters[messageLetters.length - 1];
     if (latestLetter) {
       setLetterContent(
-        latestLetter?.content.split("-----generate letter-----")[1].trim()
+        latestLetter?.content.split("-----generate letter-----")[1].trim(),
       );
     }
   }, [messages]);
