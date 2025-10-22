@@ -2,6 +2,7 @@ import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
 import useLocation from "./hooks/useLocation";
 import { useEffect, useState } from "react";
+import DOMPurify, { SANITIZE_SETTINGS } from "./shared/utils/dompurify";
 
 export default function Chat() {
   const { addMessage, messages, setMessages } = useMessages();
@@ -12,12 +13,14 @@ export default function Chat() {
   useEffect(() => {
     const messageLetters = messages?.filter(
       (message) =>
-        message.content.split("-----generate letter-----").length === 2,
+        message.content.split("-----generate letter-----").length === 2
     );
     const latestLetter = messageLetters[messageLetters.length - 1];
     if (latestLetter) {
       setLetterContent(
-        latestLetter?.content.split("-----generate letter-----")[1].trim(),
+        DOMPurify.sanitize(latestLetter?.content, SANITIZE_SETTINGS)
+          .split("-----generate letter-----")[1]
+          .trim()
       );
     }
   }, [messages]);
