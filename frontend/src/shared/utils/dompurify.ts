@@ -9,7 +9,7 @@ DOMPurify.addHook("afterSanitizeAttributes", (node) => {
 });
 
 export const SANITIZE_SETTINGS = {
-  ALLOWED_TAGS: ["a", "b", "em", "strong", "p"],
+  ALLOWED_TAGS: ["a", "em", "strong", "p"],
   ALLOWED_ATTR: ["href", "title", "target", "rel"],
   FORBID_TAGS: ["style", "script", "iframe", "object", "embed"],
 };
