@@ -54,7 +54,7 @@ app.config["MAIL_DEFAULT_SENDER"] = os.getenv("SENDER_EMAIL")
 
 # Logging configuration
 logging.basicConfig(
-    level=logging.DEBUG if os.getenv("ENV", "dev") == "dev" else logging.INFO,
+    level=logging.DEBUG if os.getenv("ENV") == "dev" else logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 
