@@ -1,11 +1,6 @@
-import vertexai
-from vertexai.preview import rag
-from vertexai.generative_models import (
-    GenerativeModel,
-    GenerationConfig,
-    Tool,
-)
-from flask import request, stream_with_context, Response
+from google import genai
+from google.genai import types
+from flask import current_app, request, stream_with_context, Response
 from flask.views import View
 import os
 
@@ -20,7 +15,7 @@ Focus on finding technicalities that would legally prevent someone getting evict
 Assume the user is on a month-to-month lease unless they specify otherwise.
 
 Use only the information from the file search results to answer the question.
-City codes will override the state codes if there is a conflict.
+City laws will override the state laws if there is a conflict. Make sure that if the user is in a specific city, you check for relevant city laws.
 
 Only answer questions about housing law in Oregon, do not answer questions about other states or topics unrelated to housing law.
 
@@ -40,11 +35,7 @@ If the user asks questions about Section 8 or the HomeForward program, search th
 
 class ChatManager:
     def __init__(self):
-        vertexai.init(project="tenantfirstaid", location="us-west1")
-        self.model = GenerativeModel(
-            model_name=MODEL,
-            system_instruction=DEFAULT_INSTRUCTIONS,
-        )
+        self.client = genai.Client(vertexai=True)
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
         # Add city and state filters if they are set
@@ -64,16 +55,10 @@ class ChatManager:
         instructions=None,
         model_name=MODEL,
     ):
-        print(f"Generating response for messages: {messages}")
         instructions = (
             instructions
             if instructions
             else self.prepare_developer_instructions(city, state)
-        )
-
-        self.model = GenerativeModel(
-            model_name=model_name,
-            system_instruction=instructions,
         )
 
         formatted_messages = []
@@ -88,22 +73,64 @@ class ChatManager:
                 }
             )
 
-        GEMINI_RAG_CORPUS = os.getenv("GEMINI_RAG_CORPUS")
-        rag_retrieval_tool = Tool.from_retrieval(
-            retrieval=rag.Retrieval(
-                source=rag.VertexRagStore(
-                    rag_resources=[rag.RagResource(rag_corpus=GEMINI_RAG_CORPUS)]
-                )
-            )
+        city = city.lower() if city is not None else None
+        state = state.lower() if state is not None else None
+
+        generate_content_config = types.GenerateContentConfig(
+            temperature=0,
+            top_p=0,
+            max_output_tokens=65535,
+            safety_settings=[
+                types.SafetySetting(
+                    category=types.HarmCategory("HARM_CATEGORY_HATE_SPEECH"),
+                    threshold=types.HarmBlockThreshold("OFF"),
+                ),
+                types.SafetySetting(
+                    category=types.HarmCategory("HARM_CATEGORY_DANGEROUS_CONTENT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
+                ),
+                types.SafetySetting(
+                    category=types.HarmCategory("HARM_CATEGORY_SEXUALLY_EXPLICIT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
+                ),
+                types.SafetySetting(
+                    category=types.HarmCategory("HARM_CATEGORY_HARASSMENT"),
+                    threshold=types.HarmBlockThreshold("OFF"),
+                ),
+            ],
+            system_instruction=[instructions],
+            thinking_config=types.ThinkingConfig(
+                include_thoughts=os.getenv("SHOW_MODEL_THINKING", "false").lower()
+                == "true",
+                thinking_budget=-1,
+            ),
+            tools=[
+                types.Tool(
+                    retrieval=types.Retrieval(
+                        vertex_ai_search=types.VertexAISearch(
+                            datastore=os.getenv("VERTEX_AI_DATASTORE"),
+                            filter=f'city: ANY("{city}") AND state: ANY("{state}")',
+                            max_results=5,
+                        )
+                    )
+                ),
+                types.Tool(
+                    retrieval=types.Retrieval(
+                        vertex_ai_search=types.VertexAISearch(
+                            datastore=os.getenv("VERTEX_AI_DATASTORE"),
+                            filter=f'city: ANY("null") AND state: ANY("{state}")',
+                            max_results=5,
+                        )
+                    )
+                ),
+            ],
         )
 
-        response = self.model.generate_content(
+        response = self.client.models.generate_content_stream(
+            model=MODEL,
             contents=formatted_messages,
-            stream=stream,
-            generation_config=GenerationConfig(temperature=0.2),
-            tools=[rag_retrieval_tool] if use_tools else None,
+            config=generate_content_config,
         )
-        print(f"Response: {response}")
 
         return response
 
@@ -115,10 +142,8 @@ class ChatView(View):
     def dispatch_request(self, *args, **kwargs) -> Response:
         data = request.json
         messages = data["messages"]
-        print(f"Received messages: {messages}")
 
         def generate():
-            # Use the new Responses API with streaming
             response_stream = self.chat_manager.generate_gemini_chat_response(
                 messages,
                 data["city"],
@@ -128,8 +153,18 @@ class ChatView(View):
 
             assistant_chunks = []
             for event in response_stream:
-                assistant_chunks.append(event.candidates[0].content.parts[0].text)
-                yield event.candidates[0].content.parts[0].text
+                current_app.logger.debug(f"Received event: {event}")
+                return_text = ""
+
+                if event.candidates is None:
+                    continue
+
+                for candidate in event.candidates:
+                    for part in candidate.content.parts:
+                        return_text += f"{'<i>' if part.thought else ''}{part.text}{'</i>' if part.thought else ''}"
+
+                assistant_chunks.append(return_text)
+                yield return_text
 
         return Response(
             stream_with_context(generate()),

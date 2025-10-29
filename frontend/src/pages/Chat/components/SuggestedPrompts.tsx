@@ -7,6 +7,7 @@ const prompts = [
   "I have a leak in my roof. Help me address this with my landlord.",
   "I received an eviction notice for non-payment of rent. What should I do?",
   "I received a 'no-cause' eviction notice. How much money is my landlord required to pay me to move out?",
+  "If my landlord put my security deposit in an interest-bearing account, are they required to give me the interest when I move out?",
 ];
 
 export default function SuggestedPrompts({
