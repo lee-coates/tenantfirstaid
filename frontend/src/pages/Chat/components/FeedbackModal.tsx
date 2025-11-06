@@ -10,12 +10,14 @@ interface Props {
 export default function FeedbackModal({ messages, setOpenFeedback }: Props) {
   const [feedback, setFeedback] = useState("");
   const [wordsToRedact, setWordsToRedact] = useState("");
+  const [emailsToCC, setEmailsToCC] = useState("");
   const [status, setStatus] = useState("idle");
 
   const handleModalClose = () => {
     setOpenFeedback(false);
     setStatus("idle");
     setFeedback("");
+    setEmailsToCC("");
     setWordsToRedact("");
   };
 
@@ -33,7 +35,13 @@ export default function FeedbackModal({ messages, setOpenFeedback }: Props) {
           />
           <input
             className="resize-none h-[20%] w-full px-3 py-2 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
-            placeholder="Please enter words to redact separated by commas"
+            placeholder="Enter email(s) to CC transcript separated by commas"
+            type="text"
+            onChange={(event) => setEmailsToCC(event.target.value)}
+          />
+          <input
+            className="resize-none h-[20%] w-full px-3 py-2 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+            placeholder="Please enter word(s) to redact separated by commas"
             type="text"
             onChange={(event) => setWordsToRedact(event.target.value)}
           />
@@ -50,7 +58,7 @@ export default function FeedbackModal({ messages, setOpenFeedback }: Props) {
             if (feedback.trim() === "") handleModalClose();
             setStatus("sending");
             setTimeout(() => {
-              sendFeedback(messages, feedback, wordsToRedact);
+              sendFeedback(messages, feedback, emailsToCC, wordsToRedact);
               handleModalClose();
             }, 1000);
           }}

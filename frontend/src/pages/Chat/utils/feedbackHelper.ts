@@ -14,7 +14,10 @@ function sanitizeText(str: string) {
 
 function redactText(message: string, wordsToRedact: string) {
   let redactedMessage = message;
-  const redactList = wordsToRedact.split(/\s*,\s*/).map((s) => s.trim());
+  const redactList = wordsToRedact
+    .split(/\s*,\s*/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
   redactList.forEach((word) => {
     const regex = new RegExp(`\\b${word.replace(/\s+/g, "\\s+")}\\b`, "gi");
     redactedMessage = redactedMessage.replace(regex, () => {
@@ -32,7 +35,8 @@ function redactText(message: string, wordsToRedact: string) {
 export default async function sendFeedback(
   messages: IMessage[],
   userFeedback: string,
-  wordsToRedact: string,
+  emailsToCC: string,
+  wordsToRedact: string
 ) {
   if (messages.length < 2) return;
 
@@ -41,7 +45,7 @@ export default async function sendFeedback(
       ({ role, content }) =>
         `<p><strong>${
           role.charAt(0).toUpperCase() + role.slice(1)
-        }</strong>: ${redactText(sanitizeText(content), wordsToRedact)}</p>`,
+        }</strong>: ${redactText(sanitizeText(content), wordsToRedact)}</p>`
     )
     .join("");
 
@@ -73,6 +77,7 @@ export default async function sendFeedback(
   const formData = new FormData();
 
   formData.append("feedback", userFeedback);
+  formData.append("emailsToCC", emailsToCC);
   formData.append("transcript", blob, "transcript.html");
 
   await fetch("/api/feedback", {
