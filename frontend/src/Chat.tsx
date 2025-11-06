@@ -43,9 +43,7 @@ export default function Chat() {
                   <span
                     className="whitespace-pre-wrap generated-letter"
                     dangerouslySetInnerHTML={{
-                      __html: letterContent
-                        .split("-----generate letter-----")[0]
-                        .trim(),
+                      __html: letterContent,
                     }}
                   />
                 </div>
