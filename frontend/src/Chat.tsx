@@ -3,12 +3,15 @@ import useMessages from "./hooks/useMessages";
 import useLocation from "./hooks/useLocation";
 import { useEffect, useState } from "react";
 import DOMPurify, { SANITIZE_SETTINGS } from "./shared/utils/dompurify";
+import { useSearchParams } from "react-router-dom";
+import { CitySelectOptions } from "./pages/Chat/components/CitySelectField";
 
 export default function Chat() {
   const { addMessage, messages, setMessages } = useMessages();
   const { location, setLocation } = useLocation();
   const isOngoing = messages.length > 0;
   const [letterContent, setLetterContent] = useState("");
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const messageLetters = messages?.filter(
@@ -24,6 +27,81 @@ export default function Chat() {
       );
     }
   }, [messages]);
+
+  useEffect(() => {
+    const runGenerateLetter = async () => {
+      const loc = searchParams.get("loc");
+      const org = searchParams.get("org");
+      if (loc !== null) {
+        const selectedLocation = CitySelectOptions[loc];
+        const locationString =
+          selectedLocation.state === null && selectedLocation.city !== null
+            ? selectedLocation.city
+            : `${selectedLocation.city}, ${selectedLocation.state}`;
+
+        const userMessage = `Hello${org ? `, I've been redirected from ${org}` : ""}. I wish to draft a letter related to housing assistance for my area${selectedLocation.city === null ? "" : ` (${locationString})`}, can you start a template letter for me? We can update the letter as we discuss. You can update my location in the letter.`;
+        const userMessageId = Date.now().toString();
+        const botMessageId = (Date.now() + 1).toString();
+
+        // Add user message
+        setMessages((prev) => [
+          ...prev,
+          { role: "user", content: userMessage, messageId: userMessageId },
+        ]);
+
+        // Add empty bot message that will be updated
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "model",
+            content: "",
+            messageId: botMessageId,
+          },
+        ]);
+        try {
+          const reader = await addMessage({
+            city: selectedLocation.city,
+            state: selectedLocation.state || "",
+          });
+          if (!reader) return;
+          const decoder = new TextDecoder();
+          let fullText = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value);
+            fullText += chunk;
+
+            // Update only the bot's message
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.messageId === botMessageId
+                  ? { ...msg, content: fullText }
+                  : msg,
+              ),
+            );
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.messageId === botMessageId
+                ? {
+                    ...msg,
+                    content: "Sorry, I encountered an error. Please try again.",
+                  }
+                : msg,
+            ),
+          );
+        }
+      }
+    };
+
+    if (searchParams.size > 0) {
+      runGenerateLetter();
+    }
+  }, [searchParams, addMessage, setMessages]);
 
   return (
     <div className="h-dvh pt-16 flex items-center">

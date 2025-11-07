@@ -84,7 +84,7 @@ export default function MessageWindow({
                         : "bg-[#1F584F] text-white rounded-tr-sm"
                     }`}
                   >
-                    <MessageContent message={message} isLoading={isLoading} />
+                    <MessageContent message={message} />
                   </div>
                 </div>
               ))}
