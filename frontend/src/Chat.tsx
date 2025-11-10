@@ -16,14 +16,14 @@ export default function Chat() {
   useEffect(() => {
     const messageLetters = messages?.filter(
       (message) =>
-        message.content.split("-----generate letter-----").length === 2,
+        message.content.split("-----generate letter-----").length === 2
     );
     const latestLetter = messageLetters[messageLetters.length - 1];
     if (latestLetter) {
       setLetterContent(
         DOMPurify.sanitize(latestLetter?.content, SANITIZE_SETTINGS)
           .split("-----generate letter-----")[1]
-          .trim(),
+          .trim()
       );
     }
   }, [messages]);
@@ -34,6 +34,7 @@ export default function Chat() {
       const org = searchParams.get("org");
       if (loc !== null) {
         const selectedLocation = CitySelectOptions[loc];
+        if (selectedLocation === undefined) return;
         const locationString =
           selectedLocation.state === null && selectedLocation.city !== null
             ? selectedLocation.city
@@ -78,8 +79,8 @@ export default function Chat() {
               prev.map((msg) =>
                 msg.messageId === botMessageId
                   ? { ...msg, content: fullText }
-                  : msg,
-              ),
+                  : msg
+              )
             );
           }
         } catch (error) {
@@ -91,8 +92,8 @@ export default function Chat() {
                     ...msg,
                     content: "Sorry, I encountered an error. Please try again.",
                   }
-                : msg,
-            ),
+                : msg
+            )
           );
         }
       }
