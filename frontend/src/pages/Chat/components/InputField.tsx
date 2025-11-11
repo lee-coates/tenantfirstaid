@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { type IMessage } from "../../../hooks/useMessages";
 import { ILocation } from "../../../hooks/useLocation";
+import { streamText } from "../utils/streamHelper";
 
 interface Props {
   addMessage: (args: {
@@ -29,70 +30,17 @@ export default function InputField({
   const handleSend = async () => {
     if (!value.trim()) return;
 
-    const userMessage = value;
-    const userMessageId = Date.now().toString();
-    const botMessageId = (Date.now() + 1).toString();
-
     onChange({
       target: { value: "" },
     } as React.ChangeEvent<HTMLTextAreaElement>);
-    setIsLoading(true);
 
-    // Add user message
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", content: userMessage, messageId: userMessageId },
-    ]);
-
-    // Add empty bot message that will be updated
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "model",
-        content: "",
-        messageId: botMessageId,
-      },
-    ]);
-
-    try {
-      const reader = await addMessage({
-        city: location?.city,
-        state: location?.state || "",
-      });
-      if (!reader) return;
-      const decoder = new TextDecoder();
-      let fullText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value);
-        fullText += chunk;
-
-        // Update only the bot's message
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.messageId === botMessageId
-              ? { ...msg, content: fullText }
-              : msg,
-          ),
-        );
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.messageId === botMessageId
-            ? {
-                ...msg,
-                content: "Sorry, I encountered an error. Please try again.",
-              }
-            : msg,
-        ),
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    await streamText({
+      userMessage: value,
+      addMessage,
+      setMessages,
+      location,
+      setIsLoading,
+    });
   };
 
   const resizeTextArea = useCallback(() => {
