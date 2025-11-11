@@ -11,24 +11,24 @@ graph TB
     subgraph "Client"
         Frontend[React Frontend<br/>Vite + TypeScript]
     end
-    
+
     subgraph "Backend Services"
         API[Flask API Server<br/>Python]
         Session[Session Management<br/>Valkey/Redis]
     end
-    
+
     subgraph "AI/ML Services"
         Gemini[Google Gemini 2.5 Pro<br/>LLM]
         RAG[Vertex AI RAG<br/>Document Retrieval]
         Corpus[RAG Corpus<br/>Oregon Housing Law]
     end
-    
+
     subgraph "Infrastructure"
         Nginx[Nginx<br/>Reverse Proxy]
         DO[Digital Ocean<br/>Ubuntu 24.04 LTS]
         Systemd[Systemd Service<br/>Process Management]
     end
-    
+
     Frontend --> API
     API --> Session
     API --> Gemini
@@ -37,7 +37,7 @@ graph TB
     Nginx --> API
     DO --> Nginx
     Systemd --> API
-    
+
     style Frontend fill:#61dafb
     style API fill:#0d47a1
     style Gemini fill:#4285f4
@@ -86,6 +86,7 @@ backend/
 The system uses **Vertex AI RAG (Retrieval-Augmented Generation)**, which combines Google's Vertex AI vector search capabilities with the Gemini 2.5 Pro language model. This is specifically a **grounded generation** approach where the LLM has access to a tool-based retrieval system that searches through a curated corpus of Oregon housing law documents.
 
 **RAG Type and Category:**
+
 - **Architecture Type**: Tool-augmented RAG with function calling
 - **Implementation**: Vertex AI managed RAG service
 - **Retrieval Method**: Dense vector similarity search with semantic matching
@@ -102,17 +103,17 @@ graph LR
         Portland[Portland City<br/>Codes]
         Eugene[Eugene City<br/>Codes]
     end
-    
+
     subgraph "Processing Pipeline"
         Script[create_vector_store.py]
         Upload[File Upload<br/>to OpenAI]
         Metadata[Attribute Tagging<br/>city, state]
     end
-    
+
     subgraph "Storage"
         VectorStore[Vertex AI<br/>RAG Corpus]
     end
-    
+
     ORS --> Script
     Portland --> Script
     Eugene --> Script
@@ -124,10 +125,12 @@ graph LR
 **Data Ingestion Process:**
 
 1. **Document Collection**: Legal documents are stored as text files organized by jurisdiction:
+
    - State laws: `documents/or/*.txt`
    - City codes: `documents/or/portland/*.txt`, `documents/or/eugene/*.txt`
 
 2. **Vector Store Creation**: The `create_vector_store.py` script:
+
    - Processes documents by directory structure
    - Adds metadata attributes (city, state) for filtering
    - Uploads files to Vertex AI RAG corpus
@@ -147,7 +150,7 @@ sequenceDiagram
     participant Gemini as Gemini 2.5 Pro
     participant RAG as Vertex AI RAG
     participant Corpus as Document Corpus
-    
+
     User->>Flask: POST /api/query
     Flask->>Session: Get conversation history
     Flask->>Gemini: Generate response with RAG tool
@@ -180,18 +183,18 @@ graph TB
         Browser[Browser Session<br/>Flask Session Cookie]
         SessionID[Unique Session ID<br/>UUID v4]
     end
-    
+
     subgraph "Server Session Management"
         SessionManager[TenantSession<br/>Manager]
         Valkey[(Valkey Database<br/>Session Storage)]
     end
-    
+
     subgraph "Conversation State"
         Messages[Message History<br/>Array]
         Context[User Context<br/>City, State]
         Metadata[Session Metadata<br/>Timestamps, IDs]
     end
-    
+
     Browser --> SessionID
     SessionID --> SessionManager
     SessionManager --> Valkey
@@ -203,11 +206,13 @@ graph TB
 ### Conversation Persistence
 
 **Session Data Structure:**
+
 ```typescript
 interface TenantSessionData {
-  city: string;           // User's city (e.g., "portland", "eugene", "null")
-  state: string;          // User's state (default: "or")
-  messages: Array<{       // Complete conversation history
+  city: string; // User's city (e.g., "portland", "eugene", "null")
+  state: string; // User's state (default: "or")
+  messages: Array<{
+    // Complete conversation history
     role: "user" | "model";
     content: string;
   }>;
@@ -217,18 +222,21 @@ interface TenantSessionData {
 **Multi-Turn Implementation Details:**
 
 1. **Session Initialization** (`/api/init`):
+
    - Creates UUID v4 session identifier
    - Initializes empty message array
    - Stores user location context (city/state)
    - Uses Flask secure session cookies
 
 2. **Conversation Flow**:
+
    - Each message exchange appends to `messages` array
    - Complete conversation history sent to Gemini for context
    - Location metadata enables jurisdiction-specific legal advice
    - Session state persisted to Valkey after each interaction
 
 3. **Context Preservation**:
+
    - Full message history passed to Gemini API on each request
    - System instructions include location-specific context
    - Previous legal advice references maintained across turns
@@ -252,78 +260,128 @@ sequenceDiagram
     participant API as Flask API
     participant Gemini as Gemini 2.5 Pro
     participant RAG as Vertex AI RAG
-    
+
     UI->>API: POST /api/query with user message
     API->>API: Add user message to session
     API->>Gemini: Generate with stream=True + conversation history
     Gemini->>RAG: Tool call: retrieve relevant documents
     RAG-->>Gemini: Return legal passages
-    
+
     loop Streaming Response
         Gemini-->>API: Yield text chunk
         API-->>UI: Stream chunk via Response
         UI->>UI: Update message content incrementally
     end
-    
+
     API->>API: Concatenate full response & update session
 ```
 
 ### Backend Streaming Implementation
 
 **Stream Generation** (`chat.py:131-157`):
+
 ```python
 def generate():
     response_stream = self.chat_manager.generate_gemini_chat_response(
         current_session["messages"],
-        current_session["city"], 
+        current_session["city"],
         current_session["state"],
         stream=True,  # Enable streaming
     )
-    
+
     assistant_chunks = []
     for event in response_stream:
         # Extract text chunk from Gemini response
         chunk = event.candidates[0].content.parts[0].text
         assistant_chunks.append(chunk)
         yield chunk  # Stream to client
-    
+
     # Persist complete response
     assistant_msg = "".join(assistant_chunks)
     current_session["messages"].append({
-        "role": "model", 
+        "role": "model",
         "content": assistant_msg
     })
-    
+
 return Response(stream_with_context(generate()), mimetype="text/plain")
 ```
 
 ### Frontend Streaming Implementation
 
-**Stream Processing** (`InputField.tsx:52-71`):
-```typescript
-const reader = await addMessage(userMessage);
-const decoder = new TextDecoder();
-let fullText = "";
+**Stream Processing** (`streamHelper.ts:15-80`):
 
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
-  
-  const chunk = decoder.decode(value);
-  fullText += chunk;
-  
-  // Real-time UI update
-  setMessages((prev) =>
-    prev.map((msg) =>
-      msg.messageId === botMessageId
-        ? { ...msg, content: fullText }
-        : msg,
-    ),
-  );
+```typescript
+async function streamText({
+  userMessage,
+  addMessage,
+  setMessages,
+  location,
+  setIsLoading,
+}: IStreamTextOptions) {
+  const userMessageId = Date.now().toString();
+  const botMessageId = (Date.now() + 1).toString();
+
+  setIsLoading?.(true);
+
+  // Creates initial user input
+  setMessages((prev) => [
+    ...prev,
+    { role: "user", content: userMessage, messageId: userMessageId },
+  ]);
+
+  // Create empty bot message that will be updated
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "model",
+      content: "",
+      messageId: botMessageId,
+    },
+  ]);
+
+  try {
+    const reader = await addMessage({
+      city: location?.city,
+      state: location?.state || "",
+    });
+    if (!reader) return;
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      fullText += chunk;
+
+      // Real time update for bot message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
+        )
+      );
+    }
+  } catch (error) {
+    // Error handling in case of unforeseen errors
+    console.error("Error:", error);
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.messageId === botMessageId
+          ? {
+              ...msg,
+              content: "Sorry, I encountered an error. Please try again.",
+            }
+          : msg
+      )
+    );
+  } finally {
+    setIsLoading?.(false);
+  }
 }
 ```
 
 **Streaming Features:**
+
 - **Real-time Display**: Text appears character-by-character as generated
 - **Fetch Streams API**: Uses native browser `ReadableStream` via `response.body.getReader()`
 - **Error Handling**: Graceful fallback to error message if streaming fails
@@ -331,6 +389,7 @@ while (true) {
 - **Session Persistence**: Complete response saved to session storage after streaming
 
 **Performance Benefits:**
+
 - **Reduced Perceived Latency**: Users see responses immediately as they're generated
 - **Better UX**: Natural conversation flow without waiting for complete responses
 - **Scalability**: Server can handle multiple concurrent streaming connections
@@ -339,12 +398,14 @@ while (true) {
 ### Framework
 
 **Core Technologies:**
+
 - **Flask 3.1.1**: Web framework for API endpoints
 - **Vertex AI**: Google Cloud AI platform for LLM and RAG
 - **Valkey 6.1.0**: Redis-compatible session storage
 - **Gunicorn 23.0.0**: WSGI HTTP server for production
 
 **AI/ML Stack:**
+
 - **Google Gemini 2.5 Pro**: Large language model
 - **Vertex AI RAG**: Document retrieval system
 - **Google Cloud AI Platform**: Managed AI services
@@ -353,15 +414,16 @@ while (true) {
 
 The backend exposes the following REST API endpoints:
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/init` | POST | Initialize new chat session with location |
-| `/api/query` | POST | Send user message and get AI response |
-| `/api/history` | GET | Retrieve conversation history |
-| `/api/clear-session` | POST | Clear current session |
-| `/api/citation` | GET | Retrieve specific legal citation |
+| Endpoint             | Method | Description                               |
+| -------------------- | ------ | ----------------------------------------- |
+| `/api/init`          | POST   | Initialize new chat session with location |
+| `/api/query`         | POST   | Send user message and get AI response     |
+| `/api/history`       | GET    | Retrieve conversation history             |
+| `/api/clear-session` | POST   | Clear current session                     |
+| `/api/citation`      | GET    | Retrieve specific legal citation          |
 
 **API Flow:**
+
 ```mermaid
 graph TD
     Init[POST /api/init] --> Session[Create Session<br/>with location]
@@ -383,77 +445,89 @@ The frontend is a modern React application built with TypeScript and Vite. It pr
 ```
 frontend/
 ├── src/
-│   ├── App.tsx                     # Main application component
+│   ├── App.tsx                     # Main application component with routing logic
 │   ├── Chat.tsx                    # Chat page component
+│   ├── Letter.tsx                  # Letter page component
 │   ├── About.tsx                   # About page
 │   ├── Disclaimer.tsx              # Legal disclaimer
 │   ├── PrivacyPolicy.tsx           # Privacy policy
 │   ├── main.tsx                    # Application entry point
 │   ├── style.css                   # Global styles
-│   ├── contexts/                   # React contexts
-│   │   └── SessionContext.tsx      # Session state management
 │   ├── hooks/                      # Custom React hooks
 │   │   ├── useMessages.tsx         # Message handling logic
 │   │   ├── useSession.tsx          # Session management
-│   │   └── useStatutes.tsx         # Legal statute handling
+│   │   └── useLetterContent.tsx    # State management for letter generation
 │   ├── pages/Chat/                 # Chat page components
 │   │   ├── components/
 │   │   │   ├── CitySelectField.tsx # Location selection
 │   │   │   ├── ExportMessagesButton.tsx # Chat export
 │   │   │   ├── InputField.tsx      # Message input
+│   │   │   ├── FeedbackModal.tsx   # Feedback modal
 │   │   │   ├── MessageContent.tsx  # Message display
 │   │   │   ├── MessageWindow.tsx   # Chat window
 │   │   │   ├── Navbar.tsx          # Navigation
-│   │   │   ├── StatuteDrawer.tsx   # Legal reference drawer
 │   │   │   └── SuggestedPrompts.tsx # Prompt suggestions
 │   │   └── utils/
-│   │       └── exportHelper.ts     # Export functionality
-│   └── shared/                     # Shared components
-│       └── components/
-│           ├── BackLink.tsx        # Navigation component
-│           ├── BeaverIcon.tsx      # Oregon-themed icon
-│           └── TenatFirstAidLogo.tsx # Application logo
+│   │       ├── exportHelper.ts     # Export functionality
+│   │       ├── feedbackHelper.tsx  # Feedback functionality
+│   │       └── streamHelper.tsx    # Stream functionality
+│   └── shared/                     # Shared components and utils
+│   │   ├── components/
+│   │   │   ├── BackLink.tsx        # Navigation component
+│   │   │   ├── BeaverIcon.tsx      # Oregon-themed icon
+│   │   │   └── TenatFirstAidLogo.tsx # Application logo
+│   │   └── utils/
+│   │       └── dompurify.ts        # Helper function for sanitizing text
+│   └── tests/
+│   │   ├── components/
+│   │   │   └── Chat.test.tsx       # Chat component testing
+│   │   └── utils/
+│   │       └── dompurify.test.ts   # dompurify testing
 ├── public/
 │   └── favicon.svg                 # Site favicon
 ├── package.json                    # Dependencies and scripts
 ├── vite.config.ts                  # Vite configuration
+├── vitest.config.ts                # Vitest configuration
 ├── tsconfig.json                   # TypeScript configuration
-└── eslint.config.js               # ESLint configuration
+└── eslint.config.js                # ESLint configuration
 ```
 
 ### Framework
 
 **Core Technologies:**
+
 - **React 19.0.0**: Component-based UI library
 - **TypeScript 5.7.2**: Type-safe JavaScript
 - **Vite 6.3.1**: Fast build tool and dev server
 - **Tailwind CSS 4.1.6**: Utility-first CSS framework
 
 **State Management:**
+
 - **React Query (@tanstack/react-query)**: Server state management
 - **React Router DOM**: Client-side routing
 - **React Context**: Application-wide state
 
 **Frontend Architecture:**
+
 ```mermaid
 graph TB
     subgraph "Application Layer"
         App[App.tsx<br/>Router Setup]
         Routes[Route Components]
     end
-    
+
     subgraph "State Management"
         Context[SessionContext<br/>Global State]
         Hooks[Custom Hooks<br/>Business Logic]
         ReactQuery[React Query<br/>Server State]
     end
-    
+
     subgraph "UI Components"
         Pages[Page Components]
         Shared[Shared Components]
         ChatComponents[Chat Components]
     end
-    
+
     App --> Routes
     Routes --> Pages
     Pages --> ChatComponents
@@ -470,11 +544,13 @@ graph TB
 The application is deployed on Digital Ocean infrastructure with the following setup:
 
 **Server Specifications:**
+
 - **Platform**: Ubuntu LTS 24.04
 - **Resources**: 2 CPUs, 2GB RAM
 - **Provider**: Digital Ocean
 
 **Technology Stack:**
+
 ```mermaid
 graph TB
     subgraph "External Services"
@@ -483,7 +559,7 @@ graph TB
         Porkbun[Porkbun<br/>DNS Provider]
         GCP[Google Cloud Platform<br/>AI Services]
     end
-    
+
     subgraph "Digital Ocean Server"
         Nginx[Nginx<br/>Reverse Proxy & SSL]
         Systemd[Systemd<br/>Process Manager]
@@ -491,7 +567,7 @@ graph TB
         Flask[Flask Application]
         Valkey[Valkey<br/>Session Storage]
     end
-    
+
     Users --> Nginx
     Certbot --> Nginx
     Porkbun --> Users
@@ -503,6 +579,7 @@ graph TB
 ```
 
 **Service Configuration:**
+
 - **Web Server**: Nginx as reverse proxy with SSL termination
 - **Application Server**: Gunicorn with 10 worker processes
 - **Process Management**: Systemd service for automatic restart and monitoring
@@ -513,45 +590,49 @@ graph TB
 The application uses environment-based secrets management:
 
 **Configuration Files:**
+
 - **Production**: `/etc/tenantfirstaid/env` - Environment file loaded by systemd service
 - **Development**: `backend/.env` - Local environment file (git-ignored)
 
 **Required Secrets:**
+
 - `FLASK_SECRET_KEY` - Session encryption key
 - `GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_FILE` - Path to GCP service account JSON
 - `GEMINI_RAG_CORPUS` - Vertex AI RAG corpus identifier
 - `OPENAI_API_KEY` - OpenAI API key (used by data ingestion scripts)
 
 **Security Measures:**
+
 - Environment variables loaded at service startup
 - Service account credentials stored as JSON file
 - SSL/TLS encryption via Let's Encrypt certificates
 - Secure session cookies with HttpOnly and SameSite attributes
 
 **Deployment Architecture:**
+
 ```mermaid
 graph LR
     subgraph "Client"
         Browser[Web Browser]
     end
-    
+
     subgraph "Edge"
         DNS[Porkbun DNS]
         SSL[Let's Encrypt]
     end
-    
+
     subgraph "Digital Ocean"
         LB[Nginx<br/>Port 443/80]
         App[Gunicorn + Flask<br/>Unix Socket]
         DB[Valkey<br/>Session Store]
         Files[Config Files<br/>/etc/tenantfirstaid/]
     end
-    
+
     subgraph "Google Cloud"
         Vertex[Vertex AI<br/>Gemini + RAG]
         Auth[Service Account<br/>Authentication]
     end
-    
+
     Browser --> DNS
     DNS --> SSL
     SSL --> LB
