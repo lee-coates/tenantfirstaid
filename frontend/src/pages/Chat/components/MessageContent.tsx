@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function MessageContent({ message }: Props) {
-  const letterContent = DOMPurify.sanitize(message.content, SANITIZE_SETTINGS)
+  const messageContent = DOMPurify.sanitize(message.content, SANITIZE_SETTINGS)
     .split("-----generate letter-----")[0]
     .trim();
 
@@ -14,9 +14,9 @@ export default function MessageContent({ message }: Props) {
     <>
       <strong>{message.role === "model" ? "Bot: " : "You: "}</strong>
       <span
-        className={`whitespace-pre-wrap ${letterContent.length === 0 ? "animate-dot-pulse" : ""}`}
+        className={`whitespace-pre-wrap ${messageContent.length === 0 ? "animate-dot-pulse" : ""}`}
         dangerouslySetInnerHTML={{
-          __html: letterContent.length === 0 ? "..." : letterContent,
+          __html: messageContent.length === 0 ? "..." : messageContent,
         }}
       ></span>
     </>
