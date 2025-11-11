@@ -21,7 +21,11 @@ def send_feedback() -> Tuple[str, int]:
     file = request.files.get("transcript")
 
     emails_to_cc = request.form.get("emailsToCC")
-    cc_list = [email.strip() for email in emails_to_cc.split(",") if email.strip()]
+    cc_list = [
+        stripped_email
+        for email in emails_to_cc.split(",")
+        if (stripped_email := email.strip())
+    ]
 
     if not file:
         return "No file provided", 404
@@ -39,13 +43,11 @@ def send_feedback() -> Tuple[str, int]:
         "from_email": os.getenv("SENDER_EMAIL"),
         "to": [os.getenv("RECIPIENT_EMAIL")],
         "body": f"User feedback:\n\n{feedback}\n\nTranscript is attached below",
+        "cc": cc_list,
     }
 
-    if cc_list:
-        email_params["cc"] = cc_list
-
     try:
-        msg = EmailMessage(**email_params)
+        msg = EmailMessage(email_params)
         msg.attach(
             "transcript.pdf",
             pdf_content,
