@@ -4,6 +4,7 @@ import About from "./About";
 import Navbar from "./pages/Chat/components/Navbar";
 import Disclaimer from "./Disclaimer";
 import PrivacyPolicy from "./PrivacyPolicy";
+import Letter from "./Letter";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Chat />} />
+        <Route path="/letter/:loc/:org?" element={<Letter />} />
         <Route path="/about" element={<About />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
