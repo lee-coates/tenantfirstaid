@@ -8,14 +8,14 @@ export function useLetterContent(messages: IMessage[]) {
   useEffect(() => {
     const messageLetters = messages?.filter(
       (message) =>
-        message.content.split("-----generate letter-----").length === 2
+        message.content.split("-----generate letter-----").length === 2,
     );
     const latestLetter = messageLetters[messageLetters.length - 1];
     if (latestLetter) {
       setLetterContent(
         DOMPurify.sanitize(latestLetter?.content, SANITIZE_SETTINGS)
           .split("-----generate letter-----")[1]
-          .trim()
+          .trim(),
       );
     }
   }, [messages]);

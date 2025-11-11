@@ -15,70 +15,70 @@ export default function Letter() {
 
   useEffect(() => {
     const runGenerateLetter = async () => {
-      if (loc !== undefined) {
-        const selectedLocation = CitySelectOptions[loc];
-        if (selectedLocation === undefined) return;
-        const locationString =
-          selectedLocation.state === null && selectedLocation.city !== null
-            ? selectedLocation.city
-            : `${selectedLocation.city}, ${selectedLocation.state}`;
+      const selectedLocation = CitySelectOptions[loc || "oregon"];
+      if (selectedLocation === undefined) return;
+      const locationString =
+        selectedLocation.city && selectedLocation.state
+          ? `${selectedLocation.city}, ${selectedLocation.state}`
+          : selectedLocation.city ||
+            selectedLocation.state?.toUpperCase() ||
+            "";
 
-        const userMessage = `Hello${org ? `, I've been redirected from ${org}` : ""}. I wish to draft a letter related to housing assistance for my area${selectedLocation.city === null ? "" : ` (${locationString})`}, can you start a template letter for me? We can update the letter as we discuss. You can update my location in the letter.`;
-        const userMessageId = Date.now().toString();
-        const botMessageId = (Date.now() + 1).toString();
+      const userMessage = `Hello${org ? `, I've been redirected from ${org}` : ""}. I wish to draft a letter related to housing assistance for my area${locationString ? ` (${locationString})` : ""}, can you start a template letter for me? We can update the letter as we discuss. You can update my location in the letter.`;
+      const userMessageId = Date.now().toString();
+      const botMessageId = (Date.now() + 1).toString();
 
-        // Add user message
-        setMessages((prev) => [
-          ...prev,
-          { role: "user", content: userMessage, messageId: userMessageId },
-        ]);
+      // Add user message
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", content: userMessage, messageId: userMessageId },
+      ]);
 
-        // Add empty bot message that will be updated
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "model",
-            content: "",
-            messageId: botMessageId,
-          },
-        ]);
-        try {
-          const reader = await addMessage({
-            city: selectedLocation.city,
-            state: selectedLocation.state || "",
-          });
-          if (!reader) return;
-          const decoder = new TextDecoder();
-          let fullText = "";
+      // Add empty bot message that will be updated
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "model",
+          content: "",
+          messageId: botMessageId,
+        },
+      ]);
+      try {
+        const reader = await addMessage({
+          city: selectedLocation.city,
+          state: selectedLocation.state || "",
+        });
+        if (!reader) return;
+        const decoder = new TextDecoder();
+        let fullText = "";
 
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            const chunk = decoder.decode(value);
-            fullText += chunk;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value);
+          fullText += chunk;
 
-            // Update only the bot's message
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.messageId === botMessageId
-                  ? { ...msg, content: fullText }
-                  : msg
-              )
-            );
-          }
-        } catch (error) {
-          console.error("Error:", error);
+          // Update only the bot's message
           setMessages((prev) =>
             prev.map((msg) =>
               msg.messageId === botMessageId
-                ? {
-                    ...msg,
-                    content: "Sorry, I encountered an error. Please try again.",
-                  }
-                : msg
-            )
+                ? { ...msg, content: fullText }
+                : msg,
+            ),
           );
         }
+      } catch (error) {
+        console.error("Error:", error);
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.messageId === botMessageId
+              ? {
+                  ...msg,
+                  content: "Sorry, I encountered an error. Please try again.",
+                }
+              : msg,
+          ),
+        );
       }
     };
 
