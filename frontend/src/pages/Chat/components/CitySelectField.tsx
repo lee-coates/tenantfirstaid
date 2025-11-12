@@ -3,7 +3,7 @@ import BeaverIcon from "../../../shared/components/BeaverIcon";
 import { ILocation } from "../../../hooks/useLocation";
 import { useState } from "react";
 
-interface CitySelectOptionType {
+export interface CitySelectOptionType {
   city: string | null;
   state: string | null;
   label: string;

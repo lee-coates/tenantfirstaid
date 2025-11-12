@@ -3,9 +3,9 @@ import useMessages from "./hooks/useMessages";
 import useLocation from "./hooks/useLocation";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { CitySelectOptions } from "./pages/Chat/components/CitySelectField";
 import { useLetterContent } from "./hooks/useLetterContent";
 import { streamText } from "./pages/Chat/utils/streamHelper";
+import { buildLetterUserMessage } from "./pages/Chat/utils/letterHelper";
 
 export default function Letter() {
   const { addMessage, messages, setMessages } = useMessages();
@@ -16,22 +16,15 @@ export default function Letter() {
 
   useEffect(() => {
     const runGenerateLetter = async () => {
-      const selectedLocation = CitySelectOptions[loc || "oregon"];
-      if (selectedLocation === undefined) return;
-      const locationString =
-        selectedLocation.city && selectedLocation.state
-          ? `${selectedLocation.city}, ${selectedLocation.state}`
-          : selectedLocation.city ||
-            selectedLocation.state?.toUpperCase() ||
-            "";
-
-      const userMessage = `Hello${org ? `, I've been redirected from ${org}` : ""}. I wish to draft a letter related to housing assistance for my area${locationString ? ` (${locationString})` : ""}, can you start a template letter for me? We can update the letter as we discuss. You can update my location in the letter.`;
+      if (org === undefined) return;
+      const output = buildLetterUserMessage(org, loc);
+      if (output === null) return;
 
       await streamText({
-        userMessage,
+        userMessage: output.userMessage,
         addMessage,
         setMessages,
-        location: selectedLocation,
+        location: output.selectedLocation,
       });
     };
 
