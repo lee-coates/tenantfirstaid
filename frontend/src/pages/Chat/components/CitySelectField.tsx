@@ -3,7 +3,13 @@ import BeaverIcon from "../../../shared/components/BeaverIcon";
 import { ILocation } from "../../../hooks/useLocation";
 import { useState } from "react";
 
-const CitySelectOptions = {
+export interface CitySelectOptionType {
+  city: string | null;
+  state: string | null;
+  label: string;
+}
+
+const CitySelectOptions: Record<string, CitySelectOptionType> = {
   portland: {
     city: "portland",
     state: "or",
@@ -25,6 +31,8 @@ const CitySelectOptions = {
     label: "City in another state",
   },
 };
+
+export { CitySelectOptions };
 
 interface Props {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;

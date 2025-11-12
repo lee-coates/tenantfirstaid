@@ -301,26 +301,75 @@ return Response(stream_with_context(generate()), mimetype="text/plain")
 
 ### Frontend Streaming Implementation
 
-**Stream Processing** (`InputField.tsx:52-71`):
+**Stream Processing** (`streamHelper.ts:15-80`):
 
 ```typescript
-const reader = await addMessage(userMessage);
-const decoder = new TextDecoder();
-let fullText = "";
+async function streamText({
+  userMessage,
+  addMessage,
+  setMessages,
+  location,
+  setIsLoading,
+}: IStreamTextOptions) {
+  const userMessageId = Date.now().toString();
+  const botMessageId = (Date.now() + 1).toString();
 
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
+  setIsLoading?.(true);
 
-  const chunk = decoder.decode(value);
-  fullText += chunk;
+  // Creates initial user input
+  setMessages((prev) => [
+    ...prev,
+    { role: "user", content: userMessage, messageId: userMessageId },
+  ]);
 
-  // Real-time UI update
-  setMessages((prev) =>
-    prev.map((msg) =>
-      msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
-    )
-  );
+  // Create empty bot message that will be updated
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "model",
+      content: "",
+      messageId: botMessageId,
+    },
+  ]);
+
+  try {
+    const reader = await addMessage({
+      city: location?.city,
+      state: location?.state || "",
+    });
+    if (!reader) return;
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      fullText += chunk;
+
+      // Real time update for bot message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
+        )
+      );
+    }
+  } catch (error) {
+    // Error handling in case of unforeseen errors
+    console.error("Error:", error);
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.messageId === botMessageId
+          ? {
+              ...msg,
+              content: "Sorry, I encountered an error. Please try again.",
+            }
+          : msg
+      )
+    );
+  } finally {
+    setIsLoading?.(false);
+  }
 }
 ```
 
@@ -389,42 +438,52 @@ The frontend is a modern React application built with TypeScript and Vite. It pr
 ```
 frontend/
 ├── src/
-│   ├── App.tsx                     # Main application component
+│   ├── App.tsx                     # Main application component with routing logic
 │   ├── Chat.tsx                    # Chat page component
+│   ├── Letter.tsx                  # Letter page component
 │   ├── About.tsx                   # About page
 │   ├── Disclaimer.tsx              # Legal disclaimer
 │   ├── PrivacyPolicy.tsx           # Privacy policy
 │   ├── main.tsx                    # Application entry point
 │   ├── style.css                   # Global styles
-│   ├── contexts/                   # React contexts
-│   │   └── SessionContext.tsx      # Session state management
 │   ├── hooks/                      # Custom React hooks
 │   │   ├── useMessages.tsx         # Message handling logic
 │   │   ├── useSession.tsx          # Session management
-│   │   └── useStatutes.tsx         # Legal statute handling
+│   │   └── useLetterContent.tsx    # State management for letter generation
 │   ├── pages/Chat/                 # Chat page components
 │   │   ├── components/
 │   │   │   ├── CitySelectField.tsx # Location selection
 │   │   │   ├── ExportMessagesButton.tsx # Chat export
 │   │   │   ├── InputField.tsx      # Message input
+│   │   │   ├── FeedbackModal.tsx   # Feedback modal
 │   │   │   ├── MessageContent.tsx  # Message display
 │   │   │   ├── MessageWindow.tsx   # Chat window
 │   │   │   ├── Navbar.tsx          # Navigation
-│   │   │   ├── StatuteDrawer.tsx   # Legal reference drawer
 │   │   │   └── SuggestedPrompts.tsx # Prompt suggestions
 │   │   └── utils/
-│   │       └── exportHelper.ts     # Export functionality
-│   └── shared/                     # Shared components
-│       └── components/
-│           ├── BackLink.tsx        # Navigation component
-│           ├── BeaverIcon.tsx      # Oregon-themed icon
-│           └── TenatFirstAidLogo.tsx # Application logo
+│   │       ├── exportHelper.ts     # Export functionality
+│   │       ├── feedbackHelper.tsx  # Feedback functionality
+│   │       └── streamHelper.tsx    # Stream functionality
+│   └── shared/                     # Shared components and utils
+│   │   ├── components/
+│   │   │   ├── BackLink.tsx        # Navigation component
+│   │   │   ├── BeaverIcon.tsx      # Oregon-themed icon
+│   │   │   └── TenatFirstAidLogo.tsx # Application logo
+│   │   └── utils/
+│   │       └── dompurify.ts        # Helper function for sanitizing text
+│   └── tests/
+│   │   ├── components/
+│   │   │   └── Chat.test.tsx       # Chat component testing
+│   │   └── utils/
+│   │       ├── letterHelper.test.ts # letterHelper testing
+│   │       └── dompurify.test.ts   # dompurify testing
 ├── public/
 │   └── favicon.svg                 # Site favicon
 ├── package.json                    # Dependencies and scripts
 ├── vite.config.ts                  # Vite configuration
+├── vitest.config.ts                # Vitest configuration
 ├── tsconfig.json                   # TypeScript configuration
-└── eslint.config.js               # ESLint configuration
+└── eslint.config.js                # ESLint configuration
 ```
 
 ### Framework

@@ -1,13 +1,35 @@
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
 import useLocation from "./hooks/useLocation";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useLetterContent } from "./hooks/useLetterContent";
+import { streamText } from "./pages/Chat/utils/streamHelper";
+import { buildLetterUserMessage } from "./pages/Chat/utils/letterHelper";
 
-export default function Chat() {
+export default function Letter() {
   const { addMessage, messages, setMessages } = useMessages();
   const { location, setLocation } = useLocation();
   const isOngoing = messages.length > 0;
   const { letterContent } = useLetterContent(messages);
+  const { org, loc } = useParams();
+
+  useEffect(() => {
+    const runGenerateLetter = async () => {
+      if (org === undefined) return;
+      const output = buildLetterUserMessage(org, loc);
+      if (output === null) return;
+
+      await streamText({
+        userMessage: output.userMessage,
+        addMessage,
+        setMessages,
+        location: output.selectedLocation,
+      });
+    };
+
+    runGenerateLetter();
+  }, [org, loc, addMessage, setMessages]);
 
   return (
     <div className="h-dvh pt-16 flex items-center">
