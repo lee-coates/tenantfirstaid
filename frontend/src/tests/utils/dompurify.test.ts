@@ -1,4 +1,4 @@
-import DOMPurify, { SANITIZE_SETTINGS } from "../shared/utils/dompurify";
+import DOMPurify, { SANITIZE_SETTINGS } from "../../shared/utils/dompurify";
 import { describe, it, expect } from "vitest";
 
 describe("DOMPurify sanitization", () => {

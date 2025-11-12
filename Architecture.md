@@ -475,6 +475,7 @@ frontend/
 │   │   ├── components/
 │   │   │   └── Chat.test.tsx       # Chat component testing
 │   │   └── utils/
+│   │       ├── letterHelper.test.ts # letterHelper testing
 │   │       └── dompurify.test.ts   # dompurify testing
 ├── public/
 │   └── favicon.svg                 # Site favicon
