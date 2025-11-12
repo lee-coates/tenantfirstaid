@@ -13,4 +13,16 @@ describe("buildLetterUserMessage", () => {
     expect(output?.userMessage).toContain("MyOrg");
     expect(output?.userMessage).toContain("(portland, or)");
   });
+
+  it("includes location string for eugene", () => {
+    const output = buildLetterUserMessage("MyOrg", "eugene");
+    expect(output?.userMessage).toContain("MyOrg");
+    expect(output?.userMessage).toContain("(eugene, or)");
+  });
+
+  it("includes location string for oregon", () => {
+    const output = buildLetterUserMessage("MyOrg", "oregon");
+    expect(output?.userMessage).toContain("MyOrg");
+    expect(output?.userMessage).toContain("(OR)");
+  });
 });
