@@ -305,24 +305,16 @@ return Response(stream_with_context(generate()), mimetype="text/plain")
 
 ```typescript
 async function streamText({
-  userMessage,
   addMessage,
   setMessages,
   location,
   setIsLoading,
 }: IStreamTextOptions) {
-  const userMessageId = Date.now().toString();
   const botMessageId = (Date.now() + 1).toString();
 
   setIsLoading?.(true);
 
-  // Creates initial user input
-  setMessages((prev) => [
-    ...prev,
-    { role: "user", content: userMessage, messageId: userMessageId },
-  ]);
-
-  // Create empty bot message that will be updated
+  // Add empty bot message that will be updated
   setMessages((prev) => [
     ...prev,
     {
@@ -347,7 +339,7 @@ async function streamText({
       const chunk = decoder.decode(value);
       fullText += chunk;
 
-      // Real time update for bot message
+      // Update only the bot's message
       setMessages((prev) =>
         prev.map((msg) =>
           msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
@@ -355,7 +347,6 @@ async function streamText({
       );
     }
   } catch (error) {
-    // Error handling in case of unforeseen errors
     console.error("Error:", error);
     setMessages((prev) =>
       prev.map((msg) =>

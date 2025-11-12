@@ -23,7 +23,7 @@ export default function Chat() {
           >
             {letterContent !== "" ? (
               <div className="flex flex-col gap-4 items-center flex-2/3 h-[40%] sm:h-full">
-                <div className="overflow-y-scroll pr-4">
+                <div className="overflow-y-scroll pr-4 w-full">
                   <span
                     className="whitespace-pre-wrap generated-letter"
                     dangerouslySetInnerHTML={{

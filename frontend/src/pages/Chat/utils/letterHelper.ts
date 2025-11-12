@@ -20,7 +20,7 @@ function buildLetterUserMessage(
       : selectedLocation.city || selectedLocation.state?.toUpperCase() || "";
 
   return {
-    userMessage: `Hello, I've been redirected from ${org}. I wish to draft a letter related to housing assistance for my area${locationString ? ` (${locationString})` : ""}, can you start a template letter for me? We can update the letter as we discuss. You can update my location in the letter.`,
+    userMessage: `Hello, I've been redirected from ${org}. I wish to draft a letter related to housing assistance for my area${locationString ? ` (${locationString})` : ""}, start generating a template letter for me. Update the letter as we discuss. Update my location in the letter.`,
     selectedLocation,
   };
 }

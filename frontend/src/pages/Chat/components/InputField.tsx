@@ -34,8 +34,14 @@ export default function InputField({
       target: { value: "" },
     } as React.ChangeEvent<HTMLTextAreaElement>);
 
+    const userMessageId = Date.now().toString();
+    // Add user message
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: value, messageId: userMessageId },
+    ]);
+
     await streamText({
-      userMessage: value,
       addMessage,
       setMessages,
       location,

@@ -1,7 +1,7 @@
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
-import useLocation from "./hooks/useLocation";
-import { useEffect } from "react";
+import useLocation, { ILocation } from "./hooks/useLocation";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLetterContent } from "./hooks/useLetterContent";
 import { streamText } from "./pages/Chat/utils/streamHelper";
@@ -13,23 +13,41 @@ export default function Letter() {
   const isOngoing = messages.length > 0;
   const { letterContent } = useLetterContent(messages);
   const { org, loc } = useParams();
+  const [startStreaming, setStartStreaming] = useState(false);
+  const streamLocationRef = useRef<ILocation | null>(null);
 
   useEffect(() => {
-    const runGenerateLetter = async () => {
-      if (org === undefined) return;
-      const output = buildLetterUserMessage(org, loc);
-      if (output === null) return;
+    if (org === undefined) return;
+    const output = buildLetterUserMessage(org, loc);
+    if (output === null) return;
 
-      await streamText({
-        userMessage: output.userMessage,
-        addMessage,
-        setMessages,
-        location: output.selectedLocation,
-      });
+    const userMessageId = Date.now().toString();
+    // Add user message
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: output.userMessage, messageId: userMessageId },
+    ]);
+    streamLocationRef.current = output.selectedLocation;
+    setStartStreaming(true);
+  }, [loc, org, setMessages]);
+
+  useEffect(() => {
+    if (startStreaming === false || streamLocationRef.current === null) return;
+    // Reset state to prevent re-running
+    setStartStreaming(false);
+
+    const runGenerateLetter = async () => {
+      if (streamLocationRef.current !== null) {
+        await streamText({
+          addMessage,
+          setMessages,
+          location: streamLocationRef.current,
+        });
+      }
     };
 
     runGenerateLetter();
-  }, [org, loc, addMessage, setMessages]);
+  }, [messages, startStreaming, addMessage, setMessages]);
 
   return (
     <div className="h-dvh pt-16 flex items-center">
@@ -45,7 +63,7 @@ export default function Letter() {
           >
             {letterContent !== "" ? (
               <div className="flex flex-col gap-4 items-center flex-2/3 h-[40%] sm:h-full">
-                <div className="overflow-y-scroll pr-4">
+                <div className="overflow-y-scroll pr-4 w-full">
                   <span
                     className="whitespace-pre-wrap generated-letter"
                     dangerouslySetInnerHTML={{
