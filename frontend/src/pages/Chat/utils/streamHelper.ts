@@ -2,7 +2,6 @@ import { ILocation } from "../../../hooks/useLocation";
 import { type IMessage } from "../../../hooks/useMessages";
 
 interface IStreamTextOptions {
-  userMessage: string;
   addMessage: (args: {
     city: string | null;
     state: string;
@@ -13,22 +12,14 @@ interface IStreamTextOptions {
 }
 
 async function streamText({
-  userMessage,
   addMessage,
   setMessages,
   location,
   setIsLoading,
 }: IStreamTextOptions) {
-  const userMessageId = Date.now().toString();
   const botMessageId = (Date.now() + 1).toString();
 
   setIsLoading?.(true);
-
-  // Add user message
-  setMessages((prev) => [
-    ...prev,
-    { role: "user", content: userMessage, messageId: userMessageId },
-  ]);
 
   // Add empty bot message that will be updated
   setMessages((prev) => [
@@ -58,8 +49,8 @@ async function streamText({
       // Update only the bot's message
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.messageId === botMessageId ? { ...msg, content: fullText } : msg,
-        ),
+          msg.messageId === botMessageId ? { ...msg, content: fullText } : msg
+        )
       );
     }
   } catch (error) {
@@ -71,8 +62,8 @@ async function streamText({
               ...msg,
               content: "Sorry, I encountered an error. Please try again.",
             }
-          : msg,
-      ),
+          : msg
+      )
     );
   } finally {
     setIsLoading?.(false);
