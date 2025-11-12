@@ -4,6 +4,7 @@ from flask_mailman import Mail
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
+import logging
 import os
 
 
@@ -51,6 +52,12 @@ app.config["MAIL_USERNAME"] = os.getenv("SENDER_EMAIL")
 app.config["MAIL_PASSWORD"] = os.getenv("APP_PASSWORD")
 app.config["MAIL_DEFAULT_SENDER"] = os.getenv("SENDER_EMAIL")
 
+# Logging configuration
+logging.basicConfig(
+    level=logging.DEBUG if os.getenv("ENV") == "dev" else logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+
 mail = Mail(app)
 
 
@@ -70,4 +77,4 @@ app.add_url_rule(
 )
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(host="0.0.0.0", port=5001)

@@ -20,6 +20,13 @@ def send_feedback() -> Tuple[str, int]:
     feedback = request.form.get("feedback")
     file = request.files.get("transcript")
 
+    emails_to_cc = request.form.get("emailsToCC")
+    cc_list = [
+        stripped_email
+        for email in emails_to_cc.split(",")
+        if (stripped_email := email.strip())
+    ]
+
     if not file:
         return "No file provided", 404
 
@@ -31,13 +38,16 @@ def send_feedback() -> Tuple[str, int]:
     if len(pdf_content) > MAX_ATTACHMENT_SIZE:
         return "Attachment too large", 413
 
+    email_params = {
+        "subject": "Feedback with Transcript",
+        "from_email": os.getenv("SENDER_EMAIL"),
+        "to": [os.getenv("RECIPIENT_EMAIL")],
+        "body": f"User feedback:\n\n{feedback}\n\nTranscript is attached below",
+        "cc": cc_list,
+    }
+
     try:
-        msg = EmailMessage(
-            subject="Feedback with Transcript",
-            from_email=os.getenv("SENDER_EMAIL"),
-            to=[os.getenv("RECIPIENT_EMAIL")],
-            body=f"User feedback:\n\n{feedback}\n\nTranscript is attached below",
-        )
+        msg = EmailMessage(email_params)
         msg.attach(
             "transcript.pdf",
             pdf_content,
