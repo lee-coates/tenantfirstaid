@@ -10,7 +10,7 @@ interface IBuildLetterReturnType {
 
 function buildLetterUserMessage(
   org: string,
-  loc: string | undefined
+  loc: string | undefined,
 ): IBuildLetterReturnType | null {
   const selectedLocation = CitySelectOptions[loc || "oregon"];
   if (selectedLocation === undefined) return null;
