@@ -16,8 +16,8 @@ export default function Letter() {
   const [startStreaming, setStartStreaming] = useState(false);
   const streamLocationRef = useRef<ILocation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isOpen, setIsOpen] = useState(true);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const LOADING_DISPLAY_DELAY_MS = 1000;
 
   useEffect(() => {
     if (org === undefined) return;
@@ -54,17 +54,18 @@ export default function Letter() {
 
   useEffect(() => {
     if (messages.length > 1 && messages[1].content !== "") {
-      setTimeout(() => setIsLoading(false), 1000);
+      // Include 1s delay for smoother transition
+      const timeoutId = setTimeout(
+        () => setIsLoading(false),
+        LOADING_DISPLAY_DELAY_MS,
+      );
+      return () => clearTimeout(timeoutId);
     }
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen) {
-      dialogRef.current?.showModal();
-    } else {
-      dialogRef.current?.close();
-    }
-  }, [isOpen]);
+    dialogRef.current?.showModal();
+  }, []);
 
   return (
     <>
@@ -83,7 +84,7 @@ export default function Letter() {
               steps.
             </p>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => dialogRef.current?.close()}
               className="cursor-pointer underline text-blue-600 hover:text-blue-500 text-sm"
             >
               close

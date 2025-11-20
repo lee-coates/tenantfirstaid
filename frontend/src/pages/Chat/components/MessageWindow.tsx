@@ -36,6 +36,12 @@ export default function MessageWindow({
   const messagesRef = useRef<HTMLDivElement | null>(null);
   const loc = useLocation();
 
+  // To hide initial prompt and response for letter generation
+  const LETTER_PAGE_HIDDEN_MESSAGES = 2;
+  const displayedMessages = loc.pathname.startsWith("/letter")
+    ? messages.slice(LETTER_PAGE_HIDDEN_MESSAGES)
+    : messages;
+
   const handleClearSession = () => {
     window.location.reload();
   };
@@ -72,30 +78,26 @@ export default function MessageWindow({
         <div className="max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px]">
           {isOngoing ? (
             <div className="flex flex-col gap-4 relative">
-              {messages
-                .slice(loc.pathname.startsWith("/letter") ? 2 : 0)
-                .map((message) => {
-                  return (
+              {displayedMessages.map((message) => {
+                return (
+                  <div
+                    className={`flex w-full ${
+                      message.role === "model" ? "justify-start" : "justify-end"
+                    }`}
+                    key={message.messageId}
+                  >
                     <div
-                      className={`flex w-full ${
+                      className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
                         message.role === "model"
-                          ? "justify-start"
-                          : "justify-end"
+                          ? "bg-slate-200 rounded-tl-sm"
+                          : "bg-[#1F584F] text-white rounded-tr-sm"
                       }`}
-                      key={message.messageId}
                     >
-                      <div
-                        className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
-                          message.role === "model"
-                            ? "bg-slate-200 rounded-tl-sm"
-                            : "bg-[#1F584F] text-white rounded-tr-sm"
-                        }`}
-                      >
-                        <MessageContent message={message} />
-                      </div>
+                      <MessageContent message={message} />
                     </div>
-                  );
-                })}
+                  </div>
+                );
+              })}
             </div>
           ) : null}
         </div>

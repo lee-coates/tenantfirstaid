@@ -18,9 +18,17 @@ function buildLetterUserMessage(
     selectedLocation.city && selectedLocation.state
       ? `${selectedLocation.city}, ${selectedLocation.state}`
       : selectedLocation.city || selectedLocation.state?.toUpperCase() || "";
+  const promptParts = [
+    `Hello, I've been redirected from ${org}.`,
+    `Draft a letter related to housing issues for my area${locationString ? ` (${locationString})` : ""} to my landlord.`,
+    `Use the information in this prompt to generate a letter to my landlord.`,
+    `The issue could be maintenance issues, unsafe conditions, or anything else affecting my home, use a broken faucet as an example.`,
+    `Update the letter as we discuss.`,
+    `Update all placeholders for city and state in the letter with${locationString ? ` (${locationString})` : ""}`,
+  ];
 
   return {
-    userMessage: `Hello, I've been redirected from ${org}. Draft a letter related to housing issues for my area${locationString ? ` (${locationString})` : ""} to my landlord. Use the information in this prompt to generate a letter to my landlord. The issue could be maintenance issues, unsafe conditions, or anything else affecting my home, use a broken faucet as an example. Update the letter as we discuss. Update all placeholders for city and state in the letter with${locationString ? ` (${locationString})` : ""}`,
+    userMessage: promptParts.join(" "),
     selectedLocation,
   };
 }
