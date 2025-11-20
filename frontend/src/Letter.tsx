@@ -53,6 +53,7 @@ export default function Letter() {
   }, [messages, startStreaming, addMessage, setMessages]);
 
   useEffect(() => {
+    // Wait for the second message (index 1) which contains the initial AI response
     if (messages.length > 1 && messages[1].content !== "") {
       // Include 1s delay for smoother transition
       const timeoutId = setTimeout(
