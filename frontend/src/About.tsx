@@ -119,7 +119,7 @@ export default function About() {
           through this chatbot is current, complete, or applies to your specific
           situation.
         </p>
-        <h2 className="text-2xl font-semibold mt-6 mb-2">No Liability </h2>
+        <h2 className="text-2xl font-semibold mt-6 mb-2">No Liability</h2>
         <p>
           We are not responsible for any decisions you make based on information
           from this chatbot. Use it at your own risk. Always double-check with a
