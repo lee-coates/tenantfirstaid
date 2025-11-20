@@ -7,6 +7,7 @@ import CitySelectField from "./CitySelectField";
 import SuggestedPrompts from "./SuggestedPrompts";
 import { ILocation } from "../../../hooks/useLocation";
 import FeedbackModal from "./FeedbackModal";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   messages: IMessage[];
@@ -33,6 +34,7 @@ export default function MessageWindow({
   const [openFeedback, setOpenFeedback] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
+  const loc = useLocation();
 
   const handleClearSession = () => {
     window.location.reload();
@@ -69,25 +71,31 @@ export default function MessageWindow({
       >
         <div className="max-h-[calc(100dvh-240px)] sm:max-h-[calc(100dvh-20rem)] mx-auto max-w-[700px]">
           {isOngoing ? (
-            <div className="flex flex-col gap-4">
-              {messages.map((message) => (
-                <div
-                  className={`flex w-full ${
-                    message.role === "model" ? "justify-start" : "justify-end"
-                  }`}
-                  key={message.messageId}
-                >
-                  <div
-                    className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
-                      message.role === "model"
-                        ? "bg-slate-200 rounded-tl-sm"
-                        : "bg-[#1F584F] text-white rounded-tr-sm"
-                    }`}
-                  >
-                    <MessageContent message={message} />
-                  </div>
-                </div>
-              ))}
+            <div className="flex flex-col gap-4 relative">
+              {messages
+                .slice(loc.pathname.startsWith("/letter") ? 2 : 0)
+                .map((message) => {
+                  return (
+                    <div
+                      className={`flex w-full ${
+                        message.role === "model"
+                          ? "justify-start"
+                          : "justify-end"
+                      }`}
+                      key={message.messageId}
+                    >
+                      <div
+                        className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
+                          message.role === "model"
+                            ? "bg-slate-200 rounded-tl-sm"
+                            : "bg-[#1F584F] text-white rounded-tr-sm"
+                        }`}
+                      >
+                        <MessageContent message={message} />
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           ) : null}
         </div>
