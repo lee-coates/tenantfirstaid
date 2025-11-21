@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { useLetterContent } from "./hooks/useLetterContent";
 import { streamText } from "./pages/Chat/utils/streamHelper";
 import { buildLetterUserMessage } from "./pages/Chat/utils/letterHelper";
+import LetterGenerationDialog from "./pages/Letter/LetterGenerationDialog";
 
 export default function Letter() {
   const { addMessage, messages, setMessages } = useMessages();
@@ -71,27 +72,7 @@ export default function Letter() {
   return (
     <>
       <div className="h-dvh pt-16 flex items-center">
-        <dialog
-          ref={dialogRef}
-          className="rounded-lg p-6 min-w-[300px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="flex flex-col items-end">
-            <p>
-              You've been redirected here so we can help you create a letter to
-              your landlord. It'll take a few seconds to complete your initial
-              letter. You could instruct the tool to update the letter to your
-              liking after it's generated. Once your letter is complete, you
-              should go back to your previous page and follow the remaining
-              steps.
-            </p>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className="cursor-pointer underline text-blue-600 hover:text-blue-500 text-sm"
-            >
-              close
-            </button>
-          </div>
-        </dialog>
+        <LetterGenerationDialog ref={dialogRef} />
         <div className="flex w-full items-center">
           <div className="flex-1 transition-all duration-300 relative">
             <div

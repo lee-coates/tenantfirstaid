@@ -1,0 +1,33 @@
+interface Props {
+  ref: React.RefObject<HTMLDialogElement | null>;
+}
+
+export default function LetterGenerationDialog({ ref }: Props) {
+  return (
+    <dialog
+      ref={ref}
+      aria-labelledby="letter-dialog-title"
+      aria-describedby="letter-dialog-description"
+      className="rounded-lg p-6 min-w-[300px] max-w-[600px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    >
+      <div className="flex flex-col items-end">
+        <h2 id="letter-dialog-title" className="sr-only">
+          Letter Generation Notice
+        </h2>
+        <p id="letter-dialog-description">
+          You've been redirected here so we can help you create a letter to your
+          landlord. It'll take a few seconds to complete your initial letter.
+          You could instruct the tool to update the letter to your liking after
+          it's generated. Once your letter is complete, you should go back to
+          your previous page and follow the remaining steps.
+        </p>
+        <button
+          onClick={() => ref.current?.close()}
+          className="cursor-pointer underline text-blue-600 hover:text-blue-500 text-sm"
+        >
+          close
+        </button>
+      </div>
+    </dialog>
+  );
+}
