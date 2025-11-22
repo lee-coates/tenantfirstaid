@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildLetterUserMessage } from "../../pages/Chat/utils/letterHelper";
+import { buildLetterUserMessage } from "../../pages/Letter/utils/letterHelper";
 
 describe("buildLetterUserMessage", () => {
   it("includes org when provided, but loc is undefined", () => {
