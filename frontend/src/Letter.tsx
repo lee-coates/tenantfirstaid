@@ -60,7 +60,7 @@ export default function Letter() {
       // Include 1s delay for smoother transition
       const timeoutId = setTimeout(
         () => setIsLoading(false),
-        LOADING_DISPLAY_DELAY_MS
+        LOADING_DISPLAY_DELAY_MS,
       );
       return () => clearTimeout(timeoutId);
     }
