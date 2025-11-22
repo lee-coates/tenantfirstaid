@@ -56,11 +56,11 @@ export default function Letter() {
 
   useEffect(() => {
     // Wait for the second message (index 1) which contains the initial AI response
-    if (messages.length > 1 && messages[1].content !== "") {
+    if (messages.length > 1 && messages[1]?.content !== "") {
       // Include 1s delay for smoother transition
       const timeoutId = setTimeout(
         () => setIsLoading(false),
-        LOADING_DISPLAY_DELAY_MS,
+        LOADING_DISPLAY_DELAY_MS
       );
       return () => clearTimeout(timeoutId);
     }
