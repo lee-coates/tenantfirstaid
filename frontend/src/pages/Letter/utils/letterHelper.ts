@@ -1,7 +1,7 @@
 import {
   CitySelectOptions,
   type CitySelectOptionType,
-} from "../components/CitySelectField";
+} from "../../Chat/components/CitySelectField";
 
 interface IBuildLetterReturnType {
   userMessage: string;
@@ -29,6 +29,10 @@ function buildLetterUserMessage(
     `The issue could be maintenance issues, unsafe conditions, or anything else affecting my home, use a broken faucet as an example.`,
     `Update the letter as we discuss.`,
     `Update all placeholders for city and state in the letter with${locationString ? ` (${locationString})` : ""}`,
+    `When all but the signature placeholder have been replaced, please confirm that I have proof-read the letter for accuracy in content and tone,`,
+    `provide instructions for how to copy and paste(formatted) the letter from the browser into a application of my choice,`,
+    `the necessary and optional notification / deliveries to the recipient(s), and retention / receipt best practices.`,
+    `Have the user follow the steps mention from ${sanitizedOrg} first after letter completion, if there were any.`,
   ];
 
   return {
