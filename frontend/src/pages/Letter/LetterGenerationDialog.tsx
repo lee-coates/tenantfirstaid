@@ -6,6 +6,7 @@ export default function LetterGenerationDialog({ ref }: Props) {
   return (
     <dialog
       ref={ref}
+      aria-label="letter-dialog-modal"
       aria-labelledby="letter-dialog-title"
       aria-describedby="letter-dialog-description"
       className="rounded-lg p-6 min-w-[300px] max-w-[600px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
