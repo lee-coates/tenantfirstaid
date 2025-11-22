@@ -8,7 +8,7 @@ export default function About() {
         <h2 className="text-2xl font-semibold mt-6 mb-2">
           About Tenant First Aid
         </h2>
-        <p>
+        <p className="mb-6">
           <strong>Tenant First Aid</strong> is an AI-powered chatbot designed to
           help Oregon tenants navigate housing and eviction issues. It is a
           volunteer-built program by{" "}
@@ -98,6 +98,33 @@ export default function About() {
             </ul>
           </li>
         </ul>
+        <h2 className="text-2xl font-semibold mt-6 mb-2">
+          Legal Disclaimer & Privacy Notice
+        </h2>
+        <p className="mb-6">
+          This chatbot provides general information about eviction law in Oregon
+          and creates letters based on information provided by the user.
+        </p>
+        <p>
+          It is not legal advice, and using it does not create an
+          attorney-client relationship. If you need legal advice or
+          representation, you should contact a licensed attorney.
+        </p>
+        <h2 className="text-2xl font-semibold mt-6 mb-2">
+          Information Accuracy
+        </h2>
+        <p className="mb-6">
+          We try to keep the information up-to-date and accurate, but eviction
+          laws can change. We cannot guarantee that everything on this site or
+          through this chatbot is current, complete, or applies to your specific
+          situation.
+        </p>
+        <h2 className="text-2xl font-semibold mt-6 mb-2">No Liability</h2>
+        <p>
+          We are not responsible for any decisions you make based on information
+          from this chatbot. Use it at your own risk. Always double-check with a
+          legal aid organization or attorney.
+        </p>
       </div>
     </div>
   );
