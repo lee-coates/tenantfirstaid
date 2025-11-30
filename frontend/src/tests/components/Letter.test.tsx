@@ -1,4 +1,10 @@
-import { render, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import {
   vi,
   describe,
@@ -18,6 +24,8 @@ beforeAll(() => {
     // @ts-expect-error
     HTMLElement.prototype.scrollTo = function () {};
   }
+  HTMLDialogElement.prototype.showModal = vi.fn();
+  HTMLDialogElement.prototype.close = vi.fn();
 });
 
 const mockStreamText = vi.fn();
@@ -44,6 +52,29 @@ vi.mock("../../pages/Chat/components/MessageWindow", () => ({
   default: () => <div data-testid="message-window" />,
 }));
 
+vi.mock("../../LetterGenerationDialog", () => ({
+  default: ({ ref }: { ref: React.Ref<HTMLDialogElement | null> }) => (
+    <dialog ref={ref} open>
+      <p>Some content</p>
+      <button>close</button>
+    </dialog>
+  ),
+}));
+
+const renderLetter = async () => {
+  const { default: Letter } = await import("../../Letter");
+  const queryClient = new QueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={["/letter/org/portland"]}>
+        <Routes>
+          <Route path="/letter/:org/:loc" element={<Letter />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>,
+  );
+};
+
 describe("Letter component - effect orchestration", () => {
   beforeEach(() => {
     mockStreamText.mockClear();
@@ -66,7 +97,6 @@ describe("Letter component - effect orchestration", () => {
   });
 
   it("first effect adds user message before second effect calls streamText", async () => {
-    const { default: Letter } = await import("../../Letter");
     const callOrder: string[] = [];
     const mockSetMessages = vi.fn(() => {
       callOrder.push("setMessages");
@@ -84,16 +114,7 @@ describe("Letter component - effect orchestration", () => {
       setMessages: mockSetMessages,
     });
 
-    const queryClient = new QueryClient();
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={["/letter/MyOrg/portland"]}>
-          <Routes>
-            <Route path="/letter/:org/:loc" element={<Letter />} />
-          </Routes>
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
+    await renderLetter();
 
     await waitFor(() => {
       expect(callOrder).toContain("setMessages");
@@ -111,5 +132,36 @@ describe("Letter component - effect orchestration", () => {
         location: expect.objectContaining(CitySelectOptions["portland"]),
       }),
     );
+  });
+
+  it("shows loading state before second message arrives", async () => {
+    const mockSetMessages = vi.fn();
+    const mockAddMessage = vi.fn();
+
+    mockUseMessages.mockReturnValue({
+      addMessage: mockAddMessage,
+      messages: [{ role: "user", content: "hi", messageId: "1" }],
+      setMessages: mockSetMessages,
+    });
+
+    await renderLetter();
+    await waitFor(() => {
+      expect(screen.queryByText("Generating letter...")).not.toBeNull();
+    });
+  });
+
+  it("dialog closes when close button clicked", async () => {
+    const closeMock = vi.fn();
+    HTMLDialogElement.prototype.close = closeMock;
+
+    await renderLetter();
+
+    const closeButton = screen.getByText("close");
+
+    act(() => {
+      fireEvent.click(closeButton);
+    });
+
+    expect(closeMock).toHaveBeenCalled();
   });
 });
