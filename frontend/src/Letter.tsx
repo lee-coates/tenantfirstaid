@@ -47,14 +47,24 @@ export default function Letter() {
           setMessages,
           location: streamLocationRef.current,
         });
+        const INITIAL_INSTRUCTION =
+          "What was generated is just an initial template. Please include details of your specific housing situation to update the letter.";
 
         if (streamDone) {
           setMessages((prev) => [
             ...prev,
             {
               role: "model",
-              content:
-                "What was generated is just an initial template. Please include details of your specific housing situation to update the letter.",
+              content: INITIAL_INSTRUCTION,
+              messageId: Date.now().toString(),
+            },
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "model",
+              content: "Error: Message unable to be streamed",
               messageId: Date.now().toString(),
             },
           ]);
@@ -71,7 +81,7 @@ export default function Letter() {
       // Include 1s delay for smoother transition
       const timeoutId = setTimeout(
         () => setIsLoading(false),
-        LOADING_DISPLAY_DELAY_MS,
+        LOADING_DISPLAY_DELAY_MS
       );
       return () => clearTimeout(timeoutId);
     }

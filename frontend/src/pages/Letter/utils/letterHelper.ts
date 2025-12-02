@@ -10,7 +10,7 @@ interface IBuildLetterReturnType {
 
 function buildLetterUserMessage(
   org: string | undefined,
-  loc: string | undefined,
+  loc: string | undefined
 ): IBuildLetterReturnType | null {
   const selectedLocation = CitySelectOptions[loc || "oregon"];
   if (selectedLocation === undefined) return null;
@@ -19,7 +19,7 @@ function buildLetterUserMessage(
       ? `${selectedLocation.city}, ${selectedLocation.state}`
       : selectedLocation.city || selectedLocation.state?.toUpperCase() || "";
 
-  const CHARACTER_LIMIT = 100;
+  const CHARACTER_LIMIT = 100; // Limit character count to prevent token overflow
   const sanitizedOrg = org
     ?.replace(/[^a-zA-Z0-9\s\-_.]/g, "") // Prevent injection attacks
     .replace(/\s+/g, " ") // Normalize whitespace
@@ -38,7 +38,7 @@ function buildLetterUserMessage(
     `provide instructions for how to copy and paste(formatted) the letter from the browser into a application of my choice,`,
     `the necessary and optional notification / deliveries to the recipient(s), and retention / receipt best practices.`,
     sanitizedOrg &&
-      `Have the user follow the steps mention from ${sanitizedOrg} first after letter completion, if there were any.`,
+      `Have the user follow the steps mentioned from ${sanitizedOrg} first after letter completion, if there were any.`,
   ].filter(Boolean);
 
   return {
