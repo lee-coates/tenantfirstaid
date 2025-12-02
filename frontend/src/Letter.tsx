@@ -49,6 +49,8 @@ export default function Letter() {
         });
         const INITIAL_INSTRUCTION =
           "What was generated is just an initial template. Please include details of your specific housing situation to update the letter.";
+        const ERROR_MESSAGE =
+          "Unable to generate letter. Please try again or refresh the page.";
 
         if (streamDone) {
           setMessages((prev) => [
@@ -64,7 +66,7 @@ export default function Letter() {
             ...prev,
             {
               role: "model",
-              content: "Error: Message unable to be streamed",
+              content: ERROR_MESSAGE,
               messageId: Date.now().toString(),
             },
           ]);

@@ -203,7 +203,7 @@ describe("Letter component - effect orchestration", () => {
     const setMessagesCall = mockSetMessages.mock.calls.find((call) => {
       const result = call[0]([]);
       return result.some((msg: IMessage) =>
-        msg.content.includes("unable to be streamed"),
+        msg.content.includes("Unable to generate letter"),
       );
     });
     expect(setMessagesCall).toBeDefined();
