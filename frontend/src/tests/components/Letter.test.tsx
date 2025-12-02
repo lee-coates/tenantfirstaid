@@ -71,7 +71,7 @@ const renderLetter = async () => {
           <Route path="/letter/:org/:loc" element={<Letter />} />
         </Routes>
       </MemoryRouter>
-    </QueryClientProvider>
+    </QueryClientProvider>,
   );
 };
 
@@ -122,7 +122,7 @@ describe("Letter component - effect orchestration", () => {
     });
 
     expect(callOrder.indexOf("setMessages")).toBeLessThan(
-      callOrder.indexOf("streamText")
+      callOrder.indexOf("streamText"),
     );
 
     expect(mockStreamText).toHaveBeenCalledWith(
@@ -130,7 +130,7 @@ describe("Letter component - effect orchestration", () => {
         addMessage: mockAddMessage,
         setMessages: mockSetMessages,
         location: expect.objectContaining(CitySelectOptions["portland"]),
-      })
+      }),
     );
   });
 
