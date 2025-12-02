@@ -1,8 +1,12 @@
+import { useLocation } from "react-router-dom";
+
 interface Props {
   ref: React.RefObject<HTMLDialogElement | null>;
 }
 
 export default function LetterGenerationDialog({ ref }: Props) {
+  const location = useLocation();
+
   return (
     <dialog
       ref={ref}
@@ -16,11 +20,13 @@ export default function LetterGenerationDialog({ ref }: Props) {
           Letter Generation Notice
         </h2>
         <p id="letter-dialog-description">
-          You've been redirected here so we can help you create a letter to your
-          landlord. It'll take a few seconds to complete your initial letter.
-          You could instruct the tool to update the letter to your liking after
-          it's generated. Once your letter is complete, you should go back to
-          your previous page and follow the remaining steps.
+          {location.pathname !== "/letter" &&
+            "You've been redirected here so we can help you create a letter to your landlord. "}
+          It'll take a few seconds to complete your initial letter. You could
+          instruct the tool to update the letter to your liking after it's
+          generated.
+          {location.pathname !== "/letter" &&
+            " Once your letter is complete, you should go back to your previous page and follow the remaining steps."}
         </p>
         <button
           onClick={() => ref.current?.close()}

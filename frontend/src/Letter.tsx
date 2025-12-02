@@ -22,7 +22,6 @@ export default function Letter() {
   const LOADING_DISPLAY_DELAY_MS = 1000;
 
   useEffect(() => {
-    if (org === undefined) return;
     const output = buildLetterUserMessage(org, loc);
     if (output === null) return;
 
@@ -43,11 +42,23 @@ export default function Letter() {
 
     const runGenerateLetter = async () => {
       if (streamLocationRef.current !== null) {
-        await streamText({
+        const streamDone = await streamText({
           addMessage,
           setMessages,
           location: streamLocationRef.current,
         });
+
+        if (streamDone) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "model",
+              content:
+                "What was generated is just an initial template. Please include details of your specific housing situation to update the letter.",
+              messageId: Date.now().toString(),
+            },
+          ]);
+        }
       }
     };
 
@@ -60,7 +71,7 @@ export default function Letter() {
       // Include 1s delay for smoother transition
       const timeoutId = setTimeout(
         () => setIsLoading(false),
-        LOADING_DISPLAY_DELAY_MS,
+        LOADING_DISPLAY_DELAY_MS
       );
       return () => clearTimeout(timeoutId);
     }

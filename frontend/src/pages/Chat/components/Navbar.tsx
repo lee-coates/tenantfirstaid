@@ -53,6 +53,13 @@ export default function Navbar() {
             Chat
           </Link>
           <Link
+            to="/letter"
+            className="block px-3 py-2 rounded text-gray-700 font-medium transition-colors hover:bg-[#4F8B82] hover:text-[#F4F4F2]"
+            onClick={() => setSidebarOpen(false)}
+          >
+            Letter
+          </Link>
+          <Link
             to="/about"
             className="block px-3 py-2 rounded text-gray-700 font-medium transition-colors hover:bg-[#4F8B82] hover:text-[#F4F4F2]"
             onClick={() => setSidebarOpen(false)}

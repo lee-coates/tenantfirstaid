@@ -12,6 +12,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Chat />} />
+        <Route path="/letter" element={<Letter />} />
         <Route path="/letter/:org/:loc?" element={<Letter />} />
         <Route path="/about" element={<About />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
