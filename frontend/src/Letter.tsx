@@ -58,8 +58,6 @@ export default function Letter() {
               messageId: Date.now().toString(),
             },
           ]);
-        } else {
-          throw new Error("Error: Unable to steam message");
         }
       }
     };
