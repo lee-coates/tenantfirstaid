@@ -18,10 +18,14 @@ function buildLetterUserMessage(
     selectedLocation.city && selectedLocation.state
       ? `${selectedLocation.city}, ${selectedLocation.state}`
       : selectedLocation.city || selectedLocation.state?.toUpperCase() || "";
+
+  const CHARACTER_LIMIT = 100;
   const sanitizedOrg = org
-    ?.replace(/[<>'"{}[\]]/g, "")
+    ?.replace(/[^a-zA-Z0-9\s\-_.]/g, "") // Prevent injection attacks
+    .replace(/\s+/g, " ") // Normalize whitespace
     .trim()
-    .slice(0, 100);
+    .slice(0, CHARACTER_LIMIT);
+
   const promptParts = [
     sanitizedOrg && `Hello, I've been redirected from ${sanitizedOrg}.`,
     `Draft a letter related to housing issues for my area${locationString ? ` (${locationString})` : ""} to my landlord.`,
@@ -35,7 +39,7 @@ function buildLetterUserMessage(
     `the necessary and optional notification / deliveries to the recipient(s), and retention / receipt best practices.`,
     sanitizedOrg &&
       `Have the user follow the steps mention from ${sanitizedOrg} first after letter completion, if there were any.`,
-  ];
+  ].filter(Boolean);
 
   return {
     userMessage: promptParts.join(" ").trim(),

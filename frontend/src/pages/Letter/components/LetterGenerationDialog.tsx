@@ -6,6 +6,13 @@ interface Props {
 
 export default function LetterGenerationDialog({ ref }: Props) {
   const location = useLocation();
+  const isRedirected = location.pathname !== "/letter";
+  const redirectMessage = isRedirected
+    ? "You've been redirected here so we can help you create a letter to your landlord. "
+    : "";
+  const followUpMessage = isRedirected
+    ? " Once your letter is complete, you should go back to your previous page and follow the remaining steps."
+    : "";
 
   return (
     <dialog
@@ -20,19 +27,18 @@ export default function LetterGenerationDialog({ ref }: Props) {
           Letter Generation Notice
         </h2>
         <p id="letter-dialog-description">
-          {location.pathname !== "/letter" &&
-            "You've been redirected here so we can help you create a letter to your landlord. "}
+          {redirectMessage}
           It'll take a few seconds to complete your initial letter. You could
           instruct the tool to update the letter to your liking after it's
           generated.
-          {location.pathname !== "/letter" &&
-            " Once your letter is complete, you should go back to your previous page and follow the remaining steps."}
+          {followUpMessage}
         </p>
         <button
           onClick={() => ref.current?.close()}
           className="cursor-pointer underline text-blue-600 hover:text-blue-500 text-sm"
+          aria-label="close-dialog"
         >
-          close
+          Close
         </button>
       </div>
     </dialog>

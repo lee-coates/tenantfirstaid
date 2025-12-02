@@ -58,12 +58,14 @@ export default function Letter() {
               messageId: Date.now().toString(),
             },
           ]);
+        } else {
+          throw new Error("Error: Unable to steam message");
         }
       }
     };
 
     runGenerateLetter();
-  }, [messages, startStreaming, addMessage, setMessages]);
+  }, [startStreaming, addMessage, setMessages]);
 
   useEffect(() => {
     // Wait for the second message (index 1) which contains the initial AI response
