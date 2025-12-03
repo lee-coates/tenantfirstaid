@@ -11,12 +11,19 @@ interface IStreamTextOptions {
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ * Streams text from the AI model and updates messages in real-time.
+ *
+ * @returns Promise that resolves to:
+ *   - `true` if streaming completed successfully
+ *   - `undefined` if reader is not available or an error occurred
+ */
 async function streamText({
   addMessage,
   setMessages,
   location,
   setIsLoading,
-}: IStreamTextOptions) {
+}: IStreamTextOptions): Promise<boolean | undefined> {
   const botMessageId = (Date.now() + 1).toString();
 
   setIsLoading?.(true);
@@ -42,7 +49,7 @@ async function streamText({
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) return true;
       const chunk = decoder.decode(value);
       fullText += chunk;
 

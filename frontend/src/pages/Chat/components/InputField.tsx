@@ -74,7 +74,7 @@ export default function InputField({
           }
         }}
         rows={1}
-        className="overflow-auto resize-none max-h-22 w-full px-3 py-2 border-1 border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+        className="overflow-auto resize-none max-h-22 w-full px-3 py-2 border border-[#ddd] rounded-md box-border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
         placeholder="Type your message here..."
         disabled={isLoading}
         ref={inputRef}
