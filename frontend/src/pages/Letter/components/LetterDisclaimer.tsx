@@ -7,10 +7,9 @@ interface Props {
 export default function LetterDisclaimer({ isOngoing }: Props) {
   return isOngoing ? (
     <span>
-      <strong>Disclaimer</strong>: This tool provides general information and
-      drafts letters based solely on what you enter. It is not legal advice and
-      does not create an attorney–client relationship. As explained further in
-      the{" "}
+      This tool provides general information and drafts letters based solely on
+      what you enter. It is not legal advice and does not create an
+      attorney–client relationship. As explained further in the{" "}
       <Link to="/privacy-policy" target="_blank" className="underline">
         Privacy Policy
       </Link>
