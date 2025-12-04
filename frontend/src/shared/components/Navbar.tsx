@@ -14,7 +14,7 @@ export default function Navbar() {
           </Link>
         </div>
         <button
-          className="flex flex-col justify-center items-center w-10 h-10 relative z-60 cursor-pointer"
+          className="flex flex-col justify-center items-center w-10 h-10 relative z-60"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Open menu"
         >

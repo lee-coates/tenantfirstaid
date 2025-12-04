@@ -17,7 +17,7 @@ export default function SuggestedPrompts({
         {prompts.map((prompt, idx) => (
           <button
             key={idx}
-            className="inline-flex px-4 border border-[#1f584f] rounded-4xl cursor-pointer py-1 font-medium text-sm sm:bg-white hover:bg-[#bac9b2]/50"
+            className="inline-flex px-4 border border-[#1f584f] rounded-4xl py-1 font-medium text-sm sm:bg-white hover:bg-[#bac9b2]/50"
             onClick={() =>
               onPromptClick(Array.isArray(prompt) ? prompt.join(" ") : prompt)
             }

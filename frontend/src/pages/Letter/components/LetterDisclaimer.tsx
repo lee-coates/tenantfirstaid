@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import DisclaimerLayout from "../../../shared/components/DisclaimerLayout";
 
 interface Props {
   isOngoing: boolean;
 }
 
 export default function LetterDisclaimer({ isOngoing }: Props) {
-  return isOngoing ? (
+  const disclaimer = isOngoing ? (
     <span>
       This tool provides general information and drafts letters based solely on
       what you enter. It is not legal advice and does not create an
@@ -26,5 +27,9 @@ export default function LetterDisclaimer({ isOngoing }: Props) {
       contacting a qualified attorney or a local legal aid clinic for
       personalized assistance.
     </span>
+  );
+
+  return (
+    <DisclaimerLayout isOngoing={isOngoing}>{disclaimer}</DisclaimerLayout>
   );
 }

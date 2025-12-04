@@ -123,15 +123,16 @@ export default function MessageWindow({
             />
             <div className="flex justify-center gap-4 mt-4">
               <button
-                className="py-2 px-4 border rounded-md font-semibold text-sm sm:text-base shadow-sm border-red-300 text-[#E3574B] hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors cursor-pointer"
+                className="border text-sm sm:text-base shadow-sm border-red-300 text-[#E3574B] hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
                 onClick={handleClearSession}
+                aria-label="clear chat"
                 title="Clear Chat"
               >
                 Clear
               </button>
               <ExportMessagesButton messages={messages} />
               <button
-                className="py-2 px-4 border rounded-md font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-200 transition-colors cursor-pointer opacity-70"
+                className="border text-sm sm:text-base shadow-sm hover:bg-gray-200 transition-colors opacity-70"
                 onClick={() => {
                   setOpenFeedback(true);
                 }}

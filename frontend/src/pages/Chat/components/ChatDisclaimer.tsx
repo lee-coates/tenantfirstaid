@@ -1,9 +1,11 @@
+import DisclaimerLayout from "../../../shared/components/DisclaimerLayout";
+
 interface Props {
   isOngoing: boolean;
 }
 
 export default function ChatDisclaimer({ isOngoing }: Props) {
-  return isOngoing ? (
+  const disclaimer = isOngoing ? (
     <span>
       This chatbot offers general housing law info and is not legal advice. For
       help with your situation, contact a lawyer.
@@ -17,5 +19,9 @@ export default function ChatDisclaimer({ isOngoing }: Props) {
       contacting a qualified attorney or a local legal aid clinic for
       personalized assistance.
     </span>
+  );
+
+  return (
+    <DisclaimerLayout isOngoing={isOngoing}>{disclaimer}</DisclaimerLayout>
   );
 }

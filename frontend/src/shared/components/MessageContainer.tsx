@@ -16,7 +16,7 @@ export default function MessageContainer({
       className={`container relative flex flex-col md:flex-row mx-auto gap-4 p-4 sm:p-6 bg-[#F4F4F2] rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
         ${
           isOngoing
-            ? "justify-between h-[calc(100dvh-4rem-64px)] max-h-[calc(100dvh-4rem-64px)] md:h-[calc(100dvh-10rem-64px)]"
+            ? "justify-between h-[calc(100dvh-4rem-64px)] md:h-[calc(100dvh-10rem-64px)]"
             : "justify-center max-w-[600px]"
         }`}
     >
