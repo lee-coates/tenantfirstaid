@@ -11,12 +11,15 @@ export default function MessageContainer({
   letterContent,
   children,
 }: Props) {
+  const MOBILE_OFFSET_HEIGHT = 4;
+  const DESKTOP_OFFSET_HEIGHT = 10;
+
   return (
     <div
       className={`container relative flex flex-col md:flex-row mx-auto gap-4 p-4 sm:p-6 bg-[#F4F4F2] rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]
         ${
           isOngoing
-            ? "justify-between h-[calc(100dvh-4rem-var(--navbar-height))] md:h-[calc(100dvh-10rem-var(--navbar-height))]"
+            ? `justify-between h-[calc(100dvh-${MOBILE_OFFSET_HEIGHT}rem-var(--navbar-height))] md:h-[calc(100dvh-${DESKTOP_OFFSET_HEIGHT}rem-var(--navbar-height))]`
             : "justify-center max-w-[600px]"
         }`}
     >
