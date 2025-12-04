@@ -8,6 +8,10 @@
   }
 }
 
+:root {
+  --navbar-height: 64px;
+}
+
 body {
   margin: 0;
   font-family:
