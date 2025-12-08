@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
       <div className="relative max-w-2xl m-auto p-8 bg-[#F4F4F2] rounded-lg shadow-md">
         <BackLink />
         <h2 className="text-2xl font-semibold mt-6">Privacy Policy</h2>
-        <em>Last Updated: June 19, 2025</em>
+        <em>Last Updated: December 7, 2025</em>
         <p className="my-4">
           Tenant First Aid, a program of Code PDX and Qiu Qiu Law ("
           <span className="underline">Tenant First Aid</span>
@@ -38,15 +38,25 @@ export default function PrivacyPolicy() {
           <span>Collection of Information</span>
           <span>Information You Provide to Us</span>
         </h3>
-        <p>
-          We collect transcripts of all conversations for quality improvement
-          purposes. We do not encourage you to provide your name, address, or
-          other sensitive information, and generally do not need it to answer
-          the type of general questions that Tenant First Aid is meant for.
+        <p className="my-4">
+          Tenant First Aid does not store or retain any personal data or
+          conversation transcripts during normal usage. All interactions are
+          processed in real time and are not saved to our servers. We do not
+          encourage you to provide your name, address, or other sensitive
+          information, and generally do not need it to answer the type of
+          general questions that Tenant First Aid is meant for.
         </p>
         <p className="my-4">
-          When you access or use our Services, we automatically collect
-          information about you, including:
+          However, if you choose to submit feedback through the feedback
+          feature, you may be asked to include the conversation transcript. This
+          information is used solely for debugging, product improvement, and
+          developer support. We only collect this data when you voluntarily
+          provide it as part of your feedback submission. Any words or details
+          you wish to protect can be redacted before submitting your feedback.
+        </p>
+        <p className="my-4">
+          When you access or use our Services, we automatically collect other
+          relevant information about you, including:
         </p>
         <ul className="list-disc list-outside my-4 pl-4">
           <li>
