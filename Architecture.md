@@ -2,7 +2,7 @@
 
 ## Overview
 
-Tenant First Aid is a chatbot application that provides legal advice related to housing and eviction in Oregon. The system uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, contextual responses based on Oregon housing law documents.
+Tenant First Aid is a chatbot application that provides legal information related to housing and eviction in Oregon. The system uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, contextual responses based on Oregon housing law documents.
 
 The application follows a modern web architecture with a Flask-based Python backend serving a React frontend, deployed on Digital Ocean infrastructure.
 
@@ -462,6 +462,8 @@ frontend/
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
 │   │   │   ├── Navbar.tsx            # Navigation
 │   │   │   └── TenatFirstAidLogo.tsx # Application logo
+│   │   ├── constants/
+│   │   │   └── constants.ts        # File of constants
 │   │   └── utils/
 │   │       └── dompurify.ts        # Helper function for sanitizing text
 │   └── tests/

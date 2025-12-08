@@ -1,6 +1,6 @@
 # Tenant First Aid
 
-A chatbot that provides legal advice related to housing and eviction
+A chatbot that provides legal information related to housing and eviction in Oregon.
 
 Live at https://tenantfirstaid.com/
 
@@ -10,12 +10,13 @@ Live at https://tenantfirstaid.com/
 [![CI-CD](https://github.com/codeforpdx/tenantfirstaid/actions/workflows/deploy.yml/badge.svg)](https://github.com/codeforpdx/tenantfirstaid/actions/workflows/deploy.yml)
 
 ### Prerequisites
- - [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 1. copy `backend/.env.example` to a new file named `.env` in the same directory. The chatbot now uses Google Gemini instead of OpenAI. You need to authenticate with the gcloud cli to develop, following these instructions:
    1. [install gcloud](https://cloud.google.com/sdk/docs/install)
    1. [generate application default credentials file](https://cloud.google.com/docs/authentication/application-default-credentials)
-   1. `gcloud auth application-default login` 
+   1. `gcloud auth application-default login`
    1. `gcloud auth application-default set-quota-project tenantfirstaid`
    1. add `GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_CREDS>` to your `backend/.env` file. The default path will be something like `/home/<USERNAME>/.config/gcloud/application_default_credentials.json` on Unix systems. (HINT: don't use path shortcuts like `~` for home, python won't be able to find it).
 1. `cd backend`
@@ -34,69 +35,79 @@ Live at https://tenantfirstaid.com/
    ```sh
    % cd backend
    ```
-  - run individual checks
-    1. *format* Python code with `ruff`
-       ```sh
-       % uv run ruff format
-       ```
-       or
-       ```sh
-       % make fmt
-       ```
-    1. *lint* Python code with `ruff`
-       ```sh
-       % uv run ruff check
-       ```
-       or
-       ```sh
-       % make lint
-       ```
-    1. *typecheck* Python code with `ty`
-       ```sh
-       % uv run ty check
-       ```
-       or
-       ```sh
-       % make typecheck
-       ```
 
-       *typecheck* with other Python typecheckers which are not protected in [PR Checks](.github/workflows/pr-check.yml) - useful for completeness & a 2nd opinion
-       1. *typecheck* Python code with `mypy`
-          ```sh
-          % uv run mypy -p tenantfirstaid --python-executable .venv/bin/python3 --check-untyped-defs
-          ```
-          or
-          ```sh
-          % make typecheck-mypy
-          ```
-       1. *typecheck* Python code with `pyrefly`
-          ```sh
-          % uv run pyrefly check --python-interpreter .venv/bin/python3
-          ```
-          or
-          ```sh
-          % make typecheck-pyrefly
-          ```
-    1. *test* Python code with `pytest`
-       ```sh
-       % uv run pytest
-       ```
-       or
-       ```sh
-       % make test
-       ```
-  - or run the above checks in one-shot
-    ```sh
-    % make --keep-going check
-    ```
-    `--keep-going` will continue to run checks, even if previous `make` rule fail.  Omit if you want to stop after the first `make` rule fails.
+- run individual checks
+
+  1. _format_ Python code with `ruff`
+     ```sh
+     % uv run ruff format
+     ```
+     or
+     ```sh
+     % make fmt
+     ```
+  1. _lint_ Python code with `ruff`
+     ```sh
+     % uv run ruff check
+     ```
+     or
+     ```sh
+     % make lint
+     ```
+  1. _typecheck_ Python code with `ty`
+
+     ```sh
+     % uv run ty check
+     ```
+
+     or
+
+     ```sh
+     % make typecheck
+     ```
+
+     _typecheck_ with other Python typecheckers which are not protected in [PR Checks](.github/workflows/pr-check.yml) - useful for completeness & a 2nd opinion
+
+     1. _typecheck_ Python code with `mypy`
+        ```sh
+        % uv run mypy -p tenantfirstaid --python-executable .venv/bin/python3 --check-untyped-defs
+        ```
+        or
+        ```sh
+        % make typecheck-mypy
+        ```
+     1. _typecheck_ Python code with `pyrefly`
+        ```sh
+        % uv run pyrefly check --python-interpreter .venv/bin/python3
+        ```
+        or
+        ```sh
+        % make typecheck-pyrefly
+        ```
+
+  1. _test_ Python code with `pytest`
+     ```sh
+     % uv run pytest
+     ```
+     or
+     ```sh
+     % make test
+     ```
+
+- or run the above checks in one-shot
+  ```sh
+  % make --keep-going check
+  ```
+  `--keep-going` will continue to run checks, even if previous `make` rule fail. Omit if you want to stop after the first `make` rule fails.
 
 ## Contributing
 
 We currently have regular project meetups: https://www.meetup.com/codepdx/ . Also check out https://www.codepdx.org/ to find our Discord server.
 
 ## Remote server setup
+
 On DO, we:
+
 1. added our ssh public keys
 2. install nginx
 3. Kent got the tls cert (just ask chatgpt?)
