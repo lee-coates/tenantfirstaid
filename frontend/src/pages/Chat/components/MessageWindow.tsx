@@ -34,7 +34,6 @@ export default function MessageWindow({
   const [openFeedback, setOpenFeedback] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
-  const WINDOW_OFFSET_HEIGHT = 30;
   const loc = useLocation();
 
   // To hide initial prompt and response for letter generation
@@ -77,7 +76,7 @@ export default function MessageWindow({
         ref={messagesRef}
       >
         <div
-          className={`max-h-[calc(100dvh-${WINDOW_OFFSET_HEIGHT}rem-var(--navbar-height))] mx-auto max-w-[700px]`}
+          className={`max-h-[calc(100dvh-var(--message-window-offset)-var(--navbar-height))] mx-auto max-w-[700px]`}
         >
           {isOngoing ? (
             <div className="flex flex-col gap-4 relative">
