@@ -3,9 +3,8 @@ import type { IMessage } from "../../../hooks/useMessages";
 import InputField from "./InputField";
 import MessageContent from "./MessageContent";
 import ExportMessagesButton from "./ExportMessagesButton";
-import CitySelectField from "./CitySelectField";
+import InitializationForm from "./InitializationForm";
 import SuggestedPrompts from "./SuggestedPrompts";
-import { ILocation } from "../../../hooks/useLocation";
 import FeedbackModal from "./FeedbackModal";
 import { useLocation } from "react-router-dom";
 
@@ -15,8 +14,6 @@ interface Props {
     city: string | null;
     state: string;
   }) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
-  location: ILocation;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isOngoing: boolean;
 }
@@ -24,9 +21,7 @@ interface Props {
 export default function MessageWindow({
   messages,
   addMessage,
-  location,
   setMessages,
-  setLocation,
   isOngoing,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -117,7 +112,6 @@ export default function MessageWindow({
               addMessage={addMessage}
               setMessages={setMessages}
               isLoading={isLoading}
-              location={location}
               setIsLoading={setIsLoading}
               inputRef={inputRef}
               value={inputValue}
@@ -144,9 +138,9 @@ export default function MessageWindow({
             </div>
           </>
         ) : (
-          <CitySelectField
+          <InitializationForm
+            addMessage={addMessage}
             setMessages={setMessages}
-            setLocation={setLocation}
           />
         )}
       </div>

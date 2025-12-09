@@ -1,4 +1,4 @@
-import { ILocation } from "../../../hooks/useLocation";
+import { ILocation } from "../../../contexts/housingContext";
 import { type IMessage } from "../../../hooks/useMessages";
 
 interface IStreamTextOptions {
@@ -7,7 +7,7 @@ interface IStreamTextOptions {
     state: string;
   }) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
-  location: ILocation;
+  housingLocation: ILocation;
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -21,7 +21,7 @@ interface IStreamTextOptions {
 async function streamText({
   addMessage,
   setMessages,
-  location,
+  housingLocation,
   setIsLoading,
 }: IStreamTextOptions): Promise<boolean | undefined> {
   const botMessageId = (Date.now() + 1).toString();
@@ -40,8 +40,8 @@ async function streamText({
 
   try {
     const reader = await addMessage({
-      city: location?.city,
-      state: location?.state || "",
+      city: housingLocation?.city,
+      state: housingLocation?.state || "",
     });
     if (!reader) return;
     const decoder = new TextDecoder();

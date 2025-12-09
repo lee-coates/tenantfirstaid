@@ -1,7 +1,7 @@
 import {
   CitySelectOptions,
   type CitySelectOptionType,
-} from "../../Chat/components/CitySelectField";
+} from "../../Chat/components/InitializationForm";
 
 interface IBuildLetterReturnType {
   userMessage: string;
@@ -27,13 +27,12 @@ function buildLetterUserMessage(
     .slice(0, CHARACTER_LIMIT);
 
   const promptParts = [
-    sanitizedOrg && `Hello, I've been redirected from ${sanitizedOrg}.`,
+    sanitizedOrg && `I've been redirected from ${sanitizedOrg}.`,
     `Draft a letter related to housing issues for my area${locationString ? ` (${locationString})` : ""} to my landlord.`,
-    `The issue could be maintenance issues, unsafe conditions, or anything else affecting my home, use a broken faucet as an example.`,
+    `The issue could be maintenance issues, unsafe conditions, or anything else affecting my home.`,
     `Use the information in this prompt to generate a letter to my landlord.`,
     `Do not ask for additional information until the letter is generated.`,
     `Update the letter as we discuss.`,
-    `Update all placeholders for city and state in the letter with${locationString ? ` (${locationString})` : ""}`,
     `When all but the signature placeholder have been replaced, please confirm that I have proof-read the letter for accuracy in content and tone,`,
     `provide instructions for how to copy and paste(formatted) the letter from the browser into a application of my choice,`,
     `the necessary and optional notification / deliveries to the recipient(s), and retention / receipt best practices.`,

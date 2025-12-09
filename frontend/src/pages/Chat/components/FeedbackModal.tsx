@@ -53,7 +53,7 @@ export default function FeedbackModal({ messages, setOpenFeedback }: Props) {
       )}
       <div className="flex gap-4">
         <button
-          className="border rounded-full py-1 text-[#1F584F] transition-colors hover:bg-[#E8EEE2]"
+          className="border text-[#1F584F] transition-colors hover:bg-[#E8EEE2]"
           onClick={() => {
             if (feedback.trim() === "") handleModalClose();
             setStatus("sending");
@@ -66,7 +66,7 @@ export default function FeedbackModal({ messages, setOpenFeedback }: Props) {
           Send
         </button>
         <button
-          className="border rounded-full px-4 py-1 text-[#E3574B] transition-colors hover:bg-[#fff0ee]"
+          className="border text-[#E3574B] transition-colors hover:bg-[#fff0ee]"
           onClick={handleModalClose}
         >
           Close

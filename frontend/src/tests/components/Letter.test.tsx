@@ -16,7 +16,7 @@ import {
 } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { CitySelectOptions } from "../../pages/Chat/components/CitySelectField";
+import { CitySelectOptions } from "../../pages/Chat/components/InitializationForm";
 import { IMessage } from "../../hooks/useMessages";
 
 beforeAll(() => {
@@ -29,20 +29,12 @@ beforeAll(() => {
   HTMLDialogElement.prototype.close = vi.fn();
 });
 
-const mockStreamText = vi.fn();
-const mockUseMessages = vi.fn();
-const mockUseLocation = vi.fn();
-
 vi.mock("../../pages/Chat/utils/streamHelper", () => ({
-  streamText: mockStreamText,
+  streamText: vi.fn(),
 }));
 
 vi.mock("../../hooks/useMessages", () => ({
-  default: mockUseMessages,
-}));
-
-vi.mock("../../hooks/useLocation", () => ({
-  default: mockUseLocation,
+  default: vi.fn(),
 }));
 
 vi.mock("../../hooks/useLetterContent", () => ({
@@ -62,22 +54,34 @@ vi.mock("../../LetterGenerationDialog", () => ({
   ),
 }));
 
+import * as streamHelper from "../../pages/Chat/utils/streamHelper";
+import useMessages from "../../hooks/useMessages";
+import HousingContextProvider from "../../contexts/housingContext";
+
+let mockStreamText: ReturnType<typeof vi.fn>;
+let mockUseMessages: ReturnType<typeof vi.fn>;
+
 const renderLetter = async () => {
   const { default: Letter } = await import("../../Letter");
   const queryClient = new QueryClient();
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={["/letter/org/portland"]}>
-        <Routes>
-          <Route path="/letter/:org/:loc" element={<Letter />} />
-        </Routes>
-      </MemoryRouter>
+      <HousingContextProvider>
+        <MemoryRouter initialEntries={["/letter/org/portland"]}>
+          <Routes>
+            <Route path="/letter/:org/:loc" element={<Letter />} />
+          </Routes>
+        </MemoryRouter>
+      </HousingContextProvider>
     </QueryClientProvider>,
   );
 };
 
 describe("Letter component - effect orchestration", () => {
   beforeEach(() => {
+    mockStreamText = vi.mocked(streamHelper.streamText);
+    mockUseMessages = vi.mocked(useMessages);
+
     mockStreamText.mockClear();
     mockStreamText.mockResolvedValue(undefined);
 
@@ -85,11 +89,6 @@ describe("Letter component - effect orchestration", () => {
       addMessage: vi.fn(),
       messages: [],
       setMessages: vi.fn(),
-    });
-
-    mockUseLocation.mockReturnValue({
-      location: null,
-      setLocation: vi.fn(),
     });
   });
 
@@ -130,7 +129,7 @@ describe("Letter component - effect orchestration", () => {
       expect.objectContaining({
         addMessage: mockAddMessage,
         setMessages: mockSetMessages,
-        location: expect.objectContaining(CitySelectOptions["portland"]),
+        housingLocation: expect.objectContaining(CitySelectOptions["portland"]),
       }),
     );
   });
@@ -171,11 +170,13 @@ describe("Letter component - effect orchestration", () => {
     const queryClient = new QueryClient();
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={["/letter"]}>
-          <Routes>
-            <Route path="/letter" element={<Letter />} />
-          </Routes>
-        </MemoryRouter>
+        <HousingContextProvider>
+          <MemoryRouter initialEntries={["/letter"]}>
+            <Routes>
+              <Route path="/letter" element={<Letter />} />
+            </Routes>
+          </MemoryRouter>
+        </HousingContextProvider>
       </QueryClientProvider>,
     );
 
