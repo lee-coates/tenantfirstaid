@@ -207,7 +207,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             <Link
               to="letter"
               className={`flex items-center border rounded-md font-semibold py-1 px-4 border-[#4a90e2] text-[#4a90e2] hover:bg-[#E6F0FB] transition-colors
-            ${city === "other" ? "opacity-50" : ""}`}
+                ${city === "other" ? "opacity-50" : ""}`}
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",
               }}

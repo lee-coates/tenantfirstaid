@@ -5,7 +5,7 @@ export interface ILocation {
   state: string | null;
 }
 
-interface IHousingContextType {
+export interface IHousingContextType {
   housingLocation: ILocation;
   city: string | null;
   housingType: string | null;

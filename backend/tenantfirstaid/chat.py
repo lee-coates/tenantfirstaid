@@ -75,6 +75,18 @@ class ChatManager:
         self.client = genai.Client(vertexai=True)
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
+        VALID_CITIES = {"portland", "eugene", "null", None}
+        VALID_STATES = {"or", "OR"}
+
+        # Validate and sanitize inputs
+        city_lower = city.lower() if city else "null"
+        state_upper = state.upper() if state else "OR"
+
+        if city_lower not in VALID_CITIES:
+            city_lower = "null"
+        if state_upper not in VALID_STATES:
+            raise ValueError(f"Invalid state: {state}")
+
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
         instructions += (

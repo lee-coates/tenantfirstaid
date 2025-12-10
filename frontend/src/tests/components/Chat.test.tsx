@@ -70,8 +70,6 @@ describe("Chat generated-letter block", () => {
     await waitFor(() =>
       expect(document.querySelector(".generated-letter")).not.toBeNull(),
     );
-
-    console.log(document.querySelector(".generated-letter")?.innerHTML);
   });
 
   it("does not render .generated-letter when no message contains the separator", async () => {

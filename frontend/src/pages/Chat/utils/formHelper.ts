@@ -4,6 +4,15 @@ interface IChatFormReturnType {
   userMessage: string;
 }
 
+/**
+ * Builds the initial user message for the AI based on housing context
+ *
+ * @param loc - User's housing location (city and state)
+ * @param housingType - Type of housing (e.g., "Apartment/House Rental")
+ * @param tenantTopic - Topic of inquiry (e.g., "Eviction and Notices")
+ * @param issueDescription - User's specific issue or question
+ * @returns Object containing the formatted user message
+ */
 function buildChatUserMessage(
   loc: ILocation,
   housingType: string | null,
