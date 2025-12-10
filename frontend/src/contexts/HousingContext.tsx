@@ -72,7 +72,18 @@ export default function HousingContextProvider({ children }: Props) {
       handleTenantTopic,
       handleIssueDescription,
     }),
-    [housingLocation, city, housingType, tenantTopic, issueDescription],
+    [
+      housingLocation,
+      city,
+      housingType,
+      tenantTopic,
+      issueDescription,
+      handleHousingLocation,
+      handleCityChange,
+      handleHousingChange,
+      handleTenantTopic,
+      handleIssueDescription,
+    ],
   );
 
   return (
