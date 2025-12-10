@@ -90,7 +90,7 @@ class ChatManager:
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
         instructions += (
-            f"\nThe user is in {city if city != 'null' else ''} {state.upper()}.\n"
+            f"\nThe user is in {city if city != 'null' else ''} {state_upper}.\n"
         )
         return instructions
 
