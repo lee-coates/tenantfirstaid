@@ -166,8 +166,15 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",
               }}
+              aria-disabled={city === "other"}
               aria-label="generate letter"
               title="Generate Letter"
+              onClick={(e) => {
+                if (city === "other") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
             >
               Generate Letter
             </Link>
