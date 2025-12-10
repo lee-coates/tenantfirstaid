@@ -80,7 +80,9 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
     handleIssueDescription,
   } = useHousingContext();
   const [initialUserMessage, setInitialUserMessage] = useState("");
-  const locationString = city && city?.charAt(0).toUpperCase() + city?.slice(1);
+  const locationString = city
+    ? city.charAt(0).toUpperCase() + city.slice(1)
+    : null;
 
   const handleLocationChange = (key: string | null) => {
     handleCityChange(key);

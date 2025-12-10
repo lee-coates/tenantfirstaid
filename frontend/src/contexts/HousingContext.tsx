@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 
 export interface ILocation {
   city: string | null;
@@ -36,27 +36,28 @@ export default function HousingContextProvider({ children }: Props) {
   const [tenantTopic, setTenantTopic] = useState<string | null>(null);
   const [issueDescription, setIssueDescription] = useState("");
 
-  const handleHousingLocation = ({ city, state }: ILocation) => {
+  const handleHousingLocation = useCallback(({ city, state }: ILocation) => {
     setHousingLocation({ city, state });
-  };
+  }, []);
 
-  const handleCityChange = (option: string | null) => {
+  const handleCityChange = useCallback((option: string | null) => {
     setCity(option);
-  };
+  }, []);
 
-  const handleHousingChange = (option: string | null) => {
+  const handleHousingChange = useCallback((option: string | null) => {
     setHousingType(option);
-  };
+  }, []);
 
-  const handleTenantTopic = (option: string | null) => {
+  const handleTenantTopic = useCallback((option: string | null) => {
     setTenantTopic(option);
-  };
+  }, []);
 
-  const handleIssueDescription = (
-    event: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setIssueDescription(event.target.value);
-  };
+  const handleIssueDescription = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setIssueDescription(event.target.value);
+    },
+    [],
+  );
 
   const housingContextObject = useMemo(
     () => ({

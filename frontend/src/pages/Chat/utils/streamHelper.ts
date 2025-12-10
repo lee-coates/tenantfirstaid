@@ -43,7 +43,10 @@ async function streamText({
       city: housingLocation?.city,
       state: housingLocation?.state || "",
     });
-    if (!reader) return;
+    if (!reader) {
+      console.error("Stream reader is unavailable");
+      return;
+    }
     const decoder = new TextDecoder();
     let fullText = "";
 
