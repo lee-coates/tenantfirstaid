@@ -27,11 +27,9 @@ function buildLetterUserMessage(
     .slice(0, CHARACTER_LIMIT);
 
   const promptParts = [
-    sanitizedOrg && `I've been redirected from ${sanitizedOrg}.`,
-    `Draft a letter related to housing issues for my area${locationString ? ` (${locationString})` : ""} to my landlord.`,
-    `Use the information in this prompt to generate a letter to my landlord.`,
-    `Do not ask for additional information until the letter is generated.`,
-    `Update the letter as we discuss.`,
+    sanitizedOrg && `I'm redirected from ${sanitizedOrg}.`,
+    `Draft a letter to my landlord on housing issues related to my area${locationString ? ` (${locationString})` : ""}.`,
+    `Do not ask for additional information until the letter is generated, update the letter as we discuss.`,
     `When all but the signature placeholder have been replaced in the generated letter, provide instructions for how to copy and paste(formatted) the letter from the browser into a application of my choice,`,
     `the necessary and optional notification / deliveries to the recipient(s), and retention / receipt best practices.`,
     sanitizedOrg &&

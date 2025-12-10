@@ -75,8 +75,8 @@ class ChatManager:
         self.client = genai.Client(vertexai=True)
 
     def prepare_developer_instructions(self, city: str, state: str) -> str:
-        VALID_CITIES = {"portland", "eugene", "null", None}
-        VALID_STATES = {"or", "OR"}
+        VALID_CITIES = {"Portland", "Eugene", "null", None}
+        VALID_STATES = {"OR"}
 
         # Validate and sanitize inputs
         city_lower = city.lower() if city else "null"

@@ -8,18 +8,18 @@ interface CitySelectOptionType {
 
 const CITY_SELECT_OPTIONS: Record<string, CitySelectOptionType> = {
   portland: {
-    city: "portland",
-    state: "or",
+    city: "Portland",
+    state: "OR",
     label: "Portland",
   },
   eugene: {
-    city: "eugene",
-    state: "or",
+    city: "Eugene",
+    state: "OR",
     label: "Eugene",
   },
   oregon: {
     city: null,
-    state: "or",
+    state: "OR",
     label: "Other city in Oregon",
   },
   other: {

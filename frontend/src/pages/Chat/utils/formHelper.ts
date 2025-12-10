@@ -22,13 +22,12 @@ function buildChatUserMessage(
   const locationString =
     loc.city && loc.state
       ? `${loc.city}, ${loc.state}`
-      : loc.city || loc.state?.toUpperCase() || "";
+      : loc.city || loc.state || "";
 
   const promptParts = [
-    `I'm a tenant located in ${locationString ? `${locationString}` : ""}.`,
-    `I currently reside in the following housing type: ${housingType}.`,
-    `I would like to ask you about ${tenantTopic}.`,
-    `Can you help me with the following issue or question: ${issueDescription}`,
+    `I'm in ${locationString ? `${locationString}` : ""}.`,
+    `I live in ${housingType}.`,
+    `My issue is on ${tenantTopic}: ${issueDescription}`,
   ];
 
   return {
