@@ -16,7 +16,6 @@ import {
 } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { CitySelectOptions } from "../../pages/Chat/components/InitializationForm";
 import { IMessage } from "../../hooks/useMessages";
 
 beforeAll(() => {
@@ -57,6 +56,7 @@ vi.mock("../../LetterGenerationDialog", () => ({
 import * as streamHelper from "../../pages/Chat/utils/streamHelper";
 import useMessages from "../../hooks/useMessages";
 import HousingContextProvider from "../../contexts/HousingContext";
+import { CITY_SELECT_OPTIONS } from "../../shared/constants/constants";
 
 let mockStreamText: ReturnType<typeof vi.fn>;
 let mockUseMessages: ReturnType<typeof vi.fn>;
@@ -129,7 +129,9 @@ describe("Letter component - effect orchestration", () => {
       expect.objectContaining({
         addMessage: mockAddMessage,
         setMessages: mockSetMessages,
-        housingLocation: expect.objectContaining(CitySelectOptions["portland"]),
+        housingLocation: expect.objectContaining(
+          CITY_SELECT_OPTIONS["portland"],
+        ),
       }),
     );
   });

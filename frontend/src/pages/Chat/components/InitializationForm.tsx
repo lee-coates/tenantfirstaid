@@ -6,58 +6,11 @@ import { streamText } from "../utils/streamHelper";
 import SelectField from "./SelectField";
 import { Link } from "react-router-dom";
 import useHousingContext from "../../../hooks/useHousingContext";
-
-export interface CitySelectOptionType {
-  city: string | null;
-  state: string | null;
-  label: string;
-}
-
-const CitySelectOptions: Record<string, CitySelectOptionType> = {
-  portland: {
-    city: "portland",
-    state: "or",
-    label: "Portland",
-  },
-  eugene: {
-    city: "eugene",
-    state: "or",
-    label: "Eugene",
-  },
-  oregon: {
-    city: null,
-    state: "or",
-    label: "Other city in Oregon",
-  },
-  other: {
-    city: null,
-    state: null,
-    label: "City in another state",
-  },
-};
-
-const HousingOptions = [
-  "Apartment/House Rental",
-  "Manufactured/Mobile Home",
-  "RV/Tiny Home (on wheels)",
-  "Room Rental/Shared Housing",
-  "Other",
-];
-
-const TopicOptions = [
-  "Eviction and Notices",
-  "Repairs and Conditions",
-  "Security Deposits and Fees",
-  "Rent Issues",
-  "Entry and Privacy",
-  "Discrimination/Fair Housing",
-  "Lease/Rental Agreement",
-  "Manufacture Home Park Issues",
-  "Other",
-];
-
-export { CitySelectOptions };
-
+import {
+  CITY_SELECT_OPTIONS,
+  HOUSING_OPTIONS,
+  TOPIC_OPTIONS,
+} from "../../../shared/constants/constants";
 interface Props {
   addMessage: (args: {
     city: string | null;
@@ -88,9 +41,11 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
     handleCityChange(key);
     handleHousingLocation({
       city:
-        CitySelectOptions[key as keyof typeof CitySelectOptions]?.city || null,
+        CITY_SELECT_OPTIONS[key as keyof typeof CITY_SELECT_OPTIONS]?.city ||
+        null,
       state:
-        CitySelectOptions[key as keyof typeof CitySelectOptions]?.state || null,
+        CITY_SELECT_OPTIONS[key as keyof typeof CITY_SELECT_OPTIONS]?.state ||
+        null,
     });
   };
 
@@ -146,7 +101,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         description="Select your location"
         handleFunction={handleLocationChange}
       >
-        {Object.entries(CitySelectOptions).map(([key, option]) => (
+        {Object.entries(CITY_SELECT_OPTIONS).map(([key, option]) => (
           <option key={key} value={key}>
             {option.label}
           </option>
@@ -158,7 +113,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         description="Select your housing type"
         handleFunction={handleHousingChange}
       >
-        {HousingOptions.map((option) => (
+        {HOUSING_OPTIONS.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
@@ -170,7 +125,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         description="Select your topic"
         handleFunction={handleTenantTopic}
       >
-        {TopicOptions.map((option) => (
+        {TOPIC_OPTIONS.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

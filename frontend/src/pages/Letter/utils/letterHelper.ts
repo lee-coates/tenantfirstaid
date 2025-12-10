@@ -1,7 +1,7 @@
 import {
-  CitySelectOptions,
+  CITY_SELECT_OPTIONS,
   type CitySelectOptionType,
-} from "../../Chat/components/InitializationForm";
+} from "../../../shared/constants/constants";
 
 interface IBuildLetterReturnType {
   userMessage: string;
@@ -12,7 +12,7 @@ function buildLetterUserMessage(
   org: string | undefined,
   loc: string | undefined,
 ): IBuildLetterReturnType | null {
-  const selectedLocation = CitySelectOptions[loc || "oregon"];
+  const selectedLocation = CITY_SELECT_OPTIONS[loc || "oregon"];
   if (selectedLocation === undefined) return null;
   const locationString =
     selectedLocation.city && selectedLocation.state
