@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import MessageWindow from "../../pages/Chat/components/MessageWindow";
 import { IMessage } from "../../hooks/useMessages";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import HousingContextProvider from "../../contexts/housingContext";
+import HousingContextProvider from "../../contexts/HousingContext";
 
 beforeAll(() => {
   if (!("scrollTo" in HTMLElement.prototype)) {

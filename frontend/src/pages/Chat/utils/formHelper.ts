@@ -1,4 +1,4 @@
-import { ILocation } from "../../../contexts/housingContext";
+import { ILocation } from "../../../contexts/HousingContext";
 
 interface IChatFormReturnType {
   userMessage: string;

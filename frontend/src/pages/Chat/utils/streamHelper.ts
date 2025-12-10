@@ -1,4 +1,4 @@
-import { ILocation } from "../../../contexts/housingContext";
+import { ILocation } from "../../../contexts/HousingContext";
 import { type IMessage } from "../../../hooks/useMessages";
 
 interface IStreamTextOptions {

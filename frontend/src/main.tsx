@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./style.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import HousingContextProvider from "./contexts/housingContext";
+import HousingContextProvider from "./contexts/HousingContext";
 
 const queryClient = new QueryClient();
 

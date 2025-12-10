@@ -56,7 +56,7 @@ vi.mock("../../LetterGenerationDialog", () => ({
 
 import * as streamHelper from "../../pages/Chat/utils/streamHelper";
 import useMessages from "../../hooks/useMessages";
-import HousingContextProvider from "../../contexts/housingContext";
+import HousingContextProvider from "../../contexts/HousingContext";
 
 let mockStreamText: ReturnType<typeof vi.fn>;
 let mockUseMessages: ReturnType<typeof vi.fn>;

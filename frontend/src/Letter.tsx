@@ -10,7 +10,7 @@ import LetterDisclaimer from "./pages/Letter/components/LetterDisclaimer";
 import MessageContainer from "./shared/components/MessageContainer";
 import useHousingContext from "./hooks/useHousingContext";
 import { buildChatUserMessage } from "./pages/Chat/utils/formHelper";
-import { ILocation } from "./contexts/housingContext";
+import { ILocation } from "./contexts/HousingContext";
 
 export default function Letter() {
   const { addMessage, messages, setMessages } = useMessages();
@@ -34,6 +34,7 @@ export default function Letter() {
   useEffect(() => {
     const output = buildLetterUserMessage(org, loc);
     if (output === null) return;
+    const hasIssueContext = issueDescription !== "";
 
     const userMessageId = Date.now().toString();
     // Add user message
@@ -41,13 +42,15 @@ export default function Letter() {
       ...prev,
       {
         role: "user",
-        content: [initialUserMessage, output.userMessage].join(" ").trim(),
+        content: [hasIssueContext ? initialUserMessage : "", output.userMessage]
+          .join(" ")
+          .trim(),
         messageId: userMessageId,
       },
     ]);
     streamLocationRef.current = output.selectedLocation;
     setStartStreaming(true);
-  }, [loc, org, setMessages, initialUserMessage]);
+  }, [loc, org, setMessages, issueDescription, initialUserMessage]);
 
   useEffect(() => {
     if (startStreaming === false || streamLocationRef.current === null) return;
