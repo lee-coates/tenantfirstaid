@@ -477,11 +477,19 @@ frontend/
 │   │   │   └── constants.ts        # File of constants
 │   │   └── utils/
 │   │       └── dompurify.ts        # Helper function for sanitizing text
-│   └── tests/
-│   │   ├── components/
-│   │   │   └── Chat.test.tsx       # Chat component testing
-│   │   └── utils/
+│   └── tests/                     # Testing suite
+│   │   ├── components/            # Component testing
+│   │   │   ├── About.test.ts      # About component testing
+│   │   │   ├── Chat.test.tsx       # Chat component testing
+│   │   │   ├── ChatDisclaimer.test.ts # ChatDisclaimer component testing
+│   │   │   ├── HousingContext.test.ts # HousingContext component testing
+│   │   │   ├── InitializationForm.test.ts # InitializationForm component testing
+│   │   │   ├── Letter.test.ts      # Letter component testing
+│   │   │   ├── LetterDisclaimer.test.ts # LetterDisclaimer component testing
+│   │   │   ├── MessageWindow.test.ts # MessageWindow component testing
+│   │   └── utils/                  # Utility function testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
+│   │       ├── formHelper.test.ts  # formHelper testing
 │   │       └── dompurify.test.ts   # dompurify testing
 ├── public/
 │   └── favicon.svg                 # Site favicon
