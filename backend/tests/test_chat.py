@@ -26,7 +26,7 @@ def chat_manager(mocker):
 
 
 def test_prepare_developer_instructions_includes_city_state(chat_manager):
-    city = "Portland"
+    city = "portland"
     state = "or"
     instructions = chat_manager.prepare_developer_instructions(city, state)
     assert f"The user is in {city} {state.upper()}." in instructions
