@@ -66,7 +66,9 @@ describe("buildChatUserMessage", () => {
     const message = result.userMessage;
 
     expect(message).toContain("I'm a tenant located in");
-    expect(message).toContain("I currently reside the following housing type:");
+    expect(message).toContain(
+      "I currently reside in the following housing type:",
+    );
     expect(message).toContain("I would like to ask you about");
     expect(message).toContain(
       "Can you help me with the following issue or question:",

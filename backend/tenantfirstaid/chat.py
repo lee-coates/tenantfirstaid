@@ -89,9 +89,7 @@ class ChatManager:
 
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
-        instructions += (
-            f"\nThe user is in {city if city != 'null' else ''} {state_upper}.\n"
-        )
+        instructions += f"\nThe user is in {city_lower if city_lower != 'null' else ''} {state_upper}.\n"
         return instructions
 
     def generate_gemini_chat_response(
