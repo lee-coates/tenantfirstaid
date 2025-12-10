@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { type IMessage } from "../../../hooks/useMessages";
-import { ILocation } from "../../../hooks/useLocation";
 import { streamText } from "../utils/streamHelper";
+import useHousingContext from "../../../hooks/useHousingContext";
 
 interface Props {
   addMessage: (args: {
@@ -10,7 +10,6 @@ interface Props {
   }) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   isLoading: boolean;
-  location: ILocation;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
   inputRef: React.RefObject<HTMLTextAreaElement | null>;
@@ -21,12 +20,13 @@ export default function InputField({
   addMessage,
   setMessages,
   isLoading,
-  location,
   setIsLoading,
   inputRef,
   value,
   onChange,
 }: Props) {
+  const { housingLocation } = useHousingContext();
+
   const handleSend = async () => {
     if (!value.trim()) return;
 
@@ -44,7 +44,7 @@ export default function InputField({
     await streamText({
       addMessage,
       setMessages,
-      location,
+      housingLocation,
       setIsLoading,
     });
   };
@@ -80,7 +80,7 @@ export default function InputField({
         ref={inputRef}
       />
       <button
-        className={`px-6 h-10 text-sm sm:text-base bg-[#1F584F] hover:bg-[#4F8B82] text-white rounded-md transition-color duration-300 ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
+        className={`h-10 text-sm sm:text-base bg-[#1F584F] hover:bg-[#4F8B82] text-white rounded-md transition-color duration-300 ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
         onClick={handleSend}
         disabled={isLoading || !value.trim()}
       >

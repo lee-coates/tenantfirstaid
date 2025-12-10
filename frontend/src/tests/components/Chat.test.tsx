@@ -12,14 +12,9 @@ beforeAll(() => {
 });
 
 let mockUseMessagesReturn: object;
-let mockUseLocationReturn: object;
 
 vi.mock("../../hooks/useMessages", () => ({
   default: () => mockUseMessagesReturn,
-}));
-
-vi.mock("../../hooks/useLocation", () => ({
-  default: () => mockUseLocationReturn,
 }));
 
 vi.mock("../../pages/Chat/components/MessageWindow", () => ({
@@ -69,18 +64,12 @@ describe("Chat generated-letter block", () => {
       messages: mockMessages1,
       setMessages: vi.fn(),
     };
-    mockUseLocationReturn = {
-      location: null,
-      setLocation: vi.fn(),
-    };
 
     await renderChat();
 
     await waitFor(() =>
       expect(document.querySelector(".generated-letter")).not.toBeNull(),
     );
-
-    console.log(document.querySelector(".generated-letter")?.innerHTML);
   });
 
   it("does not render .generated-letter when no message contains the separator", async () => {
@@ -89,17 +78,11 @@ describe("Chat generated-letter block", () => {
       messages: mockMessages2,
       setMessages: vi.fn(),
     };
-    mockUseLocationReturn = {
-      location: null,
-      setLocation: vi.fn(),
-    };
 
     await renderChat();
 
     await waitFor(() =>
       expect(document.querySelector(".generated-letter")).toBeNull(),
     );
-
-    console.log(document.querySelector(".generated-letter")?.innerHTML);
   });
 });

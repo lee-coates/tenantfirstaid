@@ -1,6 +1,5 @@
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
-import useLocation, { ILocation } from "./hooks/useLocation";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLetterContent } from "./hooks/useLetterContent";
@@ -9,10 +8,12 @@ import LetterGenerationDialog from "./pages/Letter/components/LetterGenerationDi
 import { buildLetterUserMessage } from "./pages/Letter/utils/letterHelper";
 import LetterDisclaimer from "./pages/Letter/components/LetterDisclaimer";
 import MessageContainer from "./shared/components/MessageContainer";
+import useHousingContext from "./hooks/useHousingContext";
+import { buildChatUserMessage } from "./pages/Chat/utils/formHelper";
+import { ILocation } from "./contexts/HousingContext";
 
 export default function Letter() {
   const { addMessage, messages, setMessages } = useMessages();
-  const { location, setLocation } = useLocation();
   const isOngoing = messages.length > 0;
   const { letterContent } = useLetterContent(messages);
   const { org, loc } = useParams();
@@ -21,20 +22,35 @@ export default function Letter() {
   const [isLoading, setIsLoading] = useState(true);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const LOADING_DISPLAY_DELAY_MS = 1000;
+  const { housingLocation, housingType, tenantTopic, issueDescription } =
+    useHousingContext();
+  const { userMessage: initialUserMessage } = buildChatUserMessage(
+    housingLocation,
+    housingType,
+    tenantTopic,
+    issueDescription,
+  );
 
   useEffect(() => {
     const output = buildLetterUserMessage(org, loc);
     if (output === null) return;
+    const hasIssueContext = issueDescription !== "";
 
     const userMessageId = Date.now().toString();
     // Add user message
     setMessages((prev) => [
       ...prev,
-      { role: "user", content: output.userMessage, messageId: userMessageId },
+      {
+        role: "user",
+        content: [hasIssueContext ? initialUserMessage : "", output.userMessage]
+          .join(" ")
+          .trim(),
+        messageId: userMessageId,
+      },
     ]);
     streamLocationRef.current = output.selectedLocation;
     setStartStreaming(true);
-  }, [loc, org, setMessages]);
+  }, [loc, org, setMessages, issueDescription, initialUserMessage]);
 
   useEffect(() => {
     if (startStreaming === false || streamLocationRef.current === null) return;
@@ -46,7 +62,7 @@ export default function Letter() {
         const streamDone = await streamText({
           addMessage,
           setMessages,
-          location: streamLocationRef.current,
+          housingLocation: streamLocationRef.current,
         });
         const INITIAL_INSTRUCTION =
           "What was generated is just an initial template. Please include details of your specific housing situation to update the letter.";
@@ -96,7 +112,7 @@ export default function Letter() {
 
   return (
     <>
-      <div className="absolute top-16 md:top-32 w-full flex items-center">
+      <div className="flex pt-16 h-screen items-center justify-center">
         <LetterGenerationDialog ref={dialogRef} />
         <div className="flex-1 h-full sm:h-auto items-center transition-all duration-300">
           <MessageContainer isOngoing={isOngoing} letterContent={letterContent}>
@@ -111,8 +127,6 @@ export default function Letter() {
                 <MessageWindow
                   messages={messages}
                   addMessage={addMessage}
-                  location={location}
-                  setLocation={setLocation}
                   setMessages={setMessages}
                   isOngoing={isOngoing}
                 />

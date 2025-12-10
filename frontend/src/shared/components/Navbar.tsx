@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import TenantFirstAidLogo from "./TenatFirstAidLogo";
+import TenantFirstAidLogo from "./TenantFirstAidLogo";
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

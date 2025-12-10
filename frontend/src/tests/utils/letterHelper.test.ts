@@ -20,14 +20,14 @@ describe("buildLetterUserMessage", () => {
     const output = buildLetterUserMessage("MyOrg", "portland");
     expect(output?.userMessage).toContain("redirected from");
     expect(output?.userMessage).toContain("MyOrg");
-    expect(output?.userMessage).toContain("(portland, or)");
+    expect(output?.userMessage).toContain("(Portland, OR)");
   });
 
   it("includes location string for eugene", () => {
     const output = buildLetterUserMessage("MyOrg", "eugene");
     expect(output?.userMessage).toContain("redirected from");
     expect(output?.userMessage).toContain("MyOrg");
-    expect(output?.userMessage).toContain("(eugene, or)");
+    expect(output?.userMessage).toContain("(Eugene, OR)");
   });
 
   it("includes location string for oregon", () => {

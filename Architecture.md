@@ -437,23 +437,34 @@ frontend/
 │   ├── PrivacyPolicy.tsx           # Privacy policy
 │   ├── main.tsx                    # Application entry point
 │   ├── style.css                   # Global styles
+│   ├── contexts/                   # React Contexts
+│   │   └── HousingContext.tsx      # Housing context for chat/letter generation
 │   ├── hooks/                      # Custom React hooks
 │   │   ├── useMessages.tsx         # Message handling logic
-│   │   ├── useSession.tsx          # Session management
+│   │   ├── useHousingContext.tsx   # Custom hook for housing context
 │   │   └── useLetterContent.tsx    # State management for letter generation
 │   ├── pages/Chat/                 # Chat page components
 │   │   ├── components/
-│   │   │   ├── CitySelectField.tsx # Location selection
+│   │   │   ├── ChatDisclaimer.tsx # Disclaimer for Chat page
+│   │   │   ├── InitializationForm.tsx # Context information from user
 │   │   │   ├── ExportMessagesButton.tsx # Chat export
 │   │   │   ├── InputField.tsx      # Message input
 │   │   │   ├── FeedbackModal.tsx   # Feedback modal
 │   │   │   ├── MessageContent.tsx  # Message display
 │   │   │   ├── MessageWindow.tsx   # Chat window
+│   │   │   ├── SelectField.tsx     # Initialization form select field
 │   │   │   └── SuggestedPrompts.tsx # Prompt suggestions
 │   │   └── utils/
 │   │       ├── exportHelper.ts     # Export functionality
 │   │       ├── feedbackHelper.tsx  # Feedback functionality
+│   │       ├── formHelper.tsx      # Housing context functionality
 │   │       └── streamHelper.tsx    # Stream functionality
+│   ├── pages/Letter/               # Letter page components
+│   │   ├── components/
+│   │   │   ├── LetterDisclaimer.tsx # Disclaimer for Letter page
+│   │   │   └── LetterGenerationDialog.tsx # Letter page dialog
+│   │   └── utils/
+│   │       └── letterHelper.tsx    # Letter generation functionality
 │   └── shared/                     # Shared components and utils
 │   │   ├── components/
 │   │   │   ├── BackLink.tsx        # Navigation component
@@ -461,16 +472,24 @@ frontend/
 │   │   │   ├── DisclaimerLayout.tsx  # Layout for disclaimer components
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
 │   │   │   ├── Navbar.tsx            # Navigation
-│   │   │   └── TenatFirstAidLogo.tsx # Application logo
+│   │   │   └── TenantFirstAidLogo.tsx # Application logo
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
 │   │   └── utils/
 │   │       └── dompurify.ts        # Helper function for sanitizing text
-│   └── tests/
-│   │   ├── components/
-│   │   │   └── Chat.test.tsx       # Chat component testing
-│   │   └── utils/
+│   └── tests/                     # Testing suite
+│   │   ├── components/            # Component testing
+│   │   │   ├── About.test.ts      # About component testing
+│   │   │   ├── Chat.test.tsx       # Chat component testing
+│   │   │   ├── ChatDisclaimer.test.ts # ChatDisclaimer component testing
+│   │   │   ├── HousingContext.test.ts # HousingContext component testing
+│   │   │   ├── InitializationForm.test.ts # InitializationForm component testing
+│   │   │   ├── Letter.test.ts      # Letter component testing
+│   │   │   ├── LetterDisclaimer.test.ts # LetterDisclaimer component testing
+│   │   │   ├── MessageWindow.test.ts # MessageWindow component testing
+│   │   └── utils/                  # Utility function testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
+│   │       ├── formHelper.test.ts  # formHelper testing
 │   │       └── dompurify.test.ts   # dompurify testing
 ├── public/
 │   └── favicon.svg                 # Site favicon
