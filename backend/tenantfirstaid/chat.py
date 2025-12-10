@@ -79,17 +79,17 @@ class ChatManager:
         VALID_STATES = {"OR"}
 
         # Validate and sanitize inputs
-        city_lower = city.lower() if city else "null"
+        city_clean = city.title() if city else "null"
         state_upper = state.upper() if state else "OR"
 
-        if city_lower not in VALID_CITIES:
-            city_lower = "null"
+        if city_clean not in VALID_CITIES:
+            city_clean = "null"
         if state_upper not in VALID_STATES:
             raise ValueError(f"Invalid state: {state}")
 
         # Add city and state filters if they are set
         instructions = DEFAULT_INSTRUCTIONS
-        instructions += f"\nThe user is in {city_lower if city_lower != 'null' else ''} {state_upper}.\n"
+        instructions += f"\nThe user is in {city_clean if city_clean != 'null' else ''} {state_upper}.\n"
         return instructions
 
     def generate_gemini_chat_response(
