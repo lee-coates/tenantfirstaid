@@ -80,7 +80,7 @@ export default function InputField({
           border border-[#ddd] rounded-md focus:outline-0 focus:border-blue-dark
           transition-colors duration-300
           box-border
-          focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]`.trim()}
+          focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]`}
         placeholder="Type your message here..."
         disabled={isLoading}
         ref={inputRef}
@@ -91,7 +91,7 @@ export default function InputField({
           text-sm sm:text-base text-white
           bg-green-dark hover:bg-green-medium
           transition-color duration-300
-          ${isLoading ? "cursor-progress" : "cursor-pointer"}`.trim()}
+          ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
         onClick={handleSend}
         disabled={isLoading || !value.trim()}
       >

@@ -13,6 +13,10 @@ import {
   LETTERABLE_TOPIC_OPTIONS,
   NONLETTERABLE_TOPIC_OPTIONS,
 } from "../../../shared/constants/constants";
+import { scrollToTop } from "../../../shared/utils/scrolling";
+
+const NONLETTERABLE_TOPICS = Object.keys(NONLETTERABLE_TOPIC_OPTIONS);
+
 interface Props {
   addMessage: (args: {
     city: string | null;
@@ -39,7 +43,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
   const locationString = city
     ? city.charAt(0).toUpperCase() + city.slice(1)
     : null;
-  const NONLETTERABLE_TOPICS = Object.keys(NONLETTERABLE_TOPIC_OPTIONS);
 
   const handleLocationChange = (key: string | null) => {
     handleCityChange(key);
@@ -175,7 +178,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           <ul className="list-disc pl-4">
             {ALL_TOPIC_OPTIONS[
               tenantTopic as keyof typeof ALL_TOPIC_OPTIONS
-            ].example.map((question, index) => (
+            ]?.example.map((question, index) => (
               <li key={`${tenantTopic}-${index}`}>
                 {question.split(/(_)/).map((part, i) => {
                   if (!part.startsWith("_")) return part;
@@ -195,7 +198,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             h-25 md:h-20 w-full
             border focus:outline-0 focus:border-blue-dark
             focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]
-            transition-colors duration-300`.trim()}
+            transition-colors duration-300`}
           placeholder="Briefly describe your specific housing situation or question about housing."
           onChange={handleIssueDescription}
         />
@@ -207,7 +210,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             text-red-dark
             border border-red-medium hover:border-red-dark
             hover:bg-red-light transition-colors
-            ${city === "other" ? "opacity-50" : ""}`.trim()}
+            ${city === "other" ? "opacity-50" : ""}`}
           type="reset"
           onClick={handleFormReset}
         >
@@ -218,7 +221,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             text-green-dark
             border border-green-medium hover:border-green-dark
             hover:bg-green-light transition-colors
-            ${city === "other" ? "opacity-50" : ""}`.trim()}
+            ${city === "other" ? "opacity-50" : ""}`}
           style={{
             cursor: city === "other" ? "not-allowed" : "pointer",
           }}
@@ -226,7 +229,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           aria-label="enter chat"
           title="Enter Chat"
           disabled={city === "other"}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => scrollToTop()}
         >
           Start Chat
         </button>
@@ -243,7 +246,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
                 border rounded-md border-blue-medium hover:border-blue-dark
                 font-semibold text-center text-blue-dark 
                 hover:bg-blue-light transition-colors no-underline
-                ${city === "other" ? "opacity-50" : ""}`.trim()}
+                ${city === "other" ? "opacity-50" : ""}`}
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",
               }}
@@ -255,7 +258,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
                   e.preventDefault();
                   e.stopPropagation();
                 } else {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  scrollToTop();
                 }
               }}
             >

@@ -6,7 +6,7 @@ export default function BackLink() {
       className={`
         absolute top-4 left-4
         flex
-        text-blue-dark hover:text-blue-medium font-semibold`.trim()}
+        text-blue-dark hover:text-blue-medium font-semibold`}
       to="/"
       aria-label="Go back"
     >

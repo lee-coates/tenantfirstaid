@@ -127,7 +127,7 @@ const REFERENCED_LAW_LIST = {
   },
   "ORS 105": {
     link: "https://www.oregonlegislature.gov/bills_laws/ors/ors105.html",
-    label: "ORS 150",
+    label: "ORS 105",
   },
   "Section 8.425": {
     link: "https://eugene.municipal.codes/EC/8.425",

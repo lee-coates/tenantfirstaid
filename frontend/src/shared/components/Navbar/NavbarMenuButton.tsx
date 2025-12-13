@@ -14,7 +14,7 @@ export default function NavbarMenuButton({
         w-10 h-10 relative z-60
         hover:bg-green-medium
         transition-colors duration-300
-        group`.trim()}
+        group`}
       onClick={() => setSidebarOpen(!sidebarOpen)}
       aria-label="Open menu"
     >
@@ -26,7 +26,7 @@ export default function NavbarMenuButton({
             sidebarOpen
               ? "rotate-45 translate-y-2 bg-green-dark group-hover:bg-green-light"
               : "bg-green-background"
-          }`.trim()}
+          }`}
       />
       <span
         className={`
@@ -34,7 +34,7 @@ export default function NavbarMenuButton({
           bg-green-background 
           rounded
           transition-all duration-300
-          ${sidebarOpen ? "opacity-0" : ""}`.trim()}
+          ${sidebarOpen ? "opacity-0" : ""}`}
       />
       <span
         className={`
@@ -44,7 +44,7 @@ export default function NavbarMenuButton({
             sidebarOpen
               ? "-rotate-45 -translate-y-2 bg-green-dark group-hover:bg-green-light"
               : "bg-green-background"
-          }`.trim()}
+          }`}
       />
     </button>
   );

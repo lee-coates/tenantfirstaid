@@ -12,7 +12,7 @@ export default function ExportMessagesButton({ messages }: Props) {
         text-sm sm:text-base text-blue-dark
         shadow-sm
         border border-blue-medium hover:border-blue-dark
-        hover:bg-blue-light transition-colors`.trim()}
+        hover:bg-blue-light transition-colors`}
       onClick={() => exportMessages(messages)}
     >
       Export

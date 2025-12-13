@@ -27,12 +27,13 @@ export default function Navbar() {
           bg-paper-background
           shadow-lg z-50
           transition-transform duration-300
-          ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`.trim()}
+          ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col p-8 gap-6 mt-10">
           {NAVBAR_LINKS.map(({ to, label }) => (
             <Link
               to={to}
+              key={label}
               className={`
                 block px-3 py-2
                 rounded no-underline

@@ -28,7 +28,7 @@ export default function SelectField({
           border border-[#ddd] focus:outline-0 focus:border-blue-dark
           rounded-md box-border
           transition-colors duration-300
-          focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]`.trim()}
+          focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]`}
         required
       >
         <option value="" disabled>

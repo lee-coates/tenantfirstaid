@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import BackLink from "./shared/components/BackLink";
 import { useEffect } from "react";
 import { CONTACT_EMAIL } from "./shared/constants/constants";
+import { scrollToTop } from "./shared/utils/scrolling";
 
 export default function Disclaimer() {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop();
   }, []);
 
   return (
