@@ -243,7 +243,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
                 border rounded-md border-blue-medium hover:border-blue-dark
                 font-semibold text-center text-blue-dark 
                 hover:bg-blue-light transition-colors no-underline
-                ${city === "other" ? "opacity-50" : ""}.trim()`}
+                ${city === "other" ? "opacity-50" : ""}`.trim()}
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",
               }}
