@@ -466,11 +466,14 @@ frontend/
 │   │       └── letterHelper.tsx    # Letter generation functionality
 │   └── shared/                     # Shared components and utils
 │   │   ├── components/
+│   │   │   ├── Navbar/
+│   │   │   │   ├── Navbar.tsx      # Navigation
+│   │   │   │   └── NavbarMenuButton.tsx # Navigation component
 │   │   │   ├── BackLink.tsx        # Navigation component
 │   │   │   ├── BeaverIcon.tsx      # Oregon-themed icon
 │   │   │   ├── DisclaimerLayout.tsx  # Layout for disclaimer components
+│   │   │   ├── FeatureSnippet.tsx  # Features and references component
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
-│   │   │   ├── Navbar.tsx            # Navigation
 │   │   │   └── TenantFirstAidLogo.tsx # Application logo
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
