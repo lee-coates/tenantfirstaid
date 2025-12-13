@@ -452,8 +452,7 @@ frontend/
 │   │   │   ├── FeedbackModal.tsx   # Feedback modal
 │   │   │   ├── MessageContent.tsx  # Message display
 │   │   │   ├── MessageWindow.tsx   # Chat window
-│   │   │   ├── SelectField.tsx     # Initialization form select field
-│   │   │   └── SuggestedPrompts.tsx # Prompt suggestions
+│   │   │   └── SelectField.tsx     # Initialization form select field
 │   │   └── utils/
 │   │       ├── exportHelper.ts     # Export functionality
 │   │       ├── feedbackHelper.tsx  # Feedback functionality

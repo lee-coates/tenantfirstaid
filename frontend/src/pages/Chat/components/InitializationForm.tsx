@@ -7,9 +7,11 @@ import SelectField from "./SelectField";
 import { Link } from "react-router-dom";
 import useHousingContext from "../../../hooks/useHousingContext";
 import {
+  ALL_TOPIC_OPTIONS,
   CITY_SELECT_OPTIONS,
   HOUSING_OPTIONS,
-  TOPIC_OPTIONS,
+  LETTERABLE_TOPIC_OPTIONS,
+  NONLETTERABLE_TOPIC_OPTIONS,
 } from "../../../shared/constants/constants";
 interface Props {
   addMessage: (args: {
@@ -31,9 +33,13 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
     handleHousingChange,
     handleTenantTopic,
     handleIssueDescription,
+    handleFormReset,
   } = useHousingContext();
   const [initialUserMessage, setInitialUserMessage] = useState("");
-  const locationString = city ?? null;
+  const locationString = city
+    ? city.charAt(0).toUpperCase() + city.slice(1)
+    : null;
+  const NONLETTERABLE_TOPICS = Object.keys(NONLETTERABLE_TOPIC_OPTIONS);
 
   const handleLocationChange = (key: string | null) => {
     handleCityChange(key);
@@ -80,19 +86,37 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         handleInitialInput();
       }}
     >
-      <div className="flex px-4 gap-4 items-center">
+      <div className="flex px-4 gap-4 items-center justify-center">
         <div>
           <BeaverIcon />
         </div>
-        <div className="w-full">
-          <p className="text-center text-[#888]">
-            {city === "other"
-              ? "Unfortunately, we can only answer questions related to tenant rights in Oregon at this time."
-              : `Welcome to Tenant First Aid! ${locationString ? `I can help answer your questions about tenant rights in ${locationString}.` : "Start by filling the form below."}`}
+        <div className="">
+          <p className="text-xl sm:text-2xl text-center">
+            Welcome to Tenant First Aid!
           </p>
         </div>
       </div>
-
+      <div>
+        <div className="border rounded-lg px-4 py-3">
+          <p>Things to keep in mind!</p>
+          <ul className="list-disc pl-4">
+            <li>Tenants have rights under state and local law.</li>
+            <li>
+              The type of housing you live in may determine what legal
+              protections apply to you.
+            </li>
+            <li>
+              In most cases, landlords must go through a specific legal process
+              in order to get you to move out (eviction).
+            </li>
+          </ul>
+        </div>
+        <p className="pt-2 px-4">
+          I'm an interactive AI. We can start by filling the form below.
+          Depending on the topic, I could help generate a letter to address your
+          housing situation or answer your questions.
+        </p>
+      </div>
       <SelectField
         name="city"
         value={city || ""}
@@ -105,6 +129,13 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           </option>
         ))}
       </SelectField>
+      {city && (
+        <p className="px-4">
+          {city === "other"
+            ? "Unfortunately, we can only answer questions related to tenant rights in Oregon at this time."
+            : `${locationString ? `I can help answer your questions about tenant rights in ${locationString}.` : ""}`}
+        </p>
+      )}
       <SelectField
         name="housing type"
         value={housingType || ""}
@@ -123,25 +154,71 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         description="Select your topic"
         handleFunction={handleTenantTopic}
       >
-        {TOPIC_OPTIONS.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+        <optgroup label="--Letterable--">
+          {Object.entries(LETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
+            <option key={key} value={key}>
+              {option.label}
+            </option>
+          ))}
+        </optgroup>
+        <optgroup label="--Non-Letterable--">
+          {Object.entries(NONLETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
+            <option key={key} value={key}>
+              {option.label}
+            </option>
+          ))}
+        </optgroup>
       </SelectField>
+      {tenantTopic && (
+        <div className="px-4">
+          Here are some examples of questions I can help with:
+          <ul className="list-disc pl-4">
+            {ALL_TOPIC_OPTIONS[
+              tenantTopic as keyof typeof ALL_TOPIC_OPTIONS
+            ].example.map((question, index) => (
+              <li key={`${tenantTopic}-${index}`}>
+                {question.split(/(_)/).map((part, i) => {
+                  if (!part.startsWith("_")) return part;
+                  return (
+                    <span key={i} className="inline-block w-[3ch] border-b" />
+                  );
+                })}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div>
         <textarea
-          className="resize-none h-[80%] w-full border transition-colors duration-300 focus:outline-0 focus:border-[#4a90e2] focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]"
+          className={`
+            resize-none
+            h-25 md:h-20 w-full
+            border focus:outline-0 focus:border-blue-dark
+            focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]
+            transition-colors duration-300`.trim()}
           placeholder="Briefly describe your specific housing situation or question about housing."
           onChange={handleIssueDescription}
-          required
         />
       </div>
 
       <div className="flex justify-center gap-4">
         <button
-          className={`border border-[#1F584F] text-[#1F584F] hover:bg-[#E8EEE2] transition-colors
-            ${city === "other" ? "opacity-50" : ""}`}
+          className={`
+            text-red-dark
+            border border-red-medium hover:border-red-dark
+            hover:bg-red-light transition-colors
+            ${city === "other" ? "opacity-50" : ""}`.trim()}
+          type="reset"
+          onClick={handleFormReset}
+        >
+          Reset
+        </button>
+        <button
+          className={`
+            text-green-dark
+            border border-green-medium hover:border-green-dark
+            hover:bg-green-light transition-colors
+            ${city === "other" ? "opacity-50" : ""}`.trim()}
           style={{
             cursor: city === "other" ? "not-allowed" : "pointer",
           }}
@@ -149,18 +226,24 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           aria-label="enter chat"
           title="Enter Chat"
           disabled={city === "other"}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           Start Chat
         </button>
         {housingLocation &&
           housingType &&
           tenantTopic &&
-          tenantTopic !== "Eviction and Notices" &&
+          !NONLETTERABLE_TOPICS.includes(tenantTopic) &&
           issueDescription && (
             <Link
               to="letter"
-              className={`flex items-center border rounded-md font-semibold py-1 px-4 border-[#4a90e2] text-[#4a90e2] hover:bg-[#E6F0FB] transition-colors
-                ${city === "other" ? "opacity-50" : ""}`}
+              className={`
+                flex items-center
+                py-1 px-4
+                border rounded-md border-blue-medium hover:border-blue-dark
+                font-semibold text-center text-blue-dark 
+                hover:bg-blue-light transition-colors no-underline
+                ${city === "other" ? "opacity-50" : ""}.trim()`}
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",
               }}
@@ -168,9 +251,11 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
               aria-label="generate letter"
               title="Generate Letter"
               onClick={(e) => {
-                if (city === "other") {
+                if (NONLETTERABLE_TOPICS.includes(tenantTopic)) {
                   e.preventDefault();
                   e.stopPropagation();
+                } else {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }
               }}
             >

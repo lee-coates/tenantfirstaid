@@ -1,18 +1,40 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import "tailwindcss";
 
-@layer base {
-  html,
-  body {
-    @apply bg-[#BACAB2];
-  }
-}
-
 :root {
   --navbar-height: 64px;
   --mobile-offset-message-container: 4rem;
   --desktop-offset-message-container: 10rem;
   --message-window-offset: 30rem;
+}
+
+@theme {
+  --color-blue-link: #2563eb;
+  --color-blue-dark: #4a91e2;
+  --color-blue-medium: #60a5fa;
+  --color-blue-light: #e6f0fb;
+
+  --color-paper-background: #f4f4f2;
+  --color-green-background: #bacab2;
+
+  --color-green-dark: #1f584f;
+  --color-green-medium: #4f8b82;
+  --color-green-light: #e8eee2;
+
+  --color-red-dark: #e3574b;
+  --color-red-medium: #fca5a5;
+  --color-red-light: #fff0ee;
+
+  --color-gray-dark: #4b5563;
+  --color-gray-medium: #9ca3af;
+  --color-gray-light: #e5e7eb;
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-green-background;
+  }
 }
 
 body {
@@ -70,9 +92,17 @@ textarea {
   animation: dotPulse 1.5s infinite linear;
 }
 
+a {
+  @apply underline;
+}
+
+.no-underline {
+  @apply no-underline;
+}
+
 .message-bubble a,
 .generated-letter a {
-  @apply inline text-blue-600 underline transition-colors hover:bg-blue-200 rounded;
+  @apply inline text-blue-link transition-colors hover:bg-blue-dark rounded;
 }
 
 @keyframes fadeInUp {

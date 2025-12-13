@@ -4,7 +4,6 @@ import InputField from "./InputField";
 import MessageContent from "./MessageContent";
 import ExportMessagesButton from "./ExportMessagesButton";
 import InitializationForm from "./InitializationForm";
-import SuggestedPrompts from "./SuggestedPrompts";
 import FeedbackModal from "./FeedbackModal";
 import { useLocation } from "react-router-dom";
 
@@ -54,14 +53,6 @@ export default function MessageWindow({
     }
   }, [messages]);
 
-  const handlePromptClick = (prompt: string) => {
-    setInputValue(prompt);
-    if (inputRef.current) {
-      inputRef.current.value = prompt;
-      inputRef.current.focus();
-    }
-  };
-
   return (
     <>
       <div
@@ -70,9 +61,7 @@ export default function MessageWindow({
         }`}
         ref={messagesRef}
       >
-        <div
-          className={`max-h-[calc(100dvh-var(--message-window-offset)-var(--navbar-height))] mx-auto max-w-[700px]`}
-        >
+        <div className="max-h-[calc(100dvh-var(--message-window-offset)-var(--navbar-height))] mx-auto max-w-[700px]">
           {isOngoing ? (
             <div className="flex flex-col gap-4 relative">
               {displayedMessages.map((message) => {
@@ -105,9 +94,6 @@ export default function MessageWindow({
       <div>
         {messages.length > 0 ? (
           <>
-            {messages.length === 1 && inputValue === "" && (
-              <SuggestedPrompts onPromptClick={handlePromptClick} />
-            )}
             <InputField
               addMessage={addMessage}
               setMessages={setMessages}
@@ -119,7 +105,11 @@ export default function MessageWindow({
             />
             <div className="flex justify-center gap-4 mt-4">
               <button
-                className="border text-sm sm:text-base shadow-sm border-red-300 text-[#E3574B] hover:bg-[#fff0ee] hover:border-[#E3574B] transition-colors"
+                className={`
+                  text-sm sm:text-base text-red-dark
+                  shadow-sm
+                  border border-red-medium hover:border-red-dark
+                  hover:bg-red-light transition-colors`.trim()}
                 onClick={handleClearSession}
                 aria-label="clear chat"
                 title="Clear Chat"
@@ -128,7 +118,11 @@ export default function MessageWindow({
               </button>
               <ExportMessagesButton messages={messages} />
               <button
-                className="border text-sm sm:text-base shadow-sm hover:bg-gray-200 transition-colors opacity-70"
+                className={`
+                  text-sm sm:text-base
+                  shadow-sm
+                  border border-gray-medium hover:border-gray-dark
+                  hover:bg-gray-light transition-colors opacity-70`.trim()}
                 onClick={() => {
                   setOpenFeedback(true);
                 }}

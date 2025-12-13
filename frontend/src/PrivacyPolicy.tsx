@@ -91,14 +91,14 @@ export default function PrivacyPolicy() {
             (Google:{" "}
             <Link
               to="https://policies.google.com/privacy"
-              className="underline text-blue-600"
+              className="text-blue-link hover:text-blue-dark"
             >
               Privacy Policy
             </Link>{" "}
             and{" "}
             <Link
               to="https://policies.google.com/terms"
-              className="underline text-blue-600"
+              className="text-blue-link hover:text-blue-dark"
             >
               Terms of Service
             </Link>
@@ -214,7 +214,7 @@ export default function PrivacyPolicy() {
           interacting with the Services, or emailing us at{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="underline text-blue-600"
+            className="text-blue-link hover:text-blue-dark"
             aria-label="contact-email"
           >
             {CONTACT_EMAIL}
@@ -239,7 +239,7 @@ export default function PrivacyPolicy() {
           at:{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="underline text-blue-600"
+            className="text-blue-link hover:text-blue-dark"
             aria-label="contact-email"
           >
             {CONTACT_EMAIL}

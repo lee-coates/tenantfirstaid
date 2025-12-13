@@ -18,6 +18,7 @@ export interface IHousingContextType {
   handleIssueDescription: (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
+  handleFormReset: () => void;
 }
 
 const HousingContext = createContext<IHousingContextType | null>(null);
@@ -59,6 +60,14 @@ export default function HousingContextProvider({ children }: Props) {
     [],
   );
 
+  const handleFormReset = useCallback(() => {
+    setCity(null);
+    setHousingLocation({ city: null, state: null });
+    setHousingType(null);
+    setTenantTopic(null);
+    setIssueDescription("");
+  }, []);
+
   const housingContextObject = useMemo(
     () => ({
       housingLocation,
@@ -71,6 +80,7 @@ export default function HousingContextProvider({ children }: Props) {
       handleHousingChange,
       handleTenantTopic,
       handleIssueDescription,
+      handleFormReset,
     }),
     [
       housingLocation,
@@ -83,6 +93,7 @@ export default function HousingContextProvider({ children }: Props) {
       handleHousingChange,
       handleTenantTopic,
       handleIssueDescription,
+      handleFormReset,
     ],
   );
 

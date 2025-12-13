@@ -30,7 +30,7 @@ export default function Disclaimer() {
           contact us at{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="underline text-blue-600"
+            className="underline text-blue-link hover:text-blue-dark"
             aria-label="contact-email"
           >
             {CONTACT_EMAIL}
@@ -51,7 +51,10 @@ export default function Disclaimer() {
         <h3 className="text-xl font-semibold my-4">2. Privacy</h3>
         <p>
           Please refer to our{" "}
-          <Link to="/privacy-policy" className="underline text-blue-600">
+          <Link
+            to="/privacy-policy"
+            className="underline text-blue-link hover:text-blue-dark"
+          >
             Privacy Policy
           </Link>{" "}
           for information about how we collect, use and disclose information
@@ -408,7 +411,7 @@ export default function Disclaimer() {
           by sending an email to{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="underline text-blue-600"
+            className="underline text-blue-link hover:text-blue-dark"
             aria-label="contact-email"
           >
             {CONTACT_EMAIL}
