@@ -76,7 +76,7 @@ export default function MessageWindow({
                       className={`message-bubble p-3 rounded-2xl max-w-[95%] ${
                         message.role === "model"
                           ? "bg-slate-200 rounded-tl-sm"
-                          : "bg-[#1F584F] text-white rounded-tr-sm"
+                          : "bg-green-dark text-white rounded-tr-sm"
                       }`}
                     >
                       <MessageContent message={message} />

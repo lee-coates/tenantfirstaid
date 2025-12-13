@@ -95,18 +95,28 @@ a {
   @apply inline text-blue-link transition-colors hover:bg-blue-dark rounded;
 }
 
-input,
-textarea {
-  resize: none;
-  border-color: #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  padding: 8px 12px;
+select {
+  padding: 8px;
 }
 
 input,
 textarea {
-  @apply border focus:outline-0 focus:border-blue-dark focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)];
+  padding: 8px 12px;
+}
+
+input,
+textarea,
+select {
+  resize: none;
+  border-color: #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select {
+  @apply border transition-colors duration-300 focus:outline-0 focus:border-blue-dark focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)];
 }
 
 .animate-dot-pulse {
