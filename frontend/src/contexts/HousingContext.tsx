@@ -1,5 +1,5 @@
 import { createContext, useCallback, useMemo, useState } from "react";
-import DOMPurify, { SANITIZE_SETTINGS } from "../shared/utils/dompurify";
+import DOMPurify, { SANITIZE_USER_SETTINGS } from "../shared/utils/dompurify";
 
 export interface ILocation {
   city: string | null;
@@ -57,7 +57,7 @@ export default function HousingContextProvider({ children }: Props) {
   const handleIssueDescription = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setIssueDescription(
-        DOMPurify.sanitize(event.target.value, SANITIZE_SETTINGS),
+        DOMPurify.sanitize(event.target.value, SANITIZE_USER_SETTINGS),
       );
     },
     [],
