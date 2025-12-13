@@ -107,9 +107,8 @@ export default function MessageWindow({
               <button
                 className={`
                   text-sm sm:text-base text-red-dark
-                  shadow-sm
                   border border-red-medium hover:border-red-dark
-                  hover:bg-red-light transition-colors`}
+                  hover:bg-red-light`}
                 onClick={handleClearSession}
                 aria-label="clear chat"
                 title="Clear Chat"
@@ -120,9 +119,8 @@ export default function MessageWindow({
               <button
                 className={`
                   text-sm sm:text-base
-                  shadow-sm
                   border border-gray-medium hover:border-gray-dark
-                  hover:bg-gray-light transition-colors opacity-70`}
+                  hover:bg-gray-light opacity-70`}
                 onClick={() => {
                   setOpenFeedback(true);
                 }}

@@ -74,13 +74,7 @@ export default function InputField({
           }
         }}
         rows={1}
-        className={`
-          overflow-auto resize-none
-          max-h-22 w-full px-3 py-2
-          border border-[#ddd] rounded-md focus:outline-0 focus:border-blue-dark
-          transition-colors duration-300
-          box-border
-          focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]`}
+        className="overflow-auto box-border max-h-22 w-full px-3 py-2"
         placeholder="Type your message here..."
         disabled={isLoading}
         ref={inputRef}
@@ -90,7 +84,6 @@ export default function InputField({
           h-10
           text-sm sm:text-base text-white
           bg-green-dark hover:bg-green-medium
-          transition-color duration-300
           ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
         onClick={handleSend}
         disabled={isLoading || !value.trim()}

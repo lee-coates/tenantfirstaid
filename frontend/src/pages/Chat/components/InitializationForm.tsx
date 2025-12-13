@@ -193,12 +193,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
       )}
       <div>
         <textarea
-          className={`
-            resize-none
-            h-25 md:h-20 w-full
-            border focus:outline-0 focus:border-blue-dark
-            focus:shadow-[0_0_0_2px_rgba(74,144,226,0.2)]
-            transition-colors duration-300`}
+          className="h-25 md:h-20 w-full"
           placeholder="Briefly describe your specific housing situation or question about housing."
           onChange={handleIssueDescription}
         />
@@ -209,7 +204,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           className={`
             text-red-dark
             border border-red-medium hover:border-red-dark
-            hover:bg-red-light transition-colors
+            hover:bg-red-light
             ${city === "other" ? "opacity-50" : ""}`}
           type="reset"
           onClick={handleFormReset}
@@ -220,7 +215,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           className={`
             text-green-dark
             border border-green-medium hover:border-green-dark
-            hover:bg-green-light transition-colors
+            hover:bg-green-light
             ${city === "other" ? "opacity-50" : ""}`}
           style={{
             cursor: city === "other" ? "not-allowed" : "pointer",
@@ -245,7 +240,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
                 py-1 px-4
                 border rounded-md border-blue-medium hover:border-blue-dark
                 font-semibold text-center text-blue-dark 
-                hover:bg-blue-light transition-colors no-underline
+                hover:bg-blue-light no-underline
                 ${city === "other" ? "opacity-50" : ""}`}
               style={{
                 cursor: city === "other" ? "not-allowed" : "pointer",

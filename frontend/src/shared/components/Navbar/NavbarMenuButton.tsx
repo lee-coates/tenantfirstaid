@@ -13,38 +13,29 @@ export default function NavbarMenuButton({
         flex flex-col justify-center items-center
         w-10 h-10 relative z-60
         hover:bg-green-medium
-        transition-colors duration-300
+        transition-all
         group`}
       onClick={() => setSidebarOpen(!sidebarOpen)}
       aria-label="Open menu"
     >
       <span
-        className={`
-          block w-7 h-1
-          rounded 
-          transition-all duration-300 ${
-            sidebarOpen
-              ? "rotate-45 translate-y-2 bg-green-dark group-hover:bg-green-light"
-              : "bg-green-background"
-          }`}
+        className={`block w-7 h-1 rounded transition-all ${
+          sidebarOpen
+            ? "rotate-45 translate-y-2 bg-green-dark group-hover:bg-green-light"
+            : "bg-green-background"
+        }`}
       />
       <span
-        className={`
-          block w-7 h-1 my-1 
+        className={`block w-7 h-1 my-1 rounded transition-all
           bg-green-background 
-          rounded
-          transition-all duration-300
           ${sidebarOpen ? "opacity-0" : ""}`}
       />
       <span
-        className={`
-          block w-7 h-1
-          rounded
-          transition-all duration-300 ${
-            sidebarOpen
-              ? "-rotate-45 -translate-y-2 bg-green-dark group-hover:bg-green-light"
-              : "bg-green-background"
-          }`}
+        className={`block w-7 h-1 rounded transition-all ${
+          sidebarOpen
+            ? "-rotate-45 -translate-y-2 bg-green-dark group-hover:bg-green-light"
+            : "bg-green-background"
+        }`}
       />
     </button>
   );

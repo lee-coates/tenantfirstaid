@@ -10,9 +10,8 @@ export default function ExportMessagesButton({ messages }: Props) {
     <button
       className={`
         text-sm sm:text-base text-blue-dark
-        shadow-sm
         border border-blue-medium hover:border-blue-dark
-        hover:bg-blue-light transition-colors`}
+        hover:bg-blue-light`}
       onClick={() => exportMessages(messages)}
     >
       Export
