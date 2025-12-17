@@ -447,6 +447,7 @@ frontend/
 │   │   ├── components/
 │   │   │   ├── ChatDisclaimer.tsx # Disclaimer for Chat page
 │   │   │   ├── InitializationForm.tsx # Context information from user
+│   │   │   ├── AutoExpandText.tsx  # Animated Text component
 │   │   │   ├── ExportMessagesButton.tsx # Chat export
 │   │   │   ├── InputField.tsx      # Message input
 │   │   │   ├── FeedbackModal.tsx   # Feedback modal
@@ -478,6 +479,7 @@ frontend/
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
 │   │   └── utils/
+│   │       ├── scrolling.ts        # Helper function for window scrolling
 │   │       └── dompurify.ts        # Helper function for sanitizing text
 │   └── tests/                     # Testing suite
 │   │   ├── components/            # Component testing
@@ -488,7 +490,7 @@ frontend/
 │   │   │   ├── InitializationForm.test.ts # InitializationForm component testing
 │   │   │   ├── Letter.test.ts      # Letter component testing
 │   │   │   ├── LetterDisclaimer.test.ts # LetterDisclaimer component testing
-│   │   │   ├── MessageWindow.test.ts # MessageWindow component testing
+│   │   │   └── MessageWindow.test.ts # MessageWindow component testing
 │   │   └── utils/                  # Utility function testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
 │   │       ├── formHelper.test.ts  # formHelper testing
