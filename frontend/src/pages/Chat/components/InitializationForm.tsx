@@ -14,6 +14,7 @@ import {
   NONLETTERABLE_TOPIC_OPTIONS,
 } from "../../../shared/constants/constants";
 import { scrollToTop } from "../../../shared/utils/scrolling";
+import AutoExpandText from "./AutoExpandText";
 
 const NONLETTERABLE_TOPICS = Object.keys(NONLETTERABLE_TOPIC_OPTIONS);
 
@@ -120,25 +121,25 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           housing situation or answer your questions.
         </p>
       </div>
-      <SelectField
-        name="city"
-        value={city || ""}
-        description="Select your location"
-        handleFunction={handleLocationChange}
-      >
-        {Object.entries(CITY_SELECT_OPTIONS).map(([key, option]) => (
-          <option key={key} value={key}>
-            {option.label}
-          </option>
-        ))}
-      </SelectField>
-      {city && (
-        <p className="px-4">
+      <div>
+        <SelectField
+          name="city"
+          value={city || ""}
+          description="Select your location"
+          handleFunction={handleLocationChange}
+        >
+          {Object.entries(CITY_SELECT_OPTIONS).map(([key, option]) => (
+            <option key={key} value={key}>
+              {option.label}
+            </option>
+          ))}
+        </SelectField>
+        <AutoExpandText isExpanded={Boolean(city)}>
           {city === "other"
             ? "Unfortunately, we can only answer questions related to tenant rights in Oregon at this time."
             : `${locationString ? `I can help answer your questions about tenant rights in ${locationString}.` : ""}`}
-        </p>
-      )}
+        </AutoExpandText>
+      </div>
       <SelectField
         name="housing type"
         value={housingType || ""}
@@ -151,46 +152,50 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           </option>
         ))}
       </SelectField>
-      <SelectField
-        name="tenant topic"
-        value={tenantTopic || ""}
-        description="Select your topic"
-        handleFunction={handleTenantTopic}
-      >
-        <optgroup label="--Letterable--">
-          {Object.entries(LETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
-            <option key={key} value={key}>
-              {option.label}
-            </option>
-          ))}
-        </optgroup>
-        <optgroup label="--Non-Letterable--">
-          {Object.entries(NONLETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
-            <option key={key} value={key}>
-              {option.label}
-            </option>
-          ))}
-        </optgroup>
-      </SelectField>
-      {tenantTopic && (
-        <div className="px-4">
-          Here are some examples of questions I can help with:
-          <ul className="list-disc pl-4">
-            {ALL_TOPIC_OPTIONS[
-              tenantTopic as keyof typeof ALL_TOPIC_OPTIONS
-            ]?.example.map((question, index) => (
-              <li key={`${tenantTopic}-${index}`}>
-                {question.split(/(_)/).map((part, i) => {
-                  if (!part.startsWith("_")) return part;
-                  return (
-                    <span key={i} className="inline-block w-[3ch] border-b" />
-                  );
-                })}
-              </li>
+      <div>
+        <SelectField
+          name="tenant topic"
+          value={tenantTopic || ""}
+          description="Select your topic"
+          handleFunction={handleTenantTopic}
+        >
+          <optgroup label="--Letterable--">
+            {Object.entries(LETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
+              <option key={key} value={key}>
+                {option.label}
+              </option>
             ))}
-          </ul>
-        </div>
-      )}
+          </optgroup>
+          <optgroup label="--Non-Letterable--">
+            {Object.entries(NONLETTERABLE_TOPIC_OPTIONS).map(
+              ([key, option]) => (
+                <option key={key} value={key}>
+                  {option.label}
+                </option>
+              ),
+            )}
+          </optgroup>
+        </SelectField>
+        <AutoExpandText isExpanded={Boolean(tenantTopic)}>
+          <div className="px-4">
+            Here are some examples of questions I can help with:
+            <ul className="list-disc pl-4">
+              {ALL_TOPIC_OPTIONS[
+                tenantTopic as keyof typeof ALL_TOPIC_OPTIONS
+              ]?.example.map((question, index) => (
+                <li key={`${tenantTopic}-${index}`}>
+                  {question.split(/(_)/).map((part, i) => {
+                    if (!part.startsWith("_")) return part;
+                    return (
+                      <span key={i} className="inline-block w-[3ch] border-b" />
+                    );
+                  })}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </AutoExpandText>
+      </div>
       <div>
         <textarea
           className="h-25 md:h-20 w-full"

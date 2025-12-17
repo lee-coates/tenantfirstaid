@@ -23,6 +23,7 @@ export default function SelectField({
         name={name}
         value={value || ""}
         onChange={(event) => handleFunction(event.target.value)}
+        className="w-full"
         required
       >
         <option value="" disabled>
