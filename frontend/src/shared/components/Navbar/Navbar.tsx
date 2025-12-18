@@ -29,12 +29,14 @@ export default function Navbar() {
               <NavLink
                 to={to}
                 key={label}
-                className="
-                  px-2
+                className={({ isActive }) =>
+                  `px-2
                   text-paper-background hover:text-green-dark
                   hover:bg-green-light
                   hover:outline hover:outline-paper-background hover:rounded
-                  no-underline hover:opacity-70"
+                  hover:opacity-70 no-underline
+                  ${isActive ? "bg-green-medium text-paper-background rounded" : "no-underline"}`
+                }
               >
                 {label}
               </NavLink>

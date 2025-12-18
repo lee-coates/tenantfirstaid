@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { NAVBAR_LINKS } from "../../constants/constants";
 
 interface Props {
@@ -20,19 +20,21 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: Props) {
       >
         <div className="flex flex-col p-8 gap-6 mt-10">
           {NAVBAR_LINKS.map(({ to, label }) => (
-            <Link
+            <NavLink
               to={to}
               key={label}
-              className={`
-                block px-3 py-2
+              className={({ isActive }) =>
+                `block px-3 py-2
                 rounded no-underline
                 text-gray-dark font-medium hover:text-paper-background
                 transition-colors
-                hover:bg-green-medium`}
+                hover:bg-green-medium
+                ${isActive ? "bg-green-background text-gray-dark " : ""}`
+              }
               onClick={() => setSidebarOpen(false)}
             >
               {label}
-            </Link>
+            </NavLink>
           ))}
           <hr className="my-2 border-t border-gray-300" />
         </div>
