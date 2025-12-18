@@ -28,6 +28,7 @@ export default function Navbar() {
             {NAVBAR_LINKS.map(({ label, to }) => (
               <NavLink
                 to={to}
+                key={label}
                 className="
                   px-2
                   text-paper-background hover:text-green-dark
