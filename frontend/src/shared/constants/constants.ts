@@ -144,7 +144,7 @@ const NAVBAR_LINKS = [
   { to: "/letter", label: "Letter" },
   { to: "/about", label: "About Tenant First Aid" },
   { to: "/disclaimer", label: "Disclaimer" },
-  { to: "/Privacy Policy", label: "Privacy Policy" },
+  { to: "/privacy-policy", label: "Privacy Policy" },
 ];
 
 export {

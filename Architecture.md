@@ -440,6 +440,7 @@ frontend/
 │   ├── contexts/                   # React Contexts
 │   │   └── HousingContext.tsx      # Housing context for chat/letter generation
 │   ├── hooks/                      # Custom React hooks
+│   │   ├── useIsMobile.tsx         # Checking mobile state
 │   │   ├── useMessages.tsx         # Message handling logic
 │   │   ├── useHousingContext.tsx   # Custom hook for housing context
 │   │   └── useLetterContent.tsx    # State management for letter generation
@@ -468,6 +469,7 @@ frontend/
 │   └── shared/                     # Shared components and utils
 │   │   ├── components/
 │   │   │   ├── Navbar/
+│   │   │   │   ├── Sidebar.tsx     # Navigation for mobile
 │   │   │   │   ├── Navbar.tsx      # Navigation
 │   │   │   │   └── NavbarMenuButton.tsx # Navigation component
 │   │   │   ├── BackLink.tsx        # Navigation component
