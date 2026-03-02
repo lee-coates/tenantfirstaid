@@ -71,7 +71,8 @@ export default function useMessages() {
     }) => {
       // Exclude UI-only messages and empty placeholders from backend history.
       const filteredMessages = messages.filter(
-        (msg) => msg.type !== "ui" && msg.text.trim() !== "",
+        (msg): msg is Exclude<TChatMessage, TUiMessage> =>
+          msg.type !== "ui" && msg.text.trim() !== "",
       );
       return await addNewMessage(filteredMessages, city, state);
     },
