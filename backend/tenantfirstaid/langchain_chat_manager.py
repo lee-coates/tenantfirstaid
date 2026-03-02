@@ -173,15 +173,21 @@ class LangChainChatManager:
             config = RunnableConfig()
 
         # Stream the agent response.
-        for chunk in self.agent.stream(
+        for mode, chunk in self.agent.stream(
             input={
                 "messages": messages,
                 "city": city,
                 "state": state,
             },
-            stream_mode="updates",
+            stream_mode=["updates", "custom"],
             config=config,
         ):
+            # Custom chunks are emitted directly by tools (e.g. generate_letter).
+            if mode == "custom":
+                self.logger.debug(chunk)
+                yield chunk
+                continue
+
             # outer dict key changes with internal messages (Model, Tool, ...)
             if not chunk:
                 continue
@@ -207,24 +213,8 @@ class LangChainChatManager:
                                     if "reasoning" in b:
                                         self.logger.debug(b)
                                         yield b
-                                # the Model calling a tool
                                 case "tool_call":
-                                    if b["name"] == "generate_letter":
-                                        letter = b["args"].get("letter")
-                                        if letter:
-                                            # Full dump at DEBUG; INFO keeps prod logs lean.
-                                            self.logger.debug(b)
-                                            self.logger.info(
-                                                "generate_letter intercepted: %d chars",
-                                                len(letter),
-                                            )
-                                            yield {"type": "letter", "content": letter}
-                                        else:
-                                            self.logger.warning(
-                                                "generate_letter called with missing or empty letter arg."
-                                            )
-                                    else:
-                                        self.logger.info(b)
+                                    self.logger.info(b)
                                 case "server_tool_call":
                                     self.logger.info(b)
 

@@ -11,6 +11,7 @@ from google.oauth2.credentials import Credentials
 from langchain.tools import ToolRuntime
 from langchain_core.tools import tool
 from langchain_google_community import VertexAISearchRetriever
+from langgraph.config import get_stream_writer
 from pydantic import BaseModel
 
 from .constants import LETTER_TEMPLATE, SINGLETON
@@ -109,8 +110,11 @@ def generate_letter(letter: str) -> str:
     Returns:
         Confirmation that the letter was displayed.
     """
-    # `letter` is intercepted from the tool call args in langchain_chat_manager.py
-    # and streamed to the frontend as a letter chunk
+    # Emit a custom chunk so the frontend can render the letter separately from
+    # the chat text. See: https://docs.langchain.com/oss/python/langgraph/streaming#use-with-any-llm
+    # and https://reference.langchain.com/python/langgraph/config/get_stream_writer
+    writer = get_stream_writer()
+    writer({"type": "letter", "content": letter})
     return "Letter generated successfully."
 
 

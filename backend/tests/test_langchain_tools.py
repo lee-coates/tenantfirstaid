@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, patch
 from tenantfirstaid.langchain_tools import (
     CityStateLawsInputSchema,
     __filter_builder,
+    generate_letter,
     get_letter_template,
     retrieve_city_state_laws,
 )
@@ -69,6 +70,19 @@ def test_retrieve_state_law_filters_correctly():
     # Verify filter was constructed correctly.
     assert 'city: ANY("null")' in str(filter)
     assert 'state: ANY("or")' in str(filter)
+
+
+@patch("tenantfirstaid.langchain_tools.get_stream_writer")
+def test_generate_letter_writes_letter_chunk(mock_get_stream_writer):
+    """Test that generate_letter emits a letter chunk via the stream writer."""
+    mock_writer = MagicMock()
+    mock_get_stream_writer.return_value = mock_writer
+
+    letter_content = "Dear Landlord,\n\nPlease fix the heater.\n\nSincerely,\nTenant"
+    result = generate_letter.func(letter=letter_content)  # type: ignore[union-attr]
+
+    mock_writer.assert_called_once_with({"type": "letter", "content": letter_content})
+    assert result == "Letter generated successfully."
 
 
 def test_get_letter_template_returns_template():
