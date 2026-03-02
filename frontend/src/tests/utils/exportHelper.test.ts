@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import exportMessages from "../../pages/Chat/utils/exportHelper";
-import { TChatMessage } from "../../hooks/useMessages";
+import { TChatMessage, TUiMessage } from "../../hooks/useMessages";
 
 function createMockDocument() {
   const writelnCalls: string[] = [];
@@ -84,6 +84,43 @@ describe("exportMessages", () => {
     expect(mockDocument.document.close).toHaveBeenCalledTimes(1);
     expect(mockDocument.focus).toHaveBeenCalledTimes(1);
     expect(mockDocument.print).toHaveBeenCalledTimes(1);
+  });
+
+  it("should deserialize JSONL AI message content to plain text", () => {
+    const jsonlContent =
+      '{"type":"text","content":"Here is your answer."}\n{"type":"letter","content":"Dear Landlord,\\n\\nPlease fix the heater."}';
+    const messages: TChatMessage[] = [
+      new HumanMessage({ content: "Write a letter", id: "1" }),
+      new AIMessage({ content: jsonlContent, id: "2" }),
+    ];
+
+    exportMessages(messages);
+
+    const html = mockDocument.writelnCalls.join("");
+    expect(html).toContain("Here is your answer.");
+    expect(html).toContain("Dear Landlord,");
+    expect(html).not.toContain('"type":"text"');
+    expect(html).not.toContain('"type":"letter"');
+  });
+
+  it("should exclude ui messages from export", () => {
+    const uiMessage: TUiMessage = {
+      type: "ui",
+      text: "Sorry, I encountered an error.",
+      id: "3",
+    };
+    const messages: TChatMessage[] = [
+      new HumanMessage({ content: "Hello", id: "1" }),
+      new AIMessage({ content: "Hi there", id: "2" }),
+      uiMessage,
+    ];
+
+    exportMessages(messages);
+
+    const html = mockDocument.writelnCalls.join("");
+    expect(html).not.toContain("Sorry, I encountered an error.");
+    const paragraphCount = (html.match(/<p>/g) || []).length;
+    expect(paragraphCount).toBe(2);
   });
 
   it("should handle edge cases gracefully", () => {

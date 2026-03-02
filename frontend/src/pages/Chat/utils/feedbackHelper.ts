@@ -1,4 +1,8 @@
-import type { TChatMessage } from "../../../hooks/useMessages";
+import {
+  deserializeAiMessage,
+  type TChatMessage,
+  type TUiMessage,
+} from "../../../hooks/useMessages";
 import sanitizeText from "../../../shared/utils/sanitizeText";
 
 function redactText(message: string, wordsToRedact: string) {
@@ -34,11 +38,14 @@ export default async function sendFeedback(
   if (messages.length < 2) return;
 
   const messageChain = messages
+    .filter(
+      (msg): msg is Exclude<TChatMessage, TUiMessage> => msg.type !== "ui",
+    )
     .map(
       (msg) =>
         `<p><strong>${
           msg.type === "human" ? "User" : "AI"
-        }</strong>: ${redactText(sanitizeText(msg.text), wordsToRedact)}</p>`,
+        }</strong>: ${redactText(sanitizeText(msg.type === "ai" ? deserializeAiMessage(msg.text) : msg.text), wordsToRedact)}</p>`,
     )
     .join("");
 

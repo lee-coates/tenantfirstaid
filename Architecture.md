@@ -328,6 +328,12 @@ async function streamText({
 
   setIsLoading?.(true);
 
+  // Add empty bot message immediately so "Typing..." appears before the API responds.
+  setMessages((prev) => [
+    ...prev,
+    new AIMessage({ content: "", id: botMessageId }),
+  ]);
+
   try {
     const reader = await addMessage({
       city: housingLocation?.city,
@@ -338,11 +344,6 @@ async function streamText({
       return;
     }
 
-    // Add empty bot placeholder only once we have a valid reader
-    setMessages((prev) => [
-      ...prev,
-      new AIMessage({ content: "", id: botMessageId }),
-    ]);
     const decoder = new TextDecoder();
     let buffer = "";
     let fullText = "";
@@ -350,35 +351,25 @@ async function streamText({
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
+        // Flush any remaining content in the buffer.
         if (buffer.trim() !== "") processLines([buffer]);
         return true;
       }
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n");
       buffer = lines.pop() || "";
-      // Accumulate JSONL chunks and update the bot message incrementally
-      lines
-        .filter((line) => line.trim() !== "")
-        .forEach((line) => {
-          fullText += line + "\n";
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === botMessageId
-                ? new AIMessage({ content: fullText, id: botMessageId })
-                : msg,
-            ),
-          );
-        });
+      processLines(lines);
     }
   } catch (error) {
     console.error("Error:", error);
-    // Append error regardless of whether the placeholder was added
+    const errorMessage: TUiMessage = {
+      type: "ui",
+      text: "Sorry, I encountered an error. Please try again.",
+      id: botMessageId,
+    };
     setMessages((prev) => [
       ...prev.filter((msg) => msg.id !== botMessageId),
-      new AIMessage({
-        content: JSON.stringify({ type: "text", text: "Sorry, I encountered an error. Please try again." }) + "\n",
-        id: botMessageId,
-      }),
+      errorMessage,
     ]);
   } finally {
     setIsLoading?.(false);
