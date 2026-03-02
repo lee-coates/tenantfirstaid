@@ -60,7 +60,7 @@ describe("MessageContent", () => {
     expect(screen.queryByText("Thinking...")).toBeNull();
   });
 
-  it("renders ui message without a You: or Brainy: label", () => {
+  it("renders ui message using Info: label", () => {
     const message: TUiMessage = {
       type: "ui",
       text: "What was generated is just an initial template.",
@@ -70,6 +70,7 @@ describe("MessageContent", () => {
     expect(
       screen.getByText("What was generated is just an initial template."),
     ).toBeInTheDocument();
+    expect(screen.queryByText(/Info:/));
     expect(screen.queryByText(/You:/)).toBeNull();
     expect(screen.queryByText(/Brainy:/)).toBeNull();
   });
