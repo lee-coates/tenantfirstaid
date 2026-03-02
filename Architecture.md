@@ -105,10 +105,11 @@ The system uses **LangChain agents** with **Vertex AI RAG** tools for document r
 
 #### Tool-Based Retrieval
 
-The agent has access to two tools:
+The agent has access to three tools:
 
 1. **City-Specific and State Law Retrieval**: Searches documents filtered by city (optional) and state
-2. **Letter Template**: Returns a pre-formatted letter template wrapped in delimiters for the frontend to extract
+2. **Letter Template**: Returns a pre-formatted letter template for the model to fill in
+3. **Generate Letter**: Emits the completed letter as a custom stream chunk for the frontend to render separately from chat text
 
 The LLM decides how to call the tool based on the user's query and location context.
 

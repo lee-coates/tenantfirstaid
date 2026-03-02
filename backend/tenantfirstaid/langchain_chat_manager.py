@@ -6,7 +6,7 @@ Google Gemini API calls with a standardized agent-based architecture.
 
 import logging
 import sys
-from typing import Any, Dict, Generator, List, Optional
+from typing import Any, Dict, Generator, List, Optional, cast
 
 from langchain.agents import create_agent
 
@@ -189,6 +189,7 @@ class LangChainChatManager:
                 continue
 
             # outer dict key changes with internal messages (Model, Tool, ...)
+            chunk = cast(Dict[str, Any], chunk)
             if not chunk:
                 continue
             chunk_k = next(iter(chunk))
