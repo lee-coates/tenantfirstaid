@@ -483,9 +483,9 @@ frontend/
 │   │   │   │   └── SelectField.tsx     # Initialization form select field
 │   │   │   └── utils/
 │   │   │       ├── exportHelper.ts     # Export functionality
-│   │   │       ├── feedbackHelper.tsx  # Feedback functionality
-│   │   │       ├── formHelper.tsx      # Housing context functionality
-│   │   │       └── streamHelper.tsx    # Stream functionality
+│   │   │       ├── feedbackHelper.ts   # Feedback functionality
+│   │   │       ├── formHelper.ts       # Housing context functionality
+│   │   │       └── streamHelper.ts     # Stream functionality
 │   │   ├──Letter/               # Letter page components
 │   │   │   ├── components/
 │   │   │   │   ├── LetterDisclaimer.tsx # Disclaimer for Letter page
@@ -513,19 +513,25 @@ frontend/
 │   │       └── dompurify.ts        # Helper function for sanitizing text
 │   └── tests/                     # Testing suite
 │   │   ├── components/            # Component testing
-│   │   │   ├── About.test.ts      # About component testing
-│   │   │   ├── Chat.test.tsx       # Chat component testing
-│   │   │   ├── ChatDisclaimer.test.ts # ChatDisclaimer component testing
-│   │   │   ├── HousingContext.test.ts # HousingContext component testing
-│   │   │   ├── InitializationForm.test.ts # InitializationForm component testing
-│   │   │   ├── Letter.test.ts      # Letter component testing
-│   │   │   ├── LetterDisclaimer.test.ts # LetterDisclaimer component testing
-│   │   │   ├── MessageWindow.test.ts # MessageWindow component testing
+│   │   │   ├── About.test.tsx     # About component testing
+│   │   │   ├── ChatDisclaimer.test.tsx # ChatDisclaimer component testing
+│   │   │   ├── HousingContext.test.tsx # HousingContext component testing
+│   │   │   ├── InitializationForm.test.tsx # InitializationForm component testing
+│   │   │   ├── Letter.test.tsx    # Letter component testing
+│   │   │   ├── LetterDisclaimer.test.tsx # LetterDisclaimer component testing
+│   │   │   ├── LoadingPage.test.tsx # LoadingPage component testing
+│   │   │   ├── MessageContainer.test.tsx # MessageContainer component testing
+│   │   │   ├── MessageContent.test.tsx # MessageContent component testing
+│   │   │   ├── MessageWindow.test.tsx # MessageWindow component testing
 │   │   │   ├── PageLayout.test.tsx # PageLayout component testing
-│   │   │   └── PageSection.test.ts # PageSection component testing
+│   │   │   └── PageSection.test.tsx # PageSection component testing
+│   │   ├── hooks/                 # Hook testing
+│   │   │   ├── useLetterContent.test.tsx # useLetterContent testing
+│   │   │   └── useMessages.test.ts # useMessages testing
 │   │   └── utils/                  # Utility function testing
 │   │       ├── dompurify.test.ts   # dompurify testing
 │   │       ├── exportHelper.test.ts # exportHelper testing
+│   │       ├── feedbackHelper.test.ts # feedbackHelper testing
 │   │       ├── formHelper.test.ts  # formHelper testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
 │   │       ├── sanitizeText.test.ts # sanitizeText testing

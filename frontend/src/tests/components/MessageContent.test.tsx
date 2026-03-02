@@ -60,7 +60,7 @@ describe("MessageContent", () => {
     expect(screen.queryByText("Thinking...")).toBeNull();
   });
 
-  it("renders ui message as plain italic text without a label", () => {
+  it("renders ui message without a You: or Brainy: label", () => {
     const message: TUiMessage = {
       type: "ui",
       text: "What was generated is just an initial template.",
