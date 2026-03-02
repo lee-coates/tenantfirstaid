@@ -70,7 +70,7 @@ describe("MessageContent", () => {
     expect(
       screen.getByText("What was generated is just an initial template."),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/Info:/));
+    expect(screen.getByText(/Info:/)).toBeInTheDocument();
     expect(screen.queryByText(/You:/)).toBeNull();
     expect(screen.queryByText(/Brainy:/)).toBeNull();
   });

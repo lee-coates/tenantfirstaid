@@ -505,6 +505,7 @@ frontend/
 │   │   │   ├── FeatureSnippet.tsx  # Features and references component
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
 │   │   │   ├── PageSection.tsx     # Layout static page sections component
+│   │   │   ├── SafeMarkdown.tsx    # Safe markdown renderer
 │   │   │   └── TenantFirstAidLogo.tsx # Application logo
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
