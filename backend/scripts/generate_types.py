@@ -8,7 +8,7 @@ import sys
 from enum import StrEnum
 from pathlib import Path
 from types import UnionType
-from typing import Literal, Union, get_args, get_origin
+from typing import Any, Literal, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
@@ -24,7 +24,7 @@ HEADER = (
 )
 
 
-def py_annotation_to_ts(annotation: type) -> str:
+def py_annotation_to_ts(annotation: Any) -> str:
     """Convert a Python type annotation to a TypeScript type string.
 
     Supported annotations: str, Literal, StrEnum subclasses, X | None, Optional[X].
