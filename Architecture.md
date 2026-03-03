@@ -490,7 +490,7 @@ frontend/
 │   │   │   │   ├── LetterDisclaimer.tsx # Disclaimer for Letter page
 │   │   │   │   └── LetterGenerationDialog.tsx # Letter page dialog
 │   │   │   └── utils/
-│   │   │       └── letterHelper.tsx    # Letter generation functionality
+│   │   │       └── letterHelper.ts     # Letter generation functionality
 │   │   └── LoadingPage.tsx             # Loading component for routes
 │   ├── shared/                     # Shared components and utils
 │   │   ├── components/

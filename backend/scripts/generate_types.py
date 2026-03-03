@@ -15,7 +15,7 @@ from pydantic import BaseModel
 from tenantfirstaid.location import Location, OregonCity, UsaState
 from tenantfirstaid.schema import ResponseChunk
 
-CHUNK_MODELS = list(get_args(ResponseChunk))
+CHUNK_MODELS: list[type[BaseModel]] = list(get_args(ResponseChunk))
 LOCATION_ENUMS: list[type[StrEnum]] = [OregonCity, UsaState]
 
 HEADER = (
@@ -63,13 +63,9 @@ def enum_to_ts_type(enum: type[StrEnum]) -> str:
     return f"type T{enum.__name__} = {members};"
 
 
-def make_file(blocks: list[str], exports: list[str], imports: str = "") -> str:
-    """Assemble a TypeScript file from blocks, with optional imports."""
-    parts = [HEADER]
-    if imports:
-        parts.append(imports)
-    parts.extend(blocks)
-    parts.append(f"export type {{ {', '.join(exports)} }};")
+def make_file(blocks: list[str], exports: list[str]) -> str:
+    """Assemble a TypeScript file from blocks."""
+    parts = [HEADER, *blocks, f"export type {{ {', '.join(exports)} }};"]
     return "\n\n".join(parts) + "\n"
 
 
@@ -79,6 +75,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     types_dir = Path(sys.argv[1])
+    if not types_dir.is_dir():
+        print(f"Error: types_dir does not exist: {types_dir}")
+        sys.exit(1)
 
     ts_names = [f"I{m.__name__}" for m in CHUNK_MODELS]
     interfaces = [model_to_interface(m) for m in CHUNK_MODELS]

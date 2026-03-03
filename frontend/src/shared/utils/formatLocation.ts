@@ -12,7 +12,7 @@ function formatLocation(
   const cityDisplay = city
     ? city.charAt(0).toUpperCase() + city.slice(1)
     : null;
-  const stateDisplay = state?.toUpperCase() ?? null;
+  const stateDisplay = state && state !== "other" ? state.toUpperCase() : null;
 
   if (cityDisplay && stateDisplay) return `${cityDisplay}, ${stateDisplay}`;
   return cityDisplay || stateDisplay || "";

@@ -17,4 +17,12 @@ describe("formatLocation", () => {
   it("returns empty string when both are null", () => {
     expect(formatLocation(null, null)).toBe("");
   });
+
+  it("omits state when state is 'other'", () => {
+    expect(formatLocation(null, "other")).toBe("");
+  });
+
+  it("returns only city when state is 'other'", () => {
+    expect(formatLocation("portland", "other")).toBe("Portland");
+  });
 });
