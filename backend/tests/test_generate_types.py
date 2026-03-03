@@ -35,6 +35,11 @@ def test_py_annotation_to_ts_optional():
     assert "null" in result
 
 
+def test_py_annotation_to_ts_union_without_none():
+    result = py_annotation_to_ts(OregonCity | UsaState)
+    assert result == "TOregonCity | TUsaState"
+
+
 def test_py_annotation_to_ts_unsupported():
     with pytest.raises(TypeError, match="Unsupported annotation"):
         py_annotation_to_ts(int)
