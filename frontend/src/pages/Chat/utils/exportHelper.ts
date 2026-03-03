@@ -1,4 +1,8 @@
-import type { TChatMessage } from "../../../hooks/useMessages";
+import {
+  deserializeAiMessage,
+  type TChatMessage,
+  type TUiMessage,
+} from "../../../hooks/useMessages";
 import sanitizeText from "../../../shared/utils/sanitizeText";
 
 /**
@@ -10,11 +14,14 @@ export default function exportMessages(messages: TChatMessage[]) {
 
   const newDocument = window.open("", "", "height=800,width=600");
   const messageChain = messages
+    .filter(
+      (msg): msg is Exclude<TChatMessage, TUiMessage> => msg.type !== "ui",
+    )
     .map(
       (msg) =>
         `<p><strong>${
           msg.type === "human" ? "User" : "AI"
-        }</strong>: ${sanitizeText(msg.text)}</p>`,
+        }</strong>: ${sanitizeText(msg.type === "ai" ? deserializeAiMessage(msg.text) : msg.text)}</p>`,
     )
     .join("");
 

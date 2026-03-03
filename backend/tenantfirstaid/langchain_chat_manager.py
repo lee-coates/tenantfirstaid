@@ -6,7 +6,7 @@ Google Gemini API calls with a standardized agent-based architecture.
 
 import logging
 import sys
-from typing import Any, Generator, List, Optional
+from typing import Any, Dict, Generator, List, Optional, cast
 
 from langchain.agents import create_agent
 
@@ -26,7 +26,11 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.state import CompiledStateGraph
 
 from .constants import DEFAULT_INSTRUCTIONS, SINGLETON
-from .langchain_tools import get_letter_template, retrieve_city_state_laws
+from .langchain_tools import (
+    generate_letter,
+    get_letter_template,
+    retrieve_city_state_laws,
+)
 from .location import OregonCity, TFAAgentStateSchema, UsaState
 
 
@@ -71,7 +75,7 @@ class LangChainChatManager:
         )
 
         # Specify tools for RAG retrieval.
-        self.tools = [retrieve_city_state_laws, get_letter_template]
+        self.tools = [retrieve_city_state_laws, get_letter_template, generate_letter]
 
         # defer agent instantiation until 'generate_stream_response'
         self.agent = None
@@ -140,7 +144,7 @@ class LangChainChatManager:
 
     def generate_streaming_response(
         self,
-        messages: List[AnyMessage],
+        messages: List[AnyMessage | Dict[str, Any]],
         city: Optional[OregonCity],
         state: UsaState,
         thread_id: Optional[str],
@@ -169,21 +173,31 @@ class LangChainChatManager:
             config = RunnableConfig()
 
         # Stream the agent response.
-        for chunk in self.agent.stream(
+        for mode, chunk in self.agent.stream(
             input={
                 "messages": messages,
                 "city": city,
                 "state": state,
             },
-            stream_mode="updates",
+            stream_mode=["updates", "custom"],
             config=config,
         ):
+            # Custom chunks are emitted directly by tools (e.g. generate_letter).
+            if mode == "custom":
+                self.logger.debug(chunk)
+                yield chunk
+                continue
+
             # outer dict key changes with internal messages (Model, Tool, ...)
-            chunk_k = list(chunk.keys())[0]
+            chunk = cast(Dict[str, Any], chunk)
+            if not chunk:
+                continue
+            chunk_k = next(iter(chunk))
 
             # TODO: refactor this match/yield into a function
             # Specialize handling/printing based on each message class/type
             for m in chunk[chunk_k]["messages"]:
+                # Extend caller's list so tool messages are included in the agent's running context.
                 messages.append(m)
 
                 match m:
@@ -193,12 +207,13 @@ class LangChainChatManager:
                             match b["type"]:
                                 # text responses from the Model
                                 case "text":
+                                    self.logger.debug(b)
                                     yield b
                                 # reasoning steps (aka "thoughts") from the Model
                                 case "reasoning":
                                     if "reasoning" in b:
+                                        self.logger.debug(b)
                                         yield b
-                                # the Model calling a tool
                                 case "tool_call":
                                     self.logger.info(b)
                                 case "server_tool_call":

@@ -11,6 +11,7 @@ from google.oauth2.credentials import Credentials
 from langchain.tools import ToolRuntime
 from langchain_core.tools import tool
 from langchain_google_community import VertexAISearchRetriever
+from langgraph.config import get_stream_writer
 from pydantic import BaseModel
 
 from .constants import LETTER_TEMPLATE, SINGLETON
@@ -85,11 +86,36 @@ def get_letter_template() -> str:
     """Retrieve the letter template when the user asks to draft or generate a letter.
 
     Fill in placeholders with any details the user has provided, leave the rest intact.
+    After filling in the template, call generate_letter with the completed letter.
 
     Returns:
         A formatted letter template with placeholder fields.
     """
     return LETTER_TEMPLATE
+
+
+class GenerateLetterInputSchema(BaseModel):
+    letter: str
+
+
+@tool(args_schema=GenerateLetterInputSchema)
+def generate_letter(letter: str) -> str:
+    """Display the completed or updated letter in the letter panel.
+
+    Call this after filling in the letter template or after making any updates.
+
+    Args:
+        letter: The complete letter content.
+
+    Returns:
+        Confirmation that the letter was displayed.
+    """
+    # Emit a custom chunk so the frontend can render the letter separately from
+    # the chat text. See: https://docs.langchain.com/oss/python/langgraph/streaming#use-with-any-llm
+    # and https://reference.langchain.com/python/langgraph/config/get_stream_writer
+    writer = get_stream_writer()
+    writer({"type": "letter", "content": letter})
+    return "Letter generated successfully."
 
 
 class CityStateLawsInputSchema(BaseModel):

@@ -59,6 +59,7 @@ backend/
 │   ├── __init__.py
 │   ├── app.py                          # Flask application setup and routing
 │   ├── chat.py                         # Flask ChatView
+|   ├── schema.py                       # Pydantic response chunk types (TextChunk, LetterChunk, ReasoningChunk)
 |   ├── constants.py                    # Immutable state and consolidated interface to environment variables
 |   ├── location.py                     # City & State normalization and sanitization
 |   ├── langchain_chat_manager.py       # Chat model configuration and response generation
@@ -104,9 +105,11 @@ The system uses **LangChain agents** with **Vertex AI RAG** tools for document r
 
 #### Tool-Based Retrieval
 
-The agent has access to one retrieval tool:
+The agent has access to three tools:
 
 1. **City-Specific and State Law Retrieval**: Searches documents filtered by city (optional) and state
+2. **Letter Template**: Returns a pre-formatted letter template for the model to fill in
+3. **Generate Letter**: Emits the completed letter as a custom stream chunk for the frontend to render separately from chat text
 
 The LLM decides how to call the tool based on the user's query and location context.
 
@@ -238,7 +241,7 @@ When serializing messages for the backend API, the hook maps these to the format
 ```typescript
 const serializedMsg = messages.map((msg) => ({
   role: msg.type,
-  content: msg.text,
+  content: msg.type === "ai" ? deserializeAiMessage(msg.text) : msg.text,
   id: msg.id,
 }));
 ```
@@ -325,7 +328,7 @@ async function streamText({
 
   setIsLoading?.(true);
 
-  // Add empty bot message that will be updated
+  // Add empty bot message immediately so "Typing..." appears before the API responds.
   setMessages((prev) => [
     ...prev,
     new AIMessage({ content: "", id: botMessageId }),
@@ -338,35 +341,44 @@ async function streamText({
     });
     if (!reader) {
       console.error("Stream reader is unavailable");
+      const nullReaderError: TUiMessage = {
+        type: "ui",
+        text: "Sorry, I encountered an error. Please try again.",
+        id: botMessageId,
+      };
+      setMessages((prev) =>
+        prev.map((msg) => (msg.id === botMessageId ? nullReaderError : msg)),
+      );
       return;
     }
+
     const decoder = new TextDecoder();
+    let buffer = "";
     let fullText = "";
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) return true;
-      const chunk = decoder.decode(value);
-      fullText += chunk;
-
-      // Update only the bot's message
-      const botMessage = new AIMessage({ content: fullText, id: botMessageId });
-      setMessages((prev) =>
-        prev.map((msg) => (msg.id === botMessageId ? botMessage : msg)),
-      );
+      if (done) {
+        // Flush any remaining content in the buffer.
+        if (buffer.trim() !== "") processLines([buffer]);
+        return true;
+      }
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      processLines(lines);
     }
   } catch (error) {
     console.error("Error:", error);
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === botMessageId
-          ? new AIMessage({
-              content: "Sorry, I encountered an error. Please try again.",
-              id: botMessageId,
-            })
-          : msg,
-      ),
-    );
+    const errorMessage: TUiMessage = {
+      type: "ui",
+      text: "Sorry, I encountered an error. Please try again.",
+      id: botMessageId,
+    };
+    setMessages((prev) => [
+      ...prev.filter((msg) => msg.id !== botMessageId),
+      errorMessage,
+    ]);
   } finally {
     setIsLoading?.(false);
   }
@@ -453,6 +465,8 @@ frontend/
 │   │   ├── useMessages.tsx         # Message handling logic
 │   │   ├── useHousingContext.tsx   # Custom hook for housing context
 │   │   └── useLetterContent.tsx    # State management for letter generation
+│   ├── types/
+│   │   └── MessageTypes.ts         # TypeScript types mirroring backend schema (TResponseChunk, etc.)
 │   ├── layouts/                    # Layouts
 │   │   └── PageLayout.tsx          # Layout for pages
 │   ├── pages/
@@ -469,9 +483,9 @@ frontend/
 │   │   │   │   └── SelectField.tsx     # Initialization form select field
 │   │   │   └── utils/
 │   │   │       ├── exportHelper.ts     # Export functionality
-│   │   │       ├── feedbackHelper.tsx  # Feedback functionality
-│   │   │       ├── formHelper.tsx      # Housing context functionality
-│   │   │       └── streamHelper.tsx    # Stream functionality
+│   │   │       ├── feedbackHelper.ts   # Feedback functionality
+│   │   │       ├── formHelper.ts       # Housing context functionality
+│   │   │       └── streamHelper.ts     # Stream functionality
 │   │   ├──Letter/               # Letter page components
 │   │   │   ├── components/
 │   │   │   │   ├── LetterDisclaimer.tsx # Disclaimer for Letter page
@@ -491,6 +505,7 @@ frontend/
 │   │   │   ├── FeatureSnippet.tsx  # Features and references component
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
 │   │   │   ├── PageSection.tsx     # Layout static page sections component
+│   │   │   ├── SafeMarkdown.tsx    # Safe markdown renderer
 │   │   │   └── TenantFirstAidLogo.tsx # Application logo
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
@@ -499,19 +514,25 @@ frontend/
 │   │       └── dompurify.ts        # Helper function for sanitizing text
 │   └── tests/                     # Testing suite
 │   │   ├── components/            # Component testing
-│   │   │   ├── About.test.ts      # About component testing
-│   │   │   ├── Chat.test.tsx       # Chat component testing
-│   │   │   ├── ChatDisclaimer.test.ts # ChatDisclaimer component testing
-│   │   │   ├── HousingContext.test.ts # HousingContext component testing
-│   │   │   ├── InitializationForm.test.ts # InitializationForm component testing
-│   │   │   ├── Letter.test.ts      # Letter component testing
-│   │   │   ├── LetterDisclaimer.test.ts # LetterDisclaimer component testing
-│   │   │   ├── MessageWindow.test.ts # MessageWindow component testing
+│   │   │   ├── About.test.tsx     # About component testing
+│   │   │   ├── ChatDisclaimer.test.tsx # ChatDisclaimer component testing
+│   │   │   ├── HousingContext.test.tsx # HousingContext component testing
+│   │   │   ├── InitializationForm.test.tsx # InitializationForm component testing
+│   │   │   ├── Letter.test.tsx    # Letter component testing
+│   │   │   ├── LetterDisclaimer.test.tsx # LetterDisclaimer component testing
+│   │   │   ├── LoadingPage.test.tsx # LoadingPage component testing
+│   │   │   ├── MessageContainer.test.tsx # MessageContainer component testing
+│   │   │   ├── MessageContent.test.tsx # MessageContent component testing
+│   │   │   ├── MessageWindow.test.tsx # MessageWindow component testing
 │   │   │   ├── PageLayout.test.tsx # PageLayout component testing
-│   │   │   └── PageSection.test.ts # PageSection component testing
+│   │   │   └── PageSection.test.tsx # PageSection component testing
+│   │   ├── hooks/                 # Hook testing
+│   │   │   ├── useLetterContent.test.tsx # useLetterContent testing
+│   │   │   └── useMessages.test.ts # useMessages testing
 │   │   └── utils/                  # Utility function testing
 │   │       ├── dompurify.test.ts   # dompurify testing
 │   │       ├── exportHelper.test.ts # exportHelper testing
+│   │       ├── feedbackHelper.test.ts # feedbackHelper testing
 │   │       ├── formHelper.test.ts  # formHelper testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
 │   │       ├── sanitizeText.test.ts # sanitizeText testing
