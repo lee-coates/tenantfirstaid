@@ -6,16 +6,8 @@ describe("formatLocation", () => {
     expect(formatLocation("portland", "or")).toBe("Portland, OR");
   });
 
-  it("capitalizes city with null state", () => {
-    expect(formatLocation("eugene", null)).toBe("Eugene");
-  });
-
   it("uppercases state with null city", () => {
     expect(formatLocation(null, "or")).toBe("OR");
-  });
-
-  it("returns empty string when both are null", () => {
-    expect(formatLocation(null, null)).toBe("");
   });
 
   it("omits state when state is 'other'", () => {

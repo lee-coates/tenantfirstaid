@@ -14,8 +14,7 @@ function formatLocation(
     : null;
   const stateDisplay = state && state !== "other" ? state.toUpperCase() : null;
 
-  if (cityDisplay && stateDisplay) return `${cityDisplay}, ${stateDisplay}`;
-  return cityDisplay || stateDisplay || "";
+  return [cityDisplay, stateDisplay].filter(Boolean).join(", ");
 }
 
 export { formatLocation };
