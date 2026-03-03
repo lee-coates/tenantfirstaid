@@ -62,8 +62,8 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
     const selected = typedKey !== null ? CITY_SELECT_OPTIONS[typedKey] : null;
     handleCityChange(typedKey);
     handleHousingLocation({
-      city: selected?.city || null,
-      state: selected?.state || null,
+      city: selected?.city ?? null,
+      state: selected?.state ?? null,
     });
   };
 

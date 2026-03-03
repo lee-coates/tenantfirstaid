@@ -47,6 +47,16 @@ describe("buildChatUserMessage", () => {
     expect(result.userMessage).not.toContain("null");
   });
 
+  it("omits location sentence when city and state are both null", () => {
+    const result = buildChatUserMessage(
+      { city: null, state: null },
+      "Apartment/House Rental",
+      "Eviction and Notices",
+      "Some issue",
+    );
+    expect(result.userMessage).not.toContain("I'm in");
+  });
+
   it("includes all prompt parts", () => {
     const location: ILocation = {
       city: "portland",
