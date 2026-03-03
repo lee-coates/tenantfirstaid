@@ -49,7 +49,12 @@ def py_annotation_to_ts(annotation: Any) -> str:
 
 
 def model_to_interface(model: type[BaseModel]) -> str:
-    """Render a Pydantic BaseModel as a TypeScript interface."""
+    """Render a Pydantic BaseModel as a TypeScript interface.
+
+    All fields are rendered as required. Models with optional fields would need
+    field_info.is_required() checks to emit `field?: type` instead, e.g.:
+        lines.append(f"  {field_name}{'?' if not field_info.is_required() else ''}: ...")
+    """
     lines = [f"interface I{model.__name__} {{"]
     for field_name, field_info in model.model_fields.items():
         lines.append(f"  {field_name}: {py_annotation_to_ts(field_info.annotation)};")

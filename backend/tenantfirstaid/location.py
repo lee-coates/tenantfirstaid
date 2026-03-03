@@ -64,7 +64,10 @@ class UsaState(StrEnum):
 
 
 class Location(BaseModel):
-    """City and state for a user's location. Used by generate_types.py to produce ILocation."""
+    """City and state as sent by the frontend. Used by generate_types.py to produce ILocation.
+
+    state=None is treated as UsaState.OTHER by the backend.
+    """
 
     city: OregonCity | None = None
     state: UsaState | None = None

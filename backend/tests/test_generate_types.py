@@ -53,8 +53,8 @@ def test_enum_to_ts_type_usa_state():
 def test_model_to_interface_location():
     result = model_to_interface(Location)
     assert "interface ILocation {" in result
-    assert "city:" in result
-    assert "state:" in result
+    assert "  city: TOregonCity | null;" in result
+    assert "  state: TUsaState | null;" in result
     assert "}" in result
 
 

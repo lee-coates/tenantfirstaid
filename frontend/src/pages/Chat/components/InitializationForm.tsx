@@ -58,14 +58,12 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
   );
 
   const handleLocationChange = (key: string | null) => {
-    handleCityChange(key as TCitySelectKey | null);
+    const typedKey = key as TCitySelectKey | null;
+    const selected = typedKey !== null ? CITY_SELECT_OPTIONS[typedKey] : null;
+    handleCityChange(typedKey);
     handleHousingLocation({
-      city:
-        CITY_SELECT_OPTIONS[key as keyof typeof CITY_SELECT_OPTIONS]?.city ||
-        null,
-      state:
-        CITY_SELECT_OPTIONS[key as keyof typeof CITY_SELECT_OPTIONS]?.state ||
-        null,
+      city: selected?.city || null,
+      state: selected?.state || null,
     });
   };
 
@@ -149,7 +147,9 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         <AutoExpandText isExpanded={Boolean(city)}>
           {city === "other"
             ? "Unfortunately, we can only answer questions related to tenant rights in Oregon at this time."
-            : `${locationString ? `I can help answer your questions about tenant rights in ${locationString}.` : ""}`}
+            : locationString
+              ? `I can help answer your questions about tenant rights in ${locationString}.`
+              : ""}
         </AutoExpandText>
       </div>
       <SelectField
