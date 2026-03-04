@@ -52,7 +52,7 @@ jobs:
 
           # Minimize top-level PR comments from previous invocations of the next step
           echo "Processing top-level comments..."
-          COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.author.login == "github-actions") | select(.isMinimized == false) | select (.body | contains("### PR Review")) | .id')
+          COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --repo codeforpdx/tenantfirstaid --json comments --jq '.comments[] | select(.author.login == "github-actions") | select(.isMinimized == false) | select (.body | contains("### PR Review")) | .id')
           for COMMENT_ID in $COMMENTS; do
             minimize_comment "$COMMENT_ID"
           done
