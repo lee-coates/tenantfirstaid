@@ -40,6 +40,7 @@ test: uv.lock
 	uv run pytest -v -s $(TEST_OPTIONS)
 
 generate-types: uv.lock
+	mkdir -p $(FRONTEND_DIR)/src/types
 	$(PYTHON) run python scripts/generate_types.py $(FRONTEND_DIR)/src/types
 
 clean:
