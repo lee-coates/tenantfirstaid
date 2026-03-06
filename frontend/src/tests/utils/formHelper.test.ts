@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { buildChatUserMessage } from "../../pages/Chat/utils/formHelper";
-import type { ILocation } from "../../types/LocationTypes";
+import type { Location } from "../../types/models";
 
 describe("buildChatUserMessage", () => {
   it("builds message with all fields populated", () => {
-    const location: ILocation = {
+    const location: Location = {
       city: "portland",
       state: "or",
     };
@@ -28,7 +28,7 @@ describe("buildChatUserMessage", () => {
   });
 
   it("handles null city gracefully", () => {
-    const location: ILocation = {
+    const location: Location = {
       city: null,
       state: "or",
     };
@@ -58,7 +58,7 @@ describe("buildChatUserMessage", () => {
   });
 
   it("includes all prompt parts", () => {
-    const location: ILocation = {
+    const location: Location = {
       city: "portland",
       state: "or",
     };

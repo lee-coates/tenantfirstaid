@@ -1,15 +1,15 @@
-import type { TOregonCity, TUsaState } from "../../types/LocationTypes";
+import type { OregonCity, UsaState } from "../../types/models";
 
 const CONTACT_EMAIL = "michael@qiu-qiulaw.com";
 
 interface CitySelectOptionType {
-  city: TOregonCity | null;
-  state: TUsaState | null;
+  city: OregonCity | null;
+  state: UsaState | null;
   label: string;
 }
 
 const CITY_SELECT_OPTIONS: Record<
-  TOregonCity | "oregon" | "other",
+  OregonCity | "oregon" | "other",
   CitySelectOptionType
 > = {
   portland: {
@@ -165,6 +165,6 @@ export {
 
 export type { CitySelectOptionType };
 
-export type TCitySelectKey = keyof typeof CITY_SELECT_OPTIONS;
-export type THousingType = (typeof HOUSING_OPTIONS)[number];
-export type TTenantTopic = keyof typeof ALL_TOPIC_OPTIONS;
+export type CitySelectKey = keyof typeof CITY_SELECT_OPTIONS;
+export type HousingType = (typeof HOUSING_OPTIONS)[number];
+export type TenantTopic = keyof typeof ALL_TOPIC_OPTIONS;

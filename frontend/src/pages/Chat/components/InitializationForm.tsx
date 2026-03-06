@@ -1,6 +1,6 @@
-import { TChatMessage } from "../../../hooks/useMessages";
+import { ChatMessage } from "../../../hooks/useMessages";
 import BeaverIcon from "../../../shared/components/BeaverIcon";
-import type { ILocation } from "../../../types/LocationTypes";
+import type { Location } from "../../../types/models";
 import { formatLocation } from "../../../shared/utils/formatLocation";
 import { useEffect, useState } from "react";
 import { buildChatUserMessage } from "../utils/formHelper";
@@ -14,9 +14,9 @@ import {
   HOUSING_OPTIONS,
   LETTERABLE_TOPIC_OPTIONS,
   NONLETTERABLE_TOPIC_OPTIONS,
-  type TCitySelectKey,
-  type THousingType,
-  type TTenantTopic,
+  type CitySelectKey,
+  type HousingType,
+  type TenantTopic,
 } from "../../../shared/constants/constants";
 import { scrollToTop } from "../../../shared/utils/scrolling";
 import AutoExpandText from "./AutoExpandText";
@@ -25,13 +25,13 @@ import { HumanMessage } from "@langchain/core/messages";
 
 const NONLETTERABLE_TOPICS = Object.keys(
   NONLETTERABLE_TOPIC_OPTIONS,
-) as TTenantTopic[];
+) as TenantTopic[];
 
 interface Props {
   addMessage: (
-    args: ILocation,
+    args: Location,
   ) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
-  setMessages: React.Dispatch<React.SetStateAction<TChatMessage[]>>;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
 }
 
 /**
@@ -58,7 +58,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
   );
 
   const handleLocationChange = (key: string | null) => {
-    const typedKey = key as TCitySelectKey | null;
+    const typedKey = key as CitySelectKey | null;
     const selected = typedKey !== null ? CITY_SELECT_OPTIONS[typedKey] : null;
     handleCityChange(typedKey);
     handleHousingLocation({
@@ -157,7 +157,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         value={housingType || ""}
         description="Select your housing type"
         handleFunction={(option) =>
-          handleHousingChange(option as THousingType | null)
+          handleHousingChange(option as HousingType | null)
         }
       >
         {HOUSING_OPTIONS.map((option) => (
@@ -172,7 +172,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           value={tenantTopic || ""}
           description="Select your topic"
           handleFunction={(option) =>
-            handleTenantTopic(option as TTenantTopic | null)
+            handleTenantTopic(option as TenantTopic | null)
           }
         >
           <optgroup label="--Letterable--">

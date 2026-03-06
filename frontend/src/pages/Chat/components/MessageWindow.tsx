@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { TChatMessage } from "../../../hooks/useMessages";
-import type { ILocation } from "../../../types/LocationTypes";
+import type { ChatMessage } from "../../../hooks/useMessages";
+import type { Location } from "../../../types/models";
 import InputField from "./InputField";
 import MessageContent from "./MessageContent";
 import ExportMessagesButton from "./ExportMessagesButton";
@@ -10,11 +10,11 @@ import { useLocation } from "react-router-dom";
 import clsx from "clsx";
 
 interface Props {
-  messages: TChatMessage[];
+  messages: ChatMessage[];
   addMessage: (
-    args: ILocation,
+    args: Location,
   ) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
-  setMessages: React.Dispatch<React.SetStateAction<TChatMessage[]>>;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   isOngoing: boolean;
 }
 

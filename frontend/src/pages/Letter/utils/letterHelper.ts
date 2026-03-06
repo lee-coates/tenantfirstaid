@@ -4,7 +4,7 @@ import {
 } from "../../../shared/constants/constants";
 import { formatLocation } from "../../../shared/utils/formatLocation";
 
-interface IBuildLetterReturnType {
+interface BuildLetterReturnType {
   userMessage: string;
   selectedLocation: CitySelectOptionType;
 }
@@ -12,7 +12,7 @@ interface IBuildLetterReturnType {
 function buildLetterUserMessage(
   org: string | undefined,
   loc: string | undefined,
-): IBuildLetterReturnType | null {
+): BuildLetterReturnType | null {
   const key = (loc ?? "oregon") as keyof typeof CITY_SELECT_OPTIONS;
   const selectedLocation = CITY_SELECT_OPTIONS[key];
   if (selectedLocation === undefined) return null;

@@ -1,11 +1,11 @@
 import { formatLocation } from "../../../shared/utils/formatLocation";
-import type { ILocation } from "../../../types/LocationTypes";
+import type { Location } from "../../../types/models";
 import type {
-  THousingType,
-  TTenantTopic,
+  HousingType,
+  TenantTopic,
 } from "../../../shared/constants/constants";
 
-interface IChatFormReturnType {
+interface ChatFormReturnType {
   userMessage: string;
 }
 
@@ -19,11 +19,11 @@ interface IChatFormReturnType {
  * @returns Object containing the formatted user message
  */
 function buildChatUserMessage(
-  loc: ILocation,
-  housingType: THousingType | null,
-  tenantTopic: TTenantTopic | null,
+  loc: Location,
+  housingType: HousingType | null,
+  tenantTopic: TenantTopic | null,
   issueDescription: string,
-): IChatFormReturnType {
+): ChatFormReturnType {
   const locationString = formatLocation(loc.city, loc.state);
 
   const promptParts = [

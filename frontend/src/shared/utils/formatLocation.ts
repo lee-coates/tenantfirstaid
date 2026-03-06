@@ -1,4 +1,4 @@
-import type { TOregonCity, TUsaState } from "../../types/LocationTypes";
+import type { OregonCity, UsaState } from "../../types/models";
 
 /**
  * Formats a city and state into a human-readable location string.
@@ -6,8 +6,8 @@ import type { TOregonCity, TUsaState } from "../../types/LocationTypes";
  * @returns A display string like "Portland, OR", "OR", or "" if both are null.
  */
 function formatLocation(
-  city: TOregonCity | null,
-  state: TUsaState | null,
+  city: OregonCity | null | undefined,
+  state: UsaState | null | undefined,
 ): string {
   const cityDisplay = city
     ? city.charAt(0).toUpperCase() + city.slice(1)

@@ -1,16 +1,16 @@
 import { AIMessage } from "@langchain/core/messages";
-import type { ILocation } from "../../../types/LocationTypes";
-import { type TChatMessage, type TUiMessage } from "../../../hooks/useMessages";
+import type { Location } from "../../../types/models";
+import { type ChatMessage, type UiMessage } from "../../../hooks/useMessages";
 
 /**
  * Options for streaming AI responses into the chat message list.
  */
-export interface IStreamTextOptions {
+export interface StreamTextOptions {
   addMessage: (
-    args: ILocation,
+    args: Location,
   ) => Promise<ReadableStreamDefaultReader<Uint8Array> | undefined>;
-  setMessages: React.Dispatch<React.SetStateAction<TChatMessage[]>>;
-  housingLocation: ILocation;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  housingLocation: Location;
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -26,7 +26,7 @@ async function streamText({
   setMessages,
   housingLocation,
   setIsLoading,
-}: IStreamTextOptions): Promise<boolean | undefined> {
+}: StreamTextOptions): Promise<boolean | undefined> {
   const botMessageId = (Date.now() + 1).toString();
 
   setIsLoading?.(true);
@@ -41,7 +41,7 @@ async function streamText({
     const reader = await addMessage(housingLocation);
     if (!reader) {
       console.error("Stream reader is unavailable");
-      const nullReaderError: TUiMessage = {
+      const nullReaderError: UiMessage = {
         type: "ui",
         text: "Sorry, I encountered an error. Please try again.",
         id: botMessageId,
@@ -87,7 +87,7 @@ async function streamText({
     }
   } catch (error) {
     console.error("Error:", error);
-    const errorMessage: TUiMessage = {
+    const errorMessage: UiMessage = {
       type: "ui",
       text: "Sorry, I encountered an error. Please try again.",
       id: botMessageId,
