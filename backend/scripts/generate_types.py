@@ -6,7 +6,7 @@ visible in this module's namespace are included in the generated output.
 
 from pydantic import RootModel
 
-from tenantfirstaid.location import Location
+from tenantfirstaid.location import Location  # noqa: F401
 from tenantfirstaid.schema import LetterChunk, ReasoningChunk, TextChunk
 
 
