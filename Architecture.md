@@ -510,7 +510,7 @@ frontend/
 │   │   └── utils/
 │   │       ├── scrolling.ts        # Helper function for window scrolling
 │   │       ├── dompurify.ts        # Helper function for sanitizing text
-│   │       └── formatLocation.ts   # Formats TOregonCity/TUsaState into a display string (e.g. "Portland, OR")
+│   │       └── formatLocation.ts   # Formats OregonCity/UsaState into a display string (e.g. "Portland, OR")
 │   └── tests/                     # Testing suite
 │   │   ├── components/            # Component testing
 │   │   │   ├── About.test.tsx     # About component testing
