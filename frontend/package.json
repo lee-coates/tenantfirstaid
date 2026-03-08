@@ -7,6 +7,7 @@
     "dev": "vite",
     "generate-types": "cd ../backend && make generate-types",
     "build": "npm run generate-types && tsc -b && vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "preview": "vite preview",
