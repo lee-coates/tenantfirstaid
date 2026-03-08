@@ -1,20 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import type { AIMessage, HumanMessage } from "@langchain/core/messages";
 import type { Location } from "../types/models";
-
-/**
- * Chat message Type aligned with LangChain's message types
- * to ensure consistency with backend.
- */
-export type ChatMessage = HumanMessage | AIMessage | UiMessage;
-
-/** UI-only message for display purposes; excluded from backend history. */
-export type UiMessage = {
-  type: "ui";
-  text: string;
-  id: string;
-};
+import type { ChatMessage, UiMessage } from "../shared/types/messages";
 
 /**
  * Converts a stored AI message (JSONL chunks) back to plain text for backend

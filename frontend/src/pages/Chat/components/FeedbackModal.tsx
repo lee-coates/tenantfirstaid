@@ -1,6 +1,6 @@
 import { useState } from "react";
 import sendFeedback from "../utils/feedbackHelper";
-import { ChatMessage } from "../../../hooks/useMessages";
+import type { ChatMessage } from "../../../shared/types/messages";
 
 interface Props {
   messages: ChatMessage[];

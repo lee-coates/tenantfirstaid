@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import sendFeedback from "../../pages/Chat/utils/feedbackHelper";
-import { ChatMessage, UiMessage } from "../../hooks/useMessages";
+import type { ChatMessage, UiMessage } from "../../shared/types/messages";
 
 describe("sendFeedback", () => {
   let fetchSpy: ReturnType<typeof vi.fn>;

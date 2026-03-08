@@ -1,6 +1,6 @@
 import { AIMessage } from "@langchain/core/messages";
 import type { Location } from "../../../types/models";
-import { type ChatMessage, type UiMessage } from "../../../hooks/useMessages";
+import type { ChatMessage, UiMessage } from "../../../shared/types/messages";
 
 /**
  * Options for streaming AI responses into the chat message list.

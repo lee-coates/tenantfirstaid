@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { describe, it, expect } from "vitest";
 import MessageContent from "../../pages/Chat/components/MessageContent";
-import type { UiMessage } from "../../hooks/useMessages";
+import type { UiMessage } from "../../shared/types/messages";
 
 describe("MessageContent", () => {
   it("renders text chunk for AI message", () => {

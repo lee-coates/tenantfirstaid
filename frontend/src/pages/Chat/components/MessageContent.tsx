@@ -1,5 +1,5 @@
 import SafeMarkdown from "../../../shared/components/SafeMarkdown";
-import type { ChatMessage } from "../../../hooks/useMessages";
+import type { ChatMessage } from "../../../shared/types/messages";
 import type { ResponseChunk } from "../../../types/models";
 
 interface ChunkProps {

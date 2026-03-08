@@ -1,4 +1,4 @@
-import { ChatMessage } from "../../../hooks/useMessages";
+import type { ChatMessage } from "../../../shared/types/messages";
 import BeaverIcon from "../../../shared/components/BeaverIcon";
 import type { Location } from "../../../types/models";
 import { formatLocation } from "../../../shared/utils/formatLocation";

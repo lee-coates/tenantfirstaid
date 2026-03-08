@@ -1,8 +1,5 @@
-import {
-  deserializeAiMessage,
-  type ChatMessage,
-  type UiMessage,
-} from "../../../hooks/useMessages";
+import { deserializeAiMessage } from "../../../hooks/useMessages";
+import type { ChatMessage, UiMessage } from "../../../shared/types/messages";
 import sanitizeText from "../../../shared/utils/sanitizeText";
 
 /**
@@ -14,9 +11,7 @@ export default function exportMessages(messages: ChatMessage[]) {
 
   const newDocument = window.open("", "", "height=800,width=600");
   const messageChain = messages
-    .filter(
-      (msg): msg is Exclude<ChatMessage, UiMessage> => msg.type !== "ui",
-    )
+    .filter((msg): msg is Exclude<ChatMessage, UiMessage> => msg.type !== "ui")
     .map(
       (msg) =>
         `<p><strong>${

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ChatMessage } from "./useMessages";
+import type { ChatMessage } from "../shared/types/messages";
 import type { ResponseChunk } from "../types/models";
 
 /**

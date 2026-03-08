@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import exportMessages from "../../pages/Chat/utils/exportHelper";
-import { ChatMessage, UiMessage } from "../../hooks/useMessages";
+import type { ChatMessage, UiMessage } from "../../shared/types/messages";
 
 function createMockDocument() {
   const writelnCalls: string[] = [];

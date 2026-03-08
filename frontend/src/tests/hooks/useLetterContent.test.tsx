@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { describe, it, expect } from "vitest";
 import { useLetterContent } from "../../hooks/useLetterContent";
-import type { ChatMessage } from "../../hooks/useMessages";
+import type { ChatMessage } from "../../shared/types/messages";
 
 const letterChunk =
   '{"type":"letter","content":"Dear Landlord, please fix the heat."}\n';

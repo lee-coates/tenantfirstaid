@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { ChatMessage } from "../../../hooks/useMessages";
+import type { ChatMessage } from "../../../shared/types/messages";
 import type { Location } from "../../../types/models";
 import InputField from "./InputField";
 import MessageContent from "./MessageContent";

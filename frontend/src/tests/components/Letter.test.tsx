@@ -17,7 +17,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { HumanMessage } from "@langchain/core/messages";
-import { ChatMessage } from "../../hooks/useMessages";
+import type { ChatMessage } from "../../shared/types/messages";
 
 beforeAll(() => {
   if (!("scrollTo" in HTMLElement.prototype)) {

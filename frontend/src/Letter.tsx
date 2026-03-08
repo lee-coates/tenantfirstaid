@@ -1,5 +1,5 @@
 import { HumanMessage } from "@langchain/core/messages";
-import type { UiMessage } from "./hooks/useMessages";
+import type { UiMessage } from "./shared/types/messages";
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
 import { useEffect, useRef, useState } from "react";

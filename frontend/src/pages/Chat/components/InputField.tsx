@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { HumanMessage } from "@langchain/core/messages";
-import { type ChatMessage } from "../../../hooks/useMessages";
+import type { ChatMessage } from "../../../shared/types/messages";
 import type { Location } from "../../../types/models";
 import { streamText } from "../utils/streamHelper";
 import useHousingContext from "../../../hooks/useHousingContext";
