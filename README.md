@@ -135,6 +135,35 @@ Live at https://tenantfirstaid.com/
   ```
   `--keep-going` will continue to run checks, even if previous `make` rule fail. Omit if you want to stop after the first `make` rule fails.
 
+### Frontend Development & Checks
+
+1. change to the `frontend/` directory
+   ```sh
+   % cd frontend
+   ```
+
+1. generate TypeScript types from backend models (required before type-checking or building)
+   ```sh
+   % npm run generate-types
+   ```
+
+   This writes `src/types/models.ts` from the backend Pydantic models (gitignored). Non-generated frontend types are stored in `src/shared/types/` and are checked into source control.
+
+- run individual checks
+
+  1. _lint_ TypeScript code with `eslint`
+     ```sh
+     % npm run lint
+     ```
+  1. _typecheck_ TypeScript code with `tsc`
+     ```sh
+     % npm run typecheck
+     ```
+  1. _test_ TypeScript code with `vitest`
+     ```sh
+     % npm run test -- --run
+     ```
+
 ## Contributing
 
 We currently have regular project meetups: https://www.meetup.com/codepdx/ . Also check out https://www.codepdx.org/ to find our Discord server.
