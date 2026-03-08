@@ -226,9 +226,11 @@ graph TB
 The frontend uses LangChain's `HumanMessage` and `AIMessage` classes directly to keep message types consistent with the backend:
 
 ```typescript
+// src/shared/types/messages.ts
 import type { AIMessage, HumanMessage } from "@langchain/core/messages";
 
-type TChatMessage = HumanMessage | AIMessage;
+type UiMessage = { type: "ui"; text: string; id: string };
+type ChatMessage = HumanMessage | AIMessage | UiMessage;
 ```
 
 LangChain's `BaseMessage` exposes several accessors for message data:
@@ -324,7 +326,7 @@ async function streamText({
   setMessages,
   housingLocation,
   setIsLoading,
-}: IStreamTextOptions): Promise<boolean | undefined> {
+}: StreamTextOptions): Promise<boolean | undefined> {
   const botMessageId = (Date.now() + 1).toString();
 
   setIsLoading?.(true);
@@ -339,7 +341,7 @@ async function streamText({
     const reader = await addMessage(housingLocation);
     if (!reader) {
       console.error("Stream reader is unavailable");
-      const nullReaderError: TUiMessage = {
+      const nullReaderError: UiMessage = {
         type: "ui",
         text: "Sorry, I encountered an error. Please try again.",
         id: botMessageId,
@@ -368,7 +370,7 @@ async function streamText({
     }
   } catch (error) {
     console.error("Error:", error);
-    const errorMessage: TUiMessage = {
+    const errorMessage: UiMessage = {
       type: "ui",
       text: "Sorry, I encountered an error. Please try again.",
       id: botMessageId,
@@ -492,6 +494,8 @@ frontend/
 │   │   │       └── letterHelper.ts     # Letter generation functionality
 │   │   └── LoadingPage.tsx             # Loading component for routes
 │   ├── shared/                     # Shared components and utils
+│   │   ├── types/
+│   │   │   └── messages.ts         # Frontend shared types for messages
 │   │   ├── components/
 │   │   │   ├── Navbar/
 │   │   │   │   ├── Sidebar.tsx     # Navigation for mobile
