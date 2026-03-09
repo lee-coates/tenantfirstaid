@@ -10,19 +10,16 @@ from pydantic import RootModel
 from pydantic.json_schema import models_json_schema
 
 from tenantfirstaid.location import Location
-from tenantfirstaid.schema import LetterChunk, ReasoningChunk, TextChunk
+from tenantfirstaid.schema import ResponseChunk as ResponseChunkType
 
 
-class ResponseChunk(RootModel[TextChunk | ReasoningChunk | LetterChunk]):
+class ResponseChunk(RootModel[ResponseChunkType]):
     """Union of all possible streaming response chunk types."""
 
 
 _, schema = models_json_schema(
     [
         (Location, "serialization"),
-        (TextChunk, "serialization"),
-        (ReasoningChunk, "serialization"),
-        (LetterChunk, "serialization"),
         (ResponseChunk, "serialization"),
     ],
     title="TenantFirstAid Models",
