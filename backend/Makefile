@@ -1,7 +1,5 @@
 PYTHON := uv
 PIP := $(PYTHON) pip
-FRONTEND_DIR := ../frontend
-
 .PHONY: all install test clean check generate-types
 
 all: check
@@ -40,8 +38,7 @@ test: uv.lock
 	uv run pytest -v -s $(TEST_OPTIONS)
 
 generate-types: uv.lock
-	mkdir -p $(FRONTEND_DIR)/src/types
-	$(PYTHON) run python scripts/generate_types.py | npx --prefix $(FRONTEND_DIR) json2ts --unreachableDefinitions --additionalProperties false > $(FRONTEND_DIR)/src/types/models.ts
+	cd ../frontend && npm run generate-types
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

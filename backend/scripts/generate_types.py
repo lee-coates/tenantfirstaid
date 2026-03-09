@@ -1,7 +1,6 @@
 """Generate a JSON Schema for all Pydantic models exported to the frontend.
 
-Usage: uv run python scripts/generate_types.py | npx json2ts --unreachableDefinitions --additionalProperties false > frontend/src/types/models.ts
-Or use: make generate-types
+Usage: npm run generate-types (from frontend/) or make generate-types (from backend/).
 """
 
 import json

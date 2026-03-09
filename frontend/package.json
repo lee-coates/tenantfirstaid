@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "generate-types": "cd ../backend && make generate-types",
+    "generate-types": "mkdir -p src/types && uv run --directory ../backend python scripts/generate_types.py | json2ts --unreachableDefinitions --additionalProperties false > src/types/models.ts",
     "build": "npm run generate-types && tsc -b && vite build",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "lint": "eslint .",
