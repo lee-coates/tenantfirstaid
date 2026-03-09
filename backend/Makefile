@@ -41,7 +41,7 @@ test: uv.lock
 
 generate-types: uv.lock
 	mkdir -p $(FRONTEND_DIR)/src/types
-	$(PYTHON) run pydantic2ts --module scripts/generate_types.py --output $(FRONTEND_DIR)/src/types/models.ts --json2ts-cmd "npx --prefix $(FRONTEND_DIR) json2ts"
+	$(PYTHON) run python scripts/generate_types.py | npx --prefix $(FRONTEND_DIR) json2ts --unreachableDefinitions --additionalProperties false > $(FRONTEND_DIR)/src/types/models.ts
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

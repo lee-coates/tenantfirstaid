@@ -76,7 +76,7 @@ backend/
 │   ├── vertex_ai_list_datastores.py    # Utility to get Google Vertex AI Datastore IDs
 │   ├── create_vector_store.py          # RAG corpus setup
 │   ├── convert_csv_to_jsonl.py         # Data conversion utilities
-│   ├── generate_types.py               # Models exported to the frontend; pydantic2ts generates frontend/src/types/models.ts from this (run via `make generate-types` or `npm run generate-types`)
+│   ├── generate_types.py               # Generates a JSON Schema for Pydantic models exported to the frontend; piped through json-schema-to-typescript to produce frontend/src/types/models.ts (run via `make generate-types` or `npm run generate-types`)
 │   └── documents/                      # Source legal documents
 │       └── or/                         # Oregon state laws
 │           ├── OAR54.txt               # Oregon Administrative Rules
