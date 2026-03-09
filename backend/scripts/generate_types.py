@@ -14,7 +14,10 @@ from tenantfirstaid.schema import ResponseChunk as ResponseChunkType
 
 
 class ResponseChunk(RootModel[ResponseChunkType]):
-    """Union of all possible streaming response chunk types."""
+    """Union of all possible streaming response chunk types.
+
+    New chunk variants added to schema.py are picked up automatically through ResponseChunkType.
+    """
 
 
 _, schema = models_json_schema(
