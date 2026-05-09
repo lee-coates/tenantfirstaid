@@ -1758,7 +1758,7 @@ Civil Penalties
 (B) A pattern violation occurs when more than a very limited number of residents or employees are affected, or the situation has occurred in more than a limited number of locations but the locations are not dispersed throughout the facility.
 (C) A widespread violation occurs when the problems causing the deficiency are pervasive and affect many locations throughout the facility or represent a systemic failure that affected, or has the potential to affect, a large portion or all of the residents or employees.
 (3) Determining Civil Penalties.
-(a) When the Director is considering imposition of a civil penalty under ORS 443.455(2)(a), ORS 441.710, or Or Laws 2017, ch 679, 4 on a residential care or assisted living facility the Director shall comply with the requirements of this section.
+(a) When the Director is considering imposition of a civil penalty under ORS 443.455(2)(a), ORS 441.710, or Or Laws 2017, ch 679, Section 4 on a residential care or assisted living facility the Director shall comply with the requirements of this section.
 (b) When imposing a civil penalty on a facility pursuant to this section, the Director shall consider:
 (A) Any prior violations of laws or rules pertaining to the facility and, as a mitigating factor, whether violations were incurred under prior ownership or management of the facility.
 (B) The financial benefits, if any, realized by the facility as a result of the violation.
@@ -1807,7 +1807,7 @@ Civil Penalties
 (13) If the order is not appealed, the amount of the penalty is payable within 10 calendar days after the order is entered. If the order is appealed and is sustained, the amount of the penalty is payable within 10 calendar days after the court decision. The order, if not appealed or sustained on appeal, shall constitute a judgment and may be filed in accordance with the provisions of ORS 18.005 to 18.428. Execution may be issued upon the order in the same manner as execution upon a judgment of a court of record.
 (14) A violation of any general order or final order pertaining to a residential care or assisted living facility issued by the Department, other than a Level 1 violation, is subject to a civil penalty.
 (15) Judicial review of civil penalties imposed under ORS 441.710 shall be as provided under ORS 183.480, except the court may, in its discretion, reduce the amount of the penalty.
-(16) All penalties recovered under ORS 443.455, Or Laws 2017, ch 679, 4, and 441.710 to 441.740 shall be paid to the Quality Care Fund.
+(16) All penalties recovered under ORS 443.455, Or Laws 2017, ch 679, Section 4, and 441.710 to 441.740 shall be paid to the Quality Care Fund.
 Statutory/Other Authority: ORS 410.070 & 443.450
 Statutes/Other Implemented: ORS 441.705 - 441.745, 443.400 - 443.455 & 443.991
 History:
@@ -2142,7 +2142,7 @@ SPD 13-2009, f. 9-30-09, cert. ef. 10-1-09
 SPD 14-2007, f. 8-31-07, cert. ef. 11-1-07
 411-054-0320
 Quality Measurement Program and Council
-(1) The purpose of the Quality Measurement Program is to allow facilities and the public to compare residential care and assisted living facility performance on each quality metric. The Department shall provide and maintain a web-based report based on metrics defined in Or Laws 2017, ch 679, 15(1) and any other metrics determined by the Quality Measurement Council. The first report from this program will be published July 1, 2021.
+(1) The purpose of the Quality Measurement Program is to allow facilities and the public to compare residential care and assisted living facility performance on each quality metric. The Department shall provide and maintain a web-based report based on metrics defined in Or Laws 2017, ch 679, Section 15(1) and any other metrics determined by the Quality Measurement Council. The first report from this program will be published July 1, 2021.
 (2) Quality Measurement Council. The Quality Measurement Council is appointed by the Governor, and consists of the following members:
 (a) One individual representing the Oregon Patient Safety Commission.
 (b) One individual representing residential care facilities or assisted living facilities.
@@ -2152,7 +2152,7 @@ Quality Measurement Program and Council
 (f) The Long-Term Care Ombudsman or a designee of the Long-Term Care Ombudsman.
 (g) One direct care worker or a representative of a direct care worker who works in a residential care facility.
 (h) One individual representing the Department.
-(3) A staff coordinator shall be assigned by the Department to support the council. The staff coordinator will assist the council as needed and ensure the annual report required by Or Laws 2017, ch 679, 15(3) and (4) are implemented.
+(3) A staff coordinator shall be assigned by the Department to support the council. The staff coordinator will assist the council as needed and ensure the annual report required by Or Laws 2017, ch 679, Section 15(3) and (4) are implemented.
 (4) The council shall determine the form and manner for facilities to report metrics for the prior calendar year. Data that identifies a resident is excluded from this requirement.
 (a) In developing quality metrics, the council shall consider whether:
 (A) Reported data reflects and promotes quality care; and
@@ -2180,7 +2180,7 @@ Quality Measurement Program and Council
 (F) Identify patterns of performance by geographic regions, and other categories the Department believes will be useful to consumers.
 (G) Identify the number, severity, and scope of regulatory violations by each geographic region.
 (H) Show average timelines for surveys and investigations of abuse or regulatory noncompliance.
-(d) Quality metric data reported to the Department under this section may not be used against the facility, as required under Or Laws 2017, ch 679, 15(7). This section does not exempt a facility from complying with state law. Also, the Department may use quality metric data obtained during the normal course of business or compliance activity, as required by Or Laws 2017, ch 679, 15(8).
+(d) Quality metric data reported to the Department under this section may not be used against the facility, as required under Or Laws 2017, ch 679, Section 15(7). This section does not exempt a facility from complying with state law. Also, the Department may use quality metric data obtained during the normal course of business or compliance activity, as required by Or Laws 2017, ch 679, Section 15(8).
 (7) Online Training. The Department shall develop online training modules for facilities and the public.
 (a) Training modules shall address the top two statewide issues identified by surveys or reviews of facilities during the prior year.
 (b) Training modules shall be available and accessible by January 1, 2019.

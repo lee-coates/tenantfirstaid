@@ -60,7 +60,7 @@ GENERAL PROVISIONS
 
  
 
-Note          Consumer credit reporting for nonpayment during 2020-2021 emergency period--2021 c.39 6,7
+Note          Consumer credit reporting for nonpayment during 2020-2021 emergency period--2021 c.39 Sections 6,7
 
  
 
@@ -1006,15 +1006,15 @@ GENERAL PROVISIONS
 
       (b) There is a written rental agreement that defines the landlord's and the tenant's rights and responsibilities under this chapter; and
 
-      (c) There are no fees or security deposits, although the landlord may require the payment of an applicant screening charge, as provided in ORS 90.295. [Formerly 91.705; 1991 c.844 3; 1993 c.369 1; 1995 c.324 1; 1995 c.559 1; 1997 c.577 1; 1999 c.676 7,7a; 2001 c.596 27; 2003 c.378 8; 2005 c.22 57; 2005 c.41 1; 2005 c.619 15; 2007 c.508 7; 2007 c.906 6; 2009 c.431 7; 2009 c.816 16; 2011 c.42 11; 2013 c.294 14; 2013 c.443 1; 2014 c.89 12; 2019 c.1 6; 2019 c.422 28; 2019 c.625 49; 2021 c.260 12; 2023 c.72 45; 2023 c.250 1; 2023 c.549 1]
+      (c) There are no fees or security deposits, although the landlord may require the payment of an applicant screening charge, as provided in ORS 90.295. [Formerly 91.705; 1991 c.844 Section 3; 1993 c.369 Section 1; 1995 c.324 Section 1; 1995 c.559 Section 1; 1997 c.577 Section 1; 1999 c.676 Sections 7,7a; 2001 c.596 Section 27; 2003 c.378 Section 8; 2005 c.22 Section 57; 2005 c.41 Section 1; 2005 c.619 Section 15; 2007 c.508 Section 7; 2007 c.906 Section 6; 2009 c.431 Section 7; 2009 c.816 Section 16; 2011 c.42 Section 11; 2013 c.294 Section 14; 2013 c.443 Section 1; 2014 c.89 Section 12; 2019 c.1 Section 6; 2019 c.422 Section 28; 2019 c.625 Section 49; 2021 c.260 Section 12; 2023 c.72 Section 45; 2023 c.250 Section 1; 2023 c.549 Section 1]
 
  
 
       Note: Sections 6 and 7, chapter 39, Oregon Laws 2021, provide:
 
-      Sec. 6. Section 7 of this 2021 Act is added to and made a part of ORS chapter 90. [2021 c.39 6]
+      Sec. 6. Section 7 of this 2021 Act is added to and made a part of ORS chapter 90. [2021 c.39 Section 6]
 
-      Sec. 7. Consumer credit reporting for nonpayment during 2020-2021 emergency period. A landlord may not report to any consumer credit reporting agency a tenant's nonpayment of rent, charges or fees that accrued on or after April 1, 2020, and before July 1, 2021. [2021 c.39 7]
+      Sec. 7. Consumer credit reporting for nonpayment during 2020-2021 emergency period. A landlord may not report to any consumer credit reporting agency a tenant's nonpayment of rent, charges or fees that accrued on or after April 1, 2020, and before July 1, 2021. [2021 c.39 Section 7]
 
  
 
@@ -1040,11 +1040,11 @@ GENERAL PROVISIONS
 
       (8) Occupancy by an owner of a condominium unit or a holder of a proprietary lease in a cooperative.
 
-      (9) Occupancy under a rental agreement covering premises used by the occupant primarily for agricultural purposes. [Formerly 91.710; 1993 c.369 2; 1997 c.577 2; 1999 c.603 6; 2001 c.596 28]
+      (9) Occupancy under a rental agreement covering premises used by the occupant primarily for agricultural purposes. [Formerly 91.710; 1993 c.369 Section 2; 1997 c.577 Section 2; 1999 c.603 Section 6; 2001 c.596 Section 28]
 
  
 
-      90.112 Maximum occupancy limit. A maximum occupancy limit may not be established or enforced by any local government, as defined in ORS 197.015, for any residential dwelling unit, as defined in ORS 90.100, if the restriction is based on the familial or nonfamilial relationships among any occupants. [2021 c.24 1]
+      90.112 Maximum occupancy limit. A maximum occupancy limit may not be established or enforced by any local government, as defined in ORS 197.015, for any residential dwelling unit, as defined in ORS 90.100, if the restriction is based on the familial or nonfamilial relationships among any occupants. [2021 c.24 Section 1]
 
  
 
@@ -1052,7 +1052,7 @@ GENERAL PROVISIONS
 
  
 
-      90.113 Additional exclusion from application of chapter. Residence in a licensed program, facility or home described in ORS 430.306 to 430.375, 430.380, 430.381, 430.397 to 430.401, 430.405 to 430.565, 430.570, 430.590, 430.709, 443.400 to 443.455, 443.705 to 443.825 or 443.835 is not governed by this chapter. [2007 c.715 2; 2009 c.595 58]
+      90.113 Additional exclusion from application of chapter. Residence in a licensed program, facility or home described in ORS 430.306 to 430.375, 430.380, 430.381, 430.397 to 430.401, 430.405 to 430.565, 430.570, 430.590, 430.709, 443.400 to 443.455, 443.705 to 443.825 or 443.835 is not governed by this chapter. [2007 c.715 Section 2; 2009 c.595 Section 58]
 
  
 
@@ -1084,7 +1084,7 @@ GENERAL PROVISIONS
 
       (b) A manufactured dwelling or floating home, located inside or outside of a facility, if the tenant rents both the dwelling or home and the space; and
 
-      (c) A manufactured dwelling or floating home, located outside a facility, if the tenant owns the dwelling or home and rents the space. [Formerly 91.720; 1991 c.844 28; 1995 c.559 5; 1997 c.577 2a; 1999 c.676 8; 2005 c.41 2; 2023 c.250 2]
+      (c) A manufactured dwelling or floating home, located outside a facility, if the tenant owns the dwelling or home and rents the space. [Formerly 91.720; 1991 c.844 Section 28; 1995 c.559 Section 5; 1997 c.577 Section 2a; 1999 c.676 Section 8; 2005 c.41 Section 2; 2023 c.250 Section 2]
 
  
 
@@ -1128,7 +1128,7 @@ GENERAL PROVISIONS
 
       (i) Damages, for noncompliance with a rental agreement or ORS 90.325, under ORS 90.401 or as provided elsewhere in this chapter.
 
-      (2) A tenant who requests a writing that evidences the tenant's payment is entitled to receive that writing from the landlord as a condition for making the payment. The writing may be a receipt, statement of the tenant's account or other acknowledgment of the tenant's payment. The writing must include the amount paid, the date of payment and information identifying the landlord or the rental property. If the tenant makes the payment by mail, deposit or a method other than in person and requests the writing, the landlord shall within a reasonable time provide the tenant with the writing in a manner consistent with ORS 90.150. [1997 c.577 4; 1999 c.603 7; 2001 c.596 29; 2005 c.22 58; 2005 c.391 13; 2005 c.619 16]
+      (2) A tenant who requests a writing that evidences the tenant's payment is entitled to receive that writing from the landlord as a condition for making the payment. The writing may be a receipt, statement of the tenant's account or other acknowledgment of the tenant's payment. The writing must include the amount paid, the date of payment and information identifying the landlord or the rental property. If the tenant makes the payment by mail, deposit or a method other than in person and requests the writing, the landlord shall within a reasonable time provide the tenant with the writing in a manner consistent with ORS 90.150. [1997 c.577 Section 4; 1999 c.603 Section 7; 2001 c.596 Section 29; 2005 c.22 Section 58; 2005 c.391 Section 13; 2005 c.619 Section 16]
 
  
 
@@ -1138,7 +1138,7 @@ GENERAL PROVISIONS
 
       (3) Nothing in this section diminishes the obligations of a landlord to maintain the dwelling unit in a habitable condition under ORS 90.320 or 90.730.
 
-      (4) Any electrical or plumbing installation, maintenance or repair work performed by a tenant or an applicant under this section must comply with ORS 447.010 to 447.156 and 479.510 to 479.945. [1995 c.773 2; 1999 c.676 9; 2005 c.758 6]
+      (4) Any electrical or plumbing installation, maintenance or repair work performed by a tenant or an applicant under this section must comply with ORS 447.010 to 447.156 and 479.510 to 479.945. [1995 c.773 Section 2; 1999 c.676 Section 9; 2005 c.758 Section 6]
 
  
 
@@ -1152,11 +1152,11 @@ GENERAL PROVISIONS
 
       (b) After the expiration date of an outstanding termination of tenancy notice or the end of a term tenancy, the landlord reasonably believes under all the circumstances that the tenant has relinquished or no longer claims the right to occupy the dwelling unit to the exclusion of others; or
 
-      (c) The landlord reasonably knows of the tenant's abandonment of the dwelling unit. [1995 c.559 9; 1999 c.603 8]
+      (c) The landlord reasonably knows of the tenant's abandonment of the dwelling unit. [1995 c.559 Section 9; 1999 c.603 Section 8]
 
  
 
-      90.148 Landlord acts that imply acceptance of tenant abandonment or relinquishment of right to occupy. The surrender of a dwelling unit may be implied from the landlord's acceptance of a tenant's abandonment or relinquishment of the right to occupy. The landlord's acceptance may be demonstrated by acts of the landlord that are inconsistent with the existence of the tenancy. A landlord's receipt of the keys to the dwelling unit or a landlord's reasonable efforts to mitigate the landlord's damages by attempting to rent the dwelling unit to a new tenant shall not constitute acts inconsistent with the existence of the tenancy. Reasonable efforts to mitigate damages include preparing the unit for rental. [1999 c.603 2]
+      90.148 Landlord acts that imply acceptance of tenant abandonment or relinquishment of right to occupy. The surrender of a dwelling unit may be implied from the landlord's acceptance of a tenant's abandonment or relinquishment of the right to occupy. The landlord's acceptance may be demonstrated by acts of the landlord that are inconsistent with the existence of the tenancy. A landlord's receipt of the keys to the dwelling unit or a landlord's reasonable efforts to mitigate the landlord's damages by attempting to rent the dwelling unit to a new tenant shall not constitute acts inconsistent with the existence of the tenancy. Reasonable efforts to mitigate damages include preparing the unit for rental. [1999 c.603 Section 2]
 
  
 
@@ -1176,7 +1176,7 @@ SERVICE OR DELIVERY OF NOTICES
 
       (3) Other written notice under ORS 90.155. If the notice is mailed, the notice shall be considered served three days after the date the notice was mailed.
 
-      (4) Any other method reasonably calculated to achieve actual receipt of notice, as agreed to and described in a written rental agreement. [1995 c.559 3; 1997 c.577 5; 1999 c.603 9; 2003 c.14 33; 2023 c.296 2]
+      (4) Any other method reasonably calculated to achieve actual receipt of notice, as agreed to and described in a written rental agreement. [1995 c.559 Section 3; 1997 c.577 Section 5; 1999 c.603 Section 9; 2003 c.14 Section 33; 2023 c.296 Section 2]
 
  
 
@@ -1224,7 +1224,7 @@ ______________________________________________________________________________
 
       (4) After 30 days' written notice, a landlord may unilaterally amend a rental agreement for a manufactured dwelling or floating home that is subject to ORS 90.505 to 90.850 to provide for service or delivery of written notices by mail and attachment service as provided by subsection (1)(c) of this section.
 
-      (5) A party to a rental agreement may use electronic mail to give a written notice terminating the tenancy only if allowed under subsection (1)(d) of this section and the termination notice is sent by both first class mail and electronic mail. [Formerly 90.910; 1997 c.577 6; 2001 c.596 29a; 2015 c.388 9; 2019 c.625 50; 2023 c.296 1]
+      (5) A party to a rental agreement may use electronic mail to give a written notice terminating the tenancy only if allowed under subsection (1)(d) of this section and the termination notice is sent by both first class mail and electronic mail. [Formerly 90.910; 1997 c.577 Section 6; 2001 c.596 Section 29a; 2015 c.388 Section 9; 2019 c.625 Section 50; 2023 c.296 Section 1]
 
  
 
@@ -1240,7 +1240,7 @@ ______________________________________________________________________________
 
       (A) A notice given under ORS 90.155 (1)(c) is both mailed and attached to the premises; or
 
-      (B) A notice given under ORS 90.155 (5) is both mailed and sent by electronic mail. [Formerly 90.402; 1997 c.577 7; 2005 c.391 14; 2013 c.294 4; 2015 c.388 1; 2020 s.s.3 c.3 11; 2023 c.296 3]
+      (B) A notice given under ORS 90.155 (5) is both mailed and sent by electronic mail. [Formerly 90.402; 1997 c.577 Section 7; 2005 c.391 Section 14; 2013 c.294 Section 4; 2015 c.388 Section 1; 2020 s.s.3 c.3 Section 11; 2023 c.296 Section 3]
 
  
 
@@ -1294,7 +1294,7 @@ CONTENT OF AGREEMENTS
 
       (E) Fees or charges owed by the tenant under ORS 90.302 or other fees or charges related to damage claims or other claims against the tenant.
 
-      (b) This subsection does not apply to rental agreements subject to ORS 90.505 to 90.850. [Formerly 90.240; 2009 c.127 3; 2009 c.431 10; 2011 c.42 1; 2015 c.388 10; 2016 c.53 3; 2019 c.1 7]
+      (b) This subsection does not apply to rental agreements subject to ORS 90.505 to 90.850. [Formerly 90.240; 2009 c.127 Section 3; 2009 c.431 Section 10; 2011 c.42 Section 1; 2015 c.388 Section 10; 2016 c.53 Section 3; 2019 c.1 Section 7]
 
  
 
@@ -1362,7 +1362,7 @@ CONTENT OF AGREEMENTS
 
       (a) Affect rights or obligations otherwise provided in this chapter or in the rental agreement.
 
-      (b) Apply to tenancies governed by ORS 90.505 to 90.850. [2013 c.294 2; 2015 c.180 38; 2015 c.388 5]
+      (b) Apply to tenancies governed by ORS 90.505 to 90.850. [2013 c.294 Section 2; 2015 c.180 Section 38; 2015 c.388 Section 5]
 
  
 
@@ -1370,7 +1370,7 @@ CONTENT OF AGREEMENTS
 
       (2) If a dwelling unit is located in a 100-year flood plain, the landlord shall provide notice in the dwelling unit rental agreement that the dwelling unit is located within the flood plain.
 
-      (3) If a landlord fails to provide a notice required under this section, and the tenant of the dwelling unit suffers an uninsured loss due to flooding, the tenant may recover from the landlord the lesser of the actual damages for the uninsured loss or two months' rent. [2009 c.306 2]
+      (3) If a landlord fails to provide a notice required under this section, and the tenant of the dwelling unit suffers an uninsured loss due to flooding, the tenant may recover from the landlord the lesser of the actual damages for the uninsured loss or two months' rent. [2009 c.306 Section 2]
 
  
 
@@ -1390,11 +1390,11 @@ CONTENT OF AGREEMENTS
 
       (3) If the occupancy fails at any time to comply with the requirements of ORS 197.493 (1) for exemption from placement and occupancy restrictions, and a state agency or local government requires the tenant to move as a result of the noncompliance, the tenant may recover the tenant's actual damages or twice the periodic rent, whichever is greater. This subsection does not apply if the noncompliance was caused by the tenant.
 
-      (4) This section does not apply to a vacation occupancy. [2005 c.619 14; 2011 c.42 1a; 2022 c.54 11]
+      (4) This section does not apply to a vacation occupancy. [2005 c.619 Section 14; 2011 c.42 Section 1a; 2022 c.54 Section 11]
 
  
 
-      90.240 [Formerly 91.740; 1993 c.369 3; 1995 c.559 6; 1997 c.577 8; 1999 c.603 10; 2003 c.378 9; renumbered 90.220 in 2005]
+      90.240 [Formerly 91.740; 1993 c.369 Section 3; 1995 c.559 Section 6; 1997 c.577 Section 8; 1999 c.603 Section 10; 2003 c.378 Section 9; renumbered 90.220 in 2005]
 
  
 
@@ -1452,7 +1452,7 @@ CONTENT OF AGREEMENTS
 
       (3) The failure by a tenant to take a test for drug or alcohol usage as requested by the landlord pursuant to subsection (1)(d)(F) of this section may be considered evidence of drug or alcohol use.
 
-      (4) As used in this section, "program of recovery" means a verifiable program of counseling and rehabilitation treatment services, including a written plan, to assist recovering alcoholics or drug addicts to recover from their addiction to alcohol, cannabis or illegal drugs while living in drug and alcohol free housing. A "program of recovery" includes Alcoholics Anonymous, Narcotics Anonymous and similar programs. [1995 c.559 7; 1997 c.577 9; 1999 c.603 11; 2003 c.378 10; 2005 c.22 59; 2005 c.391 15; 2017 c.21 32]
+      (4) As used in this section, "program of recovery" means a verifiable program of counseling and rehabilitation treatment services, including a written plan, to assist recovering alcoholics or drug addicts to recover from their addiction to alcohol, cannabis or illegal drugs while living in drug and alcohol free housing. A "program of recovery" includes Alcoholics Anonymous, Narcotics Anonymous and similar programs. [1995 c.559 Section 7; 1997 c.577 Section 9; 1999 c.603 Section 11; 2003 c.378 Section 10; 2005 c.22 Section 59; 2005 c.391 Section 15; 2017 c.21 Section 32]
 
  
 
@@ -1466,11 +1466,11 @@ CONTENT OF AGREEMENTS
 
       (d) Agrees to pay liquidated damages, except as allowed under ORS 90.302 (2)(e).
 
-      (2) A provision prohibited by subsection (1) of this section included in a rental agreement is unenforceable. If a landlord deliberately uses a rental agreement containing provisions known by the landlord to be prohibited and attempts to enforce such provisions, the tenant may recover in addition to the actual damages of the tenant an amount up to three months' periodic rent. [Formerly 91.745; 2009 c.431 11]
+      (2) A provision prohibited by subsection (1) of this section included in a rental agreement is unenforceable. If a landlord deliberately uses a rental agreement containing provisions known by the landlord to be prohibited and attempts to enforce such provisions, the tenant may recover in addition to the actual damages of the tenant an amount up to three months' periodic rent. [Formerly 91.745; 2009 c.431 Section 11]
 
  
 
-      90.250 Receipt of rent without obligation to maintain premises prohibited. A rental agreement, assignment, conveyance, trust deed or security instrument may not permit the receipt of rent free of the obligation to comply with ORS 90.320 (1) or 90.730. [Formerly 91.750; 1999 c.676 10]
+      90.250 Receipt of rent without obligation to maintain premises prohibited. A rental agreement, assignment, conveyance, trust deed or security instrument may not permit the receipt of rent free of the obligation to comply with ORS 90.320 (1) or 90.730. [Formerly 91.750; 1999 c.676 Section 10]
 
  
 
@@ -1506,7 +1506,7 @@ CONTENT OF AGREEMENTS
 
       (6) Nonpayment of a late charge alone is not grounds for termination of a rental agreement for nonpayment of rent under ORS 90.394, but is grounds for termination of a rental agreement for cause under ORS 90.392 or 90.630 (1). A landlord may note the imposition of a late charge on a nonpayment of rent termination notice under ORS 90.394, so long as the notice states or otherwise makes clear that the tenant may cure the nonpayment notice by paying only the delinquent rent, not including any late charge, within the allotted time.
 
-      (7) A late charge includes an increase or decrease in the regularly charged periodic rent payment imposed because a tenant does or does not pay that rent by a certain date. [1989 c.506 15; 1995 c.559 8; 1997 c.249 30; 1997 c.577 9a; 1999 c.603 12; 2005 c.391 16; 2007 c.906 32a]
+      (7) A late charge includes an increase or decrease in the regularly charged periodic rent payment imposed because a tenant does or does not pay that rent by a certain date. [1989 c.506 Section 15; 1995 c.559 Section 8; 1997 c.249 Section 30; 1997 c.577 Section 9a; 1999 c.603 Section 12; 2005 c.391 Section 16; 2007 c.906 Section 32a]
 
  
 
@@ -1548,7 +1548,7 @@ CONTENT OF AGREEMENTS
 
  
 
-      90.263 Vehicle tags. A landlord may not require that a tenant display a nonremovable tag, sticker or other device on a motor vehicle that might reveal or indicate to the public the premises where the tenant resides. [1999 c.397 2]
+      90.263 Vehicle tags. A landlord may not require that a tenant display a nonremovable tag, sticker or other device on a motor vehicle that might reveal or indicate to the public the premises where the tenant resides. [1999 c.397 Section 2]
 
  
 
@@ -1572,7 +1572,7 @@ CONTENT OF AGREEMENTS
 
       (b) Limits a landlord's right to recover damages and obtain injunctive relief as provided in ORS 90.401.
 
-      (4) As used in this section, "alternative energy device" has the meaning given that term in ORS 469B.100. [Formerly 91.757; 1993 c.369 32; 1995 c.559 57; 1997 c.577 10; 1999 c.603 13; 2005 c.22 60; 2005 c.391 17]
+      (4) As used in this section, "alternative energy device" has the meaning given that term in ORS 469B.100. [Formerly 91.757; 1993 c.369 Section 32; 1995 c.559 Section 57; 1997 c.577 Section 10; 1999 c.603 Section 13; 2005 c.22 Section 60; 2005 c.391 Section 17]
 
  
 
@@ -1618,7 +1618,7 @@ TEMPORARY OCCUPANCY AGREEMENT
 
       (b) A tenant may not become a temporary occupant in the tenant's own dwelling unit.
 
-      (c) A tenancy may not consist solely of a temporary occupancy. Each tenancy must have at least one tenant. [2009 c.431 6 and 2009 c.816 15; 2013 c.294 5]
+      (c) A tenancy may not consist solely of a temporary occupancy. Each tenancy must have at least one tenant. [2009 c.431 Section 6 and 2009 c.816 Section 15; 2013 c.294 Section 5]
 
  
 
@@ -1672,7 +1672,7 @@ FEES AND DEPOSITS
 
       (A) The landlord fails to comply with this section with respect to the applicant's screening or screening charge; or
 
-      (B) The landlord does not conduct a screening of the applicant for any reason and fails to refund an applicant screening charge to the applicant within 30 days. [1993 c.369 26; 1995 c.559 10; 1997 c.577 11; 1999 c.603 14; 2011 c.42 2; 2013 c.294 6; 2019 c.251 1; 2021 c.577 1; 2023 c.319 1]
+      (B) The landlord does not conduct a screening of the applicant for any reason and fails to refund an applicant screening charge to the applicant within 30 days. [1993 c.369 Section 26; 1995 c.559 Section 10; 1997 c.577 Section 11; 1999 c.603 Section 14; 2011 c.42 Section 2; 2013 c.294 Section 6; 2019 c.251 Section 1; 2021 c.577 Section 1; 2023 c.319 Section 1]
 
  
 
@@ -1690,7 +1690,7 @@ FEES AND DEPOSITS
 
       (5) If a rental agreement is not executed due to a failure by the landlord to comply with the agreement to execute, within four days the landlord shall return the deposit to the applicant either by making the deposit available to the applicant at the landlord's customary place of business or by mailing the deposit by first class mail to the applicant.
 
-      (6) If a landlord fails to comply with this section, the applicant or tenant, as the case may be, may recover from the landlord the amount of any fee or deposit charged, plus $150. [1995 c.559 11; 2001 c.596 30; 2011 c.42 3]
+      (6) If a landlord fails to comply with this section, the applicant or tenant, as the case may be, may recover from the landlord the amount of any fee or deposit charged, plus $150. [1995 c.559 Section 11; 2001 c.596 Section 30; 2011 c.42 Section 3]
 
  
 
@@ -1770,7 +1770,7 @@ FEES AND DEPOSITS
 
       (b) If a landlord delivers a security deposit or prepaid rent to a garnishor in violation of ORS 18.618 (1)(b), the landlord that delivered the security deposit or prepaid rent to the garnishor shall allow the tenant at least 30 days after a copy of the garnishee response required by ORS 18.680 is delivered to the tenant under ORS 18.690 to restore the security deposit or prepaid rent. If the tenant fails to restore a security deposit or prepaid rent under the provisions of this paragraph before the tenancy terminates, and the landlord retains no security deposit or prepaid rent from the tenant after the garnishment, the landlord is not required to refund or account for the security deposit or prepaid rent under subsection (11) of this section.
 
-      (18) This section does not preclude the landlord or tenant from recovering other damages under this chapter. [Formerly 91.760; 1993 c.369 4; 1995 c.559 12; 1997 c.577 13; 1999 c.603 15; 2001 c.596 31; 2003 c.658 3; 2005 c.391 3; 2007 c.496 7; 2007 c.906 37; 2009 c.431 12; 2010 c.28 5; 2011 c.42 4; 2011 c.510 5; 2013 c.294 7; 2015 c.217 16; 2019 c.625 51; 2023 c.296 4]
+      (18) This section does not preclude the landlord or tenant from recovering other damages under this chapter. [Formerly 91.760; 1993 c.369 Section 4; 1995 c.559 Section 12; 1997 c.577 Section 13; 1999 c.603 Section 15; 2001 c.596 Section 31; 2003 c.658 Section 3; 2005 c.391 Section 3; 2007 c.496 Section 7; 2007 c.906 Section 37; 2009 c.431 Section 12; 2010 c.28 Section 5; 2011 c.42 Section 4; 2011 c.510 Section 5; 2013 c.294 Section 7; 2015 c.217 Section 16; 2019 c.625 Section 51; 2023 c.296 Section 4]
 
  
 
@@ -1862,7 +1862,7 @@ FEES AND DEPOSITS
 
       (8) If a landlord charges a tenant a fee in violation of this section, the tenant may recover twice the actual damages of the tenant or $300, whichever is greater. This penalty does not apply to fees described in subsection (2) of this section.
 
-      (9) The landlord may unilaterally amend a rental agreement for a facility subject to ORS 90.505 to 90.850 to impose fees authorized by subsection (3) of this section upon a 90-day written notice to the tenant, except that a marina landlord may not impose a noncompliance fee for parking under subsection (3)(b)(E) of this section. [1995 c.559 13; 1997 c.577 14; 1999 c.307 19; 1999 c.603 16; 2005 c.391 18; 2009 c.431 13; 2009 c.591 11; 2013 c.294 8; 2015 c.388 3; 2016 c.53 4; 2019 c.625 37]
+      (9) The landlord may unilaterally amend a rental agreement for a facility subject to ORS 90.505 to 90.850 to impose fees authorized by subsection (3) of this section upon a 90-day written notice to the tenant, except that a marina landlord may not impose a noncompliance fee for parking under subsection (3)(b)(E) of this section. [1995 c.559 Section 13; 1997 c.577 Section 14; 1999 c.307 Section 19; 1999 c.603 Section 16; 2005 c.391 Section 18; 2009 c.431 Section 13; 2009 c.591 Section 11; 2013 c.294 Section 8; 2015 c.388 Section 3; 2016 c.53 Section 4; 2019 c.625 Section 37]
 
  
 
@@ -1904,7 +1904,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (4) When evaluating an applicant, a landlord may not consider the possession of a medical marijuana card or status as a medical marijuana patient.
 
-      (5) When evaluating an applicant, a landlord may not consider an applicant's unpaid rent, including rent reflected in judgments or referrals of debt to a collection agency, that accrued on or after April 1, 2020, and before March 1, 2022. [2013 c.294 3; 2019 c.268 1; 2021 c.39 8; 2021 c.577 2]
+      (5) When evaluating an applicant, a landlord may not consider an applicant's unpaid rent, including rent reflected in judgments or referrals of debt to a collection agency, that accrued on or after April 1, 2020, and before March 1, 2022. [2013 c.294 Section 3; 2019 c.268 Section 1; 2021 c.39 Section 8; 2021 c.577 Section 2]
 
  
 
@@ -1998,7 +1998,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (D) The age of the individual at the time the incidents occurred.
 
-      (6) If a landlord fails to comply with this section, the applicant may recover from the landlord $100. [2005 c.391 31; 2021 c.577 3]
+      (6) If a landlord fails to comply with this section, the applicant may recover from the landlord $100. [2005 c.391 Section 31; 2021 c.577 Section 3]
 
  
 
@@ -2014,7 +2014,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (4)(a) A landlord shall retain a copy of each rental agreement at the resident manager's office or at the address provided to the tenant under subsection (1)(a) of this section.
 
-      (b) A tenant may request to see the rental agreement and, within a reasonable time, the landlord shall make the agreement available for inspection. At the request of the tenant and upon payment of a reasonable charge, not to exceed the lesser of 25 cents per page or the actual copying costs, the landlord shall provide the tenant with a copy of the rental agreement. This subsection shall not diminish the landlord's obligation to furnish the tenant an initial copy of the rental agreement and any amendments under ORS 90.220 (3). [Formerly 91.765; 1993 c.369 5; 1999 c.603 17; 2003 c.378 11]
+      (b) A tenant may request to see the rental agreement and, within a reasonable time, the landlord shall make the agreement available for inspection. At the request of the tenant and upon payment of a reasonable charge, not to exceed the lesser of 25 cents per page or the actual copying costs, the landlord shall provide the tenant with a copy of the rental agreement. This subsection shall not diminish the landlord's obligation to furnish the tenant an initial copy of the rental agreement and any amendments under ORS 90.220 (3). [Formerly 91.765; 1993 c.369 Section 5; 1999 c.603 Section 17; 2003 c.378 Section 11]
 
  
 
@@ -2032,7 +2032,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (3) This section shall not apply to premises managed by a court appointed receiver.
 
-      (4) A manager who has complied with ORS 90.305 shall not be liable for damages under this section if the manager had no knowledge of the circumstances that gave rise to a duty of disclosure under subsection (1) of this section. [Formerly 91.766; 1997 c.249 31]
+      (4) A manager who has complied with ORS 90.305 shall not be liable for damages under this section if the manager had no knowledge of the circumstances that gave rise to a duty of disclosure under subsection (1) of this section. [Formerly 91.766; 1997 c.249 Section 31]
 
  
 
@@ -2126,7 +2126,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (8) If a landlord fails to return to the tenant the moneys owed as provided in subsection (5), (6) or (7) of this section, the tenant shall be entitled to twice the amount wrongfully withheld.
 
-      (9) This section does not preclude the tenant from pursuing any other remedies under this chapter. [Formerly 91.767; 1993 c.786 2; 1995 c.559 14; 1997 c.577 16; 1999 c.603 18; 2005 c.391 19; 2009 c.816 4a; 2011 c.503 7; 2015 c.388 8]
+      (9) This section does not preclude the tenant from pursuing any other remedies under this chapter. [Formerly 91.767; 1993 c.786 Section 2; 1995 c.559 Section 14; 1997 c.577 Section 16; 1999 c.603 Section 18; 2005 c.391 Section 19; 2009 c.816 Section 4a; 2011 c.503 Section 7; 2015 c.388 Section 8]
 
  
 
@@ -2138,7 +2138,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (2) The landlord shall provide a new tenant with alarm testing instructions as described in ORS 90.317.
 
-      (3) If a carbon monoxide alarm is battery-operated or has a battery-operated backup system, the landlord shall supply working batteries for the alarm at the beginning of a new tenancy. [2009 c.591 10; 2011 c.42 5]
+      (3) If a carbon monoxide alarm is battery-operated or has a battery-operated backup system, the landlord shall supply working batteries for the alarm at the beginning of a new tenancy. [2009 c.591 Section 10; 2011 c.42 Section 5]
 
  
 
@@ -2156,7 +2156,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (3) If the landlord receives written notice from the tenant of a deficiency in a carbon monoxide alarm, other than dead batteries, the landlord shall repair or replace the alarm.
 
-      (4) Supplying and maintaining a carbon monoxide alarm required under this section is a habitable condition requirement under ORS 90.320. [2009 c.591 5; 2011 c.42 7]
+      (4) Supplying and maintaining a carbon monoxide alarm required under this section is a habitable condition requirement under ORS 90.320. [2009 c.591 Section 5; 2011 c.42 Section 7]
 
  
 
@@ -2176,7 +2176,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (c) Notice at least once a year of the opportunity to recycle with a description of the location of the containers or depots on the premises and information about how to recycle. New tenants shall be notified of the opportunity to recycle at the time of entering into a rental agreement.
 
-      (2) As used in this section, "recyclable material" and "source separate" have the meaning given those terms in ORS 459.005. [1991 c.385 16; 2021 c.681 57]
+      (2) As used in this section, "recyclable material" and "source separate" have the meaning given those terms in ORS 459.005. [1991 c.385 Section 16; 2021 c.681 Section 57]
 
  
 
@@ -2234,7 +2234,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (c) The terms and conditions of the agreement are clearly and fairly disclosed and adequate consideration for the agreement is specifically stated.
 
-      (3) Any provisions of this section that reasonably apply only to a structure that is used as a home, residence or sleeping place do not apply to a manufactured dwelling, recreational vehicle or floating home where the tenant owns the manufactured dwelling, recreational vehicle or floating home, rents the space and, in the case of a dwelling or home, the space is not in a facility. Manufactured dwelling or floating home tenancies in which the tenant owns the dwelling or home and rents space in a facility are governed by ORS 90.730 and not by this section. [Formerly 91.770; 1993 c.369 6; 1995 c.559 15; 1997 c.249 32; 1997 c.577 17; 1999 c.307 20; 1999 c.676 11; 2009 c.591 12; 2013 c.294 9; 2022 c.86 11]
+      (3) Any provisions of this section that reasonably apply only to a structure that is used as a home, residence or sleeping place do not apply to a manufactured dwelling, recreational vehicle or floating home where the tenant owns the manufactured dwelling, recreational vehicle or floating home, rents the space and, in the case of a dwelling or home, the space is not in a facility. Manufactured dwelling or floating home tenancies in which the tenant owns the dwelling or home and rents space in a facility are governed by ORS 90.730 and not by this section. [Formerly 91.770; 1993 c.369 Section 6; 1995 c.559 Section 15; 1997 c.249 Section 32; 1997 c.577 Section 17; 1999 c.307 Section 20; 1999 c.676 Section 11; 2009 c.591 Section 12; 2013 c.294 Section 9; 2022 c.86 Section 11]
 
  
 
@@ -2286,7 +2286,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (7) If the tenant refuses to allow lawful access, the landlord may obtain injunctive relief to compel access or may terminate the rental agreement under ORS 90.392 and take possession as provided in ORS 105.100 to 105.168. In addition, the landlord may recover actual damages.
 
-      (8) If the landlord makes an unlawful entry or a lawful entry in an unreasonable manner or makes repeated demands for entry otherwise lawful but that have the effect of unreasonably harassing the tenant, the tenant may obtain injunctive relief to prevent the reoccurrence of the conduct or may terminate the rental agreement pursuant to ORS 90.360 (1). In addition, the tenant may recover actual damages not less than an amount equal to one week's rent in the case of a week-to-week tenancy or one month's rent in all other cases. [Formerly 90.335; 1997 c.577 18; 1999 c.603 19; 1999 c.676 12; 2005 c.391 20]
+      (8) If the landlord makes an unlawful entry or a lawful entry in an unreasonable manner or makes repeated demands for entry otherwise lawful but that have the effect of unreasonably harassing the tenant, the tenant may obtain injunctive relief to prevent the reoccurrence of the conduct or may terminate the rental agreement pursuant to ORS 90.360 (1). In addition, the tenant may recover actual damages not less than an amount equal to one week's rent in the case of a week-to-week tenancy or one month's rent in all other cases. [Formerly 90.335; 1997 c.577 Section 18; 1999 c.603 Section 19; 1999 c.676 Section 12; 2005 c.391 Section 20]
 
  
 
@@ -2326,7 +2326,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (6) A landlord that increases rent in violation of subsection (2)(d) or (4) of this section is liable to the tenant in an amount equal to three months' rent plus actual damages suffered by the tenant.
 
-      (7) This section does not apply to tenancies governed by ORS 90.505 to 90.850. [2016 c.53 2; 2019 c.1 2; 2021 c.252 1; 2023 c.226 4]
+      (7) This section does not apply to tenancies governed by ORS 90.505 to 90.850. [2016 c.53 Section 2; 2019 c.1 Section 2; 2021 c.252 Section 1; 2023 c.226 Section 4]
 
  
 
@@ -2342,7 +2342,7 @@ LANDLORD RIGHTS AND OBLIGATIONS
 
       (2) No later than September 30th of each year, the Oregon Department of Administrative Services shall publish the maximum annual rent increase percentage calculated pursuant to subsection (1) of this section, along with the provisions of ORS 90.323 and 90.600, in a press release.
 
-      (3) The department shall maintain publicly available information on its website about the maximum annual rent increase percentage for the previous calendar year and for the current calendar year and, on or after September 30th of each year, for the following calendar year. [2019 c.1 5; 2023 c.226 3]
+      (3) The department shall maintain publicly available information on its website about the maximum annual rent increase percentage for the previous calendar year and for the current calendar year and, on or after September 30th of each year, for the following calendar year. [2019 c.1 Section 5; 2023 c.226 Section 3]
 
  
 
@@ -2384,19 +2384,19 @@ TENANT OBLIGATIONS
 
       (b) Conduct by a perpetrator relating to domestic violence, sexual assault, bias crime or stalking.
 
-      (4) For damage that results from conduct by a perpetrator relating to domestic violence, sexual assault, bias crime or stalking, a landlord may require a tenant to provide verification that the tenant or a member of the tenant's household is a victim of domestic violence, sexual assault, bias crime or stalking as provided by ORS 90.453. [Formerly 91.775; 1993 c.369 7; 1995 c.559 16; 1999 c.307 21; 1999 c.603 20; 2009 c.591 13; 2015 c.388 7; 2023 c.549 1a]
+      (4) For damage that results from conduct by a perpetrator relating to domestic violence, sexual assault, bias crime or stalking, a landlord may require a tenant to provide verification that the tenant or a member of the tenant's household is a victim of domestic violence, sexual assault, bias crime or stalking as provided by ORS 90.453. [Formerly 91.775; 1993 c.369 Section 7; 1995 c.559 Section 16; 1999 c.307 Section 21; 1999 c.603 Section 20; 2009 c.591 Section 13; 2015 c.388 Section 7; 2023 c.549 Section 1a]
 
  
 
-      90.330 [Formerly 91.780; 1991 c.852 1; 1995 c.559 17; renumbered 90.262 in 1995]
+      90.330 [Formerly 91.780; 1991 c.852 Section 1; 1995 c.559 Section 17; renumbered 90.262 in 1995]
 
  
 
-      90.335 [Formerly 91.785; 1995 c.559 18; renumbered 90.322 in 1995]
+      90.335 [Formerly 91.785; 1995 c.559 Section 18; renumbered 90.322 in 1995]
 
  
 
-      90.340 Occupancy of premises as dwelling unit only; notice of tenant absence. Unless otherwise agreed, the tenant shall occupy the dwelling unit only as a dwelling unit. The rental agreement may require that the tenant give actual notice to the landlord of any anticipated extended absence from the premises in excess of seven days no later than the first day of the extended absence. [Formerly 91.790; 1995 c.559 19]
+      90.340 Occupancy of premises as dwelling unit only; notice of tenant absence. Unless otherwise agreed, the tenant shall occupy the dwelling unit only as a dwelling unit. The rental agreement may require that the tenant give actual notice to the landlord of any anticipated extended absence from the premises in excess of seven days no later than the first day of the extended absence. [Formerly 91.790; 1995 c.559 Section 19]
 
  
 
@@ -2460,13 +2460,13 @@ TENANT RIGHTS AND REMEDIES
 
       (B) That the date of termination specified in the notice will be extended by one day for each day that there is an extreme heat event for the forecast zone of the premises; and
 
-      (C) That information regarding days with an extreme heat event for the forecast zone can be found on the website for the Housing and Community Services Department. [2022 c.86 2; 2023 c.442 71]
+      (C) That information regarding days with an extreme heat event for the forecast zone can be found on the website for the Housing and Community Services Department. [2022 c.86 Section 2; 2023 c.442 Section 71]
 
  
 
       Note: Section 6 (1), chapter 86, Oregon Laws 2022, provides:
 
-      Sec. 6. (1) Section 2 of this 2022 Act [90.355] applies to tenancies commenced before, on or after the effective date of this 2022 Act [March 23, 2022]. [2022 c.86 6(1)]
+      Sec. 6. (1) Section 2 of this 2022 Act [90.355] applies to tenancies commenced before, on or after the effective date of this 2022 Act [March 23, 2022]. [2022 c.86 Section 6(1)]
 
  
 
@@ -2508,7 +2508,7 @@ TENANT RIGHTS AND REMEDIES
 
       (6) This section does not require a family child care home to carry any insurance policy unless required by a landlord under subsection (5)(b) of this section.
 
-      (7) This section does not apply to housing for older persons as defined in ORS 659A.421. [2023 c.145 2]
+      (7) This section does not apply to housing for older persons as defined in ORS 659A.421. [2023 c.145 Section 2]
 
  
 
@@ -2532,7 +2532,7 @@ TENANT RIGHTS AND REMEDIES
 
       (4) The tenant may not terminate or recover damages under this section for a condition caused by the deliberate or negligent act or omission of the tenant or other person on the premises with the tenant's permission or consent.
 
-      (5) If the rental agreement is terminated, the landlord shall return all security deposits and prepaid rent recoverable by the tenant under ORS 90.300. [Formerly 91.800; 1993 c.369 8; 1995 c.559 20; 1997 c.577 19; 1999 c.603 21; 1999 c.676 13]
+      (5) If the rental agreement is terminated, the landlord shall return all security deposits and prepaid rent recoverable by the tenant under ORS 90.300. [Formerly 91.800; 1993 c.369 Section 8; 1995 c.559 Section 20; 1997 c.577 Section 19; 1999 c.603 Section 21; 1999 c.676 Section 13]
 
  
 
@@ -2560,7 +2560,7 @@ TENANT RIGHTS AND REMEDIES
 
       (7) Service or delivery of actual or written notice shall be as provided by ORS 90.150 and 90.155, including the addition of three days to the notice period if written notice is delivered by first class mail.
 
-      (8) Any provisions of this section that reasonably apply only to a structure that is used as a home, residence or sleeping place does not apply to a manufactured dwelling, recreational vehicle or floating home if the tenant owns the manufactured dwelling, recreational vehicle or floating home and rents the space. [Formerly 91.805; 1995 c.559 21; 1997 c.577 20; 1999 c.603 22; 1999 c.676 14; 2007 c.508 8]
+      (8) Any provisions of this section that reasonably apply only to a structure that is used as a home, residence or sleeping place does not apply to a manufactured dwelling, recreational vehicle or floating home if the tenant owns the manufactured dwelling, recreational vehicle or floating home and rents the space. [Formerly 91.805; 1995 c.559 Section 21; 1997 c.577 Section 20; 1999 c.603 Section 22; 1999 c.676 Section 14; 2007 c.508 Section 8]
 
  
 
@@ -2580,7 +2580,7 @@ TENANT RIGHTS AND REMEDIES
 
       (6)(a) A tenant with a fixed term tenancy who receives actual notice that the property that is the subject of the tenant's rental agreement with a landlord is in foreclosure may terminate the tenancy by delivering a written notice to the landlord specifying that the tenant has received notice that the property is in foreclosure and that the tenancy will terminate upon a designated date that is not less than 60 days after delivery of the notice unless within 30 days the landlord provides the tenant with written evidence from a lender or trustee that the property is no longer in foreclosure or with written evidence that a receiver has been appointed by a court of competent jurisdiction to oversee the operation of the property.
 
-      (b) If the landlord does not provide the tenant with written evidence as described in paragraph (a) of this subsection within the 30-day period after delivery of the notice of termination, the tenancy terminates as provided in the notice. [2009 c.510 4; 2011 c.42 7a; 2013 c.294 10]
+      (b) If the landlord does not provide the tenant with written evidence as described in paragraph (a) of this subsection within the 30-day period after delivery of the notice of termination, the tenancy terminates as provided in the notice. [2009 c.510 Section 4; 2011 c.42 Section 7a; 2013 c.294 Section 10]
 
  
 
@@ -2626,7 +2626,7 @@ TENANT RIGHTS AND REMEDIES
 
       (f) The tenant has previously used the remedy provided by this section for the same occurrence of the defect.
 
-      (6) If the tenant proceeds under this section, the tenant may not proceed under ORS 90.360 (1) as to that breach, but may use any other available remedy in addition to the remedy provided by this section. [2007 c.508 2]
+      (6) If the tenant proceeds under this section, the tenant may not proceed under ORS 90.360 (1) as to that breach, but may use any other available remedy in addition to the remedy provided by this section. [2007 c.508 Section 2]
 
  
 
@@ -2640,11 +2640,11 @@ TENANT RIGHTS AND REMEDIES
 
       (4) If the total amount found due to the tenant on any counterclaims is less than any rent found due to the landlord, and the tenant retains possession solely because the tenant paid rent into court under subsection (1) of this section, no attorney fees shall be awarded to the tenant unless the tenant paid at least the balance found due to the landlord into court no later than the commencement of the trial.
 
-      (5) When a tenant is granted a continuance for a longer period than two days, and has not been ordered to pay rent into court under subsection (1) of this section, the tenant shall be ordered to pay rent into court under ORS 105.140 (2). [Formerly 91.810; 1993 c.369 9; 1995 c.559 22]
+      (5) When a tenant is granted a continuance for a longer period than two days, and has not been ordered to pay rent into court under subsection (1) of this section, the tenant shall be ordered to pay rent into court under ORS 105.140 (2). [Formerly 91.810; 1993 c.369 Section 9; 1995 c.559 Section 22]
 
  
 
-      90.375 Effect of unlawful ouster or exclusion; willful diminution of services. If a landlord unlawfully removes or excludes the tenant from the premises, seriously attempts or seriously threatens unlawfully to remove or exclude the tenant from the premises or willfully diminishes or seriously attempts or seriously threatens unlawfully to diminish services to the tenant by interrupting or causing the interruption of heat, running water, hot water, electric or other essential service, the tenant may obtain injunctive relief to recover possession or may terminate the rental agreement and recover an amount up to two months' periodic rent or twice the actual damages sustained by the tenant, whichever is greater. If the rental agreement is terminated the landlord shall return all security deposits and prepaid rent recoverable under ORS 90.300. The tenant need not terminate the rental agreement, obtain injunctive relief or recover possession to recover damages under this section. [Formerly 91.815; 1993 c.369 10; 1995 c.559 23; 1997 c.577 21]
+      90.375 Effect of unlawful ouster or exclusion; willful diminution of services. If a landlord unlawfully removes or excludes the tenant from the premises, seriously attempts or seriously threatens unlawfully to remove or exclude the tenant from the premises or willfully diminishes or seriously attempts or seriously threatens unlawfully to diminish services to the tenant by interrupting or causing the interruption of heat, running water, hot water, electric or other essential service, the tenant may obtain injunctive relief to recover possession or may terminate the rental agreement and recover an amount up to two months' periodic rent or twice the actual damages sustained by the tenant, whichever is greater. If the rental agreement is terminated the landlord shall return all security deposits and prepaid rent recoverable under ORS 90.300. The tenant need not terminate the rental agreement, obtain injunctive relief or recover possession to recover damages under this section. [Formerly 91.815; 1993 c.369 Section 10; 1995 c.559 Section 23; 1997 c.577 Section 21]
 
  
 
@@ -2690,7 +2690,7 @@ TENANT RIGHTS AND REMEDIES
 
       (b) The applicant or tenant has the option of choosing the method for return of any money due under this section. If the applicant or tenant fails to choose one of these methods at the time of giving the notice of termination, the landlord shall use the mail method, addressed to the last-known address of the applicant or tenant and mailed within the relevant four-day or 14-day period following the applicant's or tenant's notice.
 
-      (9) If the landlord fails to comply with subsection (8) of this section, the applicant or tenant may recover the money due in an amount equal to twice the amount due. [Formerly 91.817; 1993 c.369 11; 1995 c.559 24; 2001 c.596 32]
+      (9) If the landlord fails to comply with subsection (8) of this section, the applicant or tenant may recover the money due in an amount equal to twice the amount due. [Formerly 91.817; 1993 c.369 Section 11; 1995 c.559 Section 24; 2001 c.596 Section 32]
 
  
 
@@ -2742,7 +2742,7 @@ TENANT RIGHTS AND REMEDIES
 
       (6) For the purposes of subsection (4)(c) of this section, a tenant who has paid rent into court pursuant to ORS 90.370 shall not be considered to be in default in rent.
 
-      (7) The maintenance of an action under subsection (4) of this section does not release the landlord from liability under ORS 90.360 (2). [Formerly 91.865; 1995 c.559 25; 1997 c.303 1; 1999 c.603 23; 2011 c.42 8; 2020 s.s.3 c.3 9,18; 2023 c.145 3]
+      (7) The maintenance of an action under subsection (4) of this section does not release the landlord from liability under ORS 90.360 (2). [Formerly 91.865; 1995 c.559 Section 25; 1997 c.303 Section 1; 1999 c.603 Section 23; 2011 c.42 Section 8; 2020 s.s.3 c.3 Sections 9,18; 2023 c.145 Section 3]
 
  
 
@@ -2750,7 +2750,7 @@ TENANT RIGHTS AND REMEDIES
 
       (2) If the tenant can prove that the landlord violated subsection (1) of this section, the tenant has a defense in any discriminatory action brought by the landlord against the tenant for possession, unless the tenant is in default in rent.
 
-      (3) A tenant may prove a landlord's discrimination in violation of ORS 659A.145 or 659A.421 by demonstrating that a facially neutral housing policy has a disparate adverse impact, as described in ORS 659A.425, on members of a protected class. [1993 c.369 24; 1997 c.577 22; 2003 c.378 12; 2005 c.391 32; 2007 c.903 14; 2008 c.36 3; 2013 c.294 11; 2013 c.530 5]
+      (3) A tenant may prove a landlord's discrimination in violation of ORS 659A.145 or 659A.421 by demonstrating that a facially neutral housing policy has a disparate adverse impact, as described in ORS 659A.425, on members of a protected class. [1993 c.369 Section 24; 1997 c.577 Section 22; 2003 c.378 Section 12; 2005 c.391 Section 32; 2007 c.903 Section 14; 2008 c.36 Section 3; 2013 c.294 Section 11; 2013 c.530 Section 5]
 
  
 
@@ -2758,7 +2758,7 @@ LANDLORD REMEDIES
 
  
 
-      90.391 Information to veterans required in notice. Except as provided in ORS 408.515 (3), a notice of termination of tenancy under any provision of this chapter must include the information required by ORS 408.515. [2019 c.405 3]
+      90.391 Information to veterans required in notice. Except as provided in ORS 408.515 (3), a notice of termination of tenancy under any provision of this chapter must include the information required by ORS 408.515. [2019 c.405 Section 3]
 
  
 
@@ -2804,7 +2804,7 @@ LANDLORD REMEDIES
 
       (c) Subsection (5)(a) of this section changes from 10 days to four days.
 
-      (7) The termination of a tenancy for a manufactured dwelling or floating home space in a facility under ORS 90.505 to 90.850 is governed by ORS 90.630 and not by this section. [2005 c.391 7]
+      (7) The termination of a tenancy for a manufactured dwelling or floating home space in a facility under ORS 90.505 to 90.850 is governed by ORS 90.630 and not by this section. [2005 c.391 Section 7]
 
  
 
@@ -2832,7 +2832,7 @@ LANDLORD REMEDIES
 
       (b) A written rental agreement and the notice expressly state that payment is to be made at a specified location that is either on the premises or at a place where the tenant has made all previous rent payments in person; and
 
-      (c) The place so specified is available to the tenant for payment throughout the period of the notice. [2005 c.391 8; 2020 s.s.3 c.3 10,19; 2023 c.13 58; 2023 c.296 5]
+      (c) The place so specified is available to the tenant for payment throughout the period of the notice. [2005 c.391 Section 8; 2020 s.s.3 c.3 Sections 10,19; 2023 c.13 Section 58; 2023 c.296 Section 5]
 
  
 
@@ -2858,7 +2858,7 @@ LANDLORD REMEDIES
 
       (4) Notwithstanding ORS 105.137 (4), if a claim for possession is dismissed under subsection (3)(c) of this section and the payment was tendered after the action was commenced, the tenant is not entitled to prevailing party fees, costs or attorney fees.
 
-      (5) Notwithstanding ORS 90.302, a landlord may charge a tenant for filing fees paid under ORS 105.130, if the complaint for possession is dismissed under subsection (3)(c) of this section. Payment of the fees is not a prerequisite for dismissal under subsection (3)(c) of this section. [2023 c.13 55]
+      (5) Notwithstanding ORS 90.302, a landlord may charge a tenant for filing fees paid under ORS 105.130, if the complaint for possession is dismissed under subsection (3)(c) of this section. Payment of the fees is not a prerequisite for dismissal under subsection (3)(c) of this section. [2023 c.13 Section 55]
 
  
 
@@ -2900,7 +2900,7 @@ LANDLORD REMEDIES
 
       (4) An act can be proven to be outrageous in the extreme even if the act is one that does not violate a criminal statute. Notwithstanding the references to criminal statutes in subsection (1)(f) of this section, the landlord's burden of proof in an action for possession under subsection (1) of this section is the civil standard of proof by a preponderance of the evidence.
 
-      (5) If a good faith effort by a landlord to terminate the tenancy under subsection (1)(f) of this section and to recover possession of the rental unit under ORS 105.100 to 105.168 fails by decision of the court, the landlord may not be found in violation of any state statute or local ordinance requiring the landlord to remove that tenant upon threat of fine, abatement or forfeiture as long as the landlord continues to make a good faith effort to terminate the tenancy. [2005 c.391 9; 2007 c.71 23; 2011 c.151 5; 2015 c.98 3; 2016 c.24 54; 2017 c.21 33; 2019 c.553 11]
+      (5) If a good faith effort by a landlord to terminate the tenancy under subsection (1)(f) of this section and to recover possession of the rental unit under ORS 105.100 to 105.168 fails by decision of the court, the landlord may not be found in violation of any state statute or local ordinance requiring the landlord to remove that tenant upon threat of fine, abatement or forfeiture as long as the landlord continues to make a good faith effort to terminate the tenancy. [2005 c.391 Section 9; 2007 c.71 Section 23; 2011 c.151 Section 5; 2015 c.98 Section 3; 2016 c.24 Section 54; 2017 c.21 Section 33; 2019 c.553 Section 11]
 
  
 
@@ -2908,11 +2908,11 @@ LANDLORD REMEDIES
 
       (2) If the tenant cures the violation within the 24-hour period, the rental agreement does not terminate. If the tenant does not cure the violation within the 24-hour period, the rental agreement terminates as provided in the notice.
 
-      (3) If substantially the same act that constituted a prior drug or alcohol violation of which notice was given reoccurs within six months, the landlord may terminate the rental agreement upon at least 24 hours' written notice specifying the violation and the date and time of termination of the rental agreement. The tenant does not have a right to cure this subsequent violation. [2005 c.391 10; 2017 c.21 34]
+      (3) If substantially the same act that constituted a prior drug or alcohol violation of which notice was given reoccurs within six months, the landlord may terminate the rental agreement upon at least 24 hours' written notice specifying the violation and the date and time of termination of the rental agreement. The tenant does not have a right to cure this subsequent violation. [2005 c.391 Section 10; 2017 c.21 Section 34]
 
  
 
-      90.400 [Formerly 91.820; 1993 c.369 12; 1995 c.559 26; 1997 c.577 23; 1999 c.603 24; 1999 c.676 15; 2001 c.596 33; 2003 c.378 13; 2005 c.22 61; 2005 c.708 42; repealed by 2005 c.391 39]
+      90.400 [Formerly 91.820; 1993 c.369 Section 12; 1995 c.559 Section 26; 1997 c.577 Section 23; 1999 c.603 Section 24; 1999 c.676 Section 15; 2001 c.596 Section 33; 2003 c.378 Section 13; 2005 c.22 Section 61; 2005 c.708 Section 42; repealed by 2005 c.391 Section 39]
 
  
 
@@ -2920,11 +2920,11 @@ LANDLORD REMEDIES
 
       (1) A landlord may pursue any one or more of the remedies set forth in ORS 90.392, 90.394, 90.396, 90.398, 90.403 and 90.405, simultaneously or sequentially.
 
-      (2) In addition to the remedies provided in ORS 90.392, 90.394, 90.396 and 90.398, a landlord may recover damages and obtain injunctive relief for any noncompliance by the tenant with the rental agreement or ORS 90.325 or 90.740. [2005 c.391 11]
+      (2) In addition to the remedies provided in ORS 90.392, 90.394, 90.396 and 90.398, a landlord may recover damages and obtain injunctive relief for any noncompliance by the tenant with the rental agreement or ORS 90.325 or 90.740. [2005 c.391 Section 11]
 
  
 
-      90.402 [1993 c.369 25; 1995 c.559 27; renumbered 90.160 in 1995]
+      90.402 [1993 c.369 Section 25; 1995 c.559 Section 27; renumbered 90.160 in 1995]
 
  
 
@@ -2936,7 +2936,7 @@ LANDLORD REMEDIES
 
       (c) The landlord has not knowingly accepted rent from the person in possession of the premises.
 
-      (2) Service of notice under this section does not create a right of tenancy for the person in possession of the premises. [2005 c.391 12]
+      (2) Service of notice under this section does not create a right of tenancy for the person in possession of the premises. [2005 c.391 Section 12]
 
  
 
@@ -2946,7 +2946,7 @@ LANDLORD REMEDIES
 
       (3) If substantially the same act that constituted a prior noncompliance of which notice was given under subsection (1) of this section recurs within six months, the landlord may terminate the rental agreement upon at least 10 days' written notice specifying the breach and the date of termination of the rental agreement.
 
-      (4) This section shall not apply to any tenancy governed by ORS 90.505 to 90.850. [Formerly 91.822; 1995 c.559 28; 1999 c.603 25]
+      (4) This section shall not apply to any tenancy governed by ORS 90.505 to 90.850. [Formerly 91.822; 1995 c.559 Section 28; 1999 c.603 Section 25]
 
  
 
@@ -2954,7 +2954,7 @@ LANDLORD REMEDIES
 
       (2) During any absence of the tenant in excess of seven days, the landlord may enter the dwelling unit at times reasonably necessary.
 
-      (3) If the tenant abandons the dwelling unit, the landlord shall make reasonable efforts to rent it for a fair rental. If the landlord rents the dwelling unit for a term beginning before the expiration of the rental agreement, the rental agreement terminates as of the date of the new tenancy. If the landlord fails to use reasonable efforts to rent the dwelling unit at a fair rental or if the landlord accepts the abandonment as a surrender, the rental agreement is deemed to be terminated by the landlord as of the date the landlord knows or should know of the abandonment. If the tenancy is from month to month or week to week, the term of the rental agreement for this purpose is deemed to be a month or a week, as the case may be. [Formerly 91.825; 1993 c.369 13; 1995 c.559 29; 1999 c.603 26]
+      (3) If the tenant abandons the dwelling unit, the landlord shall make reasonable efforts to rent it for a fair rental. If the landlord rents the dwelling unit for a term beginning before the expiration of the rental agreement, the rental agreement terminates as of the date of the new tenancy. If the landlord fails to use reasonable efforts to rent the dwelling unit at a fair rental or if the landlord accepts the abandonment as a surrender, the rental agreement is deemed to be terminated by the landlord as of the date the landlord knows or should know of the abandonment. If the tenancy is from month to month or week to week, the term of the rental agreement for this purpose is deemed to be a month or a week, as the case may be. [Formerly 91.825; 1993 c.369 Section 13; 1995 c.559 Section 29; 1999 c.603 Section 26]
 
  
 
@@ -3020,7 +3020,7 @@ LANDLORD REMEDIES
 
       (a) To the tenant by personal delivery or first class mail in any form of check or money or electronically as provided in ORS 90.300 (13); or
 
-      (b) To any other payer by personal delivery or first class mail in any form of check or money. [2007 c.906 27; 2013 c.443 7; 2015 c.388 4; 2023 c.296 6]
+      (b) To any other payer by personal delivery or first class mail in any form of check or money. [2007 c.906 Section 27; 2013 c.443 Section 7; 2015 c.388 Section 4; 2023 c.296 Section 6]
 
  
 
@@ -3050,11 +3050,11 @@ LANDLORD REMEDIES
 
       (b) The acceptance of rent distributed under a court order releasing money that was paid into the court as provided under ORS 90.370 (1).
 
-      (c) The acceptance of rent paid for a rent obligation not yet due and paid more than one rental period in advance. [2007 c.906 28; 2023 c.296 7]
+      (c) The acceptance of rent paid for a rent obligation not yet due and paid more than one rental period in advance. [2007 c.906 Section 28; 2023 c.296 Section 7]
 
  
 
-      90.415 [Formerly 91.830; 1991 c.62 1; 1995 c.559 30; 1997 c.577 24; 1999 c.603 27; 1999 c.676 16; 2001 c.596 34; 2003 c.658 4; 2005 c.22 62; 2005 c.391 21; repealed by 2007 c.906 30]
+      90.415 [Formerly 91.830; 1991 c.62 Section 1; 1995 c.559 Section 30; 1997 c.577 Section 24; 1999 c.603 Section 27; 1999 c.676 Section 16; 2001 c.596 Section 34; 2003 c.658 Section 4; 2005 c.22 Section 62; 2005 c.391 Section 21; repealed by 2007 c.906 Section 30]
 
  
 
@@ -3076,7 +3076,7 @@ LANDLORD REMEDIES
 
       (5) Application of a tenant's security deposit or prepaid rent to an obligation owed to a landlord in foreclosure under ORS 90.367 does not constitute a partial payment of rent.
 
-      (6) Notwithstanding any acceptance of a partial payment of rent under subsection (4) of this section, the tenant continues to owe the landlord the unpaid balance of the rent. [2007 c.906 29; 2011 c.42 8a; 2020 s.s.3 c.3 12]
+      (6) Notwithstanding any acceptance of a partial payment of rent under subsection (4) of this section, the tenant continues to owe the landlord the unpaid balance of the rent. [2007 c.906 Section 29; 2011 c.42 Section 8a; 2020 s.s.3 c.3 Section 12]
 
  
 
@@ -3424,11 +3424,11 @@ LANDLORD REMEDIES
 
       (b) A landlord may not, as part of a rental agreement, require a tenant, a personal representative, a designated person or any lienholder or owner to waive any right provided by this section.
 
-      (27) Until personal property is conclusively presumed to be abandoned under subsection (9) of this section, a landlord does not have a lien pursuant to ORS 87.152 for storing the personal property. [Formerly 91.840; 1993 c.18 15; 1993 c.369 14; 1995 c.559 31; 1997 c.577 25; 1999 c.603 28; 2001 c.44 1; 2001 c.445 165; 2001 c.596 35; 2003 c.378 14; 2003 c.655 57; 2003 c.658 5; 2005 c.5 1; 2005 c.391 34; 2005 c.619 17,18; 2007 c.906 31; 2009 c.431 8; 2011 c.42 8b; 2013 c.294 12; 2017 c.480 17; 2019 c.585 17; 2019 c.678 52; 2023 c.250 4]
+      (27) Until personal property is conclusively presumed to be abandoned under subsection (9) of this section, a landlord does not have a lien pursuant to ORS 87.152 for storing the personal property. [Formerly 91.840; 1993 c.18 Section 15; 1993 c.369 Section 14; 1995 c.559 Section 31; 1997 c.577 Section 25; 1999 c.603 Section 28; 2001 c.44 Section 1; 2001 c.445 Section 165; 2001 c.596 Section 35; 2003 c.378 Section 14; 2003 c.655 Section 57; 2003 c.658 Section 5; 2005 c.5 Section 1; 2005 c.391 Section 34; 2005 c.619 Sections 17,18; 2007 c.906 Section 31; 2009 c.431 Section 8; 2011 c.42 Section 8b; 2013 c.294 Section 12; 2017 c.480 Section 17; 2019 c.585 Section 17; 2019 c.678 Section 52; 2023 c.250 Section 4]
 
  
 
-      90.426 [1995 c.758 3; repealed by 1997 c.577 50]
+      90.426 [1995 c.758 Section 3; repealed by 1997 c.577 Section 50]
 
  
 
@@ -3566,7 +3566,7 @@ LANDLORD REMEDIES
 
       (C) The person giving the notice need not prove the reason for the termination in a court action.
 
-      (13) Subsections (2) to (9) of this section do not apply to a month-to-month tenancy subject to ORS 90.429 or other tenancy created by a rental agreement subject to ORS 90.505 to 90.850. [Formerly 90.900; 1999 c.603 29; 1999 c.676 17; 2003 c.378 15; 2009 c.127 4; 2009 c.431 1; 2011 c.42 14; 2019 c.1 1; 2019 c.641 5]
+      (13) Subsections (2) to (9) of this section do not apply to a month-to-month tenancy subject to ORS 90.429 or other tenancy created by a rental agreement subject to ORS 90.505 to 90.850. [Formerly 90.900; 1999 c.603 Section 29; 1999 c.676 Section 17; 2003 c.378 Section 15; 2009 c.127 Section 4; 2009 c.431 Section 1; 2011 c.42 Section 14; 2019 c.1 Section 1; 2019 c.641 Section 5]
 
  
 
@@ -3580,7 +3580,7 @@ LANDLORD REMEDIES
 
       (B) The tenant does not have a right to cure the reason for the termination; and
 
-      (C) The landlord need not prove the reason for the termination in a court action. [Formerly 90.905; 1999 c.676 18; 2005 c.391 22; 2009 c.431 2]
+      (C) The landlord need not prove the reason for the termination in a court action. [Formerly 90.905; 1999 c.676 Section 18; 2005 c.391 Section 22; 2009 c.431 Section 2]
 
  
 
@@ -3588,7 +3588,7 @@ LANDLORD REMEDIES
 
  
 
-      90.435 Limitation on recovery of possession of premises. A landlord may not recover or take possession of the dwelling unit by action or otherwise, including willful diminution of services to the tenant by interrupting or causing the interruption of heat, running water, hot water, electricity or other essential service to the tenant, except in case of abandonment or relinquishment, or as permitted in this chapter in the manner provided in ORS 105.100 to 105.168. [Formerly 91.850; 1999 c.603 30; 2003 c.378 16]
+      90.435 Limitation on recovery of possession of premises. A landlord may not recover or take possession of the dwelling unit by action or otherwise, including willful diminution of services to the tenant by interrupting or causing the interruption of heat, running water, hot water, electricity or other essential service to the tenant, except in case of abandonment or relinquishment, or as permitted in this chapter in the manner provided in ORS 105.100 to 105.168. [Formerly 91.850; 1999 c.603 Section 30; 2003 c.378 Section 16]
 
  
 
@@ -3668,7 +3668,7 @@ ______________________________________________________________________________
 
       (10) In any court action regarding the removal of a tenant under this section, a group recovery home may present evidence that the tenant used or possessed alcohol, a marijuana item or illegal drugs within seven days preceding the removal, whether or not the evidence was described in the notice required by subsection (3) of this section.
 
-      (11) This section does not prevent a group recovery home from terminating a tenancy as provided by any other provision of this chapter and evicting a tenant as provided in ORS 105.100 to 105.168. [2007 c.715 3; 2009 c.595 59; 2011 c.644 11,61,69; 2013 c.180 5,6; 2015 c.174 3; 2017 c.21 35]
+      (11) This section does not prevent a group recovery home from terminating a tenancy as provided by any other provision of this chapter and evicting a tenant as provided in ORS 105.100 to 105.168. [2007 c.715 Section 3; 2009 c.595 Section 59; 2011 c.644 Sections 11,61,69; 2013 c.180 Sections 5,6; 2015 c.174 Section 3; 2017 c.21 Section 35]
 
  
 
@@ -3686,7 +3686,7 @@ DOMESTIC VIOLENCE, SEXUAL ASSAULT, BIAS CRIME OR STALKING
 
       (3) The perpetrator is jointly liable with any other tenants of the dwelling unit for rent or damages to the premises incurred prior to the later of the date the perpetrator vacates the premises or the termination date specified in the notice.
 
-      (4) The landlord's burden of proof in a removal action sought under this section is by a preponderance of the evidence. [2007 c.508 3; 2023 c.549 1b]
+      (4) The landlord's burden of proof in a removal action sought under this section is by a preponderance of the evidence. [2007 c.508 Section 3; 2023 c.549 Section 1b]
 
  
 
@@ -3718,11 +3718,11 @@ DOMESTIC VIOLENCE, SEXUAL ASSAULT, BIAS CRIME OR STALKING
 
       (a) Did not know, and did not have reasonable cause to know, at the time of commencing the action that a violation or incident on which the action was based was related to domestic violence, sexual assault, bias crime or stalking; and
 
-      (b) Promptly dismissed tenants other than the perpetrator from the action upon becoming aware that the violation or incident on which the action was based was related to domestic violence, sexual assault, bias crime or stalking. [2007 c.508 4; 2011 c.42 9; 2023 c.549 1c]
+      (b) Promptly dismissed tenants other than the perpetrator from the action upon becoming aware that the violation or incident on which the action was based was related to domestic violence, sexual assault, bias crime or stalking. [2007 c.508 Section 4; 2011 c.42 Section 9; 2023 c.549 Section 1c]
 
  
 
-      90.450 [Formerly 90.940; 1997 c.303 5; 1999 c.603 31; renumbered 90.465 in 2007]
+      90.450 [Formerly 90.940; 1997 c.303 Section 5; 1999 c.603 Section 31; renumbered 90.465 in 2007]
 
  
 
@@ -3886,11 +3886,11 @@ ______________________________________________________________________________
 
       (d) Required by law.
 
-      (7) The provision of a verification statement under subsection (2) of this section does not waive the confidential or privileged nature of a communication between the victim of domestic violence, sexual assault, bias crime or stalking and a qualified third party. [2003 c.378 4; 2007 c.508 9; 2011 c.42 9a; 2015 c.388 6; 2023 c.549 2]
+      (7) The provision of a verification statement under subsection (2) of this section does not waive the confidential or privileged nature of a communication between the victim of domestic violence, sexual assault, bias crime or stalking and a qualified third party. [2003 c.378 Section 4; 2007 c.508 Section 9; 2011 c.42 Section 9a; 2015 c.388 Section 6; 2023 c.549 Section 2]
 
  
 
-      90.456 Continuing tenancy after release of victim. Notwithstanding the release of a tenant who is a victim of domestic violence, sexual assault, bias crime or stalking, and any immediate family members of that tenant, from a rental agreement under ORS 90.453 or the exclusion of a perpetrator of domestic violence, sexual assault, bias crime or stalking as provided in ORS 90.459 or 105.128, if there are any remaining tenants of the dwelling unit, the tenancy shall continue for those tenants. Any fee, security deposit or prepaid rent paid by the victim, perpetrator or other tenants shall be applied, accounted for or refunded by the landlord following termination of the tenancy and delivery of possession by the remaining tenants as provided in ORS 90.300 and 90.302. [2003 c.378 6; 2007 c.508 10; 2007 c.508 11; 2011 c.42 9b; 2023 c.549 2a]
+      90.456 Continuing tenancy after release of victim. Notwithstanding the release of a tenant who is a victim of domestic violence, sexual assault, bias crime or stalking, and any immediate family members of that tenant, from a rental agreement under ORS 90.453 or the exclusion of a perpetrator of domestic violence, sexual assault, bias crime or stalking as provided in ORS 90.459 or 105.128, if there are any remaining tenants of the dwelling unit, the tenancy shall continue for those tenants. Any fee, security deposit or prepaid rent paid by the victim, perpetrator or other tenants shall be applied, accounted for or refunded by the landlord following termination of the tenancy and delivery of possession by the remaining tenants as provided in ORS 90.300 and 90.302. [2003 c.378 Section 6; 2007 c.508 Section 10; 2007 c.508 Section 11; 2011 c.42 Section 9b; 2023 c.549 Section 2a]
 
  
 
@@ -3908,7 +3908,7 @@ ______________________________________________________________________________
 
       (d) Except as provided in subsection (2) of this section, the landlord may not require the tenant to pay additional rent or an additional deposit or fee because of the exclusion of the perpetrator.
 
-      (e) The perpetrator's tenancy terminates by operation of law upon an order described in paragraph (a) of this subsection becoming a final order. [2003 c.378 5; 2007 c.508 11; 2023 c.549 2b]
+      (e) The perpetrator's tenancy terminates by operation of law upon an order described in paragraph (a) of this subsection becoming a final order. [2003 c.378 Section 5; 2007 c.508 Section 11; 2023 c.549 Section 2b]
 
  
 
@@ -3938,7 +3938,7 @@ MISCELLANEOUS
 
       (B) The tenant may recover twice the tenant's actual damages or twice the periodic rent, whichever is greater; and
 
-      (C) The landlord must return all security deposits and prepaid rent owed to the tenant under ORS 90.300 within four days after the termination. [2015 c.388 13; 2016 c.53 5]
+      (C) The landlord must return all security deposits and prepaid rent owed to the tenant under ORS 90.300 within four days after the termination. [2015 c.388 Section 13; 2016 c.53 Section 5]
 
  
 
@@ -3982,7 +3982,7 @@ MISCELLANEOUS
 
       (b) Name the landlord as a named additional insured under the policy with a right to notice of cancellation of the policy.
 
-      (11) This section does not apply to tenancies governed by ORS 90.505 to 90.850. [2017 c.387 2]
+      (11) This section does not apply to tenancies governed by ORS 90.505 to 90.850. [2017 c.387 Section 2]
 
  
 
@@ -4012,7 +4012,7 @@ MISCELLANEOUS
 
       (a) Subject to a penalty, fee, charge or loss of deposit because of the termination; or
 
-      (b) Liable for any rent beyond the effective date of the termination as determined under subsection (3) of this section. [2003 c.387 2; 2009 c.431 14; 2011 c.42 15]
+      (b) Liable for any rent beyond the effective date of the termination as determined under subsection (3) of this section. [2003 c.387 Section 2; 2009 c.431 Section 14; 2011 c.42 Section 15]
 
  
 
@@ -4052,7 +4052,7 @@ MISCELLANEOUS
 
       (a) Subject to a penalty, fee, charge or loss of deposit because of the termination; or
 
-      (b) Liable for any rent beyond the effective date of the termination as determined under subsection (3) of this section. [1999 c.276 2; 2009 c.431 15; 2011 c.42 16; 2012 c.106 1]
+      (b) Liable for any rent beyond the effective date of the termination as determined under subsection (3) of this section. [1999 c.276 Section 2; 2009 c.431 Section 15; 2011 c.42 Section 16; 2012 c.106 Section 1]
 
  
 
@@ -4100,7 +4100,7 @@ MISCELLANEOUS
 
       (a) Apply to a landlord of a facility.
 
-      (b) Affect the obligations imposed on a landlord under ORS 98.810 to 98.818 or under ORS 98.830 and 98.840. [2007 c.565 2; 2009 c.622 4; 2017 c.480 18]
+      (b) Affect the obligations imposed on a landlord under ORS 98.810 to 98.818 or under ORS 98.830 and 98.840. [2007 c.565 Section 2; 2009 c.622 Section 4; 2017 c.480 Section 18]
 
  
 
@@ -4116,7 +4116,7 @@ MISCELLANEOUS
 
       (b) Twice the actual damages to the tenant arising out of the termination or rent increase.
 
-      (3) The time allowed under ORS 12.125 to commence an action under this section begins on the date the declarant records the declaration under ORS 100.100. [2007 c.705 6; 2019 c.57 6]
+      (3) The time allowed under ORS 12.125 to commence an action under this section begins on the date the declarant records the declaration under ORS 100.100. [2007 c.705 Section 6; 2019 c.57 Section 6]
 
  
 
@@ -4134,11 +4134,11 @@ MISCELLANEOUS
 
       (a) Six times the monthly rent for the dwelling unit; or
 
-      (b) Twice the actual damages to the tenant arising out of the termination. [2007 c.705 5; 2019 c.57 7]
+      (b) Twice the actual damages to the tenant arising out of the termination. [2007 c.705 Section 5; 2019 c.57 Section 7]
 
  
 
-      90.500 [Formerly 91.868; 1991 c.844 4; 1993 c.580 2; repealed by 1995 c.559 58]
+      90.500 [Formerly 91.868; 1991 c.844 Section 4; 1993 c.580 Section 2; repealed by 1995 c.559 Section 58]
 
  
 
@@ -4170,7 +4170,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (c) "Rent a space for a manufactured dwelling or floating home," or similar wording, means a transaction creating a rental agreement in which the owner of a manufactured dwelling or floating home secures the right to locate the dwelling or home on the real property of another in a facility for use as a residence in return for value, and in which the owner of the manufactured dwelling or floating home retains no interest in the real property at the end of the transaction.
 
-      (2) Unless otherwise provided, ORS 90.100 to 90.465 apply to rental agreements that are subject to ORS 90.505 to 90.850. However, to the extent of inconsistency, the applicable provisions of ORS 90.505 to 90.850 control over the provisions of ORS 90.100 to 90.465. [Formerly 91.873; 1991 c.844 5; 1999 c.676 19; 2017 c.324 1]
+      (2) Unless otherwise provided, ORS 90.100 to 90.465 apply to rental agreements that are subject to ORS 90.505 to 90.850. However, to the extent of inconsistency, the applicable provisions of ORS 90.505 to 90.850 control over the provisions of ORS 90.100 to 90.465. [Formerly 91.873; 1991 c.844 Section 5; 1999 c.676 Section 19; 2017 c.324 Section 1]
 
  
 
@@ -4294,7 +4294,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (10) A suit or action arising under subsection (8) of this section must be commenced within one year after the discovery or identification of the alleged violation.
 
-      (11) Every landlord who publishes a directory of tenants and tenant services must include a one-page summary regarding any tenants' association. The tenants' association shall provide the summary to the landlord. [Formerly 91.875; 1991 c.844 6; 1993 c.580 3; 1995 c.559 34; 1997 c.304 3; 1997 c.305 1; 1997 c.577 26; 1999 c.603 32; 1999 c.676 20; 2001 c.596 35a; 2005 c.22 63; 2005 c.391 23; 2005 c.619 19b; 2009 c.816 5; 2011 c.503 5; 2013 c.443 8; 2019 c.625 53; 2021 c.260 13]
+      (11) Every landlord who publishes a directory of tenants and tenant services must include a one-page summary regarding any tenants' association. The tenants' association shall provide the summary to the landlord. [Formerly 91.875; 1991 c.844 Section 6; 1993 c.580 Section 3; 1995 c.559 Section 34; 1997 c.304 Section 3; 1997 c.305 Section 1; 1997 c.577 Section 26; 1999 c.603 Section 32; 1999 c.676 Section 20; 2001 c.596 Section 35a; 2005 c.22 Section 63; 2005 c.391 Section 23; 2005 c.619 Section 19b; 2009 c.816 Section 5; 2011 c.503 Section 5; 2013 c.443 Section 8; 2019 c.625 Section 53; 2021 c.260 Section 13]
 
  
 
@@ -4310,7 +4310,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (5) "Provider" means a contractor, manufactured dwelling dealer or landlord that is licensed under ORS chapter 701 and that contracts with a buyer for improvements to be made to a manufactured dwelling site in a manufactured dwelling park or to a converted rental space.
 
-      (6) "Statement of estimated costs" means a written list of the charges, fees, services, goods and accessories that a provider knows or should know are associated with the making of an improvement contracted by the provider and the total estimated cost to the buyer for the improvement. [2001 c.282 2; 2001 c.969 4; 2005 c.41 3]
+      (6) "Statement of estimated costs" means a written list of the charges, fees, services, goods and accessories that a provider knows or should know are associated with the making of an improvement contracted by the provider and the total estimated cost to the buyer for the improvement. [2001 c.282 Section 2; 2001 c.969 Section 4; 2005 c.41 Section 3]
 
  
 
@@ -4336,15 +4336,15 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (c) Construct or repair an improvement that cannot be reasonably removed and owned by the tenant at the termination of the tenancy, except for porches, stairs, decks, awnings, carports, sheds or vegetative landscaping on the site or any other improvements necessary for the safe and lawful installation of the manufactured dwelling.
 
-      (3) Except as provided in ORS 41.740, a written statement provided under this section is considered to contain all of the terms relating to improvements that a prospective tenant must make under the rental agreement. There may be no evidence of the terms of the written statement other than the contents of the written statement. [2001 c.282 3; 2005 c.41 4; 2023 c.334 1]
+      (3) Except as provided in ORS 41.740, a written statement provided under this section is considered to contain all of the terms relating to improvements that a prospective tenant must make under the rental agreement. There may be no evidence of the terms of the written statement other than the contents of the written statement. [2001 c.282 Section 3; 2005 c.41 Section 4; 2023 c.334 Section 1]
 
  
 
-      90.515 [1991 c.844 2; repealed by 1995 c.559 58]
+      90.515 [1991 c.844 Section 2; repealed by 1995 c.559 Section 58]
 
  
 
-      90.516 Model statement for disclosure of improvements required under rental agreement; rules. The Attorney General, by rule, shall adopt a model written statement for use by manufactured dwelling park and converted rental space landlords pursuant to ORS 90.514. [2001 c.282 5; 2005 c.41 5]
+      90.516 Model statement for disclosure of improvements required under rental agreement; rules. The Attorney General, by rule, shall adopt a model written statement for use by manufactured dwelling park and converted rental space landlords pursuant to ORS 90.514. [2001 c.282 Section 5; 2005 c.41 Section 5]
 
  
 
@@ -4352,7 +4352,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (2) If a provider fails to give a statement of estimated costs or knowingly fails to give a complete statement of estimated costs, a buyer who does not have actual notice of the total cost for an improvement and suffers an ascertainable loss due to the failure by the provider may bring an action to recover the greater of actual damages or $200.
 
-      (3) Except as provided in ORS 41.740, a statement of estimated costs given under this section is considered to contain all of the terms of the contract between the buyer and the provider. The contents of the statement of estimated costs are the only admissible evidence of the terms of the contract between the buyer and the provider. [2001 c.282 4; 2005 c.41 6]
+      (3) Except as provided in ORS 41.740, a statement of estimated costs given under this section is considered to contain all of the terms of the contract between the buyer and the provider. The contents of the statement of estimated costs are the only admissible evidence of the terms of the contract between the buyer and the provider. [2001 c.282 Section 4; 2005 c.41 Section 6]
 
  
 
@@ -4366,7 +4366,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (5) A manufactured dwelling or floating home dealer may not, as a condition of sale, require a purchaser to rent a space for a manufactured dwelling or floating home in a particular facility or one of a group of facilities, except that a dealer who is a landlord of a facility may require a purchaser of a dwelling or home from the landlord to rent a space for the dwelling or home in the landlord's facility.
 
-      (6) At the time of evaluating an applicant under ORS 90.303 or a prospective purchaser under ORS 90.680 (10)(a) or upon the execution of a rental agreement, whichever is earlier, the landlord of a facility shall provide the applicant, purchaser or tenant a copy of an informational handout regarding rights of tenants and landlords when a tenant is selling a manufactured dwelling or floating home in a facility, in a form prescribed by the Housing and Community Services Department. [Formerly 91.895; 1991 c.844 7; 2019 c.268 2]
+      (6) At the time of evaluating an applicant under ORS 90.303 or a prospective purchaser under ORS 90.680 (10)(a) or upon the execution of a rental agreement, whichever is earlier, the landlord of a facility shall provide the applicant, purchaser or tenant a copy of an informational handout regarding rights of tenants and landlords when a tenant is selling a manufactured dwelling or floating home in a facility, in a form prescribed by the Housing and Community Services Department. [Formerly 91.895; 1991 c.844 Section 7; 2019 c.268 Section 2]
 
  
 
@@ -4408,7 +4408,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (B) The claim is greater than any security deposit of the tenant; and
 
-      (C) The landlord provides a copy of the claim to the tenant contemporaneous with filing the claim with the insurer. [2021 c.260 11]
+      (C) The landlord provides a copy of the claim to the tenant contemporaneous with filing the claim with the insurer. [2021 c.260 Section 11]
 
  
 
@@ -4416,7 +4416,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (2) No tenant shall be required to acquire a bond or insurance policy as a precondition for the use of common areas or facilities.
 
-      (3) A landlord who rents a space for a manufactured dwelling shall not prohibit use of a common area or facility if the purpose of the prohibition is to prevent the use of the area or facility for tenant association meetings, tenant organizing meetings or other lawful tenant activities. [1997 c.303 3,4]
+      (3) A landlord who rents a space for a manufactured dwelling shall not prohibit use of a common area or facility if the purpose of the prohibition is to prevent the use of the area or facility for tenant association meetings, tenant organizing meetings or other lawful tenant activities. [1997 c.303 Sections 3,4]
 
  
 
@@ -4432,55 +4432,55 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (b) A landlord may provide written rules regarding control, sanitation, number, type and size of pets. The landlord may require the tenant to sign a pet agreement and to provide proof of liability insurance. The landlord may require the tenant to make the landlord a co-insured for the purpose of receiving notice in the case of cancellation of the insurance.
 
-      (c) A landlord may charge a tenant an amount for a violation of a written pet agreement or rules relating to pets not to exceed $50 for each violation. [1997 c.304 2; 2001 c.596 35b; 2003 c.378 17]
+      (c) A landlord may charge a tenant an amount for a violation of a written pet agreement or rules relating to pets not to exceed $50 for each violation. [1997 c.304 Section 2; 2001 c.596 Section 35b; 2003 c.378 Section 17]
 
  
 
-      90.531 [2005 c.619 5; 2019 c.625 42; renumbered 90.560 in 2019]
+      90.531 [2005 c.619 Section 5; 2019 c.625 Section 42; renumbered 90.560 in 2019]
 
  
 
-      90.532 [2005 c.619 6; 2007 c.71 24; 2009 c.305 1; 2009 c.816 6,6a; 2011 c.503 6,6a; 2013 c.443 14; 2019 c.625 43; renumbered 90.562 in 2019]
+      90.532 [2005 c.619 Section 6; 2007 c.71 Section 24; 2009 c.305 Section 1; 2009 c.816 Sections 6,6a; 2011 c.503 Sections 6,6a; 2013 c.443 Section 14; 2019 c.625 Section 43; renumbered 90.562 in 2019]
 
  
 
-      90.533 [2009 c.816 2; 2019 c.625 54; renumbered 90.566 in 2019]
+      90.533 [2009 c.816 Section 2; 2019 c.625 Section 54; renumbered 90.566 in 2019]
 
  
 
-      90.534 [2005 c.619 7; 2009 c.305 2; 2009 c.816 7; 2019 c.625 44; renumbered 90.568 in 2019]
+      90.534 [2005 c.619 Section 7; 2009 c.305 Section 2; 2009 c.816 Section 7; 2019 c.625 Section 44; renumbered 90.568 in 2019]
 
  
 
-      90.535 [2009 c.816 3; renumbered 90.564 in 2019]
+      90.535 [2009 c.816 Section 3; renumbered 90.564 in 2019]
 
  
 
-      90.536 [2005 c.619 8; 2009 c.305 3; 2011 c.503 8; 2019 c.625 45; renumbered 90.572 in 2019]
+      90.536 [2005 c.619 Section 8; 2009 c.305 Section 3; 2011 c.503 Section 8; 2019 c.625 Section 45; renumbered 90.572 in 2019]
 
  
 
-      90.537 [2005 c.619 9; 2009 c.816 8; 2011 c.503 9; 2019 c.625 46; renumbered 90.574 in 2019]
+      90.537 [2005 c.619 Section 9; 2009 c.816 Section 8; 2011 c.503 Section 9; 2019 c.625 Section 46; renumbered 90.574 in 2019]
 
  
 
-      90.538 [2009 c.816 4; 2019 c.625 47; renumbered 90.582 in 2019]
+      90.538 [2009 c.816 Section 4; 2019 c.625 Section 47; renumbered 90.582 in 2019]
 
  
 
-      90.539 [2005 c.619 10; 2019 c.625 47a; renumbered 90.580 in 2019]
+      90.539 [2005 c.619 Section 10; 2019 c.625 Section 47a; renumbered 90.580 in 2019]
 
  
 
-      90.540 [2001 c.596 23; renumbered 90.550 in 2011]
+      90.540 [2001 c.596 Section 23; renumbered 90.550 in 2011]
 
  
 
-      90.541 [2011 c.503 2; renumbered 90.576 in 2019]
+      90.541 [2011 c.503 Section 2; renumbered 90.576 in 2019]
 
  
 
-      90.543 [2009 c.479 1; 2011 c.503 4; 2013 c.443 9; 2019 c.625 48; renumbered 90.578 in 2019]
+      90.543 [2009 c.479 Section 1; 2011 c.503 Section 4; 2013 c.443 Section 9; 2019 c.625 Section 48; renumbered 90.578 in 2019]
 
  
 
@@ -4506,7 +4506,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (6) If a tenant fails to accept or unreasonably rejects a landlord's proposed new rental agreement as provided by subsection (4) of this section, the fixed term tenancy terminates on the ending date without further notice and the landlord may take possession by complying with ORS 105.100 to 105.168.
 
-      (7) If a tenancy terminates under conditions described in subsection (6) of this section, and the tenant surrenders or delivers possession of the premises to the landlord prior to the filing of an action pursuant to ORS 105.110, the tenant has the right to enter into a written storage agreement with the landlord, with the tenant having the same rights and responsibilities as a lienholder under ORS 90.675 (20), except that the landlord may limit the term of the storage agreement to not exceed six months. Unless the parties agree otherwise, the storage agreement must commence upon the date of the termination of the tenancy. The rights under ORS 90.675 of any lienholder are delayed until the end of the tenant storage agreement. [2001 c.596 24; 2003 c.658 6; 2005 c.22 64; 2005 c.391 24; 2015 c.217 17; 2019 c.625 52]
+      (7) If a tenancy terminates under conditions described in subsection (6) of this section, and the tenant surrenders or delivers possession of the premises to the landlord prior to the filing of an action pursuant to ORS 105.110, the tenant has the right to enter into a written storage agreement with the landlord, with the tenant having the same rights and responsibilities as a lienholder under ORS 90.675 (20), except that the landlord may limit the term of the storage agreement to not exceed six months. Unless the parties agree otherwise, the storage agreement must commence upon the date of the termination of the tenancy. The rights under ORS 90.675 of any lienholder are delayed until the end of the tenant storage agreement. [2001 c.596 Section 24; 2003 c.658 Section 6; 2005 c.22 Section 64; 2005 c.391 Section 24; 2015 c.217 Section 17; 2019 c.625 Section 52]
 
  
 
@@ -4564,7 +4564,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
       (8) Before entering into a sublease agreement, the facility landlord may screen a renter under ORS 90.303, but may not apply to the renter credit and conduct screening criteria that is more restrictive than the landlord applies to applicants for a tenancy of a dwelling or home that is either owned by the landlord or on consignment with the landlord under ORS 90.680.
 
-      (9) Notwithstanding subsection (2) of this section, if a facility landlord rents or has a policy of renting manufactured dwellings or floating homes that are listed for sale by the facility landlord, the facility landlord may not prohibit the facility tenant from entering into a subleasing agreement while the facility tenant actively markets for sale the facility tenant's manufactured dwelling or floating home. [2007 c.831 2; 2011 c.42 12; 2013 c.443 10; 2015 c.217 8; 2019 c.268 3; 2019 c.625 55; 2021 c.260 14; 2023 c.72 46; 2023 c.250 5; 2023 c.549 2c]
+      (9) Notwithstanding subsection (2) of this section, if a facility landlord rents or has a policy of renting manufactured dwellings or floating homes that are listed for sale by the facility landlord, the facility landlord may not prohibit the facility tenant from entering into a subleasing agreement while the facility tenant actively markets for sale the facility tenant's manufactured dwelling or floating home. [2007 c.831 Section 2; 2011 c.42 Section 12; 2013 c.443 Section 10; 2015 c.217 Section 8; 2019 c.268 Section 3; 2019 c.625 Section 55; 2021 c.260 Section 14; 2023 c.72 Section 46; 2023 c.250 Section 5; 2023 c.549 Section 2c]
 
  
 
@@ -4718,7 +4718,7 @@ MANUFACTURED DWELLING PARKS AND MARINAS
 
  
 
-      90.570 Public service charge pro rata apportionment. A landlord, upon 60 days' written notice to a tenant, may unilaterally amend a rental agreement to require a tenant to pay to the landlord, as part of the utility or service charge, a pro rata proportion of any new or increased public service charge billed to the landlord by a utility or service provider or a local government for a public service provided directly or indirectly to the tenant's dwelling unit or to the facility common areas. [2019 c.625 41]
+      90.570 Public service charge pro rata apportionment. A landlord, upon 60 days' written notice to a tenant, may unilaterally amend a rental agreement to require a tenant to pay to the landlord, as part of the utility or service charge, a pro rata proportion of any new or increased public service charge billed to the landlord by a utility or service provider or a local government for a public service provided directly or indirectly to the tenant's dwelling unit or to the facility common areas. [2019 c.625 Section 41]
 
  
 
@@ -4912,7 +4912,7 @@ inspection. (1) If a landlord bills tenants for water using pro rata billing or 
 
       (B) If the ballot includes two choices, it must explain that a voter may either vote yes for only one choice or may vote no on both choices.
 
-      (4) A landlord shall give the notices described in ORS 90.574 (2)(a) at least one month prior to holding a vote under subsection (3) of this section and shall hold a meeting described in ORS 90.574 (2)(c) at least one week prior to holding the vote. [2019 c.625 40]
+      (4) A landlord shall give the notices described in ORS 90.574 (2)(a) at least one month prior to holding a vote under subsection (3) of this section and shall hold a meeting described in ORS 90.574 (2)(c) at least one week prior to holding the vote. [2019 c.625 Section 40]
 
  
 
@@ -4958,11 +4958,11 @@ inspection. (1) If a landlord bills tenants for water using pro rata billing or 
 
       (8)(a) The tenants who reside in a facility may elect one committee of seven or fewer members in a facility-wide election to represent the tenants. One tenant of record for each rented space may vote in the election. Upon written request from the tenants' committee, the landlord or a representative of the landlord shall meet with the committee within 10 to 30 days of the request to discuss the tenants' nonrent concerns regarding the facility. Unless the parties agree otherwise, upon a request from the tenants' committee, a landlord or representative of the landlord shall meet with the tenants' committee at least once, but not more than twice, each calendar year. The meeting shall be held on the premises if the facility has suitable meeting space for that purpose, or at a location reasonably convenient to the tenants. After the meeting, the tenants' committee shall send a written summary of the issues and concerns addressed at the meeting to the landlord. The landlord or the landlord's representative shall make a good faith response in writing to the committee's summary within 60 days.
 
-      (b) The tenants' committee may be entitled to informal dispute resolution under ORS 90.769 if the landlord or landlord's representative fails to meet with the tenants' committee or fails to respond in good faith to the written summary as required by paragraph (a) of this subsection. [Formerly 91.869; 1991 c.844 8; 1995 c.559 35; 1997 c.577 26a; 1999 c.676 21; 2001 c.596 36; 2019 c.1 3; 2019 c.625 56; 2021 c.252 2; 2023 c.226 5]
+      (b) The tenants' committee may be entitled to informal dispute resolution under ORS 90.769 if the landlord or landlord's representative fails to meet with the tenants' committee or fails to respond in good faith to the written summary as required by paragraph (a) of this subsection. [Formerly 91.869; 1991 c.844 Section 8; 1995 c.559 Section 35; 1997 c.577 Section 26a; 1999 c.676 Section 21; 2001 c.596 Section 36; 2019 c.1 Section 3; 2019 c.625 Section 56; 2021 c.252 Section 2; 2023 c.226 Section 5]
 
  
 
-      90.605 Persons authorized to receive notice and demands on landlord's behalf; written notice to change designated person. Any person authorized by the landlord of a facility to receive notices and demands on the landlord's behalf retains this authority until the authorized person is notified otherwise. Written notice of any change in the name or address of the person authorized to receive notices and demands shall be delivered to the residence of each person who rents a space for a manufactured dwelling or floating home or, if specified in writing by the tenant, to another specified address. [Formerly 91.935; 1991 c.844 11]
+      90.605 Persons authorized to receive notice and demands on landlord's behalf; written notice to change designated person. Any person authorized by the landlord of a facility to receive notices and demands on the landlord's behalf retains this authority until the authorized person is notified otherwise. Written notice of any change in the name or address of the person authorized to receive notices and demands shall be delivered to the residence of each person who rents a space for a manufactured dwelling or floating home or, if specified in writing by the tenant, to another specified address. [Formerly 91.935; 1991 c.844 Section 11]
 
  
 
@@ -5016,7 +5016,7 @@ ______________________________________________________________________________
 
       (7) A good faith mistake by the landlord in completing those portions of the notice relating to the number of eligible spaces that have tenants entitled to vote or relating to space or street identification numbers does not invalidate the notice or the proposed rule or regulation change.
 
-      (8) After the effective date of the rule or regulation change, when a tenant continues to engage in an activity affected by the new rule or regulation to which the landlord objects, the landlord may give the tenant a notice of termination of the tenancy pursuant to ORS 90.630. [1991 c.844 10; 1993 c.580 1; 1995 c.559 36; 2001 c.596 36a; 2019 c.625 13]
+      (8) After the effective date of the rule or regulation change, when a tenant continues to engage in an activity affected by the new rule or regulation to which the landlord objects, the landlord may give the tenant a notice of termination of the tenancy pursuant to ORS 90.630. [1991 c.844 Section 10; 1993 c.580 Section 1; 1995 c.559 Section 36; 2001 c.596 Section 36a; 2019 c.625 Section 13]
 
  
 
@@ -5024,7 +5024,7 @@ ______________________________________________________________________________
 
       (2) The tenant may terminate a rental agreement that is a month-to-month or fixed term tenancy for cause pursuant to ORS 90.315, 90.360 (1), 90.365 (2), 90.375 or 90.380.
 
-      (3) A tenant may not be required to give the landlord more than 30 days' written notice to terminate. [Formerly 91.880; 1991 c.67 15; 1993 c.18 16; 2001 c.596 37]
+      (3) A tenant may not be required to give the landlord more than 30 days' written notice to terminate. [Formerly 91.880; 1991 c.67 Section 15; 1993 c.18 Section 16; 2001 c.596 Section 37]
 
  
 
@@ -5088,7 +5088,7 @@ ______________________________________________________________________________
 
       (11) Notwithstanding subsection (5) of this section, a tenant who receives a 30-day notice of termination pursuant to subsection (10) of this section does not have a right to correct the cause for the notice.
 
-      (12) The landlord may give a copy of the notice required by subsection (10) of this section to any lienholder of the manufactured dwelling or floating home by first class mail with certificate of mailing or by any other method allowed by ORS 90.150 (2) and (3). A landlord is not liable to a tenant for any damages incurred by the tenant as a result of the landlord giving a copy of the notice in good faith to a lienholder. [Formerly 91.886; 1991 c.844 12; 1995 c.559 37; 1995 c.633 1; 1999 c.676 22; 2001 c.596 38; 2005 c.22 65; 2005 c.391 25; 2005 c.619 20; 2007 c.906 32; 2013 c.708 15; 2015 c.820 15,22; 2017 c.442 15; 2019 c.430 3,7; 2019 c.625 38]
+      (12) The landlord may give a copy of the notice required by subsection (10) of this section to any lienholder of the manufactured dwelling or floating home by first class mail with certificate of mailing or by any other method allowed by ORS 90.150 (2) and (3). A landlord is not liable to a tenant for any damages incurred by the tenant as a result of the landlord giving a copy of the notice in good faith to a lienholder. [Formerly 91.886; 1991 c.844 Section 12; 1995 c.559 Section 37; 1995 c.633 Section 1; 1999 c.676 Section 22; 2001 c.596 Section 38; 2005 c.22 Section 65; 2005 c.391 Section 25; 2005 c.619 Section 20; 2007 c.906 Section 32; 2013 c.708 Section 15; 2015 c.820 Sections 15,22; 2017 c.442 Section 15; 2019 c.430 Sections 3,7; 2019 c.625 Section 38]
 
  
 
@@ -5136,17 +5136,17 @@ ______________________________________________________________________________
 
       (12) A landlord may give a copy of the notice for termination required by this section to any lienholder of the dwelling or home, by first class mail with certificate of mailing or by any other method allowed by ORS 90.150 (2) and (3). A landlord is not liable to a tenant for any damages incurred by the tenant as a result of the landlord giving a copy of the notice in good faith to a lienholder.
 
-      (13) When a tenant has been given a notice for termination pursuant to this section and has subsequently abandoned the dwelling or home as described in ORS 90.675, any lienholder shall have the same rights as provided by ORS 90.675, including the right to correct the cause of the notice, within the 90-day period provided by ORS 90.675 (20) notwithstanding the expiration of the notice period provided by this section for the tenant to correct the cause. [1999 c.603 2b and 1999 c.676 4; 2001 c.596 39; 2003 c.658 7; 2005 c.22 66; 2005 c.391 26; 2007 c.906 33; 2015 c.217 18; 2017 c.324 2; 2019 c.625 34]
+      (13) When a tenant has been given a notice for termination pursuant to this section and has subsequently abandoned the dwelling or home as described in ORS 90.675, any lienholder shall have the same rights as provided by ORS 90.675, including the right to correct the cause of the notice, within the 90-day period provided by ORS 90.675 (20) notwithstanding the expiration of the notice period provided by this section for the tenant to correct the cause. [1999 c.603 Section 2b and 1999 c.676 Section 4; 2001 c.596 Section 39; 2003 c.658 Section 7; 2005 c.22 Section 66; 2005 c.391 Section 26; 2007 c.906 Section 33; 2015 c.217 Section 18; 2017 c.324 Section 2; 2019 c.625 Section 34]
 
  
 
       90.634 Prohibition against lien for rent; action for possession; disposition of dwelling or home; disposition of goods. (1) A landlord may not assert a lien under ORS 87.162 for dwelling unit rent against a manufactured dwelling or floating home located in a facility. Notwithstanding ORS 90.100 (51) and 90.675 and regardless of whether the owner of a manufactured dwelling or floating home occupies the dwelling or home as a residence, a facility landlord that is entitled to unpaid rent and receives possession of the facility space from the sheriff following restitution pursuant to ORS 105.161 may sell or dispose of the dwelling or home as provided in ORS 90.675.
 
-      (2) If a manufactured dwelling or floating home was occupied immediately prior to abandonment by a person other than the facility tenant, and the name and address of the person are known to the landlord, a landlord selling or disposing of the dwelling or home under subsection (1) of this section shall promptly send the person a copy of the notice sent to the facility tenant under ORS 90.675 (3). Notwithstanding ORS 90.425, the facility landlord may sell or dispose of goods left in the dwelling or home or upon the dwelling unit by the person in the same manner as if the goods were left by the facility tenant. If the name and address of the person are known to the facility landlord, the landlord shall promptly send the person a copy of the written notice sent to the facility tenant under ORS 90.425 (3) and allow the person the time described in the notice to arrange for removal of the goods. [2007 c.831 4; 2011 c.42 13; 2013 c.443 11; 2021 c.260 15; 2023 c.72 47; 2023 c.250 6; 2023 c.549 3]
+      (2) If a manufactured dwelling or floating home was occupied immediately prior to abandonment by a person other than the facility tenant, and the name and address of the person are known to the landlord, a landlord selling or disposing of the dwelling or home under subsection (1) of this section shall promptly send the person a copy of the notice sent to the facility tenant under ORS 90.675 (3). Notwithstanding ORS 90.425, the facility landlord may sell or dispose of goods left in the dwelling or home or upon the dwelling unit by the person in the same manner as if the goods were left by the facility tenant. If the name and address of the person are known to the facility landlord, the landlord shall promptly send the person a copy of the written notice sent to the facility tenant under ORS 90.425 (3) and allow the person the time described in the notice to arrange for removal of the goods. [2007 c.831 Section 4; 2011 c.42 Section 13; 2013 c.443 Section 11; 2021 c.260 Section 15; 2023 c.72 Section 47; 2023 c.250 Section 6; 2023 c.549 Section 3]
 
  
 
-      90.635 [1995 c.746 47,48; 1997 c.577 26b; 1999 c.676 23; 2001 c.596 45; 2003 c.21 1; 2005 c.22 67; 2007 c.843 91; 2007 c.906 7; renumbered 90.650 in 2007]
+      90.635 [1995 c.746 Sections 47,48; 1997 c.577 Section 26b; 1999 c.676 Section 23; 2001 c.596 Section 45; 2003 c.21 Section 1; 2005 c.22 Section 67; 2007 c.843 Section 91; 2007 c.906 Section 7; renumbered 90.650 in 2007]
 
  
 
@@ -5166,7 +5166,7 @@ ______________________________________________________________________________
 
       (4) A tenant does not owe rent while the dwelling unit is inaccessible due to the natural disaster or the destruction of the dwelling unit.
 
-      (5) As used in this section, a dwelling unit is not considered accessible while a governmental agency has posted the dwelling unit as unsafe or unlawful to occupy, even if a tenant may begin repairs. [2021 c.260 10]
+      (5) As used in this section, a dwelling unit is not considered accessible while a governmental agency has posted the dwelling unit as unsafe or unlawful to occupy, even if a tenant may begin repairs. [2021 c.260 Section 10]
 
  
 
@@ -5218,7 +5218,7 @@ ______________________________________________________________________________
 
       (O) ORS 90.765 applies to retaliatory conduct by a landlord.
 
-      (P) ORS 90.771 applies to the confidentiality of information provided to the Housing and Community Services Department about disputes. [2011 c.503 17; 2013 c.443 12; 2017 c.198 3; 2019 c.1 9; 2019 c.625 57; 2023 c.226 7]
+      (P) ORS 90.771 applies to the confidentiality of information provided to the Housing and Community Services Department about disputes. [2011 c.503 Section 17; 2013 c.443 Section 12; 2017 c.198 Section 3; 2019 c.1 Section 9; 2019 c.625 Section 57; 2023 c.226 Section 7]
 
  
 
@@ -5274,7 +5274,7 @@ ______________________________________________________________________________
 
       (8) This section does not limit a landlord's right to terminate a tenancy for nonpayment of rent under ORS 90.394 or for other cause under ORS 90.380 (5)(b), 90.396, 90.398 or 90.632 by complying with ORS 105.100 to 105.168.
 
-      (9) If a landlord is required to close a manufactured dwelling park by the exercise of eminent domain or by order of a federal, state or local agency, the landlord shall notify the park tenants no later than 15 days after the landlord receives notice of the exercise of eminent domain or of the agency order. The notice to the tenants shall be in writing, designate the date of closure, state the reason for the closure, describe the tax credit available under ORS 316.090 and any government relocation benefits known by the landlord to be available to the tenants and comply with any additional content requirements under ORS 90.650. [2007 c.906 2; 2017 c.198 1; 2019 c.625 58]
+      (9) If a landlord is required to close a manufactured dwelling park by the exercise of eminent domain or by order of a federal, state or local agency, the landlord shall notify the park tenants no later than 15 days after the landlord receives notice of the exercise of eminent domain or of the agency order. The notice to the tenants shall be in writing, designate the date of closure, state the reason for the closure, describe the tax credit available under ORS 316.090 and any government relocation benefits known by the landlord to be available to the tenants and comply with any additional content requirements under ORS 90.650. [2007 c.906 Section 2; 2017 c.198 Section 1; 2019 c.625 Section 58]
 
  
 
@@ -5344,7 +5344,7 @@ ______________________________________________________________________________
 
       (3) The Department of Revenue, in consultation with the Housing and Community Services Department, shall adopt rules establishing a sample form and explanation for the property tax assessment appeal.
 
-      (4) The Housing and Community Services Department may adopt rules to administer this section. [Formerly 90.635; 2011 c.83 2; 2019 c.625 60]
+      (4) The Housing and Community Services Department may adopt rules to administer this section. [Formerly 90.635; 2011 c.83 Section 2; 2019 c.625 Section 60]
 
  
 
@@ -5374,15 +5374,15 @@ ______________________________________________________________________________
 
       (a) The number of dwelling unit owners who moved their dwelling units out of the park; and
 
-      (b) The number of dwelling unit owners who abandoned their dwelling units at the park. [2007 c.906 3; 2019 c.625 62]
+      (b) The number of dwelling unit owners who abandoned their dwelling units at the park. [2007 c.906 Section 3; 2019 c.625 Section 62]
 
  
 
-      90.660 Local regulation of park closures. A local government may not enforce an ordinance, rule or other local law regulating manufactured dwelling park closures or partial closures adopted by the local government on or after July 1, 2007, or amended on or after January 1, 2010. An ordinance, rule or other local law regulating manufactured dwelling park closures or partial closures may not be applied to reduce the rights provided to a park tenant under ORS 90.645 or 90.655. [2007 c.906 4; 2009 c.575 1]
+      90.660 Local regulation of park closures. A local government may not enforce an ordinance, rule or other local law regulating manufactured dwelling park closures or partial closures adopted by the local government on or after July 1, 2007, or amended on or after January 1, 2010. An ordinance, rule or other local law regulating manufactured dwelling park closures or partial closures may not be applied to reduce the rights provided to a park tenant under ORS 90.645 or 90.655. [2007 c.906 Section 4; 2009 c.575 Section 1]
 
  
 
-      90.670 [Formerly 91.915; 1991 c.844 13; 1993 c.580 5; repealed by 1997 c.577 50]
+      90.670 [Formerly 91.915; 1991 c.844 Section 13; 1993 c.580 Section 5; repealed by 1997 c.577 Section 50]
 
  
 
@@ -5412,7 +5412,7 @@ ______________________________________________________________________________
 
       (6) This section does not limit a landlord's right to terminate a tenancy for nonpayment of rent under ORS 90.394 or for other cause under ORS 90.380 (5)(b), 90.396, 90.398 or 90.632 by complying with ORS 105.100 to 105.168.
 
-      (7) If a landlord is required to close a marina by the exercise of eminent domain or by order of a federal, state or local agency, the landlord shall notify the marina tenants no later than 15 days after the landlord receives notice of the exercise of eminent domain or of the agency order. The notice to the tenants shall be in writing, designate the date of closure, state the reason for the closure and describe any government relocation benefits known by the landlord to be available to the tenants. [2007 c.906 25]
+      (7) If a landlord is required to close a marina by the exercise of eminent domain or by order of a federal, state or local agency, the landlord shall notify the marina tenants no later than 15 days after the landlord receives notice of the exercise of eminent domain or of the agency order. The notice to the tenants shall be in writing, designate the date of closure, state the reason for the closure and describe any government relocation benefits known by the landlord to be available to the tenants. [2007 c.906 Section 25]
 
  
 
@@ -5732,7 +5732,7 @@ ______________________________________________________________________________
 
       (b) A landlord may not, as part of a rental agreement, as a condition to approving a sale of property on rented space under ORS 90.680 or in any other manner, require a tenant, a personal representative, a designated person or any lienholder to waive any right provided by this section.
 
-      (25) Until personal property is conclusively presumed to be abandoned under subsection (9) of this section, a landlord does not have a lien pursuant to ORS 87.152 for storing the personal property. [1997 c.577 27b; 1999 c.603 33; 1999 c.676 24; 2001 c.44 2; 2001 c.596 40; 2003 c.378 18; 2003 c.655 58; 2003 c.658 8; 2005 c.5 2; 2005 c.619 21,22; 2007 c.906 34; 2013 c.294 13; 2015 c.217 4; 2019 c.1 10; 2019 c.625 36]
+      (25) Until personal property is conclusively presumed to be abandoned under subsection (9) of this section, a landlord does not have a lien pursuant to ORS 87.152 for storing the personal property. [1997 c.577 Section 27b; 1999 c.603 Section 33; 1999 c.676 Section 24; 2001 c.44 Section 2; 2001 c.596 Section 40; 2003 c.378 Section 18; 2003 c.655 Section 58; 2003 c.658 Section 8; 2005 c.5 Section 2; 2005 c.619 Sections 21,22; 2007 c.906 Section 34; 2013 c.294 Section 13; 2015 c.217 Section 4; 2019 c.1 Section 10; 2019 c.625 Section 36]
 
  
 
@@ -5840,11 +5840,11 @@ ______________________________________________________________________________
 
       (15) Except as provided by subsection (13) of this section, after a tenancy has ended and during the period provided by ORS 90.675 (6) and (8), a former tenant retains the right to sell the tenant's dwelling or home to a purchaser who wishes to leave the dwelling or home on the rented space and become a tenant as provided by this section, if the former tenant makes timely periodic payment of all storage charges as provided by ORS 90.675 (7)(b), maintains the dwelling or home and the rented space on which it is stored and enters the premises only with the written permission of the landlord. Payment of the storage charges or maintenance of the dwelling or home and the space does not create or reinstate a tenancy or create a waiver pursuant to ORS 90.412 or 90.417. A former tenant may not enter the premises without the written permission of the landlord, including entry to maintain the dwelling or home or the space or to facilitate a sale.
 
-      (16) A landlord or tenant who sells a manufactured dwelling or floating home shall deliver title to the dwelling or home to the purchaser within 25 business days after completion of the sale. If the sale by contract requires future payments, the landlord or tenant shall notify the county that the purchaser is responsible for property tax payments. [Formerly 91.890; 1991 c.844 14; 1993 c.580 6; 1997 c.577 27c; 1999 c.676 25; 1999 c.820 2; 2003 c.658 9; 2005 c.22 68; 2007 c.906 35; 2013 c.443 13; 2015 c.217 5; 2017 c.324 3]
+      (16) A landlord or tenant who sells a manufactured dwelling or floating home shall deliver title to the dwelling or home to the purchaser within 25 business days after completion of the sale. If the sale by contract requires future payments, the landlord or tenant shall notify the county that the purchaser is responsible for property tax payments. [Formerly 91.890; 1991 c.844 Section 14; 1993 c.580 Section 6; 1997 c.577 Section 27c; 1999 c.676 Section 25; 1999 c.820 Section 2; 2003 c.658 Section 9; 2005 c.22 Section 68; 2007 c.906 Section 35; 2013 c.443 Section 13; 2015 c.217 Section 5; 2017 c.324 Section 3]
 
  
 
-      90.690 [Formerly 91.910; 1991 c.844 15; 1993 c.580 7; 1995 c.559 38; repealed by 1997 c.577 50]
+      90.690 [Formerly 91.910; 1991 c.844 Section 15; 1993 c.580 Section 7; 1995 c.559 Section 38; repealed by 1997 c.577 Section 50]
 
  
 
@@ -5868,7 +5868,7 @@ ______________________________________________________________________________
 
       (A) The landlord rejects the purchaser as a tenant; and
 
-      (B) The seller knew the purchaser intended to leave the manufactured dwelling or floating home on the space. [Formerly 91.900; 1991 c.67 16; 1991 c.844 16; 1995 c.559 39; 1995 c.618 52; 2015 c.217 6; 2019 c.268 4]
+      (B) The seller knew the purchaser intended to leave the manufactured dwelling or floating home on the space. [Formerly 91.900; 1991 c.67 Section 16; 1991 c.844 Section 16; 1995 c.559 Section 39; 1995 c.618 Section 52; 2015 c.217 Section 6; 2019 c.268 Section 4]
 
  
 
@@ -5944,7 +5944,7 @@ ______________________________________________________________________________
 
       (8) If the tenant refuses to allow lawful access, the landlord may obtain injunctive relief to compel access or may terminate the rental agreement pursuant to ORS 90.630 (1) and take possession in the manner provided in ORS 105.100 to 105.168. In addition, the landlord may recover actual damages.
 
-      (9) If the landlord makes an unlawful entry or a lawful entry in an unreasonable manner or makes repeated demands for entry otherwise lawful but that have the effect of unreasonably harassing the tenant, the tenant may obtain injunctive relief to prevent the reoccurrence of the conduct or may terminate the rental agreement pursuant to ORS 90.620 (1). In addition, the tenant may recover actual damages not less than an amount equal to one month's rent. [1999 c.676 2; 2005 c.619 23; 2013 c.443 6; 2019 c.625 66]
+      (9) If the landlord makes an unlawful entry or a lawful entry in an unreasonable manner or makes repeated demands for entry otherwise lawful but that have the effect of unreasonably harassing the tenant, the tenant may obtain injunctive relief to prevent the reoccurrence of the conduct or may terminate the rental agreement pursuant to ORS 90.620 (1). In addition, the tenant may recover actual damages not less than an amount equal to one month's rent. [1999 c.676 Section 2; 2005 c.619 Section 23; 2013 c.443 Section 6; 2019 c.625 Section 66]
 
  
 
@@ -5982,7 +5982,7 @@ ______________________________________________________________________________
 
       (b) Maintain the tree at the tenant's expense, after providing the landlord with reasonable written notice of the proposed maintenance and a copy of the arborist's report.
 
-      (6) If a manufactured dwelling cannot be removed from a space without first removing or trimming a tree on the space, the owner of the manufactured dwelling may remove or trim the tree at the dwelling owner's expense, after giving reasonable written notice to the landlord, for the purpose of removing the manufactured dwelling. [2013 c.443 5; 2019 c.625 35]
+      (6) If a manufactured dwelling cannot be removed from a space without first removing or trimming a tree on the space, the owner of the manufactured dwelling may remove or trim the tree at the dwelling owner's expense, after giving reasonable written notice to the landlord, for the purpose of removing the manufactured dwelling. [2013 c.443 Section 5; 2019 c.625 Section 35]
 
  
 
@@ -6026,7 +6026,7 @@ ______________________________________________________________________________
 
       (7) If a tenant prohibits the landlord from moving the floating home under this section, a landlord may give notice to terminate the tenancy under ORS 90.630.
 
-      (8) If a landlord fails to comply with a provision of this section, a tenant is entitled to damages of one month's rent or twice the tenant's actual damages, whichever is greater. [2019 c.625 33]
+      (8) If a landlord fails to comply with a provision of this section, a tenant is entitled to damages of one month's rent or twice the tenant's actual damages, whichever is greater. [2019 c.625 Section 33]
 
  
 
@@ -6074,7 +6074,7 @@ ______________________________________________________________________________
 
       (b) The agreement does not diminish the obligations of the landlord to other tenants on the premises; and
 
-      (c) The terms and conditions of the agreement are clearly and fairly disclosed and adequate consideration for the agreement is specifically stated. [1999 c.676 6; 2007 c.906 40; 2011 c.503 10; 2013 c.443 2; 2015 c.217 7; 2022 c.86 12]
+      (c) The terms and conditions of the agreement are clearly and fairly disclosed and adequate consideration for the agreement is specifically stated. [1999 c.676 Section 6; 2007 c.906 Section 40; 2011 c.503 Section 10; 2013 c.443 Section 2; 2015 c.217 Section 7; 2022 c.86 Section 12]
 
  
 
@@ -6084,7 +6084,7 @@ ______________________________________________________________________________
 
       (1) A new manufactured dwelling or floating home is connected to the electrical supply; or
 
-      (2) The electrical supply or electrical supply connection is replaced. [2022 c.86 13]
+      (2) The electrical supply or electrical supply connection is replaced. [2022 c.86 Section 13]
 
  
 
@@ -6106,7 +6106,7 @@ ______________________________________________________________________________
 
       (4) Notwithstanding subsections (1) to (3) of this section, the department may provide for registration and confirmation of registration to be accomplished by electronic means instead of in writing.
 
-      (5) Moneys from registration fees described in subsection (1) of this section must be deposited in the Manufactured and Marina Communities Account. [2005 c.619 2; 2007 c.906 38; 2009 c.816 10; 2015 c.217 3; 2019 c.625 5,18]
+      (5) Moneys from registration fees described in subsection (1) of this section must be deposited in the Manufactured and Marina Communities Account. [2005 c.619 Section 2; 2007 c.906 Section 38; 2009 c.816 Section 10; 2015 c.217 Section 3; 2019 c.625 Sections 5,18]
 
  
 
@@ -6146,7 +6146,7 @@ ______________________________________________________________________________
 
       (5) The owner of a facility is responsible for ensuring compliance with the continuing education requirements in this section.
 
-      (6) The department shall annually send a written reminder notice regarding continuing education requirements under this section to each facility at the address shown in the facility registration filed under ORS 90.732. [2005 c.619 3; 2007 c.906 39; 2009 c.816 11; 2011 c.503 19; 2019 c.625 19]
+      (6) The department shall annually send a written reminder notice regarding continuing education requirements under this section to each facility at the address shown in the facility registration filed under ORS 90.732. [2005 c.619 Section 3; 2007 c.906 Section 39; 2009 c.816 Section 11; 2011 c.503 Section 19; 2019 c.625 Section 19]
 
  
 
@@ -6154,7 +6154,7 @@ ______________________________________________________________________________
 
       (2) The department shall deposit a civil penalty assessed under this section in the Manufactured and Marina Communities Account.
 
-      (3) If a civil penalty assessed under this section is not paid on or before 90 days after the order assessing the civil penalty becomes final by operation of law, the department may file the order with the county clerk of the county where the facility is located as a lien against the facility. In addition to any other available remedy, recording the order in the County Clerk Lien Record has the effect provided for in ORS 205.125 and 205.126 and the order may be enforced as provided in ORS 205.125 and 205.126. [2005 c.619 4; 2009 c.816 12; 2019 c.625 6,20]
+      (3) If a civil penalty assessed under this section is not paid on or before 90 days after the order assessing the civil penalty becomes final by operation of law, the department may file the order with the county clerk of the county where the facility is located as a lien against the facility. In addition to any other available remedy, recording the order in the County Clerk Lien Record has the effect provided for in ORS 205.125 and 205.126 and the order may be enforced as provided in ORS 205.125 and 205.126. [2005 c.619 Section 4; 2009 c.816 Section 12; 2019 c.625 Sections 6,20]
 
  
 
@@ -6164,7 +6164,7 @@ ______________________________________________________________________________
 
       90.738 Enforcement of registration and education requirements; advisory committee; rules. (1) The Housing and Community Services Department shall adopt rules for the administration and enforcement of ORS 90.732 and 90.734. The rules shall include, but need not be limited to, a rule that establishes a schedule of civil penalties for noncompliance that is consistent with the amount limitation established under ORS 90.736.
 
-      (2) The department shall appoint an advisory committee to advise the department in drafting the rules required by subsection (1) of this section and to assist the department in implementing and administering the duties of the department regarding the registration and continuing education requirements established in ORS 90.732 and 90.734. The advisory committee shall include representatives of interested parties, including but not limited to representatives of manufactured dwelling park landlords and representatives of manufactured dwelling park tenants. [2009 c.816 9]
+      (2) The department shall appoint an advisory committee to advise the department in drafting the rules required by subsection (1) of this section and to assist the department in implementing and administering the duties of the department regarding the registration and continuing education requirements established in ORS 90.732 and 90.734. The advisory committee shall include representatives of interested parties, including but not limited to representatives of manufactured dwelling park landlords and representatives of manufactured dwelling park tenants. [2009 c.816 Section 9]
 
  
 
@@ -6204,7 +6204,7 @@ ______________________________________________________________________________
 
       (i) Maintain and water trees, including cleanup and removal of fallen branches and leaves, on the rented space for a manufactured dwelling except for hazard trees as provided in ORS 90.727; and
 
-      (j) Behave, and require persons on the premises with the consent of the tenant to behave, in a manner that does not disturb the peaceful enjoyment of the premises by neighbors. [1999 c.676 3; 2013 c.443 3]
+      (j) Behave, and require persons on the premises with the consent of the tenant to behave, in a manner that does not disturb the peaceful enjoyment of the premises by neighbors. [1999 c.676 Section 3; 2013 c.443 Section 3]
 
  
 
@@ -6218,17 +6218,17 @@ ______________________________________________________________________________
 
       (4) This section is not intended to require a landlord to permit any person to solicit money, except that a tenants' association member, whether or not a tenant of the facility, may personally collect delinquent dues owed by an existing member of a tenants' association.
 
-      (5) This section is not intended to require a landlord to permit any person to disregard a tenant's request not to be canvassed. [Formerly 91.920; 1991 c.844 17; 1997 c.303 2]
+      (5) This section is not intended to require a landlord to permit any person to disregard a tenant's request not to be canvassed. [Formerly 91.920; 1991 c.844 Section 17; 1997 c.303 Section 2]
 
  
 
       90.755 Right to speak on political issues; limitations; placement of political signs. (1) No provision in any bylaw, rental agreement, regulation or rule may infringe upon the right of a person who rents a space for a manufactured dwelling or floating home to invite public officers, candidates for public office or officers or representatives of a tenant organization to appear and speak upon matters of public interest in the common areas or recreational areas of the facility at reasonable times and in a reasonable manner in an open public meeting. The landlord of a facility, however, may enforce reasonable rules and regulations relating to the time, place and scheduling of the speakers that will protect the interests of the majority of the homeowners.
 
-      (2) The landlord shall allow the tenant to place political signs on or in a manufactured dwelling or floating home owned by the tenant or the space rented by the tenant. The size of the signs and the length of time for which the signs may be displayed are subject to the reasonable rules of the landlord. [Formerly 91.925; 1991 c.844 18; 1995 c.559 40; 2009 c.816 17]
+      (2) The landlord shall allow the tenant to place political signs on or in a manufactured dwelling or floating home owned by the tenant or the space rented by the tenant. The size of the signs and the length of time for which the signs may be displayed are subject to the reasonable rules of the landlord. [Formerly 91.925; 1991 c.844 Section 18; 1995 c.559 Section 40; 2009 c.816 Section 17]
 
  
 
-      90.760 [Formerly 91.905; 1991 c.844 23; 2014 c.89 6; renumbered 90.805 in 2015]
+      90.760 [Formerly 91.905; 1991 c.844 Section 23; 2014 c.89 Section 6; renumbered 90.805 in 2015]
 
  
 
@@ -6242,7 +6242,7 @@ ______________________________________________________________________________
 
       (d) The tenant has performed or expressed intent to perform any other act for the purpose of asserting, protecting or invoking the protection of any right secured to tenants under any federal, state or local law.
 
-      (2) If the landlord acts in violation of subsection (1) of this section the tenant is entitled to the remedies provided in ORS 90.710 (1) and has a defense in any retaliatory action against the tenant for possession. [Formerly 91.870; 1991 c.67 17; 1993 c.18 17; 2001 c.621 84]
+      (2) If the landlord acts in violation of subsection (1) of this section the tenant is entitled to the remedies provided in ORS 90.710 (1) and has a defense in any retaliatory action against the tenant for possession. [Formerly 91.870; 1991 c.67 Section 17; 1993 c.18 Section 17; 2001 c.621 Section 84]
 
  
 
@@ -6330,7 +6330,7 @@ ______________________________________________________________________________
 
       (a) Has a defense to a claim related to the subject of the dispute for which mediation was sought; and
 
-      (b) Is entitled to damages of one month's rent against the party. [2019 c.625 8; 2023 c.549 3a]
+      (b) Is entitled to damages of one month's rent against the party. [2019 c.625 Section 8; 2023 c.549 Section 3a]
 
  
 
@@ -6338,7 +6338,7 @@ ______________________________________________________________________________
 
  
 
-      90.770 [Formerly 91.950; 1991 c.844 29; 1997 c.249 33; 1999 c.154 1; repealed by 2001 c.596 25 (90.771 enacted in lieu of 90.770)]
+      90.770 [Formerly 91.950; 1991 c.844 Section 29; 1997 c.249 Section 33; 1999 c.154 Section 1; repealed by 2001 c.596 Section 25 (90.771 enacted in lieu of 90.770)]
 
  
 
@@ -6358,11 +6358,11 @@ ______________________________________________________________________________
 
       (b) Information described in subsection (2) of this section if the landlord, tenant, complainant or other person who provided the information being disclosed, or the legal representative thereof, consents orally or in writing to the disclosure and specifies to whom the disclosure may be made. Only the landlord, tenant, complainant or other person who provided the information to the department may authorize or deny the disclosure of the information.
 
-      (4) This section does not prohibit the department from compiling and disclosing examples and statistics that demonstrate information such as the type of dispute, frequency of occurrence and geographical area where the dispute occurred if the identity of the landlord, tenant, complainant and other persons are protected. [2001 c.596 26 (enacted in lieu of 90.770); 2003 c.21 2; 2005 c.22 69; 2019 c.625 63]
+      (4) This section does not prohibit the department from compiling and disclosing examples and statistics that demonstrate information such as the type of dispute, frequency of occurrence and geographical area where the dispute occurred if the identity of the landlord, tenant, complainant and other persons are protected. [2001 c.596 Section 26 (enacted in lieu of 90.770); 2003 c.21 Section 2; 2005 c.22 Section 69; 2019 c.625 Section 63]
 
  
 
-      90.775 Rules. The Housing and Community Services Department may adopt rules necessary to carry out the provisions of ORS 90.771. [Formerly 91.955; 2001 c.596 49]
+      90.775 Rules. The Housing and Community Services Department may adopt rules necessary to carry out the provisions of ORS 90.771. [Formerly 91.955; 2001 c.596 Section 49]
 
  
 
@@ -6374,33 +6374,33 @@ ______________________________________________________________________________
 
       (2) It is the policy of the State of Oregon to encourage facility tenants to participate in the housing marketplace by ensuring that technical assistance, financing opportunities, notice of sale of facilities and the option to purchase facilities are made available to tenants who choose to participate in the purchase of a facility.
 
-      (3) The purpose of ORS 90.800 to 90.850, 456.579 and 456.581 is to strengthen the private housing market in Oregon by encouraging all Oregonians to have the ability to participate in the purchase of housing of their choice. [1989 c.919 1; 1991 c.844 24; 1995 c.559 42; 2014 c.89 7; 2017 c.315 1]
+      (3) The purpose of ORS 90.800 to 90.850, 456.579 and 456.581 is to strengthen the private housing market in Oregon by encouraging all Oregonians to have the ability to participate in the purchase of housing of their choice. [1989 c.919 Section 1; 1991 c.844 Section 24; 1995 c.559 Section 42; 2014 c.89 Section 7; 2017 c.315 Section 1]
 
  
 
-      90.805 [Formerly 90.760; repealed by 2019 c.625 25]
+      90.805 [Formerly 90.760; repealed by 2019 c.625 Section 25]
 
  
 
-      90.810 [1989 c.919 8; 1991 c.844 25; 1995 c.559 43; 2014 c.89 8; repealed by 2019 c.625 25]
+      90.810 [1989 c.919 Section 8; 1991 c.844 Section 25; 1995 c.559 Section 43; 2014 c.89 Section 8; repealed by 2019 c.625 Section 25]
 
  
 
-      90.815 [1989 c.919 9; 1991 c.844 26; 2014 c.89 9; repealed by 2019 c.625 25]
+      90.815 [1989 c.919 Section 9; 1991 c.844 Section 26; 2014 c.89 Section 9; repealed by 2019 c.625 Section 25]
 
  
 
-      90.820 [1989 c.919 10; 1991 c.844 19; 1999 c.222 1; 1999 c.603 34a; 2009 c.295 1; 2014 c.89 10; repealed by 2019 c.625 25]
+      90.820 [1989 c.919 Section 10; 1991 c.844 Section 19; 1999 c.222 Section 1; 1999 c.603 Section 34a; 2009 c.295 Section 1; 2014 c.89 Section 10; repealed by 2019 c.625 Section 25]
 
  
 
-      90.830 [1989 c.919 11; 1991 c.844 27; 1999 c.222 2; 2014 c.89 11; repealed by 2019 c.625 25]
+      90.830 [1989 c.919 Section 11; 1991 c.844 Section 27; 1999 c.222 Section 2; 2014 c.89 Section 11; repealed by 2019 c.625 Section 25]
 
  
 
       90.840 Park purchase funds, loans. (1) The Director of the Housing and Community Services Department may lend funds available to the Housing and Community Services Department to provide funds necessary to carry out the provisions of ORS 456.581 (2). Such funds advanced shall be repaid to the Housing and Community Services Department as determined by the director.
 
-      (2) Notwithstanding any budget limitation, the director may spend funds available from the Manufactured Dwelling Parks Account to employ personnel to carry out the provisions of ORS 456.581 (1). [1989 c.919 12; 2019 c.595 17]
+      (2) Notwithstanding any budget limitation, the director may spend funds available from the Manufactured Dwelling Parks Account to employ personnel to carry out the provisions of ORS 456.581 (1). [1989 c.919 Section 12; 2019 c.595 Section 17]
 
  
 
@@ -6428,7 +6428,7 @@ ______________________________________________________________________________
 
       (d) The representative of the tenants committee may request financial information described in ORS 90.844 (2) from the owner within the 15-day period.
 
-      (e) Information about purchasing a facility is available from the Housing and Community Services Department. [2014 c.89 1; 2019 c.625 26; 2021 c.292 1]
+      (e) Information about purchasing a facility is available from the Housing and Community Services Department. [2014 c.89 Section 1; 2019 c.625 Section 26; 2021 c.292 Section 1]
 
  
 
@@ -6488,7 +6488,7 @@ ______________________________________________________________________________
 
       (b) If the parties reach agreement on the purchase, the purchase and sale agreement must specify the price, due diligence duties, schedules, timelines, conditions and any extensions.
 
-      (c) If the tenants do not act as required within the time periods described in this section and ORS 90.842, if the tenants violate the confidentiality agreement described in this section or if the parties do not reach agreement on a purchase, the owner is not obligated to take additional action under ORS 90.842 to 90.850. [2014 c.89 2; 2015 c.217 11; 2019 c.625 27; 2021 c.292 2]
+      (c) If the tenants do not act as required within the time periods described in this section and ORS 90.842, if the tenants violate the confidentiality agreement described in this section or if the parties do not reach agreement on a purchase, the owner is not obligated to take additional action under ORS 90.842 to 90.850. [2014 c.89 Section 2; 2015 c.217 Section 11; 2019 c.625 Section 27; 2021 c.292 Section 2]
 
  
 
@@ -6512,7 +6512,7 @@ ______________________________________________________________________________
 
       (8) If a tenant misuses or discloses, in a substantial way, confidential information in violation of a confidentiality agreement described in ORS 90.844, the owner may recover actual damages from the tenant.
 
-      (9) The Housing and Community Services Department shall prepare and make available information for tenants about purchasing a facility. [2014 c.89 3; 2019 c.625 28; 2021 c.292 3]
+      (9) The Housing and Community Services Department shall prepare and make available information for tenants about purchasing a facility. [2014 c.89 Section 3; 2019 c.625 Section 28; 2021 c.292 Section 3]
 
  
 
@@ -6540,7 +6540,7 @@ ______________________________________________________________________________
 
       (k) Any transfer to a charitable trust.
 
-      (2) As used in this section, "affiliate" means any shareholder of the selling or transferring corporation, any corporation or entity owned or controlled, directly or indirectly, by the selling or transferring corporation or any other corporation or entity owned or controlled, directly or indirectly, by any shareholder of the selling or transferring corporation. [2014 c.89 4; 2015 c.217 12; 2019 c.625 29]
+      (2) As used in this section, "affiliate" means any shareholder of the selling or transferring corporation, any corporation or entity owned or controlled, directly or indirectly, by the selling or transferring corporation or any other corporation or entity owned or controlled, directly or indirectly, by any shareholder of the selling or transferring corporation. [2014 c.89 Section 4; 2015 c.217 Section 12; 2019 c.625 Section 29]
 
  
 
@@ -6554,7 +6554,7 @@ ______________________________________________________________________________
 
       (d) The name, address and telephone number of the new owner.
 
-      (2) Upon receipt of a notice under ORS 90.655 (1) or 90.842 (3) or subsection (1) of this section, the department shall make available on a website any public information contained in the notice and shall deliver the information to any person who has requested copies in a manner prescribed by the department. [2017 c.198 5; 2019 c.595 5; 2019 c.625 30]
+      (2) Upon receipt of a notice under ORS 90.655 (1) or 90.842 (3) or subsection (1) of this section, the department shall make available on a website any public information contained in the notice and shall deliver the information to any person who has requested copies in a manner prescribed by the department. [2017 c.198 Section 5; 2019 c.595 Section 5; 2019 c.625 Section 30]
 
  
 
@@ -6574,7 +6574,7 @@ ______________________________________________________________________________
 
       (b) A title insurance company, or an attorney, that prepares, furnishes or examines evidence of title.
 
-      (3) The purpose and intention of this section is to preserve the marketability of title to facilities. Accordingly, the provisions of this section must be liberally construed in order that all persons may rely on the record title to facilities. [2014 c.89 5; 2019 c.625 31]
+      (3) The purpose and intention of this section is to preserve the marketability of title to facilities. Accordingly, the provisions of this section must be liberally construed in order that all persons may rely on the record title to facilities. [2014 c.89 Section 5; 2019 c.625 Section 31]
 
  
 
@@ -6596,7 +6596,7 @@ ______________________________________________________________________________
 
       (6) "Secured party" has the meaning given that term in ORS 79.1050; and
 
-      (7) "Seller" has the meaning given that term in ORS 72.1030. [2001 c.112 1; 2005 c.22 70]
+      (7) "Seller" has the meaning given that term in ORS 72.1030. [2001 c.112 Section 1; 2005 c.22 Section 70]
 
  
 
@@ -6612,7 +6612,7 @@ ______________________________________________________________________________
 
       (1) Pays a portion of the rent for the dwelling; or
 
-      (2) Provides financing or assists the buyer in arranging financing that results in a party taking a purchase money security interest in the dwelling and the seller knows that a portion of the proceeds from the financing is to be used to pay a portion of the rent for the dwelling. [2001 c.112 2; 2003 c.655 59]
+      (2) Provides financing or assists the buyer in arranging financing that results in a party taking a purchase money security interest in the dwelling and the seller knows that a portion of the proceeds from the financing is to be used to pay a portion of the rent for the dwelling. [2001 c.112 Section 2; 2003 c.655 Section 59]
 
  
 
@@ -6632,7 +6632,7 @@ ______________________________________________________________________________
 
       (b) The landlord; and
 
-      (c) The secured party, if any, taking a purchase money security interest in the manufactured dwelling. [2001 c.112 3]
+      (c) The secured party, if any, taking a purchase money security interest in the manufactured dwelling. [2001 c.112 Section 3]
 
  
 
@@ -6640,7 +6640,7 @@ ______________________________________________________________________________
 
  
 
-      90.875 Remedy for failure to give notice. If a seller fails to provide notice under ORS 90.870, a buyer, landlord or secured party without actual notice that suffers an ascertainable loss as a result of the failure may bring an individual action to recover actual damages or $200, whichever is greater. [2001 c.112 4]
+      90.875 Remedy for failure to give notice. If a seller fails to provide notice under ORS 90.870, a buyer, landlord or secured party without actual notice that suffers an ascertainable loss as a result of the failure may bring an individual action to recover actual damages or $200, whichever is greater. [2001 c.112 Section 4]
 
  
 
@@ -6648,23 +6648,23 @@ ______________________________________________________________________________
 
  
 
-      90.900 [Formerly 91.855; 1995 c.559 32; renumbered 90.427 in 1995]
+      90.900 [Formerly 91.855; 1995 c.559 Section 32; renumbered 90.427 in 1995]
 
  
 
-      90.905 [1991 c.844 31; 1995 c.559 33; renumbered 90.429 in 1995]
+      90.905 [1991 c.844 Section 31; 1995 c.559 Section 33; renumbered 90.429 in 1995]
 
  
 
-      90.910 [Formerly 91.857; 1991 c.844 32; 1993 c.369 33; 1993 c.580 4; 1995 c.559 4; renumbered 90.155 in 1995]
+      90.910 [Formerly 91.857; 1991 c.844 Section 32; 1993 c.369 Section 33; 1993 c.580 Section 4; 1995 c.559 Section 4; renumbered 90.155 in 1995]
 
  
 
-      90.920 [Formerly 91.860; repealed by 1995 c.559 58]
+      90.920 [Formerly 91.860; repealed by 1995 c.559 Section 58]
 
  
 
-      90.930 [Formerly 91.862; repealed by 1993 c.369 39]
+      90.930 [Formerly 91.862; repealed by 1993 c.369 Section 39]
 
  
 
