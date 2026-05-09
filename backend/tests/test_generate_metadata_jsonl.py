@@ -85,7 +85,9 @@ class TestBuildEntries:
         entries = build_entries(tmp_path, "my-bucket", set())
         assert entries == []
 
-    def test_unknown_non_ascii_warns_all_offenders(self, tmp_path: Path, capsys: pytest.CaptureFixture):
+    def test_unknown_non_ascii_warns_all_offenders(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture
+    ):
         (tmp_path / "A.txt").write_text("café", encoding="utf-8")
         (tmp_path / "B.txt").write_text("résumé", encoding="utf-8")
         build_entries(tmp_path, "my-bucket", set())
@@ -100,7 +102,7 @@ class TestBuildEntries:
         result = (tmp_path / "A.txt").read_text(encoding="utf-8")
         assert "--" in result
         assert "—" not in result  # em-dash was converted
-        assert "é" in result      # unrecognized char still present
+        assert "é" in result  # unrecognized char still present
 
     def test_valid_files_still_converted_alongside_invalid(self, tmp_path: Path):
         (tmp_path / "A.txt").write_text("Chapter 90 — Rights", encoding="utf-8")
@@ -108,7 +110,9 @@ class TestBuildEntries:
         entries = build_entries(tmp_path, "my-bucket", set())
         assert len(entries) == 1
         assert entries[0]["id"] == "A"
-        assert (tmp_path / "A.txt").read_text(encoding="ascii") == "Chapter 90 -- Rights"
+        assert (tmp_path / "A.txt").read_text(
+            encoding="ascii"
+        ) == "Chapter 90 -- Rights"
 
     def test_known_non_ascii_is_converted(self, tmp_path: Path):
         (tmp_path / "ORS090.txt").write_text(

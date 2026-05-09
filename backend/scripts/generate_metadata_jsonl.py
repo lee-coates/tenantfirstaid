@@ -37,27 +37,27 @@ CITY_DIRS = {"eugene", "portland"}
 # trailing whitespace is collapsed: both "§ 90" and "§90" become "Section 90".
 ASCII_REPLACEMENTS = [
     # Quotes
-    ("‘", "'"),   # left single curly quote
-    ("’", "'"),   # right single curly quote
-    ("“", '"'),   # left double curly quote
-    ("”", '"'),   # right double curly quote
+    ("‘", "'"),  # left single curly quote
+    ("’", "'"),  # right single curly quote
+    ("“", '"'),  # left double curly quote
+    ("”", '"'),  # right double curly quote
     # Spaces
-    (" ", " "),   # non-breaking space
+    (" ", " "),  # non-breaking space
     # Dashes and hyphens
     ("—", "--"),  # em-dash
-    ("–", "-"),   # en-dash
-    ("‐", "-"),   # hyphen (U+2010)
-    ("‑", "-"),   # non-breaking hyphen
-    ("‒", "-"),   # figure dash
+    ("–", "-"),  # en-dash
+    ("‐", "-"),  # hyphen (U+2010)
+    ("‑", "-"),  # non-breaking hyphen
+    ("‒", "-"),  # figure dash
     # Bullets
-    ("•", "-"),   # bullet
-    ("‣", "-"),   # triangular bullet
-    ("·", "-"),   # middle dot
+    ("•", "-"),  # bullet
+    ("‣", "-"),  # triangular bullet
+    ("·", "-"),  # middle dot
     # Symbols
-    ("©", "(c)"),   # copyright
-    ("®", "(R)"),   # registered trademark
+    ("©", "(c)"),  # copyright
+    ("®", "(R)"),  # registered trademark
     ("™", "(TM)"),  # trademark
-    ("…", "..."),   # ellipsis
+    ("…", "..."),  # ellipsis
     ("°", " degrees"),  # degree sign (e.g. minimum heating requirements)
     # Fractions
     ("½", "1/2"),
@@ -87,7 +87,11 @@ def _collect_unrecognized(text: str) -> dict[str, int]:
 
 def _suggest_ascii(char: str) -> str:
     """Return a plausible ASCII replacement for char, or empty string if none obvious."""
-    base = unicodedata.normalize("NFKD", char).encode("ascii", errors="ignore").decode("ascii")
+    base = (
+        unicodedata.normalize("NFKD", char)
+        .encode("ascii", errors="ignore")
+        .decode("ascii")
+    )
     return base
 
 
@@ -151,7 +155,9 @@ def _print_warning_table(
     rows: list[tuple[str, str, str, str]] = []
     for filename, unrecognized in file_issues:
         if unrecognized is None:
-            rows.append((filename, "-", "invalid UTF-8", "re-save as UTF-8 before running"))
+            rows.append(
+                (filename, "-", "invalid UTF-8", "re-save as UTF-8 before running")
+            )
         else:
             for j, (char, _pos) in enumerate(unrecognized.items()):
                 fname = filename if j == 0 else ""
@@ -168,10 +174,7 @@ def _print_warning_table(
         return
 
     headers = ["File", "Char", "Unicode Name", "Add to ASCII_REPLACEMENTS"]
-    widths = [
-        max(max(len(r[i]) for r in rows), len(headers[i]))
-        for i in range(4)
-    ]
+    widths = [max(max(len(r[i]) for r in rows), len(headers[i])) for i in range(4)]
     sep = "  ".join("-" * w for w in widths)
     header_line = "  ".join(h.ljust(widths[i]) for i, h in enumerate(headers))
 
