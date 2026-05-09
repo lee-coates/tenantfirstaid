@@ -94,9 +94,13 @@ class TestBuildEntries:
         assert "B.txt" in str(exc.value)
 
     def test_known_non_ascii_is_converted(self, tmp_path: Path):
-        (tmp_path / "ORS090.txt").write_text("Chapter 90 — Tenant Rights", encoding="utf-8")
+        (tmp_path / "ORS090.txt").write_text(
+            "Chapter 90 — Tenant Rights", encoding="utf-8"
+        )
         build_entries(tmp_path, "my-bucket", set())
-        assert (tmp_path / "ORS090.txt").read_text(encoding="ascii") == "Chapter 90 -- Tenant Rights"
+        assert (tmp_path / "ORS090.txt").read_text(
+            encoding="ascii"
+        ) == "Chapter 90 -- Tenant Rights"
 
 
 class TestEnforceAscii:
