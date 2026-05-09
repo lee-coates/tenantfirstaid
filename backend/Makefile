@@ -43,9 +43,9 @@ test: uv.lock
 generate-types: uv.lock
 	cd ../frontend && npm run generate-types
 
+# Selective runs (e.g. LOC_OPTIONS="--portland") overwrite metadata.jsonl with
+# only those entries. Run without LOC_OPTIONS to regenerate the full corpus.
 generate-metadata: uv.lock
-	# Selective runs (e.g. LOC_OPTIONS="--portland") overwrite metadata.jsonl with
-	# only those entries. Run without LOC_OPTIONS to regenerate the full corpus.
 	$(PYTHON) run python -m scripts.generate_metadata_jsonl $(LOC_OPTIONS)
 
 clean:

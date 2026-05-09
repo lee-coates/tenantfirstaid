@@ -83,7 +83,7 @@ All `.txt` law documents must be **pure ASCII**. Vertex AI RAG ingestion has pro
 LC_ALL=C grep -n '[^[:print:][:space:]]' path/to/file.txt  # must produce no output
 ```
 
-Common offenders and their ASCII replacements:
+Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `backend/scripts/generate_metadata_jsonl.py` for the full list):
 
 | Character | Unicode | Replace with |
 |---|---|---|
@@ -94,6 +94,8 @@ Common offenders and their ASCII replacements:
 | `—` | U+2014 em dash | `--` |
 | `–` | U+2013 en dash | `-` |
 | `•` | U+2022 bullet | `-` |
+
+`make generate-metadata` auto-converts all known offenders in place and warns with a suggested replacement for any it cannot handle.
 
 ## Commit messages
 

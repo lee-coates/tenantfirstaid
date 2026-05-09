@@ -80,18 +80,35 @@ class TestBuildEntries:
         with pytest.raises(RuntimeError, match="Duplicate document id"):
             build_entries(tmp_path, "my-bucket", set())
 
-    def test_unknown_non_ascii_raises(self, tmp_path: Path):
+    def test_unknown_non_ascii_excluded_from_metadata(self, tmp_path: Path):
         (tmp_path / "ORS090.txt").write_text("café", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="Document validation failed"):
-            build_entries(tmp_path, "my-bucket", set())
+        entries = build_entries(tmp_path, "my-bucket", set())
+        assert entries == []
 
-    def test_unknown_non_ascii_reports_all_offenders(self, tmp_path: Path):
+    def test_unknown_non_ascii_warns_all_offenders(self, tmp_path: Path, capsys: pytest.CaptureFixture):
         (tmp_path / "A.txt").write_text("café", encoding="utf-8")
         (tmp_path / "B.txt").write_text("résumé", encoding="utf-8")
-        with pytest.raises(RuntimeError) as exc:
-            build_entries(tmp_path, "my-bucket", set())
-        assert "A.txt" in str(exc.value)
-        assert "B.txt" in str(exc.value)
+        build_entries(tmp_path, "my-bucket", set())
+        err = capsys.readouterr().err
+        assert "A.txt" in err
+        assert "B.txt" in err
+
+    def test_partial_conversion_applied_on_unrecognized(self, tmp_path: Path):
+        """Known replacements are written even when unrecognized chars remain."""
+        (tmp_path / "A.txt").write_text("Chapter 90 — café", encoding="utf-8")
+        build_entries(tmp_path, "my-bucket", set())
+        result = (tmp_path / "A.txt").read_text(encoding="utf-8")
+        assert "--" in result
+        assert "—" not in result  # em-dash was converted
+        assert "é" in result      # unrecognized char still present
+
+    def test_valid_files_still_converted_alongside_invalid(self, tmp_path: Path):
+        (tmp_path / "A.txt").write_text("Chapter 90 — Rights", encoding="utf-8")
+        (tmp_path / "B.txt").write_text("café", encoding="utf-8")
+        entries = build_entries(tmp_path, "my-bucket", set())
+        assert len(entries) == 1
+        assert entries[0]["id"] == "A"
+        assert (tmp_path / "A.txt").read_text(encoding="ascii") == "Chapter 90 -- Rights"
 
     def test_known_non_ascii_is_converted(self, tmp_path: Path):
         (tmp_path / "ORS090.txt").write_text(
@@ -107,32 +124,28 @@ class TestEnforceAscii:
     def test_already_ascii_is_unchanged(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("plain ascii", encoding="ascii")
-        enforce_ascii(p)
+        assert enforce_ascii(p) is None
         assert p.read_text() == "plain ascii"
 
     def test_section_sign_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("See § 90.100", encoding="utf-8")
-        enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == "See Section 90.100"
+        assert enforce_ascii(p) == "See Section 90.100"
 
     def test_double_section_sign_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("See §§ 90.100, 90.200", encoding="utf-8")
-        enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == "See Sections 90.100, 90.200"
+        assert enforce_ascii(p) == "See Sections 90.100, 90.200"
 
     def test_smart_quotes_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("“quoted” and it’s fine", encoding="utf-8")
-        enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == '"quoted" and it\'s fine'
+        assert enforce_ascii(p) == '"quoted" and it\'s fine'
 
     def test_em_dash_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("Chapter 90 — Rights", encoding="utf-8")
-        enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == "Chapter 90 -- Rights"
+        assert enforce_ascii(p) == "Chapter 90 -- Rights"
 
     def test_unknown_char_raises(self, tmp_path: Path):
         p = tmp_path / "f.txt"
