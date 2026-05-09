@@ -201,6 +201,7 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
     seen_ids: set[str] = set()
     file_issues: list[tuple[str, dict[str, int] | None]] = []
     ascii_rewrites: list[tuple[Path, str]] = []
+    partial_rewrites: list[tuple[Path, str]] = []
 
     for txt_file in sorted(documents_dir.rglob("*.txt")):
         city = infer_city(txt_file.relative_to(documents_dir))
@@ -216,13 +217,10 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
             if "not valid UTF-8" in str(e):
                 file_issues.append((txt_file.name, None))
             else:
-                try:
-                    raw = txt_file.read_text(encoding="utf-8")
-                    partial = _apply_ascii_replacements(raw)
-                    txt_file.write_text(partial, encoding="utf-8")
-                    file_issues.append((txt_file.name, _collect_unrecognized(partial)))
-                except UnicodeDecodeError:
-                    file_issues.append((txt_file.name, None))
+                raw = txt_file.read_text(encoding="utf-8")
+                partial = _apply_ascii_replacements(raw)
+                partial_rewrites.append((txt_file, partial))
+                file_issues.append((txt_file.name, _collect_unrecognized(partial)))
             continue  # exclude from metadata.jsonl
 
         if txt_file.stem in seen_ids:
@@ -245,9 +243,14 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
 
     for path, text in ascii_rewrites:
         path.write_text(text, encoding="ascii")
+    for path, text in partial_rewrites:
+        path.write_text(text, encoding="utf-8")
 
     if file_issues:
         _print_warning_table(file_issues)
+        raise RuntimeError(
+            f"{len(file_issues)} file(s) failed ASCII validation — see warnings above."
+        )
 
     return entries
 
