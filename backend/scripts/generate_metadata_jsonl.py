@@ -22,11 +22,29 @@ import re
 import sys
 import unicodedata
 from pathlib import Path
+from typing import TypedDict
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
 
 CITY_DIRS = {"eugene", "portland"}
+
+
+class _StructData(TypedDict):
+    city: str | None
+    state: str
+
+
+class _ContentField(TypedDict):
+    mimeType: str
+    uri: str
+
+
+class MetadataEntry(TypedDict):
+    id: str
+    structData: _StructData
+    content: _ContentField
+
 
 # Section sign (§) entries are handled in enforce_ascii via re.sub so that
 # trailing whitespace is collapsed: both "§ 90" and "§90" become "Section 90".
@@ -191,8 +209,10 @@ def _print_warning_table(
     )
 
 
-def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[dict]:
-    entries = []
+def build_entries(
+    documents_dir: Path, bucket: str, scopes: set[str]
+) -> list[MetadataEntry]:
+    entries: list[MetadataEntry] = []
     seen_ids: set[str] = set()
     file_issues: list[tuple[str, dict[str, int] | None]] = []
     ascii_rewrites: list[tuple[Path, str]] = []
@@ -227,14 +247,14 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
         seen_ids.add(txt_file.stem)
 
         entries.append(
-            {
-                "id": txt_file.stem,
-                "structData": {"city": city, "state": "or"},
-                "content": {
-                    "mimeType": "text/plain",
-                    "uri": f"gs://{bucket}/{txt_file.name}",
-                },
-            }
+            MetadataEntry(
+                id=txt_file.stem,
+                structData=_StructData(city=city, state="or"),
+                content=_ContentField(
+                    mimeType="text/plain",
+                    uri=f"gs://{bucket}/{txt_file.name}",
+                ),
+            )
         )
 
     for path, text in ascii_rewrites:
