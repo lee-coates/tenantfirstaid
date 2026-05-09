@@ -80,7 +80,7 @@ npm run test -- --run --coverage  # With coverage
 All `.txt` law documents must be **pure ASCII**. Vertex AI RAG ingestion has produced mojibake when UTF-8 is present. Before adding or modifying any `.txt` file in this directory, verify with:
 
 ```bash
-LC_ALL=C grep -P '[^\x00-\x7F]' path/to/file.txt  # must produce no output
+LC_ALL=C grep -n '[^[:print:][:space:]]' path/to/file.txt  # must produce no output
 ```
 
 Common offenders and their ASCII replacements:
