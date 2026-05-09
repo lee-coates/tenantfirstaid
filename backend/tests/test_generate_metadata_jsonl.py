@@ -43,34 +43,34 @@ class TestBuildEntries:
     def test_or_scope_returns_state_only(self, doc_tree: Path):
         entries = build_entries(doc_tree, "my-bucket", {"or"})
         assert len(entries) == 1
-        assert entries[0]["id"] == "ORS090"
+        assert entries[0].id == "ORS090"
 
     def test_portland_scope_returns_portland_only(self, doc_tree: Path):
         entries = build_entries(doc_tree, "my-bucket", {"portland"})
         assert len(entries) == 1
-        assert entries[0]["id"] == "PCC30.01"
+        assert entries[0].id == "PCC30.01"
 
     def test_multiple_scopes(self, doc_tree: Path):
         entries = build_entries(doc_tree, "my-bucket", {"portland", "eugene"})
-        assert {e["id"] for e in entries} == {"PCC30.01", "EHC8"}
+        assert {e.id for e in entries} == {"PCC30.01", "EHC8"}
 
     def test_state_entry_structure(self, doc_tree: Path):
         entries = build_entries(doc_tree, "my-bucket", {"or"})
         entry = entries[0]
-        assert entry["id"] == "ORS090"
-        assert entry["structData"] == {"city": None, "state": "or"}
-        assert entry["content"]["mimeType"] == "text/plain"
-        assert entry["content"]["uri"] == "gs://my-bucket/ORS090.txt"
+        assert entry.id == "ORS090"
+        assert entry.struct_data == {"city": None, "state": "or"}
+        assert entry.content.mime_type == "text/plain"
+        assert entry.content.uri == "gs://my-bucket/ORS090.txt"
 
     def test_city_entry_structure(self, doc_tree: Path):
         entries = build_entries(doc_tree, "my-bucket", {"portland"})
         entry = entries[0]
-        assert entry["structData"] == {"city": "portland", "state": "or"}
+        assert entry.struct_data == {"city": "portland", "state": "or"}
 
     def test_uri_is_flat_not_mirrored(self, doc_tree: Path):
         """GCS files are uploaded flat; URIs must point to the bucket root."""
         entries = build_entries(doc_tree, "my-bucket", {"portland"})
-        assert entries[0]["content"]["uri"] == "gs://my-bucket/PCC30.01.txt"
+        assert entries[0].content.uri == "gs://my-bucket/PCC30.01.txt"
 
     def test_duplicate_basename_raises(self, tmp_path: Path):
         (tmp_path / "2024").mkdir()

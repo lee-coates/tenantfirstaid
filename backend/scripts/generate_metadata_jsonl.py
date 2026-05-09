@@ -22,28 +22,14 @@ import re
 import sys
 import unicodedata
 from pathlib import Path
-from typing import TypedDict
+
+from google.cloud.discoveryengine_v1.types import Document
+from google.protobuf.json_format import MessageToDict
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
 
 CITY_DIRS = {"eugene", "portland"}
-
-
-class _StructData(TypedDict):
-    city: str | None
-    state: str
-
-
-class _ContentField(TypedDict):
-    mimeType: str
-    uri: str
-
-
-class MetadataEntry(TypedDict):
-    id: str
-    structData: _StructData
-    content: _ContentField
 
 
 # Section sign (§) entries are handled in enforce_ascii via re.sub so that
@@ -209,10 +195,8 @@ def _print_warning_table(
     )
 
 
-def build_entries(
-    documents_dir: Path, bucket: str, scopes: set[str]
-) -> list[MetadataEntry]:
-    entries: list[MetadataEntry] = []
+def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[Document]:
+    entries: list[Document] = []
     seen_ids: set[str] = set()
     file_issues: list[tuple[str, dict[str, int] | None]] = []
     ascii_rewrites: list[tuple[Path, str]] = []
@@ -247,11 +231,11 @@ def build_entries(
         seen_ids.add(txt_file.stem)
 
         entries.append(
-            MetadataEntry(
+            Document(
                 id=txt_file.stem,
-                structData=_StructData(city=city, state="or"),
-                content=_ContentField(
-                    mimeType="text/plain",
+                struct_data={"city": city, "state": "or"},
+                content=Document.Content(
+                    mime_type="text/plain",
                     uri=f"gs://{bucket}/{txt_file.name}",
                 ),
             )
@@ -316,8 +300,8 @@ def main() -> None:
 
     with OUTPUT_FILE.open("w") as f:
         for entry in entries:
-            f.write(json.dumps(entry) + "\n")
-            print(f"  {entry['id']} -> {entry['content']['uri']}")
+            f.write(json.dumps(MessageToDict(Document.pb(entry))) + "\n")
+            print(f"  {entry.id} -> {entry.content.uri}")
 
     print(f"Wrote {len(entries)} entries to {OUTPUT_FILE}")
 
