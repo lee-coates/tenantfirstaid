@@ -1,6 +1,6 @@
 PYTHON := uv
 PIP := $(PYTHON) pip
-.PHONY: all install test clean check generate-types
+.PHONY: all install test clean check generate-types generate-metadata
 
 all: check
 
@@ -42,6 +42,9 @@ test: uv.lock
 
 generate-types: uv.lock
 	cd ../frontend && npm run generate-types
+
+generate-metadata: uv.lock
+	$(PYTHON) run python -m scripts.generate_metadata_jsonl $(LOC_OPTIONS)
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

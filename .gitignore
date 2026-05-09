@@ -76,6 +76,7 @@ chatlog.jsonl
 /backend/feedback.jsonl
 /backend/data
 /backend/scripts/eval_results.json
+/backend/scripts/documents/or/metadata.jsonl
 /backend/scripts/generate_conversation/*.csv
 !/backend/scripts/generate_conversation/tenant_questions_facts_full.csv
 combined_training_gemini-2.0.jsonl
