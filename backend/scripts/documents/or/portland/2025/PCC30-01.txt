@@ -1,4 +1,5 @@
 These laws are only applicable to people in Portland, Oregon.
+Year Edition: 2025 (effective January 1, 2025, Ordinance 191973; updated February 17, 2026, Ordinance 192122)
 
 Chapter 30.01 Affordable Housing Preservation and Portland Renter Protections
 City Code Chapter
@@ -518,3 +519,89 @@ Ordinance No. 190381 has two effective dates:
 Directive b is effective April 30, 2021:  Amend Titles 8, 15, 17, 21, and 30 of the Portland City Code, as shown in Exhibit B, Shelter to Housing Continuum Recommended Draft Volume Three--As-Amended, dated April 2021, but excluding the amendments to Subsection 17.14.070 H. Note:  Directive b changes updated online May 4, 2021.
 
 Directive c is effective August 1, 2021:  Amend Title 29 and Subsection 17.14.070 H. of the Portland City Code as shown in Exhibit B, Shelter to Housing Continuum Recommended Draft Volume Three--As-Amended, dated April 2021. Note:  Directive c changes will be posted online around August 1, 2021.
+
+30.01.088 Prohibited Anti-Competitive Rental Practices.
+
+(Added by Ordinance 192122, effective February 17, 2026.)
+
+City policy prohibits coordinated practices that undermine competitive rental markets. In recent years, algorithmic tools have been used to generate aligned price and occupancy terms. Shared data and systems enable competitors to synchronize pricing and occupancy strategies, producing similar market-wide effects as traditional price-fixing cartels. This Section addresses these coordinated behaviors directly, ensuring that rental pricing decisions are a product of independent, free-market competition.
+
+A. Definitions.
+
+A term defined in the Act and not defined in this Section has the meaning set forth in the Act.
+
+  1. Beneficial owner. Any individual who, directly or indirectly, exercises substantial control over the ownership interest in a dwelling unit or owns or controls at least 25 percent of the ownership interest in a dwelling unit.
+
+  2. Price fixing.
+
+    a. The following constitutes price fixing:
+
+      (1) Agreement among two or more persons or entities, to set, raise, lower, maintain, or stabilize rental prices, fees, or occupancy levels for dwelling units with different beneficial owners. Such agreement can be written, verbal, or inferred from conduct; or
+
+      (2) Establishing or enabling the establishment of the rental price, lease terms, or occupancy level of a dwelling unit, using a system, software, process, algorithm, model training, runtime operation, or similar method involving information about historical, current, or anticipated rental prices, price changes, supply, occupancy rates, lease terms, or renewal dates of dwelling units with different beneficial owners.
+
+    b. The following does not constitute price fixing:
+
+      (1) Collecting, analyzing, or communicating historical, current, or anticipated rental prices, price changes, supply, or occupancy rates for uses other than establishing or enabling the establishment of rental prices, lease terms, or occupancy levels of a dwelling unit;
+
+      (2) Conducting appraisals, feasibility studies, or market research;
+
+      (3) Routine property management activities that do not enable coordinated decision-making about dwelling units with different beneficial owners; or
+
+      (4) Collecting, analyzing, or communicating public data without referencing any nonpublic data about dwelling units with different beneficial owners or otherwise enabling coordinated decision-making about dwelling units with different beneficial owners.
+
+  3. Public data.
+
+    a. Public data consists of information about the rental price, lease term, or the occupancy level of a dwelling unit that is available to the general public, including:
+
+      (1) Information contained in government records or any public disclosure required by law;
+
+      (2) Information contained in widely distributed media including, information on a property's website and promotional materials, or listing information contained on an internet listing service; and
+
+      (3) Information contained in online services that make public recommendations about rental prices or lease terms, regardless of whether the online service requires registration, or an exchange of anything of value.
+
+B. Prohibited conduct.
+
+  1. No person or entity shall engage in price fixing.
+
+  2. No person or entity shall use any service, software, or system that engages in price fixing.
+
+C. Penalties and enforcement.
+
+  1. Civil actions.
+
+    a. Any person or entity may bring an action seeking relief from a violation of this Section in any court of competent jurisdiction for damages, injunctive relief, reasonable attorney fees, and such other remedies as may be appropriate.
+
+      (1) For violations involving a beneficial owner of 6 to 15 dwelling units, a prevailing plaintiff shall recover the greater of actual damages or statutory damages of $300 for each violation of this Section.
+
+      (2) For violations involving a beneficial owner of 16 or more dwelling units, a prevailing plaintiff shall recover the greater of treble damages or statutory damages of $1,000 for each violation of this Section.
+
+  2. City enforcement.
+
+    a. The City Attorney may investigate violations of this Section and file complaints with the Code Hearings Officer, as provided under Portland City Code Section 22.03.020, for any violation of this Section, asking the Code Hearings Officer to award injunctive relief, damages, restitution, reasonable attorney's fees, enforcements costs, and civil penalties up to $1,000 per violation.
+
+    b. The City Administrator may enter into settlement agreements related to enforcement actions brought under this Section.
+
+    c. The City Attorney may issue administrative subpoenas for the production of documents, information, and materials, and for the attendance and testimony of witnesses under oath, related to the investigation of a violation or potential violation of this Section. The City Attorney may inspect, examine, and copy any books, papers, records, invoices, and other data needed to investigate potential violations. If any party refuses to obey a subpoena issued under this Section, the City Attorney may petition the Circuit Court of Multnomah County for an order requiring compliance with the subpoena.
+
+  3. Calculation of violations.
+
+    a. Each month a person or entity charges a rent established in violation of this Section constitutes a separate violation.
+
+    b. Each time a person or entity executes a contract in violation of this Section constitutes a separate violation.
+
+    c. Affected dwelling units include any dwelling unit whose rent was determined in violation of this Section and all dwelling units in an apartment building or complex that had its occupancy rate determined in violation of this Section.
+
+D. Affirmative defenses.
+
+  1. Plaintiffs shall not recover damages or obtain other relief authorized by this Section against any defendant that has demonstrated, based on a showing of clear and convincing evidence, the defendant could not have reasonably known it used a service, software, or system that engaged in price fixing.
+
+E. Applicability.
+
+  1. This Section does not apply to contracts executed prior to its effective date.
+
+  2. This Section does not apply to the operation of dwelling units regulated, subsidized, or certified as affordable housing by a federal, state, or local government or the administration of a federal, state, or local government rental assistance program.
+
+  3. This Section does not apply to the dwelling units of a beneficial owner of five or fewer dwelling units. For dwelling units with multiple beneficial owners, this Section will apply if they own more than five dwelling units, regardless of whether such ownership is joint or independent.
+
+  4. Any action under this Section must be filed within five years of the most recent violation.
