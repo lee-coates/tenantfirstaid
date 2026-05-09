@@ -6,9 +6,9 @@ GCS URIs point to the bucket root (files are uploaded flat, not mirrored).
 
 To run:
   make generate-metadata                                    # all documents
-  make generate-metadata LOC_OPTIONS="--or"               # Oregon state only
-  make generate-metadata LOC_OPTIONS="--portland"          # Portland only
-  make generate-metadata LOC_OPTIONS="--or --eugene"       # multiple
+  make generate-metadata LOC_OPTIONS="--oregon"            # Oregon state only
+  make generate-metadata LOC_OPTIONS="--portland"           # Portland only
+  make generate-metadata LOC_OPTIONS="--oregon --eugene"    # multiple
 
 Requires GCS_BUCKET_NAME in the environment (or .env file).
 """
@@ -16,6 +16,7 @@ Requires GCS_BUCKET_NAME in the environment (or .env file).
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -25,10 +26,9 @@ OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
 
 CITY_DIRS = {"eugene", "portland"}
 
-# Order matters: §§ must be replaced before §.
+# Section sign (§) entries are handled in enforce_ascii via re.sub so that
+# trailing whitespace is collapsed: both "§ 90" and "§90" become "Section 90".
 ASCII_REPLACEMENTS = [
-    ("§§", "Sections "),
-    ("§", "Section "),
     ("’", "'"),
     ("“", '"'),
     ("”", '"'),
@@ -39,8 +39,9 @@ ASCII_REPLACEMENTS = [
 
 
 def enforce_ascii(path: Path) -> None:
-    """Apply known ASCII replacements to path in-place.
+    """Apply known ASCII replacements to path, rewriting the file in-place.
 
+    Rewrites the file on disk whenever any substitution is made.
     Raises RuntimeError if unrecognized non-ASCII bytes remain after substitution.
     """
     try:
@@ -55,6 +56,13 @@ def enforce_ascii(path: Path) -> None:
         raise RuntimeError(
             f"{path.name}: file is not valid UTF-8 — re-save as UTF-8 before running."
         )
+
+    # Use regex so trailing whitespace is collapsed: both "§ 90" and "§90"
+    # become "Section 90". Double-sign pattern must precede single-sign.
+    section_sign = "§"
+    text = re.sub(section_sign * 2 + r"\s*", "Sections ", text)
+    text = re.sub(section_sign + r"\s*", "Section ", text)
+
     for src, dst in ASCII_REPLACEMENTS:
         text = text.replace(src, dst)
 
@@ -124,7 +132,7 @@ def parse_args() -> argparse.Namespace:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
-        "--or",
+        "--oregon",
         dest="include_or",
         action="store_true",
         help="Include Oregon state documents.",

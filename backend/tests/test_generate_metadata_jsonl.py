@@ -114,13 +114,13 @@ class TestEnforceAscii:
         p = tmp_path / "f.txt"
         p.write_text("See § 90.100", encoding="utf-8")
         enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == "See Section  90.100"
+        assert p.read_text(encoding="ascii") == "See Section 90.100"
 
     def test_double_section_sign_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
         p.write_text("See §§ 90.100, 90.200", encoding="utf-8")
         enforce_ascii(p)
-        assert p.read_text(encoding="ascii") == "See Sections  90.100, 90.200"
+        assert p.read_text(encoding="ascii") == "See Sections 90.100, 90.200"
 
     def test_smart_quotes_converted(self, tmp_path: Path):
         p = tmp_path / "f.txt"
