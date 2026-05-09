@@ -120,7 +120,7 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
 
     if non_ascii:
         raise RuntimeError(
-            f"Non-ASCII bytes found in {len(non_ascii)} file(s) — Vertex AI RAG ingestion requires pure ASCII:\n"
+            f"Document validation failed in {len(non_ascii)} file(s) — Vertex AI RAG ingestion requires pure ASCII:\n"
             + "\n".join(f"  {p}" for p in non_ascii)
         )
 

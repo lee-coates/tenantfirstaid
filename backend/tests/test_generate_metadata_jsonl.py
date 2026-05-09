@@ -82,7 +82,7 @@ class TestBuildEntries:
 
     def test_unknown_non_ascii_raises(self, tmp_path: Path):
         (tmp_path / "ORS090.txt").write_text("café", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="Non-ASCII"):
+        with pytest.raises(RuntimeError, match="Document validation failed"):
             build_entries(tmp_path, "my-bucket", set())
 
     def test_unknown_non_ascii_reports_all_offenders(self, tmp_path: Path):
