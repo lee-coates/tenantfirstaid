@@ -43,10 +43,11 @@ test: uv.lock
 generate-types: uv.lock
 	cd ../frontend && npm run generate-types
 
+# Pass the GCS bucket name via: make generate-metadata GCS_BUCKET_NAME=my-bucket
 # Selective runs (e.g. LOC_OPTIONS="--portland") overwrite metadata.jsonl with
 # only those entries. Run without LOC_OPTIONS to regenerate the full corpus.
 generate-metadata: uv.lock
-	$(PYTHON) run python -m scripts.generate_metadata_jsonl $(LOC_OPTIONS)
+	$(PYTHON) run python -m scripts.generate_metadata_jsonl --bucket $(GCS_BUCKET_NAME) $(LOC_OPTIONS)
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

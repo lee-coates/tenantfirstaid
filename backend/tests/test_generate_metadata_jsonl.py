@@ -10,8 +10,8 @@ from scripts.generate_metadata_jsonl import build_entries, enforce_ascii, infer_
 
 
 class TestInferCity:
-    def test_state_level_file_returns_null(self):
-        assert infer_city(Path("ORS090.txt")) == "null"
+    def test_state_level_file_returns_none(self):
+        assert infer_city(Path("ORS090.txt")) is None
 
     def test_portland_returns_portland(self):
         assert infer_city(Path("portland/PCC30.01.txt")) == "portland"
@@ -22,8 +22,8 @@ class TestInferCity:
     def test_city_in_nested_subdir(self):
         assert infer_city(Path("portland/2025/PCC30.01.txt")) == "portland"
 
-    def test_year_subdir_only_returns_null(self):
-        assert infer_city(Path("2025/ORS090.txt")) == "null"
+    def test_year_subdir_only_returns_none(self):
+        assert infer_city(Path("2025/ORS090.txt")) is None
 
 
 class TestBuildEntries:
@@ -58,7 +58,7 @@ class TestBuildEntries:
         entries = build_entries(doc_tree, "my-bucket", {"or"})
         entry = entries[0]
         assert entry["id"] == "ORS090"
-        assert entry["structData"] == {"city": "null", "state": "or"}
+        assert entry["structData"] == {"city": None, "state": "or"}
         assert entry["content"]["mimeType"] == "text/plain"
         assert entry["content"]["uri"] == "gs://my-bucket/ORS090.txt"
 
@@ -175,23 +175,20 @@ class TestEnforceAscii:
 
 class TestMain:
     def test_missing_bucket_raises(self):
-        with patch.dict("os.environ", {}, clear=True):
-            with patch("scripts.generate_metadata_jsonl.load_dotenv"):
-                from scripts.generate_metadata_jsonl import main
+        with patch("sys.argv", ["generate_metadata_jsonl"]):
+            from scripts.generate_metadata_jsonl import parse_args
 
-                with pytest.raises(RuntimeError, match="GCS_BUCKET_NAME"):
-                    main()
+            with pytest.raises(SystemExit):
+                parse_args()
 
     def test_writes_valid_jsonl(self, tmp_path: Path):
         (tmp_path / "ORS090.txt").write_text("doc")
         output = tmp_path / "out.jsonl"
 
         with (
-            patch.dict("os.environ", {"GCS_BUCKET_NAME": "test-bucket"}),
-            patch("scripts.generate_metadata_jsonl.load_dotenv"),
             patch("scripts.generate_metadata_jsonl.DOCUMENTS_DIR", tmp_path),
             patch("scripts.generate_metadata_jsonl.OUTPUT_FILE", output),
-            patch("sys.argv", ["generate_metadata_jsonl"]),
+            patch("sys.argv", ["generate_metadata_jsonl", "--bucket", "test-bucket"]),
         ):
             from scripts.generate_metadata_jsonl import main
 

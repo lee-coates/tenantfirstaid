@@ -10,23 +10,18 @@ unrecognized non-ASCII characters are warned about, excluded from metadata.jsonl
 and have known replacements applied in place where possible.
 
 To run:
-  make generate-metadata                                    # all documents
-  make generate-metadata LOC_OPTIONS="--oregon"            # Oregon state only
-  make generate-metadata LOC_OPTIONS="--portland"           # Portland only
-  make generate-metadata LOC_OPTIONS="--oregon --eugene"    # multiple
-
-Requires GCS_BUCKET_NAME in the environment (or .env file).
+  make generate-metadata GCS_BUCKET_NAME=<bucket>                                    # all documents
+  make generate-metadata GCS_BUCKET_NAME=<bucket> LOC_OPTIONS="--oregon"            # Oregon state only
+  make generate-metadata GCS_BUCKET_NAME=<bucket> LOC_OPTIONS="--portland"           # Portland only
+  make generate-metadata GCS_BUCKET_NAME=<bucket> LOC_OPTIONS="--oregon --eugene"    # multiple
 """
 
 import argparse
 import json
-import os
 import re
 import sys
 import unicodedata
 from pathlib import Path
-
-from dotenv import load_dotenv
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
@@ -142,11 +137,11 @@ def enforce_ascii(path: Path) -> str | None:
     return text
 
 
-def infer_city(path: Path) -> str:
+def infer_city(path: Path) -> str | None:
     for part in path.parts:
         if part in CITY_DIRS:
             return part
-    return "null"
+    return None
 
 
 def _print_warning_table(
@@ -205,7 +200,8 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
 
     for txt_file in sorted(documents_dir.rglob("*.txt")):
         city = infer_city(txt_file.relative_to(documents_dir))
-        scope = "or" if city == "null" else city
+        scope = "or" if city is None else city
+        # When scopes are specified, skip files that don't match any requested scope.
         if scopes and scope not in scopes:
             continue
 
@@ -260,6 +256,11 @@ def parse_args() -> argparse.Namespace:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
+        "--bucket",
+        required=True,
+        help="GCS bucket name to use in metadata URIs (e.g. my-rag-bucket).",
+    )
+    parser.add_argument(
         "--oregon",
         dest="include_or",
         action="store_true",
@@ -281,12 +282,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    load_dotenv()
-    bucket = os.environ.get("GCS_BUCKET_NAME")
-    if not bucket:
-        raise RuntimeError("GCS_BUCKET_NAME is not set. Add it to your .env file.")
-
     args = parse_args()
+    bucket = args.bucket
     scopes: set[str] = set()
     if args.include_or:
         scopes.add("or")
