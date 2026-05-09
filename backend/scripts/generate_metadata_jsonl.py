@@ -25,6 +25,49 @@ OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
 
 CITY_DIRS = {"eugene", "portland"}
 
+# Order matters: §§ must be replaced before §.
+ASCII_REPLACEMENTS = [
+    ("§§", "Sections "),
+    ("§", "Section "),
+    ("’", "'"),
+    ("“", '"'),
+    ("”", '"'),
+    ("—", "--"),
+    ("–", "-"),
+    ("•", "-"),
+]
+
+
+def enforce_ascii(path: Path) -> None:
+    """Apply known ASCII replacements to path in-place.
+
+    Raises RuntimeError if unrecognized non-ASCII bytes remain after substitution.
+    """
+    try:
+        path.read_text(encoding="ascii")
+        return
+    except UnicodeDecodeError:
+        pass
+
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        raise RuntimeError(
+            f"{path.name}: file is not valid UTF-8 — re-save as UTF-8 before running."
+        )
+    for src, dst in ASCII_REPLACEMENTS:
+        text = text.replace(src, dst)
+
+    try:
+        text.encode("ascii")
+    except UnicodeEncodeError as e:
+        raise RuntimeError(
+            f"{path.name}: unrecognized non-ASCII character {repr(text[e.start])} "
+            f"at position {e.start} — add it to ASCII_REPLACEMENTS or fix the source file."
+        )
+
+    path.write_text(text, encoding="ascii")
+
 
 def infer_city(path: Path) -> str:
     for part in path.parts:
@@ -35,11 +78,27 @@ def infer_city(path: Path) -> str:
 
 def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[dict]:
     entries = []
+    seen_ids: set[str] = set()
+    non_ascii: list[str] = []
+
     for txt_file in sorted(documents_dir.rglob("*.txt")):
         city = infer_city(txt_file.relative_to(documents_dir))
         scope = "or" if city == "null" else city
         if scopes and scope not in scopes:
             continue
+
+        try:
+            enforce_ascii(txt_file)
+        except RuntimeError as e:
+            non_ascii.append(str(e))
+
+        if txt_file.stem in seen_ids:
+            raise RuntimeError(
+                f"Duplicate document id '{txt_file.stem}': two .txt files share the same basename. "
+                "Files are uploaded flat to GCS, so one would overwrite the other."
+            )
+        seen_ids.add(txt_file.stem)
+
         entries.append(
             {
                 "id": txt_file.stem,
@@ -50,6 +109,13 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[di
                 },
             }
         )
+
+    if non_ascii:
+        raise RuntimeError(
+            f"Non-ASCII bytes found in {len(non_ascii)} file(s) — Vertex AI RAG ingestion requires pure ASCII:\n"
+            + "\n".join(f"  {p}" for p in non_ascii)
+        )
+
     return entries
 
 
