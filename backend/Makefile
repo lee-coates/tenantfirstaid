@@ -47,6 +47,9 @@ generate-types: uv.lock
 # Selective runs (e.g. LOC_OPTIONS="--portland") overwrite metadata.jsonl with
 # only those entries. Run without LOC_OPTIONS to regenerate the full corpus.
 generate-metadata: uv.lock
+ifeq ($(strip $(GCS_BUCKET_NAME)),)
+	$(error GCS_BUCKET_NAME is required: make generate-metadata GCS_BUCKET_NAME=my-bucket)
+endif
 	$(PYTHON) run python -m scripts.generate_metadata_jsonl --bucket $(GCS_BUCKET_NAME) $(LOC_OPTIONS)
 
 clean:

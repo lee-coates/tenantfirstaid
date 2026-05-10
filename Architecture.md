@@ -90,16 +90,21 @@ backend/
 │   ├── generate_conversation/          # Source data for synthetic conversation generation
 │   └── documents/                      # Source legal documents
 │       └── or/                         # Oregon state laws
-│           ├── OAR54.txt               # Oregon Administrative Rules
-│           ├── ORS090.txt              # Oregon Revised Statutes
-│           ├── ORS091.txt
-│           ├── ORS105.txt
-│           ├── ORS109.txt
-│           ├── ORS659A.txt
-│           ├── portland/               # Portland city codes
-│           │   └── PCC30.01.txt
-│           └── eugene/                 # Eugene city codes
-│               └── EHC8.425.txt
+│           ├── 2024/                       # 2024 editions
+│           │   ├── OAR411-54.txt           # Oregon Administrative Rules ch.411 div.54
+│           │   └── ORS090_annotations.txt  # ORS ch.90 annotations
+│           ├── 2025/                       # 2025 editions
+│           │   ├── ORS090.txt              # Oregon Revised Statutes ch.90
+│           │   ├── ORS091.txt
+│           │   ├── ORS105.txt
+│           │   ├── ORS109-697.txt
+│           │   └── ORS659A-421.txt
+│           ├── portland/                   # Portland city codes
+│           │   └── 2025/
+│           │       └── PCC30-01.txt
+│           └── eugene/                     # Eugene city codes
+│               └── 2025/
+│                   └── EHC8-425.txt
 ├── tests/                              # Test suite
 ├── langgraph.json                      # LangGraph deployment manifest (for langgraph dev and LangSmith Cloud)
 ├── pyproject.toml                      # Python dependencies and config

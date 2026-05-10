@@ -26,6 +26,19 @@ from pathlib import Path
 from google.cloud.discoveryengine_v1.types import Document
 from google.protobuf.json_format import MessageToDict
 
+
+class _InvalidUtf8Error(RuntimeError):
+    """Raised by enforce_ascii when the file cannot be decoded as UTF-8."""
+
+
+class _UnrecognizedAsciiError(RuntimeError):
+    """Raised by enforce_ascii when unrecognized non-ASCII bytes remain after substitution."""
+
+    def __init__(self, message: str, partial_text: str, unrecognized: dict[str, int]) -> None:
+        super().__init__(message)
+        self.partial_text = partial_text
+        self.unrecognized = unrecognized
+
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
 
@@ -111,7 +124,7 @@ def enforce_ascii(path: Path) -> str | None:
     try:
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
-        raise RuntimeError(
+        raise _InvalidUtf8Error(
             f"{path.name}: file is not valid UTF-8 — re-save as UTF-8 before running."
         )
 
@@ -133,9 +146,11 @@ def enforce_ascii(path: Path) -> str | None:
                     " — no obvious replacement, fix the source file"
                 )
         n = len(unrecognized)
-        raise RuntimeError(
+        raise _UnrecognizedAsciiError(
             f"{path.name}: {n} unrecognized non-ASCII character{'s' if n > 1 else ''}:\n"
-            + "\n".join(lines)
+            + "\n".join(lines),
+            partial_text=text,
+            unrecognized=unrecognized,
         )
 
     return text
@@ -202,49 +217,48 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[Do
     ascii_rewrites: list[tuple[Path, str]] = []
     partial_rewrites: list[tuple[Path, str]] = []
 
-    for txt_file in sorted(documents_dir.rglob("*.txt")):
-        city = infer_city(txt_file.relative_to(documents_dir))
-        scope = "or" if city is None else city
-        # When scopes are specified, skip files that don't match any requested scope.
-        if scopes and scope not in scopes:
-            continue
+    try:
+        for txt_file in sorted(documents_dir.rglob("*.txt")):
+            city = infer_city(txt_file.relative_to(documents_dir))
+            scope = "or" if city is None else city
+            # When scopes are specified, skip files that don't match any requested scope.
+            if scopes and scope not in scopes:
+                continue
 
-        try:
-            rewritten = enforce_ascii(txt_file)
-            if rewritten is not None:
-                ascii_rewrites.append((txt_file, rewritten))
-        except RuntimeError as e:
-            if "not valid UTF-8" in str(e):
+            try:
+                rewritten = enforce_ascii(txt_file)
+                if rewritten is not None:
+                    ascii_rewrites.append((txt_file, rewritten))
+            except _InvalidUtf8Error:
                 file_issues.append((txt_file.name, None))
-            else:
-                raw = txt_file.read_text(encoding="utf-8")
-                partial = _apply_ascii_replacements(raw)
-                partial_rewrites.append((txt_file, partial))
-                file_issues.append((txt_file.name, _collect_unrecognized(partial)))
-            continue  # exclude from metadata.jsonl
+                continue
+            except _UnrecognizedAsciiError as e:
+                partial_rewrites.append((txt_file, e.partial_text))
+                file_issues.append((txt_file.name, e.unrecognized))
+                continue
 
-        if txt_file.stem in seen_ids:
-            raise RuntimeError(
-                f"Duplicate document id '{txt_file.stem}': two .txt files share the same basename. "
-                "Files are uploaded flat to GCS, so one would overwrite the other."
+            if txt_file.stem in seen_ids:
+                raise RuntimeError(
+                    f"Duplicate document id '{txt_file.stem}': two .txt files share the same basename. "
+                    "Files are uploaded flat to GCS, so one would overwrite the other."
+                )
+            seen_ids.add(txt_file.stem)
+
+            entries.append(
+                Document(
+                    id=txt_file.stem,
+                    struct_data={"city": city, "state": "or"},
+                    content=Document.Content(
+                        mime_type="text/plain",
+                        uri=f"gs://{bucket}/{txt_file.name}",
+                    ),
+                )
             )
-        seen_ids.add(txt_file.stem)
-
-        entries.append(
-            Document(
-                id=txt_file.stem,
-                struct_data={"city": city, "state": "or"},
-                content=Document.Content(
-                    mime_type="text/plain",
-                    uri=f"gs://{bucket}/{txt_file.name}",
-                ),
-            )
-        )
-
-    for path, text in ascii_rewrites:
-        path.write_text(text, encoding="ascii")
-    for path, text in partial_rewrites:
-        path.write_text(text, encoding="utf-8")
+    finally:
+        for path, text in ascii_rewrites:
+            path.write_text(text, encoding="ascii")
+        for path, text in partial_rewrites:
+            path.write_text(text, encoding="utf-8")
 
     if file_issues:
         _print_warning_table(file_issues)
