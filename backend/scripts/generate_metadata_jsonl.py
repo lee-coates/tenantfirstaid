@@ -32,12 +32,15 @@ class _InvalidUtf8Error(RuntimeError):
 
 
 class _UnrecognizedAsciiError(RuntimeError):
-    """Raised by enforce_ascii when unrecognized non-ASCII bytes remain after substitution."""
+    """Raised by enforce_ascii when unrecognized non-ASCII characters remain after substitution."""
 
-    def __init__(self, message: str, partial_text: str, unrecognized: dict[str, int]) -> None:
+    def __init__(
+        self, message: str, partial_text: str, unrecognized: dict[str, int]
+    ) -> None:
         super().__init__(message)
         self.partial_text = partial_text
         self.unrecognized = unrecognized
+
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 OUTPUT_FILE = DOCUMENTS_DIR / "metadata.jsonl"
@@ -112,8 +115,8 @@ def enforce_ascii(path: Path) -> str | None:
 
     Returns the rewritten text if any substitution was made, or None if the file
     is already pure ASCII. Does NOT write to disk.
-    Raises RuntimeError if the file is not valid UTF-8 or if unrecognized
-    non-ASCII bytes remain after substitution.
+    Raises _InvalidUtf8Error if the file cannot be decoded as UTF-8.
+    Raises _UnrecognizedAsciiError if unrecognized non-ASCII characters remain after substitution.
     """
     try:
         path.read_text(encoding="ascii")
