@@ -164,6 +164,54 @@ Live at https://tenantfirstaid.com/
      % npm run test -- --run
      ```
 
+### Docker
+
+The project has separate Dockerfiles for backend and frontend, each with multiple build stages. Use `--target` to pick a stage:
+
+```sh
+# backend runtime (serves API)
+docker build -f backend/Dockerfile --target runtime -t tenantfirstaid-backend:runtime backend
+
+# frontend local/dev server
+docker build -f frontend/Dockerfile --target local -t tenantfirstaid-frontend:local .
+
+# frontend production (serves built static app)
+docker build -f frontend/Dockerfile --target production -t tenantfirstaid-frontend:production .
+```
+
+#### Docker Compose (quick start)
+
+Copy the root-level env file before running compose:
+
+```sh
+cp .env.example .env
+```
+
+`GCP_CREDENTIALS_FILE` in this file is a host path to your GCP credentials JSON (the same file referenced by `GOOGLE_APPLICATION_CREDENTIALS` in `backend/.env`). Compose bind-mounts it into the container — it is not injected as an app environment variable.
+
+Then start both services:
+
+```sh
+docker compose up --build
+```
+
+By default, compose uses:
+
+- backend target: `runtime`
+- frontend target: `local`
+
+Override targets at runtime:
+
+```sh
+RUNTIME_TARGET=ci FRONTEND_TARGET=ci docker compose up --build
+```
+
+Stop services:
+
+```sh
+docker compose down
+```
+
 ## Contributing
 
 We currently have regular project meetups: https://www.meetup.com/codepdx/ . Also check out https://www.codepdx.org/ to find our Discord server.
