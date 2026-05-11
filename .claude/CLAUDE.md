@@ -97,6 +97,20 @@ Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `back
 
 `make generate-metadata` auto-converts all known offenders in place and warns with a suggested replacement for any it cannot handle.
 
+### Publication cadence
+
+Oregon publishes statutes and annotations on offset biennial cycles, which is why statutes and annotations live in different year subfolders:
+
+- **Statutes** (`ORS*.txt`, `OAR*.txt`) — published in odd years after each long legislative session. See the [current edition](https://www.oregonlegislature.gov/bills_laws/pages/ors.aspx).
+- **Annotations** (`ORS*_annotations.txt`) — published in the fall of each even-numbered year as a Cumulative Supplement. See the [current edition](https://www.oregonlegislature.gov/bills_laws/Pages/Annotations.aspx).
+
+Statute and annotation chapter pages are accessible at predictable URLs that aren't directly enumerated from the landing pages (which route through PDFs and SharePoint volume groupings):
+
+- Statutes: `https://www.oregonlegislature.gov/bills_laws/ors/orsNNN.html`
+- Annotations: `https://www.oregonlegislature.gov/bills_laws/ors/anoNNN.html`
+
+`NNN` is the three-digit zero-padded chapter number, with lowercase letter suffix for sub-chapters. Examples: chapter 90 → `ors090.html` / `ano090.html`; chapter 659A → `ors659a.html` / `ano659a.html`.
+
 ## Commit messages
 
 Concise, imperative mood, small focused commits. Write like a humble experienced engineer — casual, no listicles, highlight non-obvious choices. No robot speak, marketing buzzwords, or vague fluff.
