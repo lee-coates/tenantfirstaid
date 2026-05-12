@@ -1,0 +1,536 @@
+Year Edition: 2024 (2024 Cumulative Supplement)
+Oregon Revised Statutes Annotations
+Chapter 105
+
+ATTY. GEN. OPINIONS: Private process server in a forcible entry and detainer action, (1975) Vol 37, p 869
+
+105.005
+
+NOTES OF DECISIONS
+
+The plaintiffs, purchasers under a land sale contract, had only an equitable interest in the property and could not maintain an action for ejectment against the owners of the fee. Buschman v. Paull, 278 Or 141, 563 P2d 1197 (1977)
+
+105.030
+
+NOTES OF DECISIONS
+
+Set-off
+
+Damages are limited to reasonable rental value of property for exclusion period, less value of permanent improvements, and do not include attorney fees or costs. Beaver v. Davis, 275 Or 209, 550 P2d 428 (1976)
+
+Where the expired lease provided that all improvements would become the property of the lessor and the evidence showed all improvements had been made before the expiration of the lease, not during the period of adverse possession, the defendants were not entitled to recovery for improvements. Seaver v. Counts, 277 Or 29, 558 P2d 1232 (1977)
+
+105.105 to 105.165
+
+NOTES OF DECISIONS
+
+Provisions for early trial, posting of security for accruing rent during continuance and restriction of triable issues do not violate Due Process or Equal Protection clauses of federal constitution. Lindsey v. Normet, 405 US 56, 92 S Ct 862, 31 L Ed 36 (1972)
+
+Proceedings under the Oregon forcible entry and detainer law, including proceedings against nonresident defendants, are not subject to the general statutes relating to service of process. Lexton-Ancira, Inc. v. Kay, 269 Or 1, 522 P2d 875 (1974)
+
+A forcible entry and detainer proceeding is a "local action" for choice of law purposes. Fry v. D.H. Overmyer Co., 269 Or 281, 525 P2d 140 (1974)
+
+The defendant did not state good affirmative defenses by alleging: a violation of public policy forbidding a franchisor to refuse to renew a franchise except for good cause; A "retaliatory eviction" for a refusal to engage in improper business practices; and an implied agreement to renew based upon conduct and prior dealings. William C. Cornitius, Inc., v. Wheeler, 276 Or 747, 556 P2d 666 (1976)
+
+In forcible entry and detainer action to recover possession of commercial property, claim for attorney fees could not be litigated. Grove v. The Hindquarter Corp., 45 Or App 781, 609 P2d 840 (1980)
+
+In forcible entry and detainer action for possession of commercial premises, landlords could not recover attorney fees. Owen J. Jones & Son, Inc. v. Gospodinovic, 46 Or App 101, 610 P2d 1238 (1980)
+
+Equitable defense may be raised in FED proceeding. Rose v. Webster, 51 Or App 293, 625 P2d 1329 (1981)
+
+In FED action to recover commercial property, defendant cannot assert counterclaim unless counterclaim is authorized by statute. Class v. Carter, 293 Or 147, 645 P2d 536 (1982)
+
+LAW REVIEW CITATIONS: 16 WLR 291 (1979)
+
+105.105
+
+NOTES OF DECISIONS
+
+In FED action to recover mobile home space, rental agreement termination notice must comply with [former] ORS 91.885, so letter sent to tenant which contained no designated date for termination of tenancy was ineffective notice. Ostlund v. Hendricks, 289 Or 543, 615 P2d 327 (1980)
+
+105.110
+
+NOTES OF DECISIONS
+
+A forcible entry and detainer proceeding is a "local action" for choice of law purposes. Fry v. D. H. Overmyer Co., 269 Or 281, 525 P2d 140 (1974)
+
+This section provides for legal, not equitable relief. Port of Siuslaw v. Ram Dev., 26 Or App 873, 554 P2d 631 (1976)
+
+Absent evidence of forcible entry, court may not award possession pursuant to forcible entry and detainer action unless landlord-tenant relationship exists. Bunch v. Pearson, 186 Or App 138, 62 P3d 878 (2003), Sup Ct review denied; Kerr v. Jones, 193 Or App 682, 91 P3d 828 (2004)
+
+105.113
+
+NOTES OF DECISIONS
+
+First appropriate opportunity for defendant to allege right to attorney fees is at first appearance before trial court. Oakleaf Mobile Home Park v. Mancilla, 189 Or App 458, 75 P3d 908 (2003), Sup Ct review denied
+
+105.115
+
+NOTES OF DECISIONS
+
+In an action based upon default in payment of rent, upon acceptance by plaintiff of the payment upon which the action is based, the lease is "reinstated" subject to termination of subsequent defaults. Reeves v. Baker, 270 Or 837, 530 P2d 30 (1974)
+
+When tenant withheld rent in good faith based on alleged habitability violations, landlord brought FED action, and tenant counterclaimed and paid rent into court, tenant was entitled to retain possession even though landlord prevailed on habitability counterclaims and action for rent. Amatisto v. Paz, 82 Or App 341, 728 P2d 42 (1986)
+
+105.120
+
+NOTES OF DECISIONS
+
+Where landlords failed to show that tenancy was terminated or notice to quit given under this section prior to commencement of FED proceeding, trial court's dismissal of action was proper. Teresi v. Gina Belmonte Corp., 31 Or App 1231, 572 P2d 6479 (1977)
+
+Where lease extension agreement incorporated provisions of original lease, which had provided that $1800 prepaid rent was to be applied to last three months of ten-year rental period, $1800 was prepaid rent to be applied only for last three months of new rental period, and tenants did not have defense under this section against termination of lease for rental payment default. Powers v. Kirkman Laboratories, Inc., 45 Or App 1083, 610 P2d 280 (1980), Sup Ct review denied
+
+FED action for land leased for agricultural purposes may be instituted as soon as tenants wrongfully hold over beyond fixed expiration date of lease and this section does not require 90 days' notice prior to commencement of action if tenancy is for fixed term. Federal Land Bank of Spokane v. Schelske, 87 Or App 346, 742 P2d 659 (1987)
+
+105.124
+
+NOTES OF DECISIONS
+
+Failure to attach notice at time of filing complaint is not type of error that court may disregard under ORCP 12B. Hill v. Evans, 239 Or App 233, 244 P3d 822 (2010)
+
+105.125 to 105.160
+
+ATTY. GEN. OPINIONS: Conditions under which an attorney may appear, (1976) Vol 38, p 184
+
+LAW REVIEW CITATIONS: 16 WLR 271 (1979)
+
+105.130
+
+NOTES OF DECISIONS
+
+Court did not err in allowing plaintiff to amend its complaint to replace short version of its name with full version because nothing in this section forbids amendment to provide more complete description of landlord's business name. Willamette Landing Apartments v. Burnett, 280 Or App 703, 382 P3d 512 (2016), modified 282 Or App 814, 387 P3d 501 (2016), Sup Ct review denied
+
+105.135
+
+NOTES OF DECISIONS
+
+This section does not violate the Due Process Clause or the Equal Protection Clause of the United States Constitution. Lindsey v. Normet, 405 US 56, 92 S Ct 862, 31 L Ed 2d 36 (1972)
+
+Where summons in forcible entry and detainer action was not served within time prescribed by this section because clerk mailed copy of summons to defendant only four days prior to day of trial, court did not obtain personal jurisdiction over defendant. South State Inv. Co. v. Brigum, 289 Or 109, 611 P2d 305 (1980)
+
+Failure to timely serve defendant with summons and complaint does not require dismissal of action, and service of amended summons and complaint may occur without leave of court. Balboa Apartments v. Patrick, 237 Or App 391, 241 P3d 317 (2010), aff'd351 Or 205, 263 P3d 1011 (2011)
+
+105.137
+
+NOTES OF DECISIONS
+
+This section permits representation of landlord by attorney if defendant appears, whether defendant appears by attorney or pro se. Freitag v. Wagner, 34 Or App 1035, 580 P2d 217 (1978)
+
+105.140
+
+NOTES OF DECISIONS
+
+This section does not violate the Due Process Clause or the Equal Protection Clause of the United States Constitution. Lindsey v. Normet, 405 US 56, 92 S Ct 862, 31 L Ed 2d 36 (1972)
+
+In FED action where defendant put up continuance bond, plaintiff was entitled to recover only amount of rent accrued during continuance. Owen J. Jones & Son, Inc. v. Gospodinovic, 46 Or App 101, 610 P2d 1238 (1980)
+
+105.145
+
+NOTES OF DECISIONS
+
+Tender of rental payments after filing an action under this section was not a defense. Fry v. D. H. Overmyer Co., 269 Or 281, 525 P2d 140 (1974)
+
+105.149
+
+NOTES OF DECISIONS
+
+Court may consider listed defenses at hearing whether or not defense is alleged in hearing request. Johnson Mobile Estates v. Oliver, 249 Or App 383, 277 P3d 598 (2012)
+
+105.159
+
+NOTES OF DECISIONS
+
+Filing of supersedeas undertaking on appeal pursuant to ORS 19.335 (2) tolls 60-day limit on issuance of process to enforce judgment for restitution of premises under section. Pine Ridge Park v. Fugere, 252 Or App 456, 287 P3d 1268 (2012), Sup Ct review denied
+
+105.161
+
+NOTES OF DECISIONS
+
+Where tenant's filing of supersedeas undertaking on appeal to stay judgment of forcible entry and detainer forces unwanted occupancy of landlord's premises, and landlord's receipt of payment before outcome of appeal would cause forcible entry and detainer judgment to become unenforceable, this statute does not govern. This statute must be construed together with ORS 19.335 to avoid prejudice to either party and should not be construed to require delay in payment of value of tenant's holdover occupancy until end of appeal, nor should it mean that landlord's receipt of payments should cause landlord to forfeit landlord's recovery of premises. Willamette Landing Apartments v. Burnett, 282 Or App 814, 387 P3d 501 (2016)
+
+This section, when read with ORS 19.335, allows tenant to remain in possession of property, despite landlord's wishes and contrary to forcible entry and detainer judgment, in exchange for immediate undertaking to assure payment of value of unwanted use and occupancy of property during appeal regardless of outcome of appeal. Willamette Landing Apartments v. Burnett, 282 Or App 814, 387 P3d 501 (2016)
+
+105.165
+
+NOTES OF DECISIONS
+
+Notice stating landlord would provide access for removal of property did not satisfy requirement of notifying tenant that property was available for removal without payment of storage charge. Taylor v. Hayden Island Mobile Home Park, 123 Or App 318, 859 P2d 1173 (1993)
+
+105.180
+
+NOTES OF DECISIONS
+
+Written demand to pay proportionate share of costs must be based on existing liability for easement maintenance. Guild v. Baune, 200 Or App 397, 115 P3d 249 (2005), clarified 201 Or App 514, 119 P3d 281 (2005)
+
+105.205 to 105.405
+
+NOTES OF DECISIONS
+
+There is nothing in these sections or dissolution statute, ORS 107.105, which precludes action from being brought under partition statutes where res judicata does not bar second action. Hellesvig v. Hellesvig, 59 Or App 356, 650 P2d 1072 (1982), aff'd294 Or 769, 662 P2d 709 (1983)
+
+105.205
+
+NOTES OF DECISIONS
+
+"Estate of inheritance" refers to estate of type that can be inherited. Veberes v. Phillips, 23 Or App 363, 542 P2d 928 (1975), Sup Ct review denied
+
+Until final distribution, personal representative of estate is person having interest in land. Veberes v. Phillips, 23 Or App 363, 542 P2d 928 (1975), Sup Ct review denied
+
+This section and ORS 105.210 establish hierarchy of dispositional alternatives where party seeks partition, with partition in kind as first preference, public sale as second preference, and private sale as third preference. Fike v. Sharer, 280 Or 577, 571 P2d 1252 (1977); Maupin v. Opie, 156 Or App 52, 964 P2d 1117 (1998), Sup Ct review denied
+
+Where there is statutory preference for partition in kind and it would not produce great prejudice, court did not err in ordering partition in kind instead of private sale. Miller v. Miller, 101 Or App 371, 790 P2d 1184 (1990)
+
+Prior proceeding under ORS 107.105 is not bar to proceeding under this section. Weber v. Galton, 111 Or App 33, 824 P2d 1166 (1992), Sup Ct review denied
+
+Right of tenant in common to maintain suit for partition of real property may be expressly or impliedly limited, restricted or prohibited by provisions of wills or deeds under which parties claim. Owen v. Zorn Farms, Inc., 186 Or App 199, 62 P3d 854 (2003), Sup Ct review denied
+
+105.210
+
+NOTES OF DECISIONS
+
+Absent evidence that prejudice would result if public sale were ordered pursuant to ORS 105.205, court was without authority to order private sale. Fike v. Sharer, 280 Or 577, 571 P2d 1252 (1977); Maupin v. Opie, 156 Or App 52, 964 P2d 1117 (1998), Sup Ct review denied
+
+In determining whether public sale would result in great prejudice to party, financial prejudice resulting from lower public sale price is given greater weight than prejudice from loss of sentimental interest in property. Fike v. Sharer, 280 Or 577, 571 P2d 1252 (1977)
+
+Where multiple owners of property exist, prejudice to single owner is sufficient to prohibit public sale. Fike v. Sharer, 280 Or 577, 571 P2d 1252 (1977)
+
+Where partition action results in private sale, party initiating action for partition must be seller of interest in property. Maupin v. Opie, 156 Or App 52, 964 P2d 1117 (1998), Sup Ct review denied
+
+105.465
+
+NOTES OF DECISIONS
+
+Voluntary disclosure statement does not create special relationship allowing action for negligence. Cameron v. Harshbarger, 165 Or App 353, 998 P2d 221 (2000)
+
+105.505
+
+NOTES OF DECISIONS
+
+In general
+
+Erroneous listing of plaintiff's telephone number and numerous consequent telephone calls to plaintiff resulted in an invasion of plaintiff's right to enjoy her property without unreasonable interference. Macca v. Gen. Tel. Co. of NW, Inc., 262 Or 414, 495 P2d 1193 (1972)
+
+In order to recover for a nuisance, one must allege facts which show that the invasion was unreasonable under the circumstances. Jacobson v. Crown Zellerbach Corp., 273 Or 15, 539 P2d 641 (1975)
+
+Equitable relief
+
+Feedlot operation was enjoined from maintaining more cattle than its waste management system could effectively handle. Spencer Creek Pollution Control Assn. v. Organic Fertilizer Co., 264 Or 557, 505 P2d 919 (1973)
+
+Persons liable for nuisances
+
+Persons making proper use of a public road were not liable for damages by such use to an abutting landowner's property. Jacobson v. Crown Zellerbach Corp., 273 Or 15, 539 P2d 641 (1975)
+
+105.550 to 105.600
+
+NOTES OF DECISIONS
+
+Under former similar statutes (ORS 465.110 to 465.180)
+
+As the state has valid interest in prohibiting illegal uses of property and proper safeguards exist, abatement proceedings do not amount to an unconstitutional taking of property. State ex rel Haas v. Club Recreation, 41 Or App 557, 599 P2d 1194 (1979), Sup Ct review denied
+
+ATTY. GEN. OPINIONS
+
+In general
+Exemption of nuisance laws from constitutional requirement for payments based on government regulations restricting use of property, (2001) Vol 49, p 284
+
+105.555
+
+NOTES OF DECISIONS
+
+Under former similar statute (ORS 465.110)
+
+Provision of prospective equitable relief from continuation of nuisances does not circumvent criminal statutes and thereby deny constitutional rights available under such statutes. State ex rel Haas v. Club Recreation, 41 Or App 557, 599 P2d 1194 (1979), Sup Ct review denied
+
+Failure to specifically name "prostitution" does not mean abatement procedures do not apply to places of prostitution. State ex rel Haas v. Club Recreation, 41 Or App 557, 599 P2d 1194 (1979), Sup Ct review denied
+
+Terms "lewdness" and "assignation" are not unconstitutionally vague. State ex rel Haas v. Club Recreation, 41 Or App 557, 599 P2d 1194 (1979), Sup Ct review denied
+
+Separate showing of irreparable harm is not required in civil nuisance abatement proceeding. State ex rel Haas v. Dionne, 42 Or App 851, 601 P2d 894 (1979)
+
+LAW REVIEW CITATIONS
+
+In general
+
+27 WLR 351 (1991)
+
+105.565
+
+NOTES OF DECISIONS
+
+Under former similar statute (ORS 465.130)
+
+Separate showing of irreparable harm is not required in civil nuisance abatement proceeding. State ex rel Haas v. Dionne, 42 Or App 851, 601 P2d 894 (1979)
+
+105.590
+
+NOTES OF DECISIONS
+
+Under former similar statute (ORS 465.160)
+
+Provision of prospective equitable relief from continuation of nuisances does not circumvent criminal statutes and thereby deny constitutional rights available under such statutes. State ex rel Haas v. Club Recreation, 41 Or App 557, 599 P2d 1194 (1979), Sup Ct review denied
+
+105.605
+
+NOTES OF DECISIONS
+
+The court rule for a suit to quiet title is that plaintiff may maintain such a suit whenever an adequate remedy at law is not available even if the plaintiff is not in actual possession. Hall v. Smith, 269 Or 215, 523 P2d 1254 (1974)
+
+Where there is a severance between the mining and surface rights, actual possession of the surface by the mining rights owner must be shown by activities beyond the use of the surface for mining purposes. Yaquina Bay Timber v. Shiny Rock Mining, 276 Or 779, 556 P2d 672 (1976)
+
+"Actual possession" necessitates activities which show an intent to hold land as one's own; equivocal conduct such as an occasional or sporadic use is insufficient to show actual possession. Yaquina Bay Timber v. Shiny Rock Mining, 276 Or 779, 556 P2d 672 (1976)
+
+Where testimony of possessor of land, who had lived on land more than 10 years, did not clearly establish when he began to assert an adverse claim, no title by adverse possession was established. McCall v. Hyde, 39 Or App 531, 592 P2d 1064 (1979)
+
+Federal wrongful levy statute is not exclusive remedy in action to quiet title to property acquired at Internal Revenue Service sale. Vanderpool v. Sawyer, 125 Or App 300, 865 P2d 446 (1993)
+
+105.615
+
+NOTES OF DECISIONS
+
+This section operates retroactively but does not permit tacking of periods of occupation by cotenants to establish adverse possession against other cotenants. Willson v. Hessong, 38 Or App 269, 589 P2d 1194 (1979)
+
+Where defendant did not have exclusive possession for 20 years before date he filed action, he did not establish adverse possession under special criteria in this section. Miller v. Miller, 101 Or App 371, 790 P2d 1184 (1990)
+
+Title vests under this section for adverse possession as matter of law if prerequisites are met at completion of 20-year period. Glenn v. Glenn, 310 Or App 661, 487 P3d 856 (2021)
+
+105.620
+
+NOTES OF DECISIONS
+
+Application of statute to interest vesting prior to 1990 was improper. Markovich v. Chambers, 122 Or App 503, 857 P2d 906 (1993)
+
+Exclusivity requires use consistent with ownership, not physical exclusion of all others. Slak v. Porter, 128 Or App 274, 875 P2d 515 (1994)
+
+Where easement is extinguished by adverse possession, reference to easement in deed subsequently transferring subservient estate does not re-create easement. Faulconer v. Williams, 147 Or App 389, 936 P2d 999 (1997), aff'd 327 Or 381, 964 P2d 246 (1998)
+
+In context of easement, hostility entails intent to occupy land without subordination to rights of dominant estate holder. Faulconer v. Williams, 327 Or 381, 964 P2d 246 (1998)
+
+Where grantor attains interest in property through adverse possession for full statutory period and subsequently acts with intent to transfer interest in property, grantee obtains interest in property that grantor acquired through adverse possession. Timber Service Co. v. Ellis, 163 Or App 349, 988 P2d 396 (1999)
+
+Adverse possessor use of property over statutory period does not shift burden to land owner to prove use was permissive. Hoffman v. Freeman Land and Timber, LLC, 329 Or 554, 994 P2d 106 (1999)
+
+Requirement that person claiming adverse possession had objectively reasonable belief concerning ownership does not alter doctrine established under common law allowing proof of hostile possession based on pure mistake. Clark v. Ranchero Acres Water Co., 198 Or App 73, 108 P3d 31 (2005)
+
+This provision does not provide for adverse possession by owner of fee simple title to real property of easement on that real property. Uhl v. Krupsky, 254 Or App 736, 294 P3d 559 (2013)
+
+Where property owner assumed that chain-link fence marked property line of lot and that all land within fence boundary was in owner's possession, owner had "honest belief" based on mistaken assumption and lack of conscious awareness of intruding on neighbor's land. Wood v. Taylor, 307 Or App 688, 479 P3d 560 (2020), Sup Ct review denied
+
+LAW REVIEW CITATIONS: 23 EL 1297 (1993)
+
+105.623 to 105.649
+
+LAW REVIEW CITATIONS
+
+Under former similar statutes (ORS 105.625 to 105.640)
+
+24 WLR 41 (1988)
+
+105.625 to 105.640
+
+See annotations under ORS 105.623 to 105.649.
+
+105.660
+
+See annotations under ORS 105.676.
+
+105.672 to 105.700
+
+NOTES OF DECISIONS
+
+Where plaintiff was injured in City of Portland public park, individual city employees who were responsible for repairing, maintaining and operating improvements in park, which is land made available to public for recreational purposes, are not "owners" as used in Oregon Public Use of Lands Act, and so are not immune from liability for negligence. Johnson v. Gibson, 358 Or 624, 369 P3d 1151 (2016)
+
+105.672 to 105.696
+
+LAW REVIEW CITATIONS: 89 OLR 725 (2010)
+
+105.672
+
+NOTES OF DECISIONS
+
+Person maintaining and operating improvements on land is "owner" of land. Brewer v. State Dept. of Fish and Wildlife, 167 Or App 173, 2 P3d 418 (2000), Sup Ct review denied
+
+Use of land to gain access to recreational site on adjoining property is not use of land for recreational purposes. Liberty v. State Dept. of Transportation, 342 Or 11, 148 P3d 909 (2006)
+
+Requiring purchase of all-terrain vehicle (ATV) operating permit to use ATV on land does not waive defendant's recreational immunity, because permit fee is not charge paid by plaintiff for permission to use defendant's particular land but is instead in nature of vehicle registration fee that allows plaintiff to operate specific ATV on various public and private lands where that ATV is permitted, by appropriate authority, to be used. Stedman v. Dept. of Forestry, 316 Or App 203, 502 P3d 234 (2021)
+
+LAW REVIEW CITATIONS: 89 OLR 725 (2010)
+
+105.676
+
+LAW REVIEW CITATIONS
+
+Under former similar statute (ORS 105.660)
+
+4 EL 411 (1974); 22 EL 731 (1992)
+
+105.677
+
+See annotations under ORS 105.692.
+
+105.682
+
+NOTES OF DECISIONS
+
+Person maintaining and operating improvements on land is "owner of land." Brewer v. State Dept. of Fish and Wildlife, 167 Or App 173, 2 P3d 418 (2000), Sup Ct review denied
+
+Immunity from liability for owner permitting "any" person to use land applies only if permission is granted to person as member of public generally rather than as specific invitee. Conant v. Stroup, 183 Or App 270, 51 P3d 1263 (2002)
+
+Immunity from liability for injury arising from use of land is not limited to injuries for which land is mechanism of injury. Conant v. Stroup, 183 Or App 270, 51 P3d 1263 (2002)
+
+Land made available to public for recreational purposes includes land developed for use as city park. Waggoner v. City of Woodburn, 196 Or App 715, 103 P3d 648 (2004)
+
+Immunity granted to city landowner for injuries arising out of recreational use of city park does not violate plaintiff's right to remedy under section 10, Article I of Oregon Constitution. Schlesinger v. City of Portland, 200 Or App 593, 116 P3d 239 (2005)
+
+Use of land to gain access to recreational site on adjoining property is not use of land for recreational purposes. Liberty v. State Dept. of Transportation, 342 Or 11, 148 P3d 909 (2006)
+
+"Recreational purposes" includes recreational activities that involve travel. Kelly v. Hochberg, 231 Or App 155, 217 P3d 699 (2009), aff'd 349 Or 267, 243 P3d 62 (2010)
+
+Scope of recreational immunity under this section is determined by volition of landowner to make land available for recreational or other specified uses; therefore, county was not immune from liability for plaintiff who was injured while jogging on ordinary sidewalk along city street, not on lands that county had decided to make available for recreational use. Landis v. Limbaugh, 282 Or App 284, 385 P3d 1139 (2016)
+
+Fee for winter recreation parking permit or other parking fee of $15 or less per day is not charge for recreational use of park and therefore does not bar state's recreational immunity. McCormick v. State, 308 Or App 220, 482 P3d 187 (2020)
+
+If owner of land permits use of land for recreation by facilitating use, recreational immunity is available even if public already has right to recreate on land. McCormick v. State Parks and Recreation Dept., 366 Or 452, 466 P3d 10 (2020)
+
+State laws encouraging accessibility to, or permitting public's recreational use of, ocean and ocean shore do not entitle state to recreational immunity as matter of law. Ortega v. Martin, 313 Or App 252, 497 P3d 314 (2021), Sup Ct review denied
+
+Whether walking constitutes "recreational purpose," as used in this section, is fact-specific inquiry. Fields v. City of Newport, 326 Or App 764, 533 P3d 384 (2023), Sup Ct review denied
+
+LAW REVIEW CITATIONS: 89 OLR 725 (2010)
+
+105.688
+
+NOTES OF DECISIONS
+
+Under former similar statutes (ORS 105.655 to 105.680)
+
+Provisions in these sections exempting landowners from liability for injuries suffered by persons engaged in recreational use for which they paid no fee, apply to United States as landowner. O'Neal v. United States, 814 F2d 1285 (1987)
+
+In general
+
+Term "charge" connotes both fees to enter land and fees to use land as long as that use entails moving over or on land for recreational purposes. Coleman v. Oregon Parks and Recreation Dept., 347 Or 94, 217 P3d 651 (2009)
+
+LAW REVIEW CITATIONS
+
+In general
+
+89 OLR 725 (2010)
+
+105.692
+
+NOTES OF DECISIONS
+
+Under former similar statute (ORS 105.677)
+
+Restrictions on the right of the public to acquire interests in private lands after 1973, contained in this section, apply to permissive uses and not to adverse uses such as public prescriptive easements. Ellis v. Municipal Reserve & Bond Co., 60 Or App 567, 655 P2d 204 (1982)
+
+LAW REVIEW CITATIONS
+
+Under former similar statute (ORS 105.677)
+
+4 EL 410-411 (1974); 22 EL 731 (1992)
+
+105.755
+
+NOTES OF DECISIONS
+
+"Legal damage" means harm for which person may recover based on existing legal principles. Deupree v. Department of Transportation, 173 Or App 623, 22 P3d 773 (2001)
+
+105.772
+
+NOTES OF DECISIONS
+
+This section is constitutional. Kilpatrick v. Snow Mountain Pine Co., 105 Or App 240, 805 P2d 137 (1991), Sup Ct review denied
+
+105.805
+
+NOTES OF DECISIONS
+
+Month-to-month tenant is tenant for years within meaning of this section. Vollertsen v. Lamb, 302 Or 489, 732 P2d 486 (1987)
+
+105.810
+
+NOTES OF DECISIONS
+
+In general
+
+This section does not apply to injuries to fruit crops and trees caused by fumes emitted from defendant's aluminum plant. Meyer v. Harvey Alum., 263 Or 487, 501 P2d 795 (1972)
+
+Where defendant log hauler did not enter, hire others to enter or act in concert with those entering plaintiff's land, defendant was not liable for timber trespass. Bergman v. Holden, 118 Or App 530, 848 P2d 141 (1993), as modified by 122 Or App 257, 857 P2d 217 (1993)
+
+Attorney fees are available in action based on conduct occurring prior to effective date of 1995 amendments permitting attorney fees. Vloedman v. Cornell, 161 Or App 396, 984 P2d 906 (1999)
+
+Court may not award attorney fees for claim that presents facts that constitute functional equivalent of timber trespass if pleading does not claim that defendant committed timber trespass. Olson v. Howard, 237 Or App 256, 239 P3d 510 (2010)
+
+Person willfully injuring or severing produce or timber without authorization commits violation, even if person is lawfully present on land. Simington Gardens, LLC v. Rock Ridge Farms, LLC, 308 Or App 661, 481 P3d 396 (2021)
+
+Willful trespass
+
+Punitive damages are not recoverable in action for timber trespass under this section because statutory provision for treble damages is exclusive punitive remedy. Harris v. Wright, 81 Or App 126, 724 P2d 875 (1986)
+
+Where defendant entered plaintiffs' property and harvested timber, relying on timber deed which defendant executed with plaintiffs' vendees, and timber deed was invalid because land sale contract under which vendees acquired land unambiguously provided vendees could not transfer interest in realty without plaintiffs' consent, which was never given, holding that defendant had trespassed as matter of law was not error. Gerdes v. Bohemia, Inc., 88 Or App 62, 744 P2d 275 (1987)
+
+In damage action for timber trespass, it was not error to deny plaintiffs' claim for costs of reforestation because plaintiffs failed to prove it necessary. Gerdes v. Bohemia, Inc., 88 Or App 62, 744 P2d 275 (1987)
+
+In action for timber trespass it was error to assess value of trees and road built by defendant as mitigating factors; both were relevant to value of property before and after logging and should have been deducted from stumpage value before amount was trebled as damages under this section. Gerdes v. Bohemia Inc., 88 Or App 62, 744 P2d 275 (1987)
+
+LAW REVIEW CITATIONS: 36 WLR 401 (2000)
+
+105.815
+
+NOTES OF DECISIONS
+
+Under this section a person who has a real property interest which the law recognizes as entitled to protection is an owner of land. Pedro v. January, 261 Or 582, 494 P2d 868 (1972)
+
+Plaintiff with a future contingent interest in land is allowed recovery under this section. Pedro v. January, 261 Or 582, 494 P2d 868 (1972)
+
+Use of the word "trespass" does not require a possessory interest in one who seeks recovery under this section. Pedro v. January, 261 Or 582, 494 P2d 868 (1972)
+
+This section does not apply to injuries to fruit crops and trees caused by fumes emitted from defendant's aluminum plant. Meyer v. Harvey Alum., 263 Or 487, 501 P2d 795 (1972)
+
+Where defendant's title to disputed parcel of property had matured by adverse possession, doctrine of relation-back applied to prevent recovery under this section. Breuer v. Covert, 47 Or App 225, 614 P2d 1169 (1980), Sup Ct review denied
+
+Stipulated value of timber itself is proper base for computing double damages under this section and cost of logging should have not been included. Sinsel v. Henderson, 62 Or App 150, 660 P2d 1072 (1983)
+
+Where defendant log hauler did not enter, hire others to enter or act in concert with those entering plaintiff's land, defendant was not liable for timber trespass. Bergman v. Holden, 118 Or App 530, 848 P2d 141 (1993), as modified by 122 Or App 257, 857 P2d 217 (1993)
+
+"Casual or involuntary" trespass does not require showing of negligence. Wyatt v. Sweitz, 146 Or App 723, 934 P2d 544 (1997)
+
+Term "trespass" refers to unauthorized injury to or severance of produce or timber. Simington Gardens, LLC v. Rock Ridge Farms, LLC, 308 Or App 661, 481 P3d 396 (2021)
+
+LAW REVIEW CITATIONS: 36 WLR 401 (2000)
+
+105.825
+
+NOTES OF DECISIONS
+
+A remainderperson is entitled to no share of the proceeds from a loss where the life tenant procured insurance in own name and paid premiums from own funds. Morris v. Morris, Ore. Mut. Ins., 274 Or 127, 544 P2d 1034 (1976)
+
+105.855
+
+NOTES OF DECISIONS
+
+Contravening methods of determining difference in fair market value of property may be presented to, and decided upon by, trier of fact. Tri-Met v. Posh Ventures, LLC, 244 Or App 425, 261 P3d 33 (2011)
+
+City's or mass transit district's restriction of street traffic lane does not constitute compensable taking of property under Article I, section 18 of Oregon Constitution. Tri-Met v. Posh Ventures, LLC, 244 Or App 425, 261 P3d 33 (2011)
+
+105.880 to 105.895
+
+LAW REVIEW CITATIONS: 16 WLR 303 (1979)
+
+105.920
+
+NOTES OF DECISIONS
+
+Where transfer of stock to "joint tenants" was made prior to enactment of this section, former ORS 93.180 governed, and designation was not sufficient to establish right of survivorship in absence of express declaration. Sautter v. Coffey, 283 Or 303, 584 P2d 245 (1978)
+
+In enacting this section in 1975, legislature did not intend to bar creation of form of joint tenancy in personal property with right of survivorship that previously existed in Oregon; statute does not provide that form of ownership authorized is exclusive. Gilbert v. Brown, 71 Or App 809, 693 P2d 1330 (1984), Sup Ct review denied
+
+There must be transfer or bequest to create joint tenancy, and inter vivos gift requires delivery in some form during donor's lifetime as objective manifestation of donative intent. Estate of Leda Mae Grove v. Selken, 109 Or App 668, 820 P2d 895 (1991), Sup Ct review denied
+
+Creation of joint tenancy by "written instrument" does not require signed writing by parties creating tenancy. Estate of James Wyburn Tressel v. Tressel, 162 Or App 188, 986 P2d 72 (1999)
+
+105.970
+
+NOTES OF DECISIONS
+
+Reformation of deed under this section is discretionary decision for court. Kerr v. Bauer, 278 Or App 224, 373 P3d 1263 (2016)
