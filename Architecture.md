@@ -90,16 +90,21 @@ backend/
 │   ├── generate_conversation/          # Source data for synthetic conversation generation
 │   └── documents/                      # Source legal documents
 │       └── or/                         # Oregon state laws
-│           ├── OAR54.txt               # Oregon Administrative Rules
-│           ├── ORS090.txt              # Oregon Revised Statutes
-│           ├── ORS091.txt
-│           ├── ORS105.txt
-│           ├── ORS109.txt
-│           ├── ORS659A.txt
-│           ├── portland/               # Portland city codes
-│           │   └── PCC30.01.txt
-│           └── eugene/                 # Eugene city codes
-│               └── EHC8.425.txt
+│           ├── 2024/                       # 2024 editions
+│           │   ├── OAR411-54.txt           # Oregon Administrative Rules ch.411 div.54
+│           │   └── ORS090_annotations.txt  # ORS ch.90 annotations
+│           ├── 2025/                       # 2025 editions
+│           │   ├── ORS090.txt              # Oregon Revised Statutes ch.90
+│           │   ├── ORS091.txt
+│           │   ├── ORS105.txt
+│           │   ├── ORS109-697.txt
+│           │   └── ORS659A-421.txt
+│           ├── portland/                   # Portland city codes
+│           │   └── 2025/
+│           │       └── PCC30-01.txt
+│           └── eugene/                     # Eugene city codes
+│               └── 2025/
+│                   └── EHC8-425.txt
 ├── tests/                              # Test suite
 ├── langgraph.json                      # LangGraph deployment manifest (for langgraph dev and LangSmith Cloud)
 ├── pyproject.toml                      # Python dependencies and config
@@ -165,13 +170,16 @@ graph LR
 
 **Data Ingestion Process:**
 
-1. **Document Collection**: Legal documents are stored as text files organized by jurisdiction:
-   - State laws: `documents/or/*.txt`
-   - City codes: `documents/or/portland/*.txt`, `documents/or/eugene/*.txt`
+1. **Document Collection**: Legal documents are stored as pure-ASCII text files organized by jurisdiction and year:
+   - State laws: `documents/or/<year>/*.txt` (e.g. `documents/or/2025/ORS090.txt`)
+   - City codes: `documents/or/<city>/<year>/*.txt` (e.g. `documents/or/portland/2025/PCC30-01.txt`)
+   - All `.txt` files must be pure ASCII — see `.claude/CLAUDE.md` for the enforcement rule and `make generate-metadata` for the gate that rejects non-ASCII files before upload.
 
-2. **Vector Store Creation**: :construction: The corpus was set up via a one-time script that is no longer in the repository. Documents are processed by directory structure, tagged with city/state metadata, and uploaded to the Vertex AI RAG corpus with UTF-8 encoding.
+2. **Metadata Generation**: `backend/scripts/generate_metadata_jsonl.py` walks the document tree, infers jurisdiction from the directory structure, and writes `metadata.jsonl` mapping each file to its GCS URI. Run via `make generate-metadata` (requires `GCS_BUCKET_NAME` in the environment). Selective runs (`LOC_OPTIONS="--portland"`) overwrite the file with entries for that scope only.
 
-3. **Metadata Attribution**: Documents are tagged with jurisdiction metadata to enable location-specific queries
+3. **Vector Store Creation**: Documents and the generated `metadata.jsonl` are uploaded flat to a GCS bucket, then ingested into a Vertex AI RAG corpus. City/state metadata enables jurisdiction-filtered retrieval.
+
+4. **Metadata Attribution**: Documents are tagged with jurisdiction metadata to enable location-specific queries
 
 #### Query Pipeline
 

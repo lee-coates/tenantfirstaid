@@ -75,6 +75,42 @@ npm run test -- --run --coverage  # With coverage
 
 - Write comments as full sentences and end them with a period.
 
+## Document files (`backend/scripts/documents/`)
+
+All `.txt` law documents must be **pure ASCII**. Vertex AI RAG ingestion has produced mojibake when UTF-8 is present. Before adding or modifying any `.txt` file in this directory, verify with:
+
+```bash
+LC_ALL=C grep -n '[^[:print:][:space:]]' path/to/file.txt  # must produce no output
+```
+
+Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `backend/scripts/generate_metadata_jsonl.py` for the full list):
+
+| Character | Unicode | Replace with |
+|---|---|---|
+| `'` | U+2019 right single quote | `'` |
+| `"` `"` | U+201C/U+201D double quotes | `"` |
+| `§` | U+00A7 section sign | `Section ` |
+| `§§` | U+00A7 U+00A7 | `Sections ` |
+| `—` | U+2014 em dash | `--` |
+| `–` | U+2013 en dash | `-` |
+| `•` | U+2022 bullet | `-` |
+
+`make generate-metadata` auto-converts all known offenders in place and warns with a suggested replacement for any it cannot handle.
+
+### Publication cadence
+
+Oregon publishes statutes and annotations on offset biennial cycles, which is why statutes and annotations live in different year subfolders:
+
+- **Statutes** (`ORS*.txt`, `OAR*.txt`) — published in odd years after each long legislative session. See the [current edition](https://www.oregonlegislature.gov/bills_laws/pages/ors.aspx).
+- **Annotations** (`ORS*_annotations.txt`) — published in the fall of each even-numbered year as a Cumulative Supplement. See the [current edition](https://www.oregonlegislature.gov/bills_laws/Pages/Annotations.aspx).
+
+Statute and annotation chapter pages are accessible at predictable URLs that aren't directly enumerated from the landing pages (which route through PDFs and SharePoint volume groupings):
+
+- Statutes: `https://www.oregonlegislature.gov/bills_laws/ors/orsNNN.html`
+- Annotations: `https://www.oregonlegislature.gov/bills_laws/ors/anoNNN.html`
+
+`NNN` is the three-digit zero-padded chapter number, with lowercase letter suffix for sub-chapters. Examples: chapter 90 → `ors090.html` / `ano090.html`; chapter 659A → `ors659a.html` / `ano659a.html`.
+
 ## Commit messages
 
 Concise, imperative mood, small focused commits. Write like a humble experienced engineer — casual, no listicles, highlight non-obvious choices. No robot speak, marketing buzzwords, or vague fluff.
