@@ -83,7 +83,7 @@ All `.txt` law documents must be **pure ASCII**. Vertex AI RAG ingestion has pro
 LC_ALL=C grep -n '[^[:print:][:space:]]' path/to/file.txt  # must produce no output
 ```
 
-Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `backend/scripts/generate_metadata_jsonl.py` for the full list):
+Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `backend/scripts/enforce_ascii.py` for the full list):
 
 | Character | Unicode | Replace with |
 |---|---|---|
@@ -95,7 +95,27 @@ Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `back
 | `–` | U+2013 en dash | `-` |
 | `•` | U+2022 bullet | `-` |
 
-`make generate-metadata` auto-converts all known offenders in place and warns with a suggested replacement for any it cannot handle.
+`make enforce-ascii` walks the tree and applies known replacements in place. `make generate-metadata` runs the same pass before building metadata.jsonl. Both warn with a suggested replacement for any character they cannot handle.
+
+### RAG ingestion pipeline (`backend/scripts/`)
+
+The RAG datastore is rebuilt by uploading the documents tree and a generated `metadata.jsonl` to a fresh GCS bucket. The three scripts are split so each step is independently runnable:
+
+```bash
+# 1. (Optional) Validate ASCII without touching files; useful in CI.
+make enforce-ascii ASCII_OPTIONS=--check
+
+# 2. Generate metadata.jsonl. Runs ASCII enforcement as a side effect.
+make generate-metadata GCS_BUCKET_NAME=my-bucket
+
+# 3. Create a new GCS bucket (fails if it already exists) and upload everything
+#    referenced by metadata.jsonl, plus metadata.jsonl itself.
+make upload-to-gcs GCS_BUCKET_NAME=my-bucket
+make upload-to-gcs GCS_BUCKET_NAME=my-bucket LOCATION=us-central1
+make upload-to-gcs GCS_BUCKET_NAME=my-bucket UPLOAD_OPTIONS=--dry-run
+```
+
+`upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. Datastore creation in Vertex AI Search is still a manual step in the GCP console.
 
 ### Publication cadence
 

@@ -1,6 +1,6 @@
 PYTHON := uv
 PIP := $(PYTHON) pip
-.PHONY: all install test clean check generate-types generate-metadata
+.PHONY: all install test clean check generate-types generate-metadata enforce-ascii upload-to-gcs
 
 all: check
 
@@ -51,6 +51,23 @@ ifeq ($(strip $(GCS_BUCKET_NAME)),)
 	$(error GCS_BUCKET_NAME is required: make generate-metadata GCS_BUCKET_NAME=my-bucket)
 endif
 	$(PYTHON) run python -m scripts.generate_metadata_jsonl --bucket $(GCS_BUCKET_NAME) $(LOC_OPTIONS)
+
+# Validate and rewrite the documents tree to pure ASCII. Pass ASCII_OPTIONS="--check"
+# to validate without rewriting (suitable for CI).
+enforce-ascii: uv.lock
+	$(PYTHON) run python -m scripts.enforce_ascii $(ASCII_OPTIONS)
+
+# Create a new GCS bucket (fails if it already exists) and upload every file
+# referenced by metadata.jsonl plus metadata.jsonl itself. The default location
+# lives in scripts/upload_to_gcs.py; LOCATION overrides it when set.
+#   make upload-to-gcs GCS_BUCKET_NAME=my-bucket
+#   make upload-to-gcs GCS_BUCKET_NAME=my-bucket LOCATION=us-central1
+#   make upload-to-gcs GCS_BUCKET_NAME=my-bucket UPLOAD_OPTIONS="--dry-run"
+upload-to-gcs: uv.lock
+ifeq ($(strip $(GCS_BUCKET_NAME)),)
+	$(error GCS_BUCKET_NAME is required: make upload-to-gcs GCS_BUCKET_NAME=my-bucket)
+endif
+	$(PYTHON) run python -m scripts.upload_to_gcs --bucket $(GCS_BUCKET_NAME) $(if $(LOCATION),--location $(LOCATION)) $(UPLOAD_OPTIONS)
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

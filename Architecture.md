@@ -173,13 +173,13 @@ graph LR
 1. **Document Collection**: Legal documents are stored as pure-ASCII text files organized by jurisdiction and year:
    - State laws: `documents/or/<year>/*.txt` (e.g. `documents/or/2025/ORS090.txt`)
    - City codes: `documents/or/<city>/<year>/*.txt` (e.g. `documents/or/portland/2025/PCC30-01.txt`)
-   - All `.txt` files must be pure ASCII — see `.claude/CLAUDE.md` for the enforcement rule and `make generate-metadata` for the gate that rejects non-ASCII files before upload.
+   - All `.txt` files must be pure ASCII — see `.claude/CLAUDE.md` for the enforcement rule. `make enforce-ascii` walks the tree and rewrites known offenders; `make generate-metadata` runs the same pass and rejects files it cannot fix.
 
 2. **Metadata Generation**: `backend/scripts/generate_metadata_jsonl.py` walks the document tree, infers jurisdiction from the directory structure, and writes `metadata.jsonl` mapping each file to its GCS URI. Run via `make generate-metadata` (requires `GCS_BUCKET_NAME` in the environment). Selective runs (`LOC_OPTIONS="--portland"`) overwrite the file with entries for that scope only.
 
-3. **Vector Store Creation**: Documents and the generated `metadata.jsonl` are uploaded flat to a GCS bucket, then ingested into a Vertex AI RAG corpus. City/state metadata enables jurisdiction-filtered retrieval.
+3. **Bucket Creation and Upload**: `backend/scripts/upload_to_gcs.py` creates a new GCS bucket (fails if it already exists, so each ingestion has a clean dedicated bucket) and uploads every file referenced by `metadata.jsonl` plus `metadata.jsonl` itself, flat at the bucket root. Run via `make upload-to-gcs GCS_BUCKET_NAME=<bucket>`; pass `LOCATION=<region>` to override the default `US` multi-region, or `UPLOAD_OPTIONS=--dry-run` to preview without calling GCS.
 
-4. **Metadata Attribution**: Documents are tagged with jurisdiction metadata to enable location-specific queries
+4. **Vector Store Creation**: Once the bucket is populated, a Vertex AI Search datastore is created (still manual in the GCP console) pointing at the bucket; ingestion reads `metadata.jsonl` to attach city/state metadata to each document, enabling jurisdiction-filtered retrieval.
 
 #### Query Pipeline
 
