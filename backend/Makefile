@@ -1,6 +1,6 @@
 PYTHON := uv
 PIP := $(PYTHON) pip
-.PHONY: all install test clean check generate-types generate-metadata enforce-ascii upload-to-gcs
+.PHONY: all install test clean check generate-types generate-metadata enforce-ascii upload-to-gcs create-datastore-gcs create-app-gcs
 
 all: check
 
@@ -68,6 +68,34 @@ ifeq ($(strip $(GCS_BUCKET_NAME)),)
 	$(error GCS_BUCKET_NAME is required: make upload-to-gcs GCS_BUCKET_NAME=my-bucket)
 endif
 	$(PYTHON) run python -m scripts.upload_to_gcs --bucket $(GCS_BUCKET_NAME) $(if $(LOCATION),--location $(LOCATION)) $(UPLOAD_OPTIONS)
+
+# Create a Vertex AI Search datastore and import documents from a GCS bucket.
+# Requires GCS_BUCKET_NAME (must match the bucket used with upload-to-gcs) and DATASTORE_NAME.
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds LOCATION=us
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds DATASTORE_OPTIONS="--no-wait"
+create-datastore-gcs: uv.lock
+ifeq ($(strip $(GCS_BUCKET_NAME)),)
+	$(error GCS_BUCKET_NAME is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds)
+endif
+ifeq ($(strip $(DATASTORE_NAME)),)
+	$(error DATASTORE_NAME is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds)
+endif
+	$(PYTHON) run python -m scripts.create_datastore_gcs --bucket $(GCS_BUCKET_NAME) --datastore-name $(DATASTORE_NAME) $(if $(LOCATION),--location $(LOCATION)) $(DATASTORE_OPTIONS)
+
+# Create a Vertex AI Search app and link it to an existing datastore.
+# Requires DATASTORE_ID (from create-datastore-gcs output) and APP_NAME.
+#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
+#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
+#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS="--dry-run"
+create-app-gcs: uv.lock
+ifeq ($(strip $(DATASTORE_ID)),)
+	$(error DATASTORE_ID is required: make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app)
+endif
+ifeq ($(strip $(APP_NAME)),)
+	$(error APP_NAME is required: make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app)
+endif
+	$(PYTHON) run python -m scripts.create_app_gcs --datastore-id $(DATASTORE_ID) --app-name $(APP_NAME) $(if $(LOCATION),--location $(LOCATION)) $(APP_OPTIONS)
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

@@ -99,7 +99,7 @@ Common offenders and their ASCII replacements (see `ASCII_REPLACEMENTS` in `back
 
 ### RAG ingestion pipeline (`backend/scripts/`)
 
-The RAG datastore is rebuilt by uploading the documents tree and a generated `metadata.jsonl` to a fresh GCS bucket. The three scripts are split so each step is independently runnable:
+The RAG datastore is rebuilt by uploading the documents tree and a generated `metadata.jsonl` to a fresh GCS bucket, then creating a new Vertex AI Search datastore from that bucket. The four scripts are split so each step is independently runnable:
 
 ```bash
 # 1. (Optional) Validate ASCII without touching files; useful in CI.
@@ -113,9 +113,21 @@ make generate-metadata GCS_BUCKET_NAME=my-bucket
 make upload-to-gcs GCS_BUCKET_NAME=my-bucket
 make upload-to-gcs GCS_BUCKET_NAME=my-bucket LOCATION=us-central1
 make upload-to-gcs GCS_BUCKET_NAME=my-bucket UPLOAD_OPTIONS=--dry-run
+
+# 4. Create a Vertex AI Search datastore and import documents from the bucket.
+#    Polls until the import finishes; pass DATASTORE_OPTIONS=--no-wait to skip.
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds LOCATION=us
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds DATASTORE_OPTIONS=--dry-run
+
+# 5. Create a Vertex AI Search app and link it to the datastore.
+#    Use the datastore ID printed by step 4 as DATASTORE_ID.
+make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
+make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
+make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS=--dry-run
 ```
 
-`upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. Datastore creation in Vertex AI Search is still a manual step in the GCP console.
+`upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. `create-datastore-gcs` additionally requires `discoveryengine.datastores.create` and `discoveryengine.documents.import` permissions. `create-app-gcs` additionally requires `discoveryengine.engines.create`. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.
 
 ### Publication cadence
 

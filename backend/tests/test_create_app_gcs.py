@@ -1,0 +1,125 @@
+"""Tests for scripts.create_app_gcs."""
+
+from unittest.mock import MagicMock, patch
+
+import pytest
+from google.api_core import exceptions as gcp_exceptions
+
+from scripts.create_app_gcs import (
+    AppError,
+    _collection_path,
+    _engine_path,
+    create_app,
+    main,
+)
+
+
+class TestPathHelpers:
+    def test_collection_path(self):
+        assert _collection_path("my-project", "global") == (
+            "projects/my-project/locations/global/collections/default_collection"
+        )
+
+    def test_engine_path(self):
+        assert _engine_path("my-project", "global", "my-app") == (
+            "projects/my-project/locations/global/collections/default_collection"
+            "/engines/my-app"
+        )
+
+
+class TestCreateApp:
+    def _make_client(
+        self,
+        engine_name: str = "projects/p/locations/global/collections/default_collection/engines/my-app",
+    ):
+        client = MagicMock()
+        operation = MagicMock()
+        operation.result.return_value = MagicMock(name=engine_name)
+        client.create_engine.return_value = operation
+        return client
+
+    def test_creates_and_returns_engine(self):
+        client = self._make_client()
+
+        result = create_app(client, "my-project", "global", "my-app", "My App", "my-ds")
+
+        client.create_engine.assert_called_once()
+        request = client.create_engine.call_args.kwargs["request"]
+        assert request.engine_id == "my-app"
+        assert request.engine.display_name == "My App"
+        assert request.engine.data_store_ids == ["my-ds"]
+        assert request.parent == _collection_path("my-project", "global")
+        assert result is client.create_engine.return_value.result.return_value
+
+    def test_already_exists_raises_app_error(self):
+        client = MagicMock()
+        client.create_engine.side_effect = gcp_exceptions.AlreadyExists("exists")
+
+        with pytest.raises(AppError, match="already exists"):
+            create_app(client, "my-project", "global", "my-app", "My App", "my-ds")
+
+
+class TestMain:
+    _ARGV_BASE = ["create_app_gcs", "--datastore-id", "my-ds", "--app-name", "my-app"]
+
+    def _patch_singleton(self):
+        singleton = MagicMock()
+        singleton.GOOGLE_CLOUD_PROJECT = "my-project"
+        singleton.GOOGLE_APPLICATION_CREDENTIALS = "/fake/creds.json"
+        return patch("scripts.create_app_gcs.SINGLETON", singleton)
+
+    def test_dry_run_does_not_call_api(self, capsys):
+        with (
+            self._patch_singleton(),
+            patch(
+                "scripts.create_app_gcs.discoveryengine.EngineServiceClient"
+            ) as eng_cls,
+            patch("sys.argv", [*self._ARGV_BASE, "--dry-run"]),
+        ):
+            main()
+
+        eng_cls.assert_not_called()
+        assert "[dry-run]" in capsys.readouterr().out
+
+    def test_happy_path_creates_app(self, capsys):
+        engine_client = MagicMock()
+        created_engine = MagicMock()
+        created_engine.name = (
+            "projects/my-project/locations/global"
+            "/collections/default_collection/engines/my-app"
+        )
+        operation = MagicMock()
+        operation.result.return_value = created_engine
+        engine_client.create_engine.return_value = operation
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_app_gcs.load_gcp_credentials"),
+            patch(
+                "scripts.create_app_gcs.discoveryengine.EngineServiceClient",
+                return_value=engine_client,
+            ),
+            patch("sys.argv", self._ARGV_BASE),
+        ):
+            main()
+
+        engine_client.create_engine.assert_called_once()
+        out = capsys.readouterr().out
+        assert "my-app" in out
+        assert "VERTEX_AI_DATASTORE_LAWS=my-ds" in out
+
+    def test_already_exists_raises_app_error(self):
+        engine_client = MagicMock()
+        engine_client.create_engine.side_effect = gcp_exceptions.AlreadyExists("exists")
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_app_gcs.load_gcp_credentials"),
+            patch(
+                "scripts.create_app_gcs.discoveryengine.EngineServiceClient",
+                return_value=engine_client,
+            ),
+            patch("sys.argv", self._ARGV_BASE),
+        ):
+            with pytest.raises(AppError, match="already exists"):
+                main()
