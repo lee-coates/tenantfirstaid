@@ -17,8 +17,8 @@ from typing import cast
 from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
-from tenantfirstaid.constants import SINGLETON
 from scripts.shared import validate_resource_name
+from tenantfirstaid.constants import SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
     load_gcp_credentials,
