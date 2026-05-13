@@ -1,0 +1,15 @@
+"""Shared utilities for the GCS and Vertex AI Search scripts."""
+
+import argparse
+import re
+
+_NAME_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]{0,62}$")
+
+
+def validate_resource_name(value: str) -> str:
+    if not _NAME_PATTERN.match(value):
+        raise argparse.ArgumentTypeError(
+            f"{value!r} is not a valid resource name. "
+            "Use lowercase letters, digits, and hyphens only (1-63 chars)."
+        )
+    return value

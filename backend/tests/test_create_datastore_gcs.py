@@ -13,6 +13,7 @@ from scripts.create_datastore_gcs import (
     _datastore_path,
     check_bucket_location_compat,
     create_datastore,
+    delete_datastore,
     import_documents,
     main,
 )
@@ -181,6 +182,20 @@ class TestImportDocuments:
         assert request.gcs_source.data_schema == GCS_DATA_SCHEMA
 
 
+class TestDeleteDatastore:
+    def test_calls_delete_and_waits(self):
+        client = MagicMock()
+        operation = MagicMock()
+        client.delete_data_store.return_value = operation
+
+        delete_datastore(client, "projects/p/locations/global/.../dataStores/my-ds")
+
+        client.delete_data_store.assert_called_once()
+        request = client.delete_data_store.call_args.kwargs["request"]
+        assert request.name == "projects/p/locations/global/.../dataStores/my-ds"
+        operation.result.assert_called_once()
+
+
 class TestMain:
     _ARGV_BASE = [
         "create_datastore_gcs",
@@ -294,3 +309,74 @@ class TestMain:
         ):
             with pytest.raises(DatastoreError, match="already exists"):
                 main()
+
+    def test_import_failure_rolls_back_datastore(self):
+        ds_client = MagicMock()
+        doc_client = MagicMock()
+
+        created_ds = MagicMock()
+        created_ds.name = (
+            "projects/my-project/locations/global/collections/default_collection"
+            "/dataStores/my-ds"
+        )
+        ds_operation = MagicMock()
+        ds_operation.result.return_value = created_ds
+        ds_client.create_data_store.return_value = ds_operation
+
+        doc_client.import_documents.side_effect = RuntimeError("network timeout")
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
+                return_value=ds_client,
+            ),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
+                return_value=doc_client,
+            ),
+            patch("sys.argv", self._ARGV_BASE),
+        ):
+            with pytest.raises(DatastoreError, match="Import failed"):
+                main()
+
+        ds_client.delete_data_store.assert_called_once()
+
+    def test_import_failure_with_cleanup_error_reports_manual_step(self, capsys):
+        ds_client = MagicMock()
+        doc_client = MagicMock()
+
+        created_ds = MagicMock()
+        created_ds.name = (
+            "projects/my-project/locations/global/collections/default_collection"
+            "/dataStores/my-ds"
+        )
+        ds_operation = MagicMock()
+        ds_operation.result.return_value = created_ds
+        ds_client.create_data_store.return_value = ds_operation
+        ds_client.delete_data_store.side_effect = RuntimeError("permission denied")
+
+        doc_client.import_documents.side_effect = RuntimeError("network timeout")
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
+                return_value=ds_client,
+            ),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
+                return_value=doc_client,
+            ),
+            patch("sys.argv", self._ARGV_BASE),
+        ):
+            with pytest.raises(DatastoreError, match="Import failed"):
+                main()
+
+        err = capsys.readouterr().err
+        assert "Rollback failed" in err
+        assert created_ds.name in err

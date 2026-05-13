@@ -26,12 +26,13 @@ from google.cloud import discoveryengine_v1 as discoveryengine
 from google.cloud import storage
 
 from tenantfirstaid.constants import SINGLETON
+from scripts.shared import validate_resource_name
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
     load_gcp_credentials,
 )
 
-DEFAULT_LOCATION = "global"
+DEFAULT_LOCATION = "us"
 METADATA_OBJECT_NAME = "metadata.jsonl"
 # The Discovery Engine document schema for metadata.jsonl entries that are full
 # Document protos (produced by generate_metadata_jsonl.py). Other valid values
@@ -66,7 +67,7 @@ def check_bucket_location_compat(
     EU/European-region buckets. 'global' accepts any region.
     """
     bucket = storage_client.get_bucket(bucket_name)
-    bucket_location = bucket.location.upper()
+    bucket_location = (bucket.location or "").upper()
     ds_location = datastore_location.lower()
 
     if ds_location == "us":
@@ -159,6 +160,16 @@ def import_documents(
             print(f"  - {err.message}")
 
 
+def delete_datastore(
+    client: discoveryengine.DataStoreServiceClient,
+    datastore_name: str,
+) -> None:
+    """Delete a datastore by its full resource name. Used for rollback on import failure."""
+    request = discoveryengine.DeleteDataStoreRequest(name=datastore_name)
+    operation = client.delete_data_store(request=request)
+    operation.result()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -171,6 +182,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--datastore-name",
         required=True,
+        type=validate_resource_name,
         help="Name for the new datastore. Lowercase letters, digits, hyphens (1-63 chars). You choose this; it becomes the resource ID.",
     )
     parser.add_argument(
@@ -190,7 +202,8 @@ def parse_args() -> argparse.Namespace:
         "--no-wait",
         dest="wait",
         action="store_false",
-        help="Return as soon as the import is queued instead of polling to completion.",
+        help="Return as soon as the import is queued instead of polling to completion. "
+        "If the import fails asynchronously, the datastore must be manually deleted before re-running.",
     )
     parser.add_argument(
         "--dry-run",
@@ -234,14 +247,30 @@ def main() -> None:
     document_client = discoveryengine.DocumentServiceClient(
         credentials=credentials, client_options=client_options
     )
-    import_documents(
-        document_client,
-        project,
-        args.location,
-        datastore_id,
-        args.bucket,
-        wait=args.wait,
-    )
+    try:
+        import_documents(
+            document_client,
+            project,
+            args.location,
+            datastore_id,
+            args.bucket,
+            wait=args.wait,
+        )
+    except Exception as e:
+        print(
+            f"Import failed; rolling back by deleting {created.name!r}...",
+            file=sys.stderr,
+        )
+        try:
+            delete_datastore(datastore_client, created.name)
+            print("Rollback succeeded.", file=sys.stderr)
+        except Exception as cleanup_err:
+            print(
+                f"Rollback failed: {cleanup_err}\n"
+                f"You may need to manually delete: {created.name}",
+                file=sys.stderr,
+            )
+        raise DatastoreError(f"Import failed: {e}") from e
     console_url = (
         f"https://console.cloud.google.com/gen-app-builder/locations/{args.location}"
         f"/collections/default_collection/data-stores/{datastore_id}"

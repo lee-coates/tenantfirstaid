@@ -18,12 +18,13 @@ from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
 from tenantfirstaid.constants import SINGLETON
+from scripts.shared import validate_resource_name
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
     load_gcp_credentials,
 )
 
-DEFAULT_LOCATION = "global"
+DEFAULT_LOCATION = "us"
 
 
 class AppError(RuntimeError):
@@ -53,6 +54,8 @@ def create_app(
         solution_type=discoveryengine.SolutionType.SOLUTION_TYPE_SEARCH,
         data_store_ids=[datastore_id],
         search_engine_config=discoveryengine.Engine.SearchEngineConfig(
+            # Standard is sufficient for keyword + semantic search; upgrade to Enterprise
+            # if advanced LLM features are needed.
             search_tier=discoveryengine.SearchTier.SEARCH_TIER_STANDARD,
         ),
     )
@@ -84,6 +87,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--app-name",
         required=True,
+        type=validate_resource_name,
         help="Name for the new Search app. Lowercase letters, digits, hyphens (1-63 chars). You choose this.",
     )
     parser.add_argument(
