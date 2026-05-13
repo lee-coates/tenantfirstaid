@@ -34,7 +34,9 @@ class TestCreateApp:
     ):
         client = MagicMock()
         operation = MagicMock()
-        operation.result.return_value = MagicMock(name=engine_name)
+        result = MagicMock()
+        result.name = engine_name
+        operation.result.return_value = result
         client.create_engine.return_value = operation
         return client
 

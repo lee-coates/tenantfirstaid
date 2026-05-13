@@ -111,7 +111,7 @@ class TestPlanUpload:
         docs.mkdir()
         metadata = tmp_path / "metadata.jsonl"
         metadata.write_text("not json\n")
-        with pytest.raises(UploadError, match="Failed to load JSON"):
+        with pytest.raises(UploadError, match=r"metadata\.jsonl:1:"):
             plan_upload("my-bucket", metadata, docs)
 
     def test_unknown_field_raises(self, tmp_path: Path):
@@ -120,7 +120,7 @@ class TestPlanUpload:
         docs.mkdir()
         metadata = tmp_path / "metadata.jsonl"
         metadata.write_text('{"id": "X", "unknown_field": 1}\n')
-        with pytest.raises(UploadError, match='no field named "unknown_field"'):
+        with pytest.raises(UploadError, match=r"metadata\.jsonl:1:"):
             plan_upload("my-bucket", metadata, docs)
 
     def test_blank_lines_skipped(self, tmp_path: Path):

@@ -102,17 +102,14 @@ def enforce_ascii(path: Path) -> str | None:
     Raises InvalidUtf8Error or UnrecognizedAsciiError on failure.
     """
     try:
-        path.read_text(encoding="ascii")
-        return None
-    except UnicodeDecodeError:
-        pass
-
-    try:
         text = path.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
+    except UnicodeDecodeError as e:
         raise InvalidUtf8Error(
             f"{path.name}: file is not valid UTF-8 -- re-save as UTF-8 before running."
-        )
+        ) from e
+
+    if text.isascii():
+        return None
 
     text = _apply_ascii_replacements(text)
 

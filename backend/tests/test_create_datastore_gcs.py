@@ -11,6 +11,7 @@ from scripts.create_datastore_gcs import (
     _branch_path,
     _collection_path,
     _datastore_path,
+    check_bucket_location_compat,
     create_datastore,
     import_documents,
     main,
@@ -36,6 +37,56 @@ class TestPathHelpers:
         )
 
 
+class TestCheckBucketLocationCompat:
+    def _make_client(self, bucket_location: str) -> MagicMock:
+        client = MagicMock()
+        bucket = MagicMock()
+        bucket.location = bucket_location
+        client.get_bucket.return_value = bucket
+        return client
+
+    @pytest.mark.parametrize(
+        "bucket_location,datastore_location",
+        [
+            ("US", "global"),
+            ("EU", "global"),
+            ("US-CENTRAL1", "global"),
+            ("US", "us"),
+            ("US-EAST1", "us"),
+            ("EU", "eu"),
+            ("EUROPE-WEST1", "eu"),
+            ("EU-WEST1", "eu"),
+        ],
+    )
+    def test_compatible_pairs_do_not_raise(self, bucket_location, datastore_location):
+        client = self._make_client(bucket_location)
+        check_bucket_location_compat(client, "my-bucket", datastore_location)
+
+    @pytest.mark.parametrize(
+        "bucket_location,datastore_location",
+        [
+            ("EU", "us"),
+            ("EUROPE-WEST1", "us"),
+            ("US", "eu"),
+            ("US-CENTRAL1", "eu"),
+        ],
+    )
+    def test_incompatible_pairs_raise_datastore_error(
+        self, bucket_location, datastore_location
+    ):
+        client = self._make_client(bucket_location)
+        with pytest.raises(DatastoreError, match="incompatible"):
+            check_bucket_location_compat(client, "my-bucket", datastore_location)
+
+    def test_error_message_includes_bucket_name_and_locations(self):
+        client = self._make_client("EU")
+        with pytest.raises(DatastoreError) as exc_info:
+            check_bucket_location_compat(client, "my-bucket", "us")
+        assert "my-bucket" in str(exc_info.value)
+        assert "EU" in str(exc_info.value)
+        assert "us" in str(exc_info.value)
+
+
 class TestCreateDatastore:
     def _make_client(
         self,
@@ -43,7 +94,9 @@ class TestCreateDatastore:
     ):
         client = MagicMock()
         operation = MagicMock()
-        operation.result.return_value = MagicMock(name=datastore_name)
+        result = MagicMock()
+        result.name = datastore_name
+        operation.result.return_value = result
         client.create_data_store.return_value = operation
         return client
 
@@ -143,6 +196,16 @@ class TestMain:
         singleton.GOOGLE_APPLICATION_CREDENTIALS = "/fake/creds.json"
         return patch("scripts.create_datastore_gcs.SINGLETON", singleton)
 
+    def _patch_storage_client(self, bucket_location: str = "US"):
+        storage_client = MagicMock()
+        bucket = MagicMock()
+        bucket.location = bucket_location
+        storage_client.get_bucket.return_value = bucket
+        return patch(
+            "scripts.create_datastore_gcs.storage.Client",
+            return_value=storage_client,
+        )
+
     def test_dry_run_does_not_call_api(self, capsys):
         with (
             self._patch_singleton(),
@@ -179,6 +242,7 @@ class TestMain:
         with (
             self._patch_singleton(),
             patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(),
             patch(
                 "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
                 return_value=ds_client,
@@ -194,6 +258,25 @@ class TestMain:
         ds_client.create_data_store.assert_called_once()
         doc_client.import_documents.assert_called_once()
 
+    def test_incompatible_bucket_location_raises_before_api_calls(self):
+        ds_client = MagicMock()
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(bucket_location="EU"),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
+                return_value=ds_client,
+            ),
+            patch("scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient"),
+            patch("sys.argv", [*self._ARGV_BASE, "--location", "us"]),
+        ):
+            with pytest.raises(DatastoreError, match="incompatible"):
+                main()
+
+        ds_client.create_data_store.assert_not_called()
+
     def test_already_exists_raises_datastore_error(self):
         ds_client = MagicMock()
         ds_client.create_data_store.side_effect = gcp_exceptions.AlreadyExists("exists")
@@ -201,6 +284,7 @@ class TestMain:
         with (
             self._patch_singleton(),
             patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(),
             patch(
                 "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
                 return_value=ds_client,

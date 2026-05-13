@@ -23,6 +23,7 @@ from typing import cast
 
 from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
+from google.cloud import storage
 
 from tenantfirstaid.constants import SINGLETON
 from tenantfirstaid.google_auth import (
@@ -52,6 +53,39 @@ def _datastore_path(project: str, location: str, datastore_id: str) -> str:
 
 def _branch_path(project: str, location: str, datastore_id: str) -> str:
     return f"{_datastore_path(project, location, datastore_id)}/branches/default_branch"
+
+
+def check_bucket_location_compat(
+    storage_client: storage.Client,
+    bucket_name: str,
+    datastore_location: str,
+) -> None:
+    """Fail early if the bucket's region is incompatible with the datastore location.
+
+    Vertex AI Search 'us' only accepts US-region buckets; 'eu' only accepts
+    EU/European-region buckets. 'global' accepts any region.
+    """
+    bucket = storage_client.get_bucket(bucket_name)
+    bucket_location = bucket.location.upper()
+    ds_location = datastore_location.lower()
+
+    if ds_location == "us":
+        compatible = bucket_location == "US" or bucket_location.startswith("US-")
+    elif ds_location == "eu":
+        compatible = (
+            bucket_location == "EU"
+            or bucket_location.startswith("EU-")
+            or bucket_location.startswith("EUROPE-")
+        )
+    else:
+        return  # "global" and unrecognized locations carry no regional constraint.
+
+    if not compatible:
+        raise DatastoreError(
+            f"Bucket {bucket_name!r} is in region {bucket_location!r}, which is "
+            f"incompatible with datastore location {datastore_location!r}. "
+            "Use a matching region bucket, or pass --location global."
+        )
 
 
 def create_datastore(
@@ -182,6 +216,10 @@ def main() -> None:
         return
 
     credentials = load_gcp_credentials(SINGLETON.GOOGLE_APPLICATION_CREDENTIALS)
+
+    storage_client = storage.Client(credentials=credentials, project=project)
+    check_bucket_location_compat(storage_client, args.bucket, args.location)
+
     client_options = discoveryengine_client_options(args.location)
 
     datastore_client = discoveryengine.DataStoreServiceClient(
