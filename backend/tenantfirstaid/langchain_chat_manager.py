@@ -5,7 +5,6 @@ agent graph with per-session location context and streaming support.
 """
 
 import logging
-import sys
 from typing import Any, Dict, Generator, List, Optional, cast
 
 from langchain_core.messages import (
@@ -34,15 +33,9 @@ class LangChainChatManager:
     def __init__(self) -> None:
         """Initialize the LangChain chat manager."""
 
-        # configure logging
-        logging.basicConfig(
-            level=logging.WARNING,
-            stream=sys.stdout,
-            format="%(levelname)s: %(message)s (%(filename)s:%(lineno)d)",
-        )
-        self.logger = logging.getLogger("LangChainChatManager")
+        self.logger = logging.getLogger(__name__)
 
-        # defer agent instantiation until 'generate_stream_response'
+        # Defer agent instantiation until 'generate_stream_response'.
         self.agent = None
         self.system_prompt: Optional[SystemMessage] = None
 

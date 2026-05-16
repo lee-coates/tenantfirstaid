@@ -5,7 +5,6 @@ automated quality evaluation.
 """
 
 import argparse
-import logging
 from typing import Any, Dict, List, Optional
 
 from langchain_core.messages import HumanMessage
@@ -24,10 +23,7 @@ from evaluate.results_display import ScenarioResult, print_consistency_stats
 from tenantfirstaid.constants import LANGSMITH_API_KEY, SINGLETON
 from tenantfirstaid.langchain_chat_manager import LangChainChatManager
 from tenantfirstaid.location import OregonCity, UsaState
-
-# Suppress the noisy additionalProperties warning from langchain_google_vertexai
-# https://github.com/langchain-ai/langchain-google/issues/1038#issuecomment-3707773510
-logging.getLogger("langchain_google_vertexai.functions_utils").setLevel(logging.ERROR)
+from tenantfirstaid.logger import configure_logging
 
 
 def agent_wrapper(inputs) -> Dict[str, str]:
@@ -200,6 +196,17 @@ def run_evaluation(
 
 
 def main() -> None:
+    import logging
+
+    # Configure logging after constants was imported above so ENV from .env is honored.
+    configure_logging()
+
+    # Suppress the noisy additionalProperties warning from langchain_google_vertexai.
+    # https://github.com/langchain-ai/langchain-google/issues/1038#issuecomment-3707773510
+    logging.getLogger("langchain_google_vertexai.functions_utils").setLevel(
+        logging.ERROR
+    )
+
     parser = argparse.ArgumentParser(
         description="Run LangSmith evaluation",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
