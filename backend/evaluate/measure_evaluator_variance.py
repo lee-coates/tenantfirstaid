@@ -11,9 +11,9 @@ If σ_evaluator << σ_total, the noise is agent-side and more agent samples are
 the right fix. If σ_evaluator is comparable to σ_total, fix the judge first.
 
 Usage:
-    uv run python -m evaluate.measure_evaluator_variance --experiment <name>
-    uv run python -m evaluate.measure_evaluator_variance --experiment <name> -k 10
-    uv run python -m evaluate.measure_evaluator_variance --experiment <name> --runs-per-scenario 3
+    uv run measure-evaluator-variance --experiment <name>
+    uv run measure-evaluator-variance --experiment <name> -k 10
+    uv run measure-evaluator-variance --experiment <name> --runs-per-scenario 3
 """
 
 import argparse
@@ -261,7 +261,7 @@ def _per_run_sigmas_from_scenario(
     return sigmas
 
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Measure LLM judge variance on fixed agent outputs",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -310,3 +310,7 @@ if __name__ == "__main__":
         evaluator_names=args.evaluators,
         scenario_ids_filter=args.scenarios,
     )
+
+
+if __name__ == "__main__":
+    main()
