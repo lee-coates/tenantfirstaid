@@ -1,5 +1,8 @@
 # Automated Evaluation with LangSmith
 
+| 💡 Using Claude Code? Type `/evaluation` in the Claude Code UI for guided evaluation workflow assistance. |
+|---|
+
 ## What is this and why does it matter?
 
 The chatbot gives legal information to tenants. Getting that information wrong — citing the wrong statute, misstating a deadline, using a dismissive tone — has real consequences for real people. We need a systematic way to check quality, not just hope spot-checks catch problems.
@@ -152,7 +155,7 @@ All dataset operations go through `langsmith_dataset.py`. Commands below assume 
 ### Initial push (first-time or after local edits)
 
 ```bash
-uv run langsmith_dataset.py dataset push \
+uv run langsmith-dataset dataset push \
   dataset-tenant-legal-qa-examples.jsonl \
   tenant-legal-qa-scenarios
 ```
@@ -162,7 +165,7 @@ Creates the dataset in LangSmith if it doesn't exist, then uploads all examples.
 ### Pull after editing in the browser
 
 ```bash
-uv run langsmith_dataset.py dataset pull \
+uv run langsmith-dataset dataset pull \
   tenant-legal-qa-scenarios \
   dataset-tenant-legal-qa-examples.jsonl
 ```
@@ -172,7 +175,7 @@ Overwrites the local file with whatever is currently in LangSmith. Commit the re
 ### Validate the local file
 
 ```bash
-uv run langsmith_dataset.py dataset validate \
+uv run langsmith-dataset dataset validate \
   dataset-tenant-legal-qa-examples.jsonl
 ```
 
@@ -182,7 +185,7 @@ Checks every line against the schema before pushing, catching formatting mistake
 
 ```bash
 # Show which examples differ between the local file and LangSmith
-uv run langsmith_dataset.py dataset diff \
+uv run langsmith-dataset dataset diff \
   dataset-tenant-legal-qa-examples.jsonl \
   tenant-legal-qa-scenarios
 ```
@@ -222,7 +225,7 @@ Examples created through the LangSmith browser UI will not have a `scenario_id` 
 1. **Pull** the dataset to get the current state, including any UI-created examples:
 
    ```bash
-   uv run langsmith_dataset.py dataset pull \
+   uv run langsmith-dataset dataset pull \
      tenant-legal-qa-scenarios \
      dataset-tenant-legal-qa-examples.jsonl
    ```
@@ -243,14 +246,14 @@ Examples created through the LangSmith browser UI will not have a `scenario_id` 
 4. **Validate** the file:
 
    ```bash
-   uv run langsmith_dataset.py dataset validate \
+   uv run langsmith-dataset dataset validate \
      dataset-tenant-legal-qa-examples.jsonl
    ```
 
 5. **Push** to write the assigned IDs back to LangSmith:
 
    ```bash
-   uv run langsmith_dataset.py dataset push \
+   uv run langsmith-dataset dataset push \
      dataset-tenant-legal-qa-examples.jsonl \
      tenant-legal-qa-scenarios
    ```
@@ -263,14 +266,14 @@ Examples created through the LangSmith browser UI will not have a `scenario_id` 
 
 ```bash
 # List all examples (shows scenario_id, tags, and the first 80 characters of the question)
-uv run langsmith_dataset.py example list tenant-legal-qa-scenarios
+uv run langsmith-dataset example list tenant-legal-qa-scenarios
 
 # Append new examples from a JSONL file without touching existing ones
-uv run langsmith_dataset.py example append \
+uv run langsmith-dataset example append \
   tenant-legal-qa-scenarios new-examples.jsonl
 
 # Remove an example by its scenario_id
-uv run langsmith_dataset.py example remove \
+uv run langsmith-dataset example remove \
   tenant-legal-qa-scenarios 42
 ```
 
@@ -279,13 +282,13 @@ uv run langsmith_dataset.py example remove \
 ## Running evaluations
 
 ```bash
-cd backend/evaluate
+# Run from backend/
 
 # Run evaluation on the full dataset
-uv run run_langsmith_evaluation.py
+uv run run-langsmith-evaluation
 
 # Run with a custom experiment label (useful for comparing before/after a change)
-uv run run_langsmith_evaluation.py \
+uv run run-langsmith-evaluation \
   --dataset "tenant-legal-qa-scenarios" \
   --experiment "my-experiment" \
   --num-repetitions 1
@@ -378,12 +381,12 @@ This matters because the two sources call for different fixes: agent variance re
 
 ```bash
 # Re-score all runs from an experiment 5 times each (default)
-uv run python -m evaluate.measure_evaluator_variance \
+uv run measure-evaluator-variance \
   --experiment <experiment-name> \
   --evaluator "legal correctness"
 
 # Use more repeats for a tighter estimate; limit to 3 runs per scenario to keep it fast
-uv run python -m evaluate.measure_evaluator_variance \
+uv run measure-evaluator-variance \
   --experiment <experiment-name> \
   --evaluator "legal correctness" \
   -k 7 \
@@ -445,7 +448,7 @@ To decompose variance per scenario, use σ²_agent = σ²_total − σ²_evaluat
 Once you identify a noisy scenario, use `--scenario` to focus on it:
 
 ```bash
-uv run python -m evaluate.measure_evaluator_variance \
+uv run measure-evaluator-variance \
   --experiment <experiment-name> \
   --evaluator "legal correctness" \
   --scenario 2
@@ -492,7 +495,7 @@ From there you can:
 To compare two experiments from the command line:
 
 ```bash
-uv run python evaluate/langsmith_dataset.py experiment compare \
+uv run langsmith-dataset experiment compare \
   tfa-baseline tfa-my-experiment
 ```
 
@@ -689,7 +692,7 @@ Cloud deployments don't use a `.env` file. Instead, environment variables are co
 
 The dataset hasn't been pushed yet. Run:
 ```bash
-uv run langsmith_dataset.py dataset push \
+uv run langsmith-dataset dataset push \
   dataset-tenant-legal-qa-examples.jsonl \
   tenant-legal-qa-scenarios
 ```
@@ -758,30 +761,48 @@ To refine how the judge scores responses, edit the rubric file and commit. You c
 
 ### Testing rubric changes without re-running the agent
 
-After editing a rubric, use `measure_evaluator_variance.py` to re-score an existing experiment's outputs with the new rubric — no new agent calls needed:
+After editing a rubric, use `measure_evaluator_variance.py` to re-score an existing experiment's outputs with the new rubric — no new agent calls needed. Pass `--show-delta` to see how the updated rubric changed scores compared to what was originally recorded in the experiment. Evaluator calls run concurrently; use `--max-workers` to control parallelism (default: 10).
 
 ```bash
-# Score every existing run once with the updated rubric
-uv run python -m evaluate.measure_evaluator_variance \
+# Re-score all runs and show per-scenario deltas vs. stored scores
+uv run measure-evaluator-variance \
   --experiment <experiment-name> \
   --evaluator "legal correctness" \
-  -k 1
+  --show-delta \
+  -k 5
 
-# Focus on a specific scenario that was noisy
-uv run python -m evaluate.measure_evaluator_variance \
+# Focus on a specific scenario; increase workers for a large experiment
+uv run measure-evaluator-variance \
   --experiment <experiment-name> \
   --evaluator "legal correctness" \
   --scenario 2 \
+  --show-delta \
+  --max-workers 20 \
   -k 5
 ```
 
-Use `-k 1` to get a quick read on how the score distribution shifts. Use `-k 5` or higher on a specific scenario to confirm that evaluator σ has dropped — a tighter rubric should produce a lower mean σ across re-evaluations of the same fixed output.
+With `--show-delta`, the mean and σ columns in the Per-Scenario Consistency table show the new value with the change from the stored score in parentheses:
+
+```
+=== Per-Scenario Consistency ===
+
+Evaluator: legal correctness
+  Scenario        mean           σ    0.0    0.5    1.0
+  --------  ----------  ----------  -----  -----  -----
+  S0        0.95(+0.23)  0.05(-0.13)    0      2      8
+  S1        0.80(+0.30)  0.12(-0.23)    1      1      8
+  S2        0.45(+0.05)  0.24(-0.02)    3      5      2
+```
+
+A positive delta on mean means the rubric change raised scores for that scenario; a negative delta on σ means scoring became more consistent. Use `-k 1` for a quick sanity check and `-k 5` or higher to confirm that evaluator σ has genuinely dropped.
 
 Heuristic evaluators (citation format, tool usage, performance) are Python code in `langsmith_evaluators.py` and require a developer to modify.
 
 ---
 
 ## Bound evaluators (running evaluations from the LangSmith UI)
+
+> **Sources:** [Automatically run evaluators on experiments](https://docs.langchain.com/langsmith/bind-evaluator-to-dataset) — LangSmith docs · [Reusable evaluators and evaluator templates](https://www.langchain.com/blog/reusable-langsmith-evaluator-templates) — LangChain blog
 
 Instead of running `run_langsmith_evaluation.py` locally, you can bind an LLM-as-judge evaluator directly to the dataset in LangSmith and run experiments from the browser against your Cloud deployment. This is useful for non-developers who want to iterate on the system prompt or test examples without a local Python setup.
 
@@ -810,9 +831,19 @@ sequenceDiagram
 
 ### Setting up a bound evaluator (example: Legal Correctness)
 
-1. Go to **LangSmith → Datasets → `tenant-legal-qa-scenarios`**.
-2. Open the **Evaluators** tab and click **+ Add Evaluator**.
-3. Choose **LLM-as-Judge**.
+LangSmith maintains a workspace-level **Evaluators** library (left sidebar → **Evaluators**) where evaluators live independently of any single dataset. You configure an evaluator once, then attach it to one or more datasets. This avoids re-entering the prompt and model settings for each dataset.
+
+**First time:** create the evaluator in the library.
+
+1. Go to **LangSmith → Evaluators → + New Evaluator**.
+2. Choose **LLM-as-Judge**.
+
+**Subsequent datasets:** attach the existing evaluator.
+
+1. Go to **LangSmith → Datasets → `tenant-legal-qa-scenarios` → Evaluators tab**.
+2. Click **+ Add Evaluator** and select the evaluator from the list. Skip the steps below.
+
+If creating for the first time, continue:
 
 #### Prompt
 
@@ -864,7 +895,7 @@ Results appear in the same Experiments view used by the offline CLI, with the sa
 **Limitation:** the UI runs each example exactly once. The `--num-repetitions` option (useful for measuring scoring variance across runs) is only available through the CLI:
 
 ```bash
-uv run run_langsmith_evaluation.py --num-repetitions 3
+uv run run-langsmith-evaluation --num-repetitions 3
 ```
 
 #### How the deployment accepts dataset inputs
@@ -873,26 +904,26 @@ The dataset stores examples as `query/state/city`, but the underlying agent expe
 
 ### Keeping bound evaluators in sync with the codebase
 
-There is no API to update a bound evaluator prompt programmatically. When you edit a rubric in `evaluators/`, update the bound evaluator prompt manually in the LangSmith UI (Datasets → `tenant-legal-qa-scenarios` → Evaluators → edit the evaluator).
+There is no SDK or API to update a bound evaluator prompt programmatically — management is UI-only. When you edit a rubric in `evaluators/`, update the bound evaluator prompt in the LangSmith Evaluators library (left sidebar → **Evaluators** → select the evaluator → edit prompt). Because the evaluator is shared across all attached datasets, one edit propagates everywhere.
 
 If a lawyer edits the rubric wording in the LangSmith Playground, pull the changes back to the local files. First check what changed with a dry run:
 
 First, find the prompt name:
 
 ```bash
-uv run langsmith_dataset.py prompt list
+uv run langsmith-dataset prompt list
 ```
 
 Then dry-run to review the diff:
 
 ```bash
-uv run langsmith_dataset.py prompt pull tfa-legal-correctness evaluators/legal_correctness.md --dry-run
+uv run langsmith-dataset prompt pull tfa-legal-correctness evaluators/legal_correctness.md --dry-run
 ```
 
 Then write and commit:
 
 ```bash
-uv run langsmith_dataset.py prompt pull tfa-legal-correctness evaluators/legal_correctness.md
+uv run langsmith-dataset prompt pull tfa-legal-correctness evaluators/legal_correctness.md
 git add evaluate/evaluators/legal_correctness.md
 git commit -m "update legal correctness rubric from Prompt Hub"
 ```

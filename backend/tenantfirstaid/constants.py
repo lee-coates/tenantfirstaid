@@ -1,3 +1,4 @@
+import logging
 import os
 from collections.abc import Mapping
 from enum import StrEnum, auto
@@ -6,6 +7,10 @@ from typing import Final, Optional, cast
 
 from dotenv import load_dotenv
 from langchain_google_genai import HarmBlockThreshold, HarmCategory
+
+from .logger import temporary_formatted_handler
+
+logger = logging.getLogger(__name__)
 
 _DATASTORE_PREFIX = "VERTEX_AI_DATASTORE_"
 
@@ -86,10 +91,15 @@ class _GoogEnvAndPolicy:
         2. explicitly set each slotted attribute
         3. check that the slotted attributes are not None
         """
-        # read .env at object creation time
-        path_to_env = Path(__file__).parent / "../.env"
+        # Read .env at object creation time.
+        path_to_env = Path(__file__).parent.parent / ".env"
         if path_to_env.exists():
-            load_dotenv(override=True)
+            load_dotenv(dotenv_path=path_to_env, override=True)
+        else:
+            logger.warning(
+                "No .env file found at %s, proceeding with existing environment variables.",
+                path_to_env,
+            )
 
         # Assign & Check slot attributes for required environment variables.
         # Note: assign explicitly since typecheckers do not understand slotted attributes
@@ -154,7 +164,10 @@ GEMINI_THINKING_BUDGET_DYNAMIC: Final = -1
 
 # Module singleton
 # TODO: rename to VERTEX_CONFIG?
-SINGLETON: Final = _GoogEnvAndPolicy()
+# Use the project log format for the "no .env" warning emitted during __init__,
+# even though entrypoints have not yet called configure_logging().
+with temporary_formatted_handler(logger):
+    SINGLETON: Final = _GoogEnvAndPolicy()
 
 LANGSMITH_API_KEY: Final = os.getenv("LANGSMITH_API_KEY")
 

@@ -5,9 +5,11 @@ agent graph with per-session location context and streaming support.
 """
 
 import logging
-import sys
+import time
 from typing import Any, Dict, Generator, List, Optional, cast
 
+import httpcore
+import httpx
 from langchain_core.messages import (
     AIMessage,
     AnyMessage,
@@ -34,15 +36,9 @@ class LangChainChatManager:
     def __init__(self) -> None:
         """Initialize the LangChain chat manager."""
 
-        # configure logging
-        logging.basicConfig(
-            level=logging.WARNING,
-            stream=sys.stdout,
-            format="%(levelname)s: %(message)s (%(filename)s:%(lineno)d)",
-        )
-        self.logger = logging.getLogger("LangChainChatManager")
+        self.logger = logging.getLogger(__name__)
 
-        # defer agent instantiation until 'generate_stream_response'
+        # Defer agent instantiation until 'generate_stream_response'.
         self.agent = None
         self.system_prompt: Optional[SystemMessage] = None
 
@@ -78,6 +74,9 @@ class LangChainChatManager:
 
         raise NotImplementedError
 
+    _MAX_STREAM_RETRIES = 2
+    _RETRY_DELAY_SECONDS = 2.0
+
     def generate_streaming_response(
         self,
         messages: List[AnyMessage | Dict[str, Any]],
@@ -108,6 +107,37 @@ class LangChainChatManager:
         else:
             config = RunnableConfig()
 
+        # Snapshot so retries start from a clean message state.
+        messages_at_start = list(messages)
+
+        for attempt in range(self._MAX_STREAM_RETRIES + 1):
+            if attempt > 0:
+                messages.clear()
+                messages.extend(messages_at_start)
+                self.logger.warning(
+                    "Retrying stream after connection reset "
+                    f"(attempt {attempt + 1}/{self._MAX_STREAM_RETRIES + 1})"
+                )
+                time.sleep(self._RETRY_DELAY_SECONDS)
+            try:
+                yielded_any = False
+                for chunk in self.__stream_once(messages, city, state, config):
+                    yielded_any = True
+                    yield chunk
+                return
+            except (httpcore.ReadError, httpx.ReadError, ConnectionError):
+                # Don't retry after partial output — the client would receive duplicates.
+                if attempt >= self._MAX_STREAM_RETRIES or yielded_any:
+                    raise
+
+    def __stream_once(
+        self,
+        messages: List[AnyMessage | Dict[str, Any]],
+        city: Optional[OregonCity],
+        state: UsaState,
+        config: RunnableConfig,
+    ) -> Generator[ContentBlock, Any, None]:
+        assert self.agent is not None
         # Stream the agent response.
         for mode, chunk in self.agent.stream(
             input={
