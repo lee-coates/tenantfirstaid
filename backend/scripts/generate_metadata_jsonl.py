@@ -36,26 +36,26 @@ def infer_city(path: Path) -> str | None:
     return None
 
 
-def _in_scope(documents_dir: Path, txt_file: Path, scopes: set[str]) -> bool:
-    """Return True if txt_file is in one of the requested scopes (or scopes is empty)."""
+def _in_scope(city: str | None, scopes: set[str]) -> bool:
+    """Return True if the file's inferred city is in one of the requested scopes (or scopes is empty)."""
     if not scopes:
         return True
-    city = infer_city(txt_file.relative_to(documents_dir))
     scope = "or" if city is None else city
     return scope in scopes
 
 
 def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[Document]:
-    validate_and_rewrite_tree(
-        documents_dir,
-        file_filter=lambda p: _in_scope(documents_dir, p, scopes),
-    )
+    def in_scope(path: Path) -> bool:
+        return _in_scope(infer_city(path.relative_to(documents_dir)), scopes)
+
+    validate_and_rewrite_tree(documents_dir, file_filter=in_scope)
 
     entries: list[Document] = []
     seen_ids: set[str] = set()
 
     for txt_file in sorted(documents_dir.rglob("*.txt")):
-        if not _in_scope(documents_dir, txt_file, scopes):
+        city = infer_city(txt_file.relative_to(documents_dir))
+        if not _in_scope(city, scopes):
             continue
 
         if txt_file.stem in seen_ids:
@@ -65,7 +65,6 @@ def build_entries(documents_dir: Path, bucket: str, scopes: set[str]) -> list[Do
             )
         seen_ids.add(txt_file.stem)
 
-        city = infer_city(txt_file.relative_to(documents_dir))
         entries.append(
             Document(
                 id=txt_file.stem,

@@ -25,7 +25,7 @@ from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 from google.cloud import storage
 
-from scripts.shared import validate_resource_name
+from scripts.shared import collection_path, validate_resource_name
 from tenantfirstaid.constants import SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
@@ -44,12 +44,8 @@ class DatastoreError(RuntimeError):
     """Raised when the datastore pipeline cannot proceed."""
 
 
-def _collection_path(project: str, location: str) -> str:
-    return f"projects/{project}/locations/{location}/collections/default_collection"
-
-
 def _datastore_path(project: str, location: str, datastore_id: str) -> str:
-    return f"{_collection_path(project, location)}/dataStores/{datastore_id}"
+    return f"{collection_path(project, location)}/dataStores/{datastore_id}"
 
 
 def _branch_path(project: str, location: str, datastore_id: str) -> str:
@@ -97,7 +93,7 @@ def create_datastore(
     display_name: str,
 ) -> discoveryengine.DataStore:
     """Create an unstructured, search-only datastore. Fails if datastore_id already exists."""
-    parent = _collection_path(project, location)
+    parent = collection_path(project, location)
     data_store = discoveryengine.DataStore(
         display_name=display_name,
         industry_vertical=discoveryengine.IndustryVertical.GENERIC,
@@ -138,7 +134,10 @@ def import_documents(
             input_uris=[gcs_uri],
             data_schema=GCS_DATA_SCHEMA,
         ),
-        reconciliation_mode=discoveryengine.ImportDocumentsRequest.ReconciliationMode.INCREMENTAL,
+        # FULL ensures the datastore exactly mirrors metadata.jsonl: any document
+        # not in the import is deleted. Safe here because each ingestion creates
+        # a fresh datastore, and protects against drift if this is ever re-run.
+        reconciliation_mode=discoveryengine.ImportDocumentsRequest.ReconciliationMode.FULL,
     )
     operation = client.import_documents(request=request)
     print(f"Started import: {operation.operation.name}")

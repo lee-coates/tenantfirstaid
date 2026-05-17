@@ -17,7 +17,7 @@ from typing import cast
 from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
-from scripts.shared import validate_resource_name
+from scripts.shared import collection_path, validate_resource_name
 from tenantfirstaid.constants import SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
@@ -31,12 +31,8 @@ class AppError(RuntimeError):
     """Raised when the app creation pipeline cannot proceed."""
 
 
-def _collection_path(project: str, location: str) -> str:
-    return f"projects/{project}/locations/{location}/collections/default_collection"
-
-
 def _engine_path(project: str, location: str, engine_id: str) -> str:
-    return f"{_collection_path(project, location)}/engines/{engine_id}"
+    return f"{collection_path(project, location)}/engines/{engine_id}"
 
 
 def create_app(
@@ -48,7 +44,7 @@ def create_app(
     datastore_id: str,
 ) -> discoveryengine.Engine:
     """Create a Search app linked to datastore_id. Fails if engine_id already exists."""
-    parent = _collection_path(project, location)
+    parent = collection_path(project, location)
     engine = discoveryengine.Engine(
         display_name=display_name,
         solution_type=discoveryengine.SolutionType.SOLUTION_TYPE_SEARCH,
@@ -82,6 +78,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--datastore-id",
         required=True,
+        type=validate_resource_name,
         help="Datastore ID to attach to the app (the ID printed by create-datastore-gcs).",
     )
     parser.add_argument(
@@ -131,7 +128,7 @@ def main() -> None:
     engine_client = discoveryengine.EngineServiceClient(
         credentials=credentials, client_options=client_options
     )
-    created = create_app(
+    create_app(
         engine_client,
         project,
         args.location,
@@ -139,14 +136,13 @@ def main() -> None:
         display_name,
         args.datastore_id,
     )
-    app_id = created.name.split("/")[-1]
     console_url = (
         f"https://console.cloud.google.com/gen-app-builder/locations/{args.location}"
-        f"/collections/default_collection/engines/{app_id}"
+        f"/collections/default_collection/engines/{args.app_name}"
         f"?project={project}"
     )
     print(
-        f"\nDone. Your app ID is: {app_id}\n"
+        f"\nDone. Your app ID is: {args.app_name}\n"
         f"View it in the GCP console: {console_url}\n"
         f"Set VERTEX_AI_DATASTORE_LAWS={args.datastore_id} in your .env."
     )

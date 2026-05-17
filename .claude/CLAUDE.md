@@ -127,7 +127,7 @@ make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
 make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS=--dry-run
 ```
 
-`upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. `create-datastore-gcs` additionally requires `discoveryengine.datastores.create` and `discoveryengine.documents.import` permissions. `create-app-gcs` additionally requires `discoveryengine.engines.create`. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.
+`upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. `create-datastore-gcs` additionally requires `storage.buckets.get` (for the bucket region compatibility check), `discoveryengine.datastores.create`, and `discoveryengine.documents.import` permissions. `create-app-gcs` additionally requires `discoveryengine.engines.create`. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.
 
 **Cross-project note:** if the GCS bucket and the Discovery Engine project are in different GCP projects, the Vertex AI Search service agent for the Discovery Engine project must be granted `roles/storage.objectViewer` on the bucket. In same-project setups this is automatic.
 

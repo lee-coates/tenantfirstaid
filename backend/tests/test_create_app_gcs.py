@@ -7,24 +7,10 @@ from google.api_core import exceptions as gcp_exceptions
 
 from scripts.create_app_gcs import (
     AppError,
-    _collection_path,
-    _engine_path,
     create_app,
     main,
 )
-
-
-class TestPathHelpers:
-    def test_collection_path(self):
-        assert _collection_path("my-project", "global") == (
-            "projects/my-project/locations/global/collections/default_collection"
-        )
-
-    def test_engine_path(self):
-        assert _engine_path("my-project", "global", "my-app") == (
-            "projects/my-project/locations/global/collections/default_collection"
-            "/engines/my-app"
-        )
+from scripts.shared import collection_path
 
 
 class TestCreateApp:
@@ -50,7 +36,7 @@ class TestCreateApp:
         assert request.engine_id == "my-app"
         assert request.engine.display_name == "My App"
         assert request.engine.data_store_ids == ["my-ds"]
-        assert request.parent == _collection_path("my-project", "global")
+        assert request.parent == collection_path("my-project", "global")
         assert result is client.create_engine.return_value.result.return_value
 
     def test_already_exists_raises_app_error(self):

@@ -4,38 +4,19 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from google.api_core import exceptions as gcp_exceptions
+from google.cloud import discoveryengine_v1 as discoveryengine
 
 from scripts.create_datastore_gcs import (
     GCS_DATA_SCHEMA,
     DatastoreError,
     _branch_path,
-    _collection_path,
-    _datastore_path,
     check_bucket_location_compat,
     create_datastore,
     delete_datastore,
     import_documents,
     main,
 )
-
-
-class TestPathHelpers:
-    def test_collection_path(self):
-        assert _collection_path("my-project", "global") == (
-            "projects/my-project/locations/global/collections/default_collection"
-        )
-
-    def test_datastore_path(self):
-        assert _datastore_path("my-project", "global", "my-ds") == (
-            "projects/my-project/locations/global/collections/default_collection"
-            "/dataStores/my-ds"
-        )
-
-    def test_branch_path(self):
-        assert _branch_path("my-project", "us", "my-ds") == (
-            "projects/my-project/locations/us/collections/default_collection"
-            "/dataStores/my-ds/branches/default_branch"
-        )
+from scripts.shared import collection_path
 
 
 class TestCheckBucketLocationCompat:
@@ -110,7 +91,7 @@ class TestCreateDatastore:
         request = client.create_data_store.call_args.kwargs["request"]
         assert request.data_store_id == "my-ds"
         assert request.data_store.display_name == "My DS"
-        assert request.parent == _collection_path("my-project", "global")
+        assert request.parent == collection_path("my-project", "global")
         assert result is client.create_data_store.return_value.result.return_value
 
     def test_already_exists_raises_datastore_error(self):
@@ -180,6 +161,10 @@ class TestImportDocuments:
         assert request.parent == _branch_path("my-project", "global", "my-ds")
         assert request.gcs_source.input_uris == ["gs://my-bucket/metadata.jsonl"]
         assert request.gcs_source.data_schema == GCS_DATA_SCHEMA
+        assert (
+            request.reconciliation_mode
+            == discoveryengine.ImportDocumentsRequest.ReconciliationMode.FULL
+        )
 
 
 class TestDeleteDatastore:

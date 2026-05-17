@@ -13,3 +13,7 @@ def validate_resource_name(value: str) -> str:
             "Use lowercase letters, digits, and hyphens only (1-63 chars)."
         )
     return value
+
+
+def collection_path(project: str, location: str) -> str:
+    return f"projects/{project}/locations/{location}/collections/default_collection"
