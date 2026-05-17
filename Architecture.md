@@ -182,7 +182,7 @@ graph LR
 
 4. **Datastore Creation**: `backend/scripts/create_datastore_gcs.py` creates a new Vertex AI Search datastore pointing at the bucket and triggers an import from `metadata.jsonl`, which attaches city/state metadata to each document for jurisdiction-filtered retrieval. Run via `make create-datastore-gcs GCS_BUCKET_NAME=<bucket> DATASTORE_ID=<id>`; pass `DATASTORE_OPTIONS=--no-wait` to skip polling. The script prints the datastore ID on completion (reuse it as `DATASTORE_ID` for step 5).
 
-5. **App Creation**: `backend/scripts/create_app_gcs.py` creates a Vertex AI Search app and links it to the datastore created in step 4. Run via `make create-app-gcs DATASTORE_ID=<id> APP_NAME=<name>`. The app is for browsing/previewing the datastore in the GCP console; the backend's LangChain `VertexAISearchRetriever` queries the datastore directly and does not depend on this app. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.
+5. **App Creation**: `backend/scripts/create_app_gcs.py` creates a Vertex AI Search app and links it to the datastore created in step 4. Run via `make create-app-gcs DATASTORE_ID=<id> APP_ID=<app-id>`. The app is for browsing/previewing the datastore in the GCP console; the backend's LangChain `VertexAISearchRetriever` queries the datastore directly and does not depend on this app. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.
 
 #### Query Pipeline
 

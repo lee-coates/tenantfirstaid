@@ -54,9 +54,9 @@ make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds DATASTORE
 #    and previewing the datastore in the GCP console; the LangChain retriever
 #    used by the backend (VertexAISearchRetriever) reads the datastore directly
 #    and does not depend on this app.
-make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
-make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
-make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS=--dry-run
+make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app
+make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app LOCATION=us
+make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app APP_OPTIONS=--dry-run
 ```
 
 `upload-to-gcs` requires `GOOGLE_APPLICATION_CREDENTIALS` to point at a service account with `storage.buckets.create` and `storage.objects.create` permissions on the target project. `create-datastore-gcs` additionally requires `storage.buckets.get` (for the bucket region compatibility check), `discoveryengine.datastores.create`, and `discoveryengine.documents.import` permissions. `create-app-gcs` additionally requires `discoveryengine.engines.create`. After the app is created, set `VERTEX_AI_DATASTORE_LAWS` in `.env` to the datastore ID.

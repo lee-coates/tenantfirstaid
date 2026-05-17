@@ -86,18 +86,18 @@ endif
 	$(PYTHON) run python -m scripts.create_datastore_gcs --bucket $(GCS_BUCKET_NAME) --datastore-id $(DATASTORE_ID) $(if $(LOCATION),--location $(LOCATION)) $(DATASTORE_OPTIONS)
 
 # Create a Vertex AI Search app and link it to an existing datastore.
-# Requires DATASTORE_ID (from create-datastore-gcs output) and APP_NAME.
-#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
-#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
-#   make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS="--dry-run"
+# Requires DATASTORE_ID (from create-datastore-gcs output) and APP_ID.
+#   make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app
+#   make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app LOCATION=us
+#   make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app APP_OPTIONS="--dry-run"
 create-app-gcs: uv.lock
 ifeq ($(strip $(DATASTORE_ID)),)
-	$(error DATASTORE_ID is required: make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app)
+	$(error DATASTORE_ID is required: make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app)
 endif
-ifeq ($(strip $(APP_NAME)),)
-	$(error APP_NAME is required: make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app)
+ifeq ($(strip $(APP_ID)),)
+	$(error APP_ID is required: make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app)
 endif
-	$(PYTHON) run python -m scripts.create_app_gcs --datastore-id $(DATASTORE_ID) --app-name $(APP_NAME) $(if $(LOCATION),--location $(LOCATION)) $(APP_OPTIONS)
+	$(PYTHON) run python -m scripts.create_app_gcs --datastore-id $(DATASTORE_ID) --app-id $(APP_ID) $(if $(LOCATION),--location $(LOCATION)) $(APP_OPTIONS)
 
 clean:
 	find . -type d -name '__pycache__' -exec rm -r {} +

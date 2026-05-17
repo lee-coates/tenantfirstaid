@@ -58,7 +58,7 @@ def create_app(
     except gcp_exceptions.AlreadyExists as e:
         raise AppError(
             f"App {engine_id!r} already exists under {parent}. "
-            "Pick a different APP_NAME or delete the existing app first."
+            "Pick a different APP_ID or delete the existing app first."
         ) from e
 
     return cast(discoveryengine.Engine, operation.result())
@@ -75,15 +75,15 @@ def parse_args() -> argparse.Namespace:
         help="Datastore ID to attach to the app (the ID printed by create-datastore-gcs).",
     )
     parser.add_argument(
-        "--app-name",
+        "--app-id",
         required=True,
         type=validate_resource_name,
-        help="Name for the new Search app. Lowercase letters, digits, hyphens; must begin with a letter or digit (1-63 chars). You choose this.",
+        help="Resource ID for the new Search app. Lowercase letters, digits, hyphens; must begin with a letter or digit (1-63 chars). You choose this.",
     )
     parser.add_argument(
         "--display-name",
         default=None,
-        help="Human-readable display name (default: app name).",
+        help="Human-readable display name (default: app ID).",
     )
     parser.add_argument(
         "--location",
@@ -104,10 +104,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     project = SINGLETON.GOOGLE_CLOUD_PROJECT
-    display_name = args.display_name or args.app_name
+    display_name = args.display_name or args.app_id
 
     print(
-        f"Plan: create Search app {_engine_path(project, args.location, args.app_name)!r} "
+        f"Plan: create Search app {_engine_path(project, args.location, args.app_id)!r} "
         f"(display_name={display_name!r}) linked to datastore {args.datastore_id!r}."
     )
 
@@ -125,17 +125,17 @@ def main() -> None:
         engine_client,
         project,
         args.location,
-        args.app_name,
+        args.app_id,
         display_name,
         args.datastore_id,
     )
     console_url = (
         f"https://console.cloud.google.com/gen-app-builder/locations/{args.location}"
-        f"/collections/default_collection/engines/{args.app_name}"
+        f"/collections/default_collection/engines/{args.app_id}"
         f"?project={project}"
     )
     print(
-        f"\nDone. Your app ID is: {args.app_name}\n"
+        f"\nDone. Your app ID is: {args.app_id}\n"
         f"View it in the GCP console: {console_url}\n"
         f"Set VERTEX_AI_DATASTORE_LAWS={args.datastore_id} in your .env."
     )

@@ -48,7 +48,7 @@ class TestCreateApp:
 
 
 class TestMain:
-    _ARGV_BASE = ["create_app_gcs", "--datastore-id", "my-ds", "--app-name", "my-app"]
+    _ARGV_BASE = ["create_app_gcs", "--datastore-id", "my-ds", "--app-id", "my-app"]
 
     def _patch_singleton(self):
         singleton = MagicMock()

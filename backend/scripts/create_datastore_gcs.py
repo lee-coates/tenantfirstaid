@@ -282,7 +282,7 @@ def main() -> None:
     print(
         f"\nDone. Your datastore ID is: {datastore_id}\n"
         f"View it in the GCP console: {console_url}\n"
-        f"Next: run make create-app-gcs DATASTORE_ID={datastore_id} APP_NAME=<name> to create and attach a Search app."
+        f"Next: run make create-app-gcs DATASTORE_ID={datastore_id} APP_ID=<id> to create and attach a Search app."
     )
 
 
