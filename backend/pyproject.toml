@@ -19,6 +19,8 @@ dependencies = [
   "google-auth>=2.40.3",
   "pydantic>=2.12.5",
   "langgraph>=1.0.10",
+  "httpx>=0.27",
+  "httpcore>=1.0",
 ]
 
 [project.scripts]
@@ -68,6 +70,7 @@ markers = [
     "require_repo_secrets: mark test as requiring repository secrets to run",
     "langchain: mark test as testing the LangChain/LangGraph API interface (may be mocked or live)",
     "property: mark test as a property-based (Hypothesis) test",
+    "allow_eval_history_writes: opt out of the eval_history write mock (for tests that exercise eval_history directly)",
 ]
 filterwarnings = [
     # Third-party library using deprecated Pydantic v1 API internally.
