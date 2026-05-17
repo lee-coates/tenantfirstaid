@@ -1,20 +1,9 @@
 """Create a Vertex AI Search datastore and import documents from a GCS bucket.
 
-Companion to scripts.upload_to_gcs: assumes `make upload-to-gcs` has already
-populated gs://<bucket>/ with the law documents and metadata.jsonl. Creates a
-new (unstructured, search-only) datastore configured for GCS ingestion and
-triggers an import from gs://<bucket>/metadata.jsonl. A sibling script could
-configure a different content source (e.g. website URLs for advanced site
-search) -- this one is GCS-specific.
-
-Imports are long-running on the Vertex side; this script polls until the
-operation finishes unless --no-wait is passed.
-
-To run:
-  make create-datastore-gcs GCS_BUCKET_NAME=<bucket> DATASTORE_NAME=<name>
-  make create-datastore-gcs GCS_BUCKET_NAME=<bucket> DATASTORE_NAME=<name> LOCATION=us
-  make create-datastore-gcs GCS_BUCKET_NAME=<bucket> DATASTORE_NAME=<name> DATASTORE_OPTIONS=--dry-run
-  make create-datastore-gcs GCS_BUCKET_NAME=<bucket> DATASTORE_NAME=<name> DATASTORE_OPTIONS=--no-wait
+Companion to scripts.upload_to_gcs. Creates an unstructured, search-only
+datastore configured for GCS ingestion and triggers an import from
+gs://<bucket>/metadata.jsonl. Polls until the import finishes unless
+--no-wait is passed. Run via `make create-datastore-gcs`.
 """
 
 import argparse
@@ -125,7 +114,6 @@ def import_documents(
     bucket: str,
     wait: bool,
 ) -> None:
-    """Trigger import of gs://<bucket>/metadata.jsonl into the datastore's default branch."""
     parent = _branch_path(project, location, datastore_id)
     gcs_uri = f"gs://{bucket}/{METADATA_OBJECT_NAME}"
     request = discoveryengine.ImportDocumentsRequest(

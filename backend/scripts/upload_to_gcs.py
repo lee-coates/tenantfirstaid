@@ -1,14 +1,7 @@
 """Create a fresh GCS bucket and upload law documents + metadata.jsonl.
 
-Consumes the metadata.jsonl produced by scripts.generate_metadata_jsonl to
-decide which files to upload. Refuses to reuse an existing bucket so that each
-RAG ingestion has a clean, dedicated bucket -- matches the workflow expected
-by Vertex AI Search datastore creation.
-
-To run:
-  make upload-to-gcs GCS_BUCKET_NAME=<bucket>                              # default location US
-  make upload-to-gcs GCS_BUCKET_NAME=<bucket> LOCATION=us-central1         # single-region
-  make upload-to-gcs GCS_BUCKET_NAME=<bucket> UPLOAD_OPTIONS=--dry-run     # preview only
+Refuses to reuse an existing bucket so each RAG ingestion has a clean,
+dedicated bucket. Run via `make upload-to-gcs`.
 """
 
 import argparse
@@ -37,7 +30,7 @@ class UploadError(RuntimeError):
 
 
 def _iter_documents(metadata_path: Path) -> Iterator[Document]:
-    """Yield each metadata.jsonl entry as a Document. ParseError covers both bad JSON and schema mismatches."""
+    # ParseError covers both bad JSON and schema mismatches.
     with metadata_path.open() as f:
         for i, raw in enumerate(f, start=1):
             line = raw.strip()
@@ -77,7 +70,6 @@ def _uri_to_filename(uri: str, expected_bucket: str) -> str:
 def _resolve_local_files(
     documents_dir: Path, expected_names: set[str]
 ) -> dict[str, Path]:
-    """Build {filename: local_path} for every expected_name found under documents_dir."""
     resolved: dict[str, Path] = {}
     for txt_file in documents_dir.rglob("*.txt"):
         if txt_file.name in expected_names:
@@ -100,7 +92,6 @@ def _resolve_local_files(
 def plan_upload(
     bucket: str, metadata_path: Path, documents_dir: Path
 ) -> tuple[dict[str, Path], Path]:
-    """Return ({object_name: local_path}, metadata_path). Raises UploadError on inconsistency."""
     if not metadata_path.exists():
         raise UploadError(
             f"metadata.jsonl not found at {metadata_path}. "
@@ -118,7 +109,6 @@ def plan_upload(
 
 
 def create_bucket(client: storage.Client, name: str, location: str) -> storage.Bucket:
-    """Create a new bucket, failing if it already exists."""
     try:
         return client.create_bucket(name, location=location)
     except gcp_exceptions.Conflict as e:
@@ -133,7 +123,6 @@ def upload_files(
     name_to_path: dict[str, Path],
     metadata_path: Path,
 ) -> None:
-    """Upload each (object_name, local_path) pair and the metadata.jsonl itself."""
     for object_name in sorted(name_to_path):
         local_path = name_to_path[object_name]
         blob = bucket_obj.blob(object_name)
@@ -185,7 +174,6 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    # Fail fast locally before touching GCS.
     validate_and_rewrite_tree(args.documents_dir, check_only=True)
 
     name_to_path, metadata_path = plan_upload(

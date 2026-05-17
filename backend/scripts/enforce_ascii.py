@@ -1,12 +1,8 @@
 """Validate and rewrite .txt law documents to pure ASCII.
 
 Vertex AI RAG ingestion has produced mojibake when UTF-8 is present, so every
-.txt under backend/scripts/documents/ must be pure ASCII before upload.
-
-Standalone CLI for validation-only / CI use:
-  uv run python -m scripts.enforce_ascii                # whole documents tree
-  uv run python -m scripts.enforce_ascii path/to/dir    # custom root
-  uv run python -m scripts.enforce_ascii --check        # no rewrites
+.txt under backend/scripts/documents/ must be pure ASCII before upload. Run
+via `make enforce-ascii` (pass `ASCII_OPTIONS=--check` for CI validation).
 """
 
 import argparse
@@ -68,7 +64,6 @@ ASCII_REPLACEMENTS = [
 
 
 def _apply_ascii_replacements(text: str) -> str:
-    """Apply all known non-ASCII to ASCII substitutions to text."""
     section_sign = "§"
     text = re.sub(section_sign * 2 + r"\s*", "Sections ", text)
     text = re.sub(section_sign + r"\s*", "Section ", text)
@@ -78,7 +73,6 @@ def _apply_ascii_replacements(text: str) -> str:
 
 
 def _collect_unrecognized(text: str) -> dict[str, int]:
-    """Return {char: first_position} for each non-ASCII character in text."""
     result: dict[str, int] = {}
     for i, c in enumerate(text):
         if ord(c) > 127 and c not in result:
@@ -87,7 +81,6 @@ def _collect_unrecognized(text: str) -> dict[str, int]:
 
 
 def _suggest_ascii(char: str) -> str:
-    """Return a plausible ASCII replacement for char, or empty string if none obvious."""
     base = (
         unicodedata.normalize("NFKD", char)
         .encode("ascii", errors="ignore")
@@ -142,7 +135,6 @@ def enforce_ascii(path: Path) -> str | None:
 def print_warning_table(
     file_issues: list[tuple[str, dict[str, int] | None]],
 ) -> None:
-    """Print a tabular summary of files that failed ASCII validation."""
     rows: list[tuple[str, str, str, str]] = []
     for filename, unrecognized in file_issues:
         if unrecognized is None:

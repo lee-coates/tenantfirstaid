@@ -1,13 +1,6 @@
 """Create a Vertex AI Search app and link it to an existing datastore.
 
-Companion to scripts.create_datastore_gcs: assumes `make create-datastore-gcs` has
-already created the datastore. Creates a new Search app, attaches the datastore to
-it, and enables search queries against it.
-
-To run:
-  make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
-  make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
-  make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS=--dry-run
+Companion to scripts.create_datastore_gcs. Run via `make create-app-gcs`.
 """
 
 import argparse
