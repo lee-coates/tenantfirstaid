@@ -45,12 +45,15 @@ make upload-to-gcs GCS_BUCKET_NAME=my-bucket UPLOAD_OPTIONS=--dry-run
 
 # 4. Create a Vertex AI Search datastore and import documents from the bucket.
 #    Polls until the import finishes; pass DATASTORE_OPTIONS=--no-wait to skip.
-make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds
-make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds LOCATION=us
-make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds DATASTORE_OPTIONS=--dry-run
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds LOCATION=us
+make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds DATASTORE_OPTIONS=--dry-run
 
 # 5. Create a Vertex AI Search app and link it to the datastore.
-#    Use the datastore ID printed by step 4 as DATASTORE_ID.
+#    Pass the same DATASTORE_ID used in step 4. The Search app is for browsing
+#    and previewing the datastore in the GCP console; the LangChain retriever
+#    used by the backend (VertexAISearchRetriever) reads the datastore directly
+#    and does not depend on this app.
 make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app
 make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app LOCATION=us
 make create-app-gcs DATASTORE_ID=my-ds APP_NAME=my-app APP_OPTIONS=--dry-run

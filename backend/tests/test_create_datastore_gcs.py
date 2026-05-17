@@ -186,7 +186,7 @@ class TestMain:
         "create_datastore_gcs",
         "--bucket",
         "my-bucket",
-        "--datastore-name",
+        "--datastore-id",
         "my-ds",
     ]
 

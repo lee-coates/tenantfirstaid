@@ -23,6 +23,10 @@ from tenantfirstaid.google_auth import (
 
 DEFAULT_LOCATION = "us"
 METADATA_OBJECT_NAME = "metadata.jsonl"
+# Upper bound for the rollback delete-datastore LRO. If the same conditions
+# that broke import (auth/network) also block the delete, this lets us surface
+# a clear "manual cleanup required" message instead of hanging.
+ROLLBACK_TIMEOUT_SECONDS = 120
 # The Discovery Engine document schema for metadata.jsonl entries that are full
 # Document protos (produced by generate_metadata_jsonl.py). Other valid values
 # are "content" and "custom", but those require different metadata formats.
@@ -114,6 +118,13 @@ def import_documents(
     bucket: str,
     wait: bool,
 ) -> None:
+    """Import documents from gs://<bucket>/metadata.jsonl into datastore_id.
+
+    Uses FULL reconciliation, so the datastore is replaced to exactly mirror
+    metadata.jsonl. Callers must guarantee the datastore is freshly created
+    (no pre-existing documents) -- this script enforces that by creating the
+    datastore in the same run and rolling it back on failure.
+    """
     parent = _branch_path(project, location, datastore_id)
     gcs_uri = f"gs://{bucket}/{METADATA_OBJECT_NAME}"
     request = discoveryengine.ImportDocumentsRequest(
@@ -150,11 +161,16 @@ def import_documents(
 def delete_datastore(
     client: discoveryengine.DataStoreServiceClient,
     datastore_name: str,
+    timeout: float = ROLLBACK_TIMEOUT_SECONDS,
 ) -> None:
-    """Delete a datastore by its full resource name. Used for rollback on import failure."""
+    """Delete a datastore by its full resource name. Used for rollback on import failure.
+
+    A finite timeout ensures a stuck delete LRO surfaces as an error caught by
+    the caller's "manual cleanup required" path instead of hanging the process.
+    """
     request = discoveryengine.DeleteDataStoreRequest(name=datastore_name)
     operation = client.delete_data_store(request=request)
-    operation.result()
+    operation.result(timeout=timeout)
 
 
 def parse_args() -> argparse.Namespace:
@@ -167,10 +183,10 @@ def parse_args() -> argparse.Namespace:
         help="GCS bucket holding metadata.jsonl and the document objects.",
     )
     parser.add_argument(
-        "--datastore-name",
+        "--datastore-id",
         required=True,
         type=validate_resource_name,
-        help="Name for the new datastore. Lowercase letters, digits, hyphens (1-63 chars). You choose this; it becomes the resource ID.",
+        help="Resource ID for the new datastore. Lowercase letters, digits, hyphens; must begin with a letter or digit (1-63 chars). Reuse this same value as --datastore-id for create-app-gcs.",
     )
     parser.add_argument(
         "--display-name",
@@ -203,10 +219,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     project = SINGLETON.GOOGLE_CLOUD_PROJECT
-    display_name = args.display_name or args.datastore_name
+    display_name = args.display_name or args.datastore_id
 
     print(
-        f"Plan: create datastore {_datastore_path(project, args.location, args.datastore_name)!r} "
+        f"Plan: create datastore {_datastore_path(project, args.location, args.datastore_id)!r} "
         f"(display_name={display_name!r}) and import from "
         f"gs://{args.bucket}/{METADATA_OBJECT_NAME}."
     )
@@ -226,7 +242,7 @@ def main() -> None:
         credentials=credentials, client_options=client_options
     )
     created = create_datastore(
-        datastore_client, project, args.location, args.datastore_name, display_name
+        datastore_client, project, args.location, args.datastore_id, display_name
     )
     datastore_id = created.name.split("/")[-1]
     print(f"Created datastore: {created.name}")

@@ -70,18 +70,20 @@ endif
 	$(PYTHON) run python -m scripts.upload_to_gcs --bucket $(GCS_BUCKET_NAME) $(if $(LOCATION),--location $(LOCATION)) $(UPLOAD_OPTIONS)
 
 # Create a Vertex AI Search datastore and import documents from a GCS bucket.
-# Requires GCS_BUCKET_NAME (must match the bucket used with upload-to-gcs) and DATASTORE_NAME.
-#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds
-#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds LOCATION=us
-#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds DATASTORE_OPTIONS="--no-wait"
+# Requires GCS_BUCKET_NAME (must match the bucket used with upload-to-gcs) and DATASTORE_ID.
+# DATASTORE_ID is the resource ID for the new datastore; reuse the same value as
+# DATASTORE_ID for create-app-gcs to link the Search app to it.
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds LOCATION=us
+#   make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds DATASTORE_OPTIONS="--no-wait"
 create-datastore-gcs: uv.lock
 ifeq ($(strip $(GCS_BUCKET_NAME)),)
-	$(error GCS_BUCKET_NAME is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds)
+	$(error GCS_BUCKET_NAME is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds)
 endif
-ifeq ($(strip $(DATASTORE_NAME)),)
-	$(error DATASTORE_NAME is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_NAME=my-ds)
+ifeq ($(strip $(DATASTORE_ID)),)
+	$(error DATASTORE_ID is required: make create-datastore-gcs GCS_BUCKET_NAME=my-bucket DATASTORE_ID=my-ds)
 endif
-	$(PYTHON) run python -m scripts.create_datastore_gcs --bucket $(GCS_BUCKET_NAME) --datastore-name $(DATASTORE_NAME) $(if $(LOCATION),--location $(LOCATION)) $(DATASTORE_OPTIONS)
+	$(PYTHON) run python -m scripts.create_datastore_gcs --bucket $(GCS_BUCKET_NAME) --datastore-id $(DATASTORE_ID) $(if $(LOCATION),--location $(LOCATION)) $(DATASTORE_OPTIONS)
 
 # Create a Vertex AI Search app and link it to an existing datastore.
 # Requires DATASTORE_ID (from create-datastore-gcs output) and APP_NAME.

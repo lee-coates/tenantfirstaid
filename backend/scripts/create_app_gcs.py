@@ -78,7 +78,7 @@ def parse_args() -> argparse.Namespace:
         "--app-name",
         required=True,
         type=validate_resource_name,
-        help="Name for the new Search app. Lowercase letters, digits, hyphens (1-63 chars). You choose this.",
+        help="Name for the new Search app. Lowercase letters, digits, hyphens; must begin with a letter or digit (1-63 chars). You choose this.",
     )
     parser.add_argument(
         "--display-name",

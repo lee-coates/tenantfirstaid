@@ -10,7 +10,8 @@ def validate_resource_name(value: str) -> str:
     if not _NAME_PATTERN.match(value):
         raise argparse.ArgumentTypeError(
             f"{value!r} is not a valid resource name. "
-            "Use lowercase letters, digits, and hyphens only (1-63 chars)."
+            "Use lowercase letters, digits, and hyphens only (1-63 chars); "
+            "must begin with a letter or digit."
         )
     return value
 
