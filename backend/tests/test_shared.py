@@ -14,7 +14,15 @@ class TestValidateResourceName:
 
     @pytest.mark.parametrize(
         "name",
-        ["UPPERCASE", "a" * 64, "has space", "under_score", "", "-leading-hyphen", "trailing-"],
+        [
+            "UPPERCASE",
+            "a" * 64,
+            "has space",
+            "under_score",
+            "",
+            "-leading-hyphen",
+            "trailing-",
+        ],
     )
     def test_invalid_names_raise(self, name):
         with pytest.raises(argparse.ArgumentTypeError):
