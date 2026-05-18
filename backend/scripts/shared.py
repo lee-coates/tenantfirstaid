@@ -3,7 +3,7 @@
 import argparse
 import re
 
-_NAME_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]{0,62}$")
+_NAME_PATTERN = re.compile(r"^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$")
 
 
 def validate_resource_name(value: str) -> str:

@@ -8,6 +8,7 @@ from google.cloud import discoveryengine_v1 as discoveryengine
 
 from scripts.create_datastore_gcs import (
     GCS_DATA_SCHEMA,
+    ROLLBACK_TIMEOUT_SECONDS,
     DatastoreError,
     _branch_path,
     check_bucket_location_compat,
@@ -178,7 +179,7 @@ class TestDeleteDatastore:
         client.delete_data_store.assert_called_once()
         request = client.delete_data_store.call_args.kwargs["request"]
         assert request.name == "projects/p/locations/global/.../dataStores/my-ds"
-        operation.result.assert_called_once()
+        operation.result.assert_called_once_with(timeout=ROLLBACK_TIMEOUT_SECONDS)
 
 
 class TestMain:
