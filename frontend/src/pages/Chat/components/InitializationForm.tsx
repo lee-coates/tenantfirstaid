@@ -94,24 +94,24 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
 
   return (
     <form
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-1"
       onSubmit={(event) => {
         event.preventDefault();
         handleInitialInput();
       }}
     >
-      <div className="flex px-4 gap-4 items-center justify-center">
+      <div className="flex px-4 gap-2 items-center justify-center">
         <div>
           <BeaverIcon />
         </div>
         <div className="">
-          <p className="text-xl sm:text-2xl text-center">
+          <p className="text-lg sm:text-xl text-center">
             Welcome to Tenant First Aid!
           </p>
         </div>
       </div>
       <div>
-        <div className="border rounded-lg px-4 py-3">
+        <div className="border rounded-lg px-4 py-2">
           <p>Things to keep in mind!</p>
           <ul className="list-disc pl-4">
             <li>Tenants have rights under state and local law.</li>
@@ -215,7 +215,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
       </div>
       <div>
         <textarea
-          className="h-25 md:h-20 w-full"
+          className="h-25 md:h-16 w-full"
           placeholder="Briefly describe your specific housing situation or question about housing."
           onChange={handleIssueDescription}
         />

@@ -62,12 +62,12 @@ export default function MessageWindow({
   return (
     <>
       <div
-        className={clsx("flex-1 min-h-0", isOngoing && "overflow-y-scroll")}
+        className={clsx(isOngoing && "flex-1 min-h-0 overflow-y-scroll")}
         ref={messagesRef}
       >
         <div className="mx-auto max-w-[700px]">
           {isOngoing ? (
-            <div className="flex flex-col gap-4 relative">
+            <div className="flex flex-col gap-2 relative">
               {displayedMessages.map((message) => {
                 return (
                   <div
@@ -81,11 +81,10 @@ export default function MessageWindow({
                   >
                     <div
                       className={clsx(
-                        "message-bubble p-3 rounded-2xl max-w-[95%]",
-                        message.type === "ai" && "bg-slate-200 rounded-tl-sm",
-                        message.type === "human" &&
-                          "bg-green-dark text-white rounded-tr-sm",
-                        message.type === "ui" && "bg-slate-200 rounded-tl-sm",
+                        "message-bubble px-3.5 py-2 rounded-xl max-w-[90%] lg:max-w-[80%]",
+                        message.type === "ai" && "bg-slate-200",
+                        message.type === "human" && "bg-green-dark text-white",
+                        message.type === "ui" && "bg-slate-200",
                       )}
                     >
                       <MessageContent message={message} />
