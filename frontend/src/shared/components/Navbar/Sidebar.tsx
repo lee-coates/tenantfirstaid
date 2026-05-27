@@ -35,15 +35,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: Props) {
               {label}
             </NavLink>
           ))}
-          <hr className="my-2 border-t border-gray-300" />
-          <p className="text-xs text-gray-400 text-center">
-            UI Version {__APP_VERSION__}
-          </p>
         </div>
       </div>
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30"
+          className="fixed inset-0 z-[45]"
           onClick={() => setSidebarOpen(false)}
         />
       )}

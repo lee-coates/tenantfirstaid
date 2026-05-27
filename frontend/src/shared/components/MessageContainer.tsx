@@ -31,9 +31,10 @@ export default function MessageContainer({
       className={clsx(
         "flex-1 container relative flex flex-col md:flex-row gap-4",
         "p-4 sm:p-6",
-        "bg-paper-background rounded-lg shadow-[0_4px_6px_rgba(0,0,0,0.1)]",
+        "bg-paper-background border-y border-gray-light",
         "max-w-full",
-        isOngoing && "h-[calc(100dvh-var(--navbar-height))]",
+        isOngoing &&
+          "h-[calc(100dvh-var(--navbar-height)-var(--footer-height))]",
       )}
     >
       {letterContent !== "" ? (

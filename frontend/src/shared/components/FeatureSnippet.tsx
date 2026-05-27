@@ -4,7 +4,7 @@ export default function FeatureSnippet() {
   return (
     <div className="flex lg:flex-col justify-center gap-4 pt-4 px-4 sm:pb-4 md:pb-0">
       <div className="w-full">
-        <h2 className="text-xl">Features</h2>
+        <h2 className="hidden lg:block text-xl">Features</h2>
         <ul className="list-disc pl-4">
           <li>Instant answers to common rental questions</li>
           <li>Guidance on tenant rights and landlord obligations</li>

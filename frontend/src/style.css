@@ -3,6 +3,7 @@
 
 :root {
   --navbar-height: 64px;
+  --footer-height: 32px;
 }
 
 @theme {
@@ -50,6 +51,19 @@ body {
   line-height: 1.6;
 }
 
+/* Hide only the document-level scrollbar (html). Internal scroll containers
+   (textarea, chat history, modals, ComparisonGrid horizontal scroll) keep
+   their native scrollbars so users have a scroll affordance for overflow
+   content. Removes the layout shift between pages that scroll and pages
+   that don't, without sacrificing in-app scroll cues. */
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes dotPulse {
   0% {
     opacity: 0.2;
@@ -64,15 +78,14 @@ body {
   }
 }
 
-button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button {
-  @apply transition-colors duration-300 shadow-sm;
+@layer base {
+  button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    @apply transition-colors duration-300 shadow-sm;
+  }
 }
 
 a {

@@ -35,10 +35,14 @@ export default function App() {
             }
           />
         </Routes>
-        <footer className="hidden sm:block fixed bottom-4 right-4 text-xs">
-          UI Version {__APP_VERSION__}
-        </footer>
       </PageLayout>
+      <footer className="fixed bottom-0 left-0 w-full h-(--footer-height) bg-paper-background border-t border-gray-light flex items-center justify-end px-4 text-xs text-gray-dark z-40">
+        <span>
+          &copy; {new Date().getFullYear()} Tenant First Aid
+          <span className="mx-2">|</span>
+          UI Version {__APP_VERSION__}
+        </span>
+      </footer>
     </Router>
   );
 }
