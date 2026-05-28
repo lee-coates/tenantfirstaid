@@ -84,5 +84,3 @@ combined_training_gemini-2.0.jsonl
 /.claude/scheduled_tasks.lock
 /backend/.eval_history/
 /.playwright-mcp
-/.codex
-/.agents
