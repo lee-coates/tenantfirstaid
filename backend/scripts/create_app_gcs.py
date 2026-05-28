@@ -58,7 +58,7 @@ def create_app(
     except gcp_exceptions.AlreadyExists as e:
         raise AppError(
             f"App {engine_id!r} already exists under {parent}. "
-            "Pick a different APP_ID or delete the existing app first."
+            "Pick a different APP_ID or delete the existing app first. BUT DO NOT DELETE/REPLACE A PRODUCTION APP!!!"
         ) from e
 
     return cast(discoveryengine.Engine, operation.result())

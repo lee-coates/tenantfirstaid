@@ -103,7 +103,7 @@ def create_datastore(
     except gcp_exceptions.AlreadyExists as e:
         raise DatastoreError(
             f"Datastore {datastore_id!r} already exists under {parent}. "
-            "Pick a different DATASTORE_ID or delete the existing datastore first."
+            "Pick a different DATASTORE_ID or delete the existing datastore first (BUT DO NOT DELETE/REPLACE A PRODUCTION DATASTORE!!!)."
         ) from e
 
     # create_data_store is a fast LRO; waiting keeps the script linear.
