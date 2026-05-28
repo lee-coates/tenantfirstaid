@@ -1,8 +1,10 @@
 """Tests for scripts.create_datastore_gcs."""
 
+import contextlib
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gcs_helpers import patch_singleton
 from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
@@ -18,6 +20,37 @@ from scripts.create_datastore_gcs import (
     main,
 )
 from scripts.shared import collection_path
+
+_DEFAULT_DS_NAME = (
+    "projects/p/locations/global/collections/default_collection/dataStores/my-ds"
+)
+
+
+def _ds_client(name: str = _DEFAULT_DS_NAME) -> MagicMock:
+    """DataStoreServiceClient mock whose create_data_store LRO returns a datastore with the given name."""
+    client = MagicMock()
+    created = MagicMock()
+    created.name = name
+    operation = MagicMock()
+    operation.result.return_value = created
+    client.create_data_store.return_value = operation
+    return client
+
+
+def _doc_client(
+    *,
+    success: int = 12,
+    failure: int = 0,
+    error_samples: list[MagicMock] | None = None,
+) -> MagicMock:
+    """DocumentServiceClient mock whose import_documents LRO reports the given counts."""
+    client = MagicMock()
+    operation = MagicMock()
+    operation.operation.name = "operations/import-123"
+    operation.result.return_value = MagicMock(error_samples=error_samples or [])
+    operation.metadata = MagicMock(success_count=success, failure_count=failure)
+    client.import_documents.return_value = operation
+    return client
 
 
 class TestCheckBucketLocationCompat:
@@ -71,20 +104,8 @@ class TestCheckBucketLocationCompat:
 
 
 class TestCreateDatastore:
-    def _make_client(
-        self,
-        datastore_name: str = "projects/p/locations/global/collections/default_collection/dataStores/my-ds",
-    ):
-        client = MagicMock()
-        operation = MagicMock()
-        result = MagicMock()
-        result.name = datastore_name
-        operation.result.return_value = result
-        client.create_data_store.return_value = operation
-        return client
-
     def test_creates_and_returns_datastore(self):
-        client = self._make_client()
+        client = _ds_client()
 
         result = create_datastore(client, "my-project", "global", "my-ds", "My DS")
 
@@ -104,22 +125,8 @@ class TestCreateDatastore:
 
 
 class TestImportDocuments:
-    def _make_client(
-        self,
-        success: int = 12,
-        failure: int = 0,
-        error_samples: list[MagicMock] | None = None,
-    ):
-        client = MagicMock()
-        operation = MagicMock()
-        operation.operation.name = "operations/import-123"
-        operation.result.return_value = MagicMock(error_samples=error_samples or [])
-        operation.metadata = MagicMock(success_count=success, failure_count=failure)
-        client.import_documents.return_value = operation
-        return client
-
     def test_wait_true_polls_and_prints_counts(self, capsys):
-        client = self._make_client(success=10, failure=0)
+        client = _doc_client(success=10, failure=0)
 
         import_documents(
             client, "my-project", "global", "my-ds", "my-bucket", wait=True
@@ -131,7 +138,7 @@ class TestImportDocuments:
         assert "failure=0" in out
 
     def test_wait_false_skips_polling(self, capsys):
-        client = self._make_client()
+        client = _doc_client()
 
         import_documents(
             client, "my-project", "global", "my-ds", "my-bucket", wait=False
@@ -143,7 +150,7 @@ class TestImportDocuments:
     def test_error_samples_are_printed(self, capsys):
         err = MagicMock()
         err.message = "bad doc"
-        client = self._make_client(failure=1, error_samples=[err])
+        client = _doc_client(failure=1, error_samples=[err])
 
         import_documents(
             client, "my-project", "global", "my-ds", "my-bucket", wait=True
@@ -152,7 +159,7 @@ class TestImportDocuments:
         assert "bad doc" in capsys.readouterr().out
 
     def test_request_points_at_correct_bucket_and_branch(self):
-        client = self._make_client()
+        client = _doc_client()
 
         import_documents(
             client, "my-project", "global", "my-ds", "my-bucket", wait=False
@@ -192,10 +199,7 @@ class TestMain:
     ]
 
     def _patch_singleton(self):
-        singleton = MagicMock()
-        singleton.GOOGLE_CLOUD_PROJECT = "my-project"
-        singleton.GOOGLE_APPLICATION_CREDENTIALS = "/fake/creds.json"
-        return patch("scripts.create_datastore_gcs.SINGLETON", singleton)
+        return patch_singleton("scripts.create_datastore_gcs.SINGLETON")
 
     def _patch_storage_client(self, bucket_location: str = "US"):
         storage_client = MagicMock()
@@ -206,6 +210,32 @@ class TestMain:
             "scripts.create_datastore_gcs.storage.Client",
             return_value=storage_client,
         )
+
+    @contextlib.contextmanager
+    def _patched_main(
+        self,
+        ds_client: MagicMock,
+        doc_client: MagicMock,
+        *,
+        bucket_location: str = "US",
+        argv: list[str] | None = None,
+    ):
+        """Patch SINGLETON, credentials, storage, both Discovery Engine clients, and argv around a main() call."""
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
+            self._patch_storage_client(bucket_location=bucket_location),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
+                return_value=ds_client,
+            ),
+            patch(
+                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
+                return_value=doc_client,
+            ),
+            patch("sys.argv", argv or self._ARGV_BASE),
+        ):
+            yield
 
     def test_dry_run_does_not_call_api(self, capsys):
         with (
@@ -225,35 +255,10 @@ class TestMain:
         assert "[dry-run]" in capsys.readouterr().out
 
     def test_happy_path_creates_datastore_and_imports(self):
-        ds_client = MagicMock()
-        doc_client = MagicMock()
+        ds_client = _ds_client()
+        doc_client = _doc_client()
 
-        created_ds = MagicMock()
-        created_ds.name = "projects/my-project/locations/global/.../dataStores/my-ds"
-        ds_operation = MagicMock()
-        ds_operation.result.return_value = created_ds
-        ds_client.create_data_store.return_value = ds_operation
-
-        import_operation = MagicMock()
-        import_operation.operation.name = "operations/import-1"
-        import_operation.result.return_value = MagicMock(error_samples=[])
-        import_operation.metadata = MagicMock(success_count=12, failure_count=0)
-        doc_client.import_documents.return_value = import_operation
-
-        with (
-            self._patch_singleton(),
-            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
-            self._patch_storage_client(),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
-                return_value=ds_client,
-            ),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
-                return_value=doc_client,
-            ),
-            patch("sys.argv", self._ARGV_BASE),
-        ):
+        with self._patched_main(ds_client, doc_client):
             main()
 
         ds_client.create_data_store.assert_called_once()
@@ -262,16 +267,11 @@ class TestMain:
     def test_incompatible_bucket_location_raises_before_api_calls(self):
         ds_client = MagicMock()
 
-        with (
-            self._patch_singleton(),
-            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
-            self._patch_storage_client(bucket_location="EU"),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
-                return_value=ds_client,
-            ),
-            patch("scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient"),
-            patch("sys.argv", [*self._ARGV_BASE, "--location", "us"]),
+        with self._patched_main(
+            ds_client,
+            MagicMock(),
+            bucket_location="EU",
+            argv=[*self._ARGV_BASE, "--location", "us"],
         ):
             with pytest.raises(DatastoreError, match="incompatible"):
                 main()
@@ -282,87 +282,31 @@ class TestMain:
         ds_client = MagicMock()
         ds_client.create_data_store.side_effect = gcp_exceptions.AlreadyExists("exists")
 
-        with (
-            self._patch_singleton(),
-            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
-            self._patch_storage_client(),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
-                return_value=ds_client,
-            ),
-            patch("scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient"),
-            patch("sys.argv", self._ARGV_BASE),
-        ):
+        with self._patched_main(ds_client, MagicMock()):
             with pytest.raises(DatastoreError, match="already exists"):
                 main()
 
     def test_import_failure_rolls_back_datastore(self):
-        ds_client = MagicMock()
+        ds_client = _ds_client()
         doc_client = MagicMock()
-
-        created_ds = MagicMock()
-        created_ds.name = (
-            "projects/my-project/locations/global/collections/default_collection"
-            "/dataStores/my-ds"
-        )
-        ds_operation = MagicMock()
-        ds_operation.result.return_value = created_ds
-        ds_client.create_data_store.return_value = ds_operation
-
         doc_client.import_documents.side_effect = RuntimeError("network timeout")
 
-        with (
-            self._patch_singleton(),
-            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
-            self._patch_storage_client(),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
-                return_value=ds_client,
-            ),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
-                return_value=doc_client,
-            ),
-            patch("sys.argv", self._ARGV_BASE),
-        ):
+        with self._patched_main(ds_client, doc_client):
             with pytest.raises(DatastoreError, match="Import failed"):
                 main()
 
         ds_client.delete_data_store.assert_called_once()
 
     def test_import_failure_with_cleanup_error_reports_manual_step(self, capsys):
-        ds_client = MagicMock()
-        doc_client = MagicMock()
-
-        created_ds = MagicMock()
-        created_ds.name = (
-            "projects/my-project/locations/global/collections/default_collection"
-            "/dataStores/my-ds"
-        )
-        ds_operation = MagicMock()
-        ds_operation.result.return_value = created_ds
-        ds_client.create_data_store.return_value = ds_operation
+        ds_client = _ds_client()
         ds_client.delete_data_store.side_effect = RuntimeError("permission denied")
-
+        doc_client = MagicMock()
         doc_client.import_documents.side_effect = RuntimeError("network timeout")
 
-        with (
-            self._patch_singleton(),
-            patch("scripts.create_datastore_gcs.load_gcp_credentials"),
-            self._patch_storage_client(),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DataStoreServiceClient",
-                return_value=ds_client,
-            ),
-            patch(
-                "scripts.create_datastore_gcs.discoveryengine.DocumentServiceClient",
-                return_value=doc_client,
-            ),
-            patch("sys.argv", self._ARGV_BASE),
-        ):
+        with self._patched_main(ds_client, doc_client):
             with pytest.raises(DatastoreError, match="Import failed"):
                 main()
 
         err = capsys.readouterr().err
         assert "Rollback failed" in err
-        assert created_ds.name in err
+        assert _DEFAULT_DS_NAME in err

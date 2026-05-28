@@ -17,6 +17,13 @@ from scripts.upload_to_gcs import (
 )
 
 
+@contextlib.contextmanager
+def _silence_stdout():
+    """Suppress stdout so script print() output doesn't clutter the test report."""
+    with contextlib.redirect_stdout(io.StringIO()):
+        yield
+
+
 def _write_metadata(path: Path, bucket: str, names: list[str]) -> None:
     """Write a minimal metadata.jsonl with one entry per name."""
     with path.open("w") as f:
@@ -185,7 +192,7 @@ class TestUploadFiles:
         metadata = tmp_path / "metadata.jsonl"
         metadata.write_text("{}")
 
-        with contextlib.redirect_stdout(io.StringIO()):
+        with _silence_stdout():
             upload_files(bucket_obj, {"a.txt": a, "b.txt": b}, metadata)
 
         assert set(blobs.keys()) == {"a.txt", "b.txt", "metadata.jsonl"}
@@ -226,7 +233,7 @@ class TestMain:
         ):
             from scripts.upload_to_gcs import main
 
-            with contextlib.redirect_stdout(io.StringIO()):
+            with _silence_stdout():
                 main()
 
         client_cls.assert_not_called()
@@ -262,7 +269,7 @@ class TestMain:
 
             from scripts.upload_to_gcs import main
 
-            with contextlib.redirect_stdout(io.StringIO()):
+            with _silence_stdout():
                 main()
 
         client_cls.return_value.create_bucket.assert_called_once_with(

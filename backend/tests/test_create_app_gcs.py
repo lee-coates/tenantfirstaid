@@ -5,6 +5,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from google.api_core import exceptions as gcp_exceptions
 
+from gcs_helpers import patch_singleton
+
 from scripts.create_app_gcs import (
     AppError,
     create_app,
@@ -51,10 +53,7 @@ class TestMain:
     _ARGV_BASE = ["create_app_gcs", "--datastore-id", "my-ds", "--app-id", "my-app"]
 
     def _patch_singleton(self):
-        singleton = MagicMock()
-        singleton.GOOGLE_CLOUD_PROJECT = "my-project"
-        singleton.GOOGLE_APPLICATION_CREDENTIALS = "/fake/creds.json"
-        return patch("scripts.create_app_gcs.SINGLETON", singleton)
+        return patch_singleton("scripts.create_app_gcs.SINGLETON")
 
     def test_dry_run_does_not_call_api(self, capsys):
         with (
