@@ -38,7 +38,7 @@ typecheck-pyrefly: uv.lock
 	$(PYTHON) run pyrefly check $(TYPECHECK_OPTIONS) --python-interpreter-path .venv/bin/python3
 
 test: uv.lock
-	uv run pytest -v -s $(TEST_OPTIONS)
+	uv run pytest -v $(TEST_OPTIONS)
 
 generate-types: uv.lock
 	cd ../frontend && npm run generate-types
