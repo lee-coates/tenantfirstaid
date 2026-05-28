@@ -1,5 +1,7 @@
 """Tests for scripts.upload_to_gcs."""
 
+import contextlib
+import io
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -183,7 +185,8 @@ class TestUploadFiles:
         metadata = tmp_path / "metadata.jsonl"
         metadata.write_text("{}")
 
-        upload_files(bucket_obj, {"a.txt": a, "b.txt": b}, metadata)
+        with contextlib.redirect_stdout(io.StringIO()):
+            upload_files(bucket_obj, {"a.txt": a, "b.txt": b}, metadata)
 
         assert set(blobs.keys()) == {"a.txt", "b.txt", "metadata.jsonl"}
         blobs["a.txt"].upload_from_filename.assert_called_once_with(
@@ -223,7 +226,8 @@ class TestMain:
         ):
             from scripts.upload_to_gcs import main
 
-            main()
+            with contextlib.redirect_stdout(io.StringIO()):
+                main()
 
         client_cls.assert_not_called()
 
@@ -258,7 +262,8 @@ class TestMain:
 
             from scripts.upload_to_gcs import main
 
-            main()
+            with contextlib.redirect_stdout(io.StringIO()):
+                main()
 
         client_cls.return_value.create_bucket.assert_called_once_with(
             "fresh-bucket", location="US"
