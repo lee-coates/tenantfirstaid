@@ -1,38 +1,4 @@
-import type { OregonCity, UsaState } from "../../types/models";
-
 const CONTACT_EMAIL = "michael@qiu-qiulaw.com";
-
-interface CitySelectOptionType {
-  city: OregonCity | null;
-  state: UsaState | null;
-  label: string;
-}
-
-const CITY_SELECT_OPTIONS: Record<
-  OregonCity | "oregon" | "other",
-  CitySelectOptionType
-> = {
-  portland: {
-    city: "portland",
-    state: "or",
-    label: "Portland",
-  },
-  eugene: {
-    city: "eugene",
-    state: "or",
-    label: "Eugene",
-  },
-  oregon: {
-    city: null,
-    state: "or",
-    label: "Other city in Oregon",
-  },
-  other: {
-    city: null,
-    state: null,
-    label: "City in another state",
-  },
-};
 
 const HOUSING_OPTIONS = [
   "Apartment/House Rental",
@@ -144,16 +110,20 @@ const REFERENCED_LAW_LIST = {
   },
 };
 
+// Feature links whose target carries the active jurisdiction (see the navbar
+// location picker), e.g. Chat -> /chat/or/portland.
+const NAVBAR_FEATURES = [
+  { label: "Chat", basePath: "/chat" },
+  { label: "Letter", basePath: "/letter" },
+] as const;
+
 const NAVBAR_LINKS = [
-  { to: "/chat", label: "Chat" },
-  { to: "/letter", label: "Letter" },
   { to: "/about", label: "About Tenant First Aid" },
   { to: "/disclaimer", label: "Disclaimer" },
   { to: "/privacy-policy", label: "Privacy Policy" },
 ];
 
 export {
-  CITY_SELECT_OPTIONS,
   HOUSING_OPTIONS,
   LETTERABLE_TOPIC_OPTIONS,
   NONLETTERABLE_TOPIC_OPTIONS,
@@ -161,10 +131,8 @@ export {
   CONTACT_EMAIL,
   REFERENCED_LAW_LIST,
   NAVBAR_LINKS,
+  NAVBAR_FEATURES,
 };
 
-export type { CitySelectOptionType };
-
-export type CitySelectKey = keyof typeof CITY_SELECT_OPTIONS;
 export type HousingType = (typeof HOUSING_OPTIONS)[number];
 export type TenantTopic = keyof typeof ALL_TOPIC_OPTIONS;

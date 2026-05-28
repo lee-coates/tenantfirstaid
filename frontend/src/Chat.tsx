@@ -1,14 +1,46 @@
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
+import useSyncJurisdiction from "./hooks/useSyncJurisdiction";
 import { useLetterContent } from "./hooks/useLetterContent";
 import ChatDisclaimer from "./pages/Chat/components/ChatDisclaimer";
 import FrequentInquiries from "./pages/Chat/components/FrequentInquiries";
 import MessageContainer from "./shared/components/MessageContainer";
 import FeatureSnippet from "./shared/components/FeatureSnippet";
 import MobilePanel from "./shared/components/MobilePanel";
+import { Navigate, useParams } from "react-router-dom";
+import { classifyStateSegment } from "./shared/utils/jurisdiction";
+import { DEFAULT_JURISDICTION } from "./shared/constants/jurisdictions";
 import clsx from "clsx";
 
+/**
+ * Routes /chat requests by classifying the :state segment: an out-of-state
+ * state is redirected to Oregon with a flag so the page can explain the
+ * switch, a non-state typo is quietly canonicalized to Oregon, and supported
+ * states render ChatView.
+ */
 export default function Chat() {
+  const { state: stateParam } = useParams();
+  const kind = classifyStateSegment(stateParam);
+
+  if (kind === "out-of-state") {
+    return (
+      <Navigate
+        to={`/chat${DEFAULT_JURISDICTION.pathSuffix}`}
+        replace
+        state={{ unsupportedRegion: true }}
+      />
+    );
+  }
+
+  if (kind === "unknown") {
+    return <Navigate to={`/chat${DEFAULT_JURISDICTION.pathSuffix}`} replace />;
+  }
+
+  return <ChatView />;
+}
+
+function ChatView() {
+  useSyncJurisdiction();
   const { addMessage, messages, setMessages } = useMessages();
   const isOngoing = messages.length > 0;
   const { letterContent } = useLetterContent(messages);

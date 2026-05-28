@@ -3,11 +3,21 @@ import type { UiMessage } from "./shared/types/messages";
 import MessageWindow from "./pages/Chat/components/MessageWindow";
 import useMessages from "./hooks/useMessages";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { useLetterContent } from "./hooks/useLetterContent";
 import { streamText } from "./pages/Chat/utils/streamHelper";
 import LetterGenerationDialog from "./pages/Letter/components/LetterGenerationDialog";
 import { buildLetterUserMessage } from "./pages/Letter/utils/letterHelper";
+import {
+  classifyStateSegment,
+  jurisdictionByKey,
+  resolveJurisdiction,
+  toLocation,
+} from "./shared/utils/jurisdiction";
+import {
+  DEFAULT_JURISDICTION,
+  type JurisdictionOption,
+} from "./shared/constants/jurisdictions";
 import LetterDisclaimer from "./pages/Letter/components/LetterDisclaimer";
 import MessageContainer from "./shared/components/MessageContainer";
 import useHousingContext from "./hooks/useHousingContext";
@@ -18,11 +28,57 @@ import FrequentInquiries from "./pages/Chat/components/FrequentInquiries";
 import MobilePanel from "./shared/components/MobilePanel";
 import clsx from "clsx";
 
+/**
+ * Routes /letter requests by classifying the leading segment: an out-of-state
+ * state is redirected to Oregon with a flag so the page can explain the switch,
+ * a legacy /letter/:org/:loc partner link is redirected to the canonical
+ * /letter/:state/:city?org= form, and supported states render LetterView.
+ */
 export default function Letter() {
+  const { state: seg1, city: seg2 } = useParams();
+  const [searchParams] = useSearchParams();
+  const kind = classifyStateSegment(seg1);
+
+  if (kind === "out-of-state") {
+    return (
+      <Navigate
+        to={`/letter${DEFAULT_JURISDICTION.pathSuffix}`}
+        replace
+        state={{ unsupportedRegion: true }}
+      />
+    );
+  }
+
+  // A non-state leading segment is a legacy /letter/:org/:loc partner link;
+  // the loc shares the JurisdictionKey naming, so look it up directly.
+  if (kind === "unknown") {
+    const { pathSuffix } = jurisdictionByKey(seg2);
+    const search = seg1 ? `?org=${encodeURIComponent(seg1)}` : "";
+    return <Navigate to={`/letter${pathSuffix}${search}`} replace />;
+  }
+
+  const jurisdiction = resolveJurisdiction(seg1, seg2);
+  const org = searchParams.get("org") ?? undefined;
+  // Remount on jurisdiction/org change so the letter regenerates from scratch
+  // (the init guard and message state are per-mount).
+  return (
+    <LetterView
+      key={`${jurisdiction.key}|${org ?? ""}`}
+      jurisdiction={jurisdiction}
+      org={org}
+    />
+  );
+}
+
+interface LetterViewProps {
+  jurisdiction: JurisdictionOption;
+  org: string | undefined;
+}
+
+function LetterView({ jurisdiction, org }: LetterViewProps) {
   const { addMessage, messages, setMessages } = useMessages();
   const isOngoing = messages.length > 0;
   const { letterContent } = useLetterContent(messages);
-  const { org, loc } = useParams();
   const [startStreaming, setStartStreaming] = useState(false);
   const streamLocationRef = useRef<Location | null>(null);
   const [isGenerating, setIsGenerating] = useState(true);
@@ -30,8 +86,14 @@ export default function Letter() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasInitialized = useRef(false);
   const LOADING_DISPLAY_DELAY_MS = 1000;
-  const { housingLocation, housingType, tenantTopic, issueDescription } =
-    useHousingContext();
+  const {
+    housingLocation,
+    housingType,
+    tenantTopic,
+    issueDescription,
+    handleHousingLocation,
+    handleCityChange,
+  } = useHousingContext();
   const { userMessage: initialUserMessage } = buildChatUserMessage(
     housingLocation,
     housingType,
@@ -39,11 +101,17 @@ export default function Letter() {
     issueDescription,
   );
 
+  // Keep the URL the source of truth for follow-up messages and the navbar
+  // location picker on this page.
+  useEffect(() => {
+    handleHousingLocation(toLocation(jurisdiction));
+    handleCityChange(jurisdiction.key);
+  }, [jurisdiction, handleHousingLocation, handleCityChange]);
+
   // Adds the initial user message once and triggers streaming.
   useEffect(() => {
     if (hasInitialized.current) return;
-    const output = buildLetterUserMessage(org, loc);
-    if (output === null) return;
+    const output = buildLetterUserMessage(org, toLocation(jurisdiction));
     hasInitialized.current = true;
     const hasIssueContext = issueDescription !== "";
 
@@ -60,7 +128,7 @@ export default function Letter() {
     ]);
     streamLocationRef.current = output.selectedLocation;
     setStartStreaming(true);
-  }, [loc, org, setMessages, issueDescription, initialUserMessage]);
+  }, [jurisdiction, org, setMessages, issueDescription, initialUserMessage]);
 
   useEffect(() => {
     if (startStreaming === false || streamLocationRef.current === null) return;

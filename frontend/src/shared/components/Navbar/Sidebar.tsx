@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { NAVBAR_LINKS } from "../../constants/constants";
+import { NAVBAR_LINKS, NAVBAR_FEATURES } from "../../constants/constants";
+import useActiveJurisdiction from "../../../hooks/useActiveJurisdiction";
 import clsx from "clsx";
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: Props) {
+  const { active } = useActiveJurisdiction();
+
   return (
     <>
       <div
@@ -20,6 +23,21 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: Props) {
         )}
       >
         <div className="flex flex-col p-8 gap-6 mt-10">
+          {NAVBAR_FEATURES.map(({ label, basePath }) => (
+            <NavLink
+              to={`${basePath}${active.pathSuffix}`}
+              key={label}
+              className={({ isActive }) =>
+                clsx(
+                  "block px-3 py-2 rounded no-underline text-gray-dark font-medium hover:text-paper-background transition-colors hover:bg-green-medium",
+                  isActive && "bg-green-background",
+                )
+              }
+              onClick={() => setSidebarOpen(false)}
+            >
+              {label}
+            </NavLink>
+          ))}
           {NAVBAR_LINKS.map(({ to, label }) => (
             <NavLink
               to={to}

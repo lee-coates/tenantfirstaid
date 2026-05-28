@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./shared/components/Navbar/Navbar";
+import RegionNotice from "./shared/components/RegionNotice";
 import Chat from "./Chat";
 import LoadingPage from "./pages/LoadingPage";
 import PageLayout from "./layouts/PageLayout";
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <Router>
       <Navbar />
+      <RegionNotice />
       <PageLayout>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -24,9 +26,8 @@ export default function App() {
             element={
               <Suspense fallback={<LoadingPage />}>
                 <Routes>
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/letter" element={<Letter />} />
-                  <Route path="/letter/:org/:loc?" element={<Letter />} />
+                  <Route path="/chat/:state?/:city?" element={<Chat />} />
+                  <Route path="/letter/:state?/:city?" element={<Letter />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/disclaimer" element={<Disclaimer />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />

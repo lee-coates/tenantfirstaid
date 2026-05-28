@@ -1,20 +1,17 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import DOMPurify, { SANITIZE_USER_SETTINGS } from "../shared/utils/dompurify";
 import type { Location } from "../types/models";
-import type {
-  CitySelectKey,
-  HousingType,
-  TenantTopic,
-} from "../shared/constants/constants";
+import type { HousingType, TenantTopic } from "../shared/constants/constants";
+import type { JurisdictionKey } from "../shared/constants/jurisdictions";
 
 export interface HousingContextType {
   housingLocation: Location;
-  city: CitySelectKey | null;
+  city: JurisdictionKey | null;
   housingType: HousingType | null;
   tenantTopic: TenantTopic | null;
   issueDescription: string;
   handleHousingLocation: ({ city, state }: Location) => void;
-  handleCityChange: (option: CitySelectKey | null) => void;
+  handleCityChange: (option: JurisdictionKey | null) => void;
   handleHousingChange: (option: HousingType | null) => void;
   handleTenantTopic: (option: TenantTopic | null) => void;
   handleIssueDescription: (
@@ -30,7 +27,7 @@ interface Props {
 }
 
 export default function HousingContextProvider({ children }: Props) {
-  const [city, setCity] = useState<CitySelectKey | null>(null);
+  const [city, setCity] = useState<JurisdictionKey | null>(null);
   const [housingLocation, setHousingLocation] = useState<Location>({
     city: null,
     state: null,
@@ -43,7 +40,7 @@ export default function HousingContextProvider({ children }: Props) {
     setHousingLocation({ city, state });
   }, []);
 
-  const handleCityChange = useCallback((option: CitySelectKey | null) => {
+  const handleCityChange = useCallback((option: JurisdictionKey | null) => {
     setCity(option);
   }, []);
 
@@ -64,9 +61,8 @@ export default function HousingContextProvider({ children }: Props) {
     [],
   );
 
+  // Location is owned by the navbar picker / URL, so a form reset leaves it.
   const handleFormReset = useCallback(() => {
-    setCity(null);
-    setHousingLocation({ city: null, state: null });
     setHousingType(null);
     setTenantTopic(null);
     setIssueDescription("");
