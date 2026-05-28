@@ -63,6 +63,21 @@ make create-app-gcs DATASTORE_ID=my-ds APP_ID=my-app APP_OPTIONS=--dry-run
 
 **Cross-project note:** if the GCS bucket and the Discovery Engine project are in different GCP projects, the Vertex AI Search service agent for the Discovery Engine project must be granted `roles/storage.objectViewer` on the bucket. In same-project setups this is automatic.
 
+## Debugging and diagnosis
+
+Two helper scripts inspect Vertex AI Search directly, bypassing LangChain/LangGraph, so you can isolate retrieval behavior from the agent framework:
+
+```bash
+# List the datastores in the project (IDs, display names, document counts).
+uv run python -m scripts.vertex_ai_list_datastores
+
+# Query a datastore directly: what passages come back for a query + filter?
+uv run python -m scripts.vertex_ai_search search "security deposit interest" --state or
+uv run python -m scripts.vertex_ai_search search "ORS 90.155 notice delivery" --state or --city portland
+```
+
+Use these to verify a freshly created datastore actually returns the expected documents before pointing the backend at it via `VERTEX_AI_DATASTORE_LAWS`.
+
 ## Publication cadence
 
 Oregon publishes statutes and annotations on offset biennial cycles:
