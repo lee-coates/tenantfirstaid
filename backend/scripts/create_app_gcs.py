@@ -11,13 +11,11 @@ from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
 from scripts.shared import collection_path, validate_resource_name
-from tenantfirstaid.constants import SINGLETON
+from tenantfirstaid.constants import DEFAULT_VERTEX_AI_SEARCH_LOCATION, SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
     load_gcp_credentials,
 )
-
-DEFAULT_LOCATION = "us"
 
 
 class AppError(RuntimeError):
@@ -87,9 +85,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--location",
-        default=DEFAULT_LOCATION,
+        default=DEFAULT_VERTEX_AI_SEARCH_LOCATION,
         help=(
-            f"Vertex AI Search location (default: {DEFAULT_LOCATION}). "
+            f"Vertex AI Search location (default: {DEFAULT_VERTEX_AI_SEARCH_LOCATION}). "
             "Must match the location used in create-datastore-gcs."
         ),
     )

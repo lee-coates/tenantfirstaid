@@ -162,6 +162,11 @@ class _GoogEnvAndPolicy:
 # the model sets the budget dynamically based on query complexity.
 GEMINI_THINKING_BUDGET_DYNAMIC: Final = -1
 
+# Default Vertex AI Search (Discovery Engine) multi-region for the GCS ingestion
+# scripts. Distinct from GOOGLE_CLOUD_LOCATION, which is the compute region for
+# the LLM. Typical values: global, us, eu.
+DEFAULT_VERTEX_AI_SEARCH_LOCATION: Final = "us"
+
 # Module singleton
 # TODO: rename to VERTEX_CONFIG?
 # Use the project log format for the "no .env" warning emitted during __init__,

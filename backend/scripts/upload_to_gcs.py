@@ -22,7 +22,10 @@ from tenantfirstaid.google_auth import load_gcp_credentials
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents" / "or"
 DEFAULT_METADATA_FILE = DOCUMENTS_DIR / "metadata.jsonl"
-DEFAULT_LOCATION = "US"
+# GCS bucket locations are uppercase (US, EU, ASIA), unlike the lowercase Vertex
+# AI Search multi-regions (us, eu, global). This US bucket pairs with a "us"
+# datastore; see check_bucket_location_compat in create_datastore_gcs.py.
+DEFAULT_BUCKET_LOCATION = "US"
 
 
 class UploadError(RuntimeError):
@@ -147,8 +150,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--location",
-        default=DEFAULT_LOCATION,
-        help=f"GCS bucket location (default: {DEFAULT_LOCATION}). "
+        default=DEFAULT_BUCKET_LOCATION,
+        help=f"GCS bucket location (default: {DEFAULT_BUCKET_LOCATION}). "
         "Use a multi-region (US, EU, ASIA) or single-region (us-central1, etc.).",
     )
     parser.add_argument(

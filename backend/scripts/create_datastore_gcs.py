@@ -15,13 +15,12 @@ from google.cloud import discoveryengine_v1 as discoveryengine
 from google.cloud import storage
 
 from scripts.shared import collection_path, validate_resource_name
-from tenantfirstaid.constants import SINGLETON
+from tenantfirstaid.constants import DEFAULT_VERTEX_AI_SEARCH_LOCATION, SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
     load_gcp_credentials,
 )
 
-DEFAULT_LOCATION = "us"
 METADATA_OBJECT_NAME = "metadata.jsonl"
 # Upper bound for the rollback delete-datastore LRO. If the same conditions
 # that broke import (auth/network) also block the delete, this lets us surface
@@ -195,9 +194,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--location",
-        default=DEFAULT_LOCATION,
+        default=DEFAULT_VERTEX_AI_SEARCH_LOCATION,
         help=(
-            f"Vertex AI Search location (default: {DEFAULT_LOCATION}). "
+            f"Vertex AI Search location (default: {DEFAULT_VERTEX_AI_SEARCH_LOCATION}). "
             "Typical values: global, us, eu."
         ),
     )
