@@ -6,22 +6,29 @@ import {
   type JurisdictionOption,
 } from "../shared/constants/jurisdictions";
 import {
+  jurisdictionByKey,
   jurisdictionFromPathname,
   toLocation,
 } from "../shared/utils/jurisdiction";
 
 /**
- * Exposes the active jurisdiction (read from the URL, defaulting to Oregon at
- * large) and a `selectLocation` action used by the navbar/sidebar location
- * picker. Selecting a location keeps the user on their current feature (chat
- * or letter) by navigating within it.
+ * Exposes the active jurisdiction and a `selectLocation` action used by the
+ * navbar/sidebar location picker. On chat/letter the URL is the source of
+ * truth; elsewhere (e.g. the homepage) there is no jurisdiction in the URL, so
+ * it falls back to the picked location, defaulting to Oregon at large.
+ * Selecting a location keeps the user on their current feature by navigating
+ * within it.
  */
 export default function useActiveJurisdiction() {
-  const { handleCityChange, handleHousingLocation } = useHousingContext();
+  const { city, handleCityChange, handleHousingLocation } = useHousingContext();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const active = jurisdictionFromPathname(pathname);
+  const isFeaturePath =
+    pathname.startsWith("/chat") || pathname.startsWith("/letter");
+  const active = isFeaturePath
+    ? jurisdictionFromPathname(pathname)
+    : jurisdictionByKey(city);
 
   const selectLocation = useCallback(
     (option: JurisdictionOption) => {

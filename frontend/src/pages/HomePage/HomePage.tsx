@@ -8,8 +8,11 @@ import ChartIcon from "../../shared/components/ChartIcon";
 import ActivityIcon from "../../shared/components/ActivityIcon";
 import ComparisonGrid from "./ComparisonGrid/ComparisonGrid";
 import LetterCarousel from "./LetterCarousel/LetterCarousel";
+import useActiveJurisdiction from "../../hooks/useActiveJurisdiction";
 
 export default function HomePage() {
+  const { active } = useActiveJurisdiction();
+
   return (
     <>
       <div className="bg-emerald-950 w-full overflow-x-hidden relative text-[#F4F4F2] selection:bg-emerald-500 selection:text-white">
@@ -38,7 +41,7 @@ export default function HomePage() {
           <div className="text-white flex justify-center gap-[60px] max-w-[1200px] mx-auto max-[950px]:flex-col">
             <div className="flex-1 text-center">
               <div className="cursor-pointer mt-5 text-emerald-500 font-semibold">
-                <a href="/chat" className="no-underline">
+                <a href={`/chat${active.pathSuffix}`} className="no-underline">
                   <h4 className="text-[32px] text-[#F4F4F2] border-b-2 border-emerald-500 pb-[15px] font-bold">
                     Chat with Brainy<span className="pl-2.5">→</span>
                   </h4>
@@ -47,7 +50,10 @@ export default function HomePage() {
             </div>
             <div className="flex-1 text-center">
               <div className="cursor-pointer mt-5 text-emerald-500 font-semibold">
-                <a href="/letter" className="no-underline">
+                <a
+                  href={`/letter${active.pathSuffix}`}
+                  className="no-underline"
+                >
                   <h4 className="text-[32px] text-[#F4F4F2] border-b-2 border-emerald-500 pb-[15px] font-bold">
                     Draft a letter<span className="pl-2.5">→</span>
                   </h4>

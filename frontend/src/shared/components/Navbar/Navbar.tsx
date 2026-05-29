@@ -24,9 +24,12 @@ export default function Navbar() {
   const { active } = useActiveJurisdiction();
   const { pathname } = useLocation();
 
-  // The location picker only affects chat/letter, so hide it elsewhere.
+  // The location picker drives the Chat/Letter links, so show it on the home
+  // page and the feature routes, but not on static pages like /about.
   const showLocationMenu =
-    pathname.startsWith("/chat") || pathname.startsWith("/letter");
+    pathname === "/" ||
+    pathname.startsWith("/chat") ||
+    pathname.startsWith("/letter");
 
   return (
     <nav className="fixed w-full bg-green-dark shadow-md py-3 px-6 z-50">
