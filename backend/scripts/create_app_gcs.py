@@ -10,7 +10,7 @@ from typing import cast
 from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 
-from scripts.shared import collection_path, validate_resource_name
+from scripts.shared import collection_path, datastore_path, validate_resource_name
 from tenantfirstaid.constants import DEFAULT_VERTEX_AI_SEARCH_LOCATION, SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
@@ -24,6 +24,23 @@ class AppError(RuntimeError):
 
 def _engine_path(project: str, location: str, engine_id: str) -> str:
     return f"{collection_path(project, location)}/engines/{engine_id}"
+
+
+def verify_datastore_exists(
+    client: discoveryengine.DataStoreServiceClient,
+    project: str,
+    location: str,
+    datastore_id: str,
+) -> None:
+    """Fail fast if datastore_id does not exist, before creating the app."""
+    name = datastore_path(project, location, datastore_id)
+    try:
+        client.get_data_store(name=name)
+    except gcp_exceptions.NotFound as e:
+        raise AppError(
+            f"Datastore {datastore_id!r} not found under {collection_path(project, location)}. "
+            "Check --datastore-id, or run create-datastore-gcs first."
+        ) from e
 
 
 def create_app(
@@ -115,6 +132,11 @@ def main() -> None:
 
     credentials = load_gcp_credentials(SINGLETON.GOOGLE_APPLICATION_CREDENTIALS)
     client_options = discoveryengine_client_options(args.location)
+
+    datastore_client = discoveryengine.DataStoreServiceClient(
+        credentials=credentials, client_options=client_options
+    )
+    verify_datastore_exists(datastore_client, project, args.location, args.datastore_id)
 
     engine_client = discoveryengine.EngineServiceClient(
         credentials=credentials, client_options=client_options

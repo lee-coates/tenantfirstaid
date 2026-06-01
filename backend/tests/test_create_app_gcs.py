@@ -11,6 +11,7 @@ from scripts.create_app_gcs import (
     AppError,
     create_app,
     main,
+    verify_datastore_exists,
 )
 from scripts.shared import collection_path
 
@@ -49,6 +50,24 @@ class TestCreateApp:
             create_app(client, "my-project", "global", "my-app", "My App", "my-ds")
 
 
+class TestVerifyDatastoreExists:
+    def test_passes_when_datastore_exists(self):
+        client = MagicMock()
+
+        verify_datastore_exists(client, "my-project", "global", "my-ds")
+
+        client.get_data_store.assert_called_once_with(
+            name=f"{collection_path('my-project', 'global')}/dataStores/my-ds"
+        )
+
+    def test_not_found_raises_app_error(self):
+        client = MagicMock()
+        client.get_data_store.side_effect = gcp_exceptions.NotFound("missing")
+
+        with pytest.raises(AppError, match="not found"):
+            verify_datastore_exists(client, "my-project", "global", "my-ds")
+
+
 class TestMain:
     _ARGV_BASE = ["create_app_gcs", "--datastore-id", "my-ds", "--app-id", "my-app"]
 
@@ -82,6 +101,7 @@ class TestMain:
         with (
             self._patch_singleton(),
             patch("scripts.create_app_gcs.load_gcp_credentials"),
+            patch("scripts.create_app_gcs.discoveryengine.DataStoreServiceClient"),
             patch(
                 "scripts.create_app_gcs.discoveryengine.EngineServiceClient",
                 return_value=engine_client,
@@ -102,6 +122,7 @@ class TestMain:
         with (
             self._patch_singleton(),
             patch("scripts.create_app_gcs.load_gcp_credentials"),
+            patch("scripts.create_app_gcs.discoveryengine.DataStoreServiceClient"),
             patch(
                 "scripts.create_app_gcs.discoveryengine.EngineServiceClient",
                 return_value=engine_client,
@@ -110,3 +131,26 @@ class TestMain:
         ):
             with pytest.raises(AppError, match="already exists"):
                 main()
+
+    def test_missing_datastore_raises_before_creating_engine(self):
+        datastore_client = MagicMock()
+        datastore_client.get_data_store.side_effect = gcp_exceptions.NotFound("missing")
+        engine_client = MagicMock()
+
+        with (
+            self._patch_singleton(),
+            patch("scripts.create_app_gcs.load_gcp_credentials"),
+            patch(
+                "scripts.create_app_gcs.discoveryengine.DataStoreServiceClient",
+                return_value=datastore_client,
+            ),
+            patch(
+                "scripts.create_app_gcs.discoveryengine.EngineServiceClient",
+                return_value=engine_client,
+            ),
+            patch("sys.argv", self._ARGV_BASE),
+        ):
+            with pytest.raises(AppError, match="not found"):
+                main()
+
+        engine_client.create_engine.assert_not_called()
