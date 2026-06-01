@@ -195,7 +195,9 @@ def main() -> None:
         return
 
     credentials = load_gcp_credentials(SINGLETON.GOOGLE_APPLICATION_CREDENTIALS)
-    client = storage.Client(credentials=credentials)
+    client = storage.Client(
+        credentials=credentials, project=SINGLETON.GOOGLE_CLOUD_PROJECT
+    )
     bucket_obj = create_bucket(client, args.bucket, args.location)
     print(f"Created bucket gs://{args.bucket} in {args.location}.")
 

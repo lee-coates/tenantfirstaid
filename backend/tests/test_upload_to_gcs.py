@@ -9,6 +9,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from google.api_core import exceptions as gcp_exceptions
 
+from gcs_helpers import patch_singleton
+
 from scripts.upload_to_gcs import (
     UploadError,
     create_bucket,
@@ -250,6 +252,7 @@ class TestMain:
         bucket_obj.blob.return_value = blob
 
         with (
+            patch_singleton("scripts.upload_to_gcs.SINGLETON"),
             patch("scripts.upload_to_gcs.storage.Client") as client_cls,
             patch("scripts.upload_to_gcs.load_gcp_credentials"),
             patch(
@@ -272,6 +275,8 @@ class TestMain:
             with _silence_stdout():
                 main()
 
+        # The bucket is created in the configured project, not the credentials' default.
+        assert client_cls.call_args.kwargs["project"] == "my-project"
         client_cls.return_value.create_bucket.assert_called_once_with(
             "fresh-bucket", location="US"
         )
