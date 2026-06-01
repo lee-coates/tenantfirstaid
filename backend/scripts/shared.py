@@ -18,3 +18,7 @@ def validate_resource_name(value: str) -> str:
 
 def collection_path(project: str, location: str) -> str:
     return f"projects/{project}/locations/{location}/collections/default_collection"
+
+
+def datastore_path(project: str, location: str, datastore_id: str) -> str:
+    return f"{collection_path(project, location)}/dataStores/{datastore_id}"

@@ -14,7 +14,7 @@ from google.api_core import exceptions as gcp_exceptions
 from google.cloud import discoveryengine_v1 as discoveryengine
 from google.cloud import storage
 
-from scripts.shared import collection_path, validate_resource_name
+from scripts.shared import collection_path, datastore_path, validate_resource_name
 from tenantfirstaid.constants import DEFAULT_VERTEX_AI_SEARCH_LOCATION, SINGLETON
 from tenantfirstaid.google_auth import (
     discoveryengine_client_options,
@@ -36,12 +36,8 @@ class DatastoreError(RuntimeError):
     """Raised when the datastore pipeline cannot proceed."""
 
 
-def _datastore_path(project: str, location: str, datastore_id: str) -> str:
-    return f"{collection_path(project, location)}/dataStores/{datastore_id}"
-
-
 def _branch_path(project: str, location: str, datastore_id: str) -> str:
-    return f"{_datastore_path(project, location, datastore_id)}/branches/default_branch"
+    return f"{datastore_path(project, location, datastore_id)}/branches/default_branch"
 
 
 def check_bucket_location_compat(
@@ -221,7 +217,7 @@ def main() -> None:
     display_name = args.display_name or args.datastore_id
 
     print(
-        f"Plan: create datastore {_datastore_path(project, args.location, args.datastore_id)!r} "
+        f"Plan: create datastore {datastore_path(project, args.location, args.datastore_id)!r} "
         f"(display_name={display_name!r}) and import from "
         f"gs://{args.bucket}/{METADATA_OBJECT_NAME}."
     )
