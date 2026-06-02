@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from scripts.generate_metadata_jsonl import build_entries, enforce_ascii, infer_city
+from scripts.generate_metadata_jsonl import build_entries, infer_city
 
 
 class TestInferCity:
@@ -81,96 +81,10 @@ class TestBuildEntries:
             build_entries(tmp_path, "my-bucket", set())
 
     def test_unknown_non_ascii_raises(self, tmp_path: Path):
+        # Smoke test for the delegation; conversion cases live in test_enforce_ascii.py.
         (tmp_path / "ORS090.txt").write_text("café", encoding="utf-8")
         with pytest.raises(RuntimeError, match="failed ASCII validation"):
             build_entries(tmp_path, "my-bucket", set())
-
-    def test_unknown_non_ascii_warns_all_offenders(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture
-    ):
-        (tmp_path / "A.txt").write_text("café", encoding="utf-8")
-        (tmp_path / "B.txt").write_text("résumé", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="failed ASCII validation"):
-            build_entries(tmp_path, "my-bucket", set())
-        err = capsys.readouterr().err
-        assert "A.txt" in err
-        assert "B.txt" in err
-
-    def test_partial_conversion_applied_on_unrecognized(self, tmp_path: Path):
-        """Known replacements are written even when unrecognized chars remain."""
-        (tmp_path / "A.txt").write_text("Chapter 90 — café", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="failed ASCII validation"):
-            build_entries(tmp_path, "my-bucket", set())
-        result = (tmp_path / "A.txt").read_text(encoding="utf-8")
-        assert "--" in result
-        assert "—" not in result  # em-dash was converted
-        assert "é" in result  # unrecognized char still present
-
-    def test_valid_files_still_converted_alongside_invalid(self, tmp_path: Path):
-        (tmp_path / "A.txt").write_text("Chapter 90 — Rights", encoding="utf-8")
-        (tmp_path / "B.txt").write_text("café", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="failed ASCII validation"):
-            build_entries(tmp_path, "my-bucket", set())
-        assert (tmp_path / "A.txt").read_text(
-            encoding="ascii"
-        ) == "Chapter 90 -- Rights"
-
-    def test_known_non_ascii_is_converted(self, tmp_path: Path):
-        (tmp_path / "ORS090.txt").write_text(
-            "Chapter 90 — Tenant Rights", encoding="utf-8"
-        )
-        build_entries(tmp_path, "my-bucket", set())
-        assert (tmp_path / "ORS090.txt").read_text(
-            encoding="ascii"
-        ) == "Chapter 90 -- Tenant Rights"
-
-
-class TestEnforceAscii:
-    def test_already_ascii_is_unchanged(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("plain ascii", encoding="ascii")
-        assert enforce_ascii(p) is None
-        assert p.read_text() == "plain ascii"
-
-    def test_section_sign_converted(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("See § 90.100", encoding="utf-8")
-        assert enforce_ascii(p) == "See Section 90.100"
-
-    def test_double_section_sign_converted(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("See §§ 90.100, 90.200", encoding="utf-8")
-        assert enforce_ascii(p) == "See Sections 90.100, 90.200"
-
-    def test_smart_quotes_converted(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("“quoted” and it’s fine", encoding="utf-8")
-        assert enforce_ascii(p) == '"quoted" and it\'s fine'
-
-    def test_em_dash_converted(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("Chapter 90 — Rights", encoding="utf-8")
-        assert enforce_ascii(p) == "Chapter 90 -- Rights"
-
-    def test_unknown_char_raises(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("café", encoding="utf-8")
-        with pytest.raises(RuntimeError, match="unrecognized non-ASCII"):
-            enforce_ascii(p)
-
-    def test_invalid_utf8_raises(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_bytes(b"invalid \x80 utf8")
-        with pytest.raises(RuntimeError, match="not valid UTF-8"):
-            enforce_ascii(p)
-
-    def test_idempotent(self, tmp_path: Path):
-        p = tmp_path / "f.txt"
-        p.write_text("Chapter 90 — Rights", encoding="utf-8")
-        rewritten = enforce_ascii(p)
-        assert rewritten is not None
-        p.write_text(rewritten, encoding="ascii")
-        assert enforce_ascii(p) is None
 
 
 class TestMain:

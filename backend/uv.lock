@@ -3421,6 +3421,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "google-cloud-discoveryengine" },
+    { name = "google-cloud-storage" },
     { name = "hypothesis" },
     { name = "ipdb" },
     { name = "jsonschema" },
@@ -3467,6 +3468,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "google-cloud-discoveryengine", specifier = ">=0.15.0" },
+    { name = "google-cloud-storage", specifier = ">=2.18.0" },
     { name = "hypothesis", specifier = ">=6.151.9" },
     { name = "ipdb", specifier = ">=0.13.13" },
     { name = "jsonschema", specifier = ">=4.26.0" },

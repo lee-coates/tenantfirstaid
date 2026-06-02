@@ -27,7 +27,6 @@ dependencies = [
 langsmith-dataset = "evaluate.langsmith_dataset:main"
 run-langsmith-evaluation = "evaluate.run_langsmith_evaluation:main"
 measure-evaluator-variance = "evaluate.measure_evaluator_variance:main"
-generate-metadata = "scripts.generate_metadata_jsonl:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -54,6 +53,7 @@ dev = [
     "types-Flask>=1.1.6",
     "types-flask-cors>=6.0.0.20250809",
     "google-cloud-discoveryengine>=0.15.0",
+    "google-cloud-storage>=2.18.0",
     "langchain-google-vertexai>=3.2.2",
     "pandas>=3.0.1",
     "jsonschema>=4.26.0",
