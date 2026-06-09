@@ -44,7 +44,7 @@ export default function FeaturesPanel({ disclaimer }: Props) {
                 )}
             >        
                 <div className={clsx(
-                        "flex-1 flex flex-col min-w-0 lg:border-l border-gray-light",
+                        "flex-1 flex flex-col min-w-0 min-h-0 lg:border-l border-gray-light",
                         "lg:transition-opacity lg:duration-300",
                         "lg:w-[20vw]",
                         open ? "lg:opacity-100" : "lg:opacity-0 pointer-events-none",
