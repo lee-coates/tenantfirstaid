@@ -1,0 +1,67 @@
+import { useState } from "react";
+import clsx from "clsx";
+import ChevronRight from "./ChevronRight";
+import MobilePanel from "./MobilePanel";
+import FeatureSnippet from "./FeatureSnippet";
+
+interface Props {
+  disclaimer: React.ReactNode;
+}
+
+export default function FeaturesPanel({ disclaimer }: Props) {
+    const [open, setOpen] = useState(true);
+
+    return (
+        <>
+            <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className={clsx(
+                    "hidden lg:flex items-center justify-center", 
+                    "absolute top-4 z-10",
+                    "w-6 h-6 bg-paper-background border border-gray-light rounded-l-md",
+                    "transition-[right] duration-300 ease-in-out",
+                    open ? "right-[20%]" : "right-0",
+                )}
+            >
+                <span
+                    className={clsx(
+                        "transition-transform duration-300", 
+                        open ? "rotate-0" : "rotate-180",
+                )}
+                >
+                    <ChevronRight size={14} />
+                </span>
+            </button>
+            <div
+                className={clsx(
+                    "flex flex-col w-full bg-paper-background",
+                    "border-b lg:border-b-0 border-gray-light",
+                    "lg:order-3 lg:my-0 lg:ml-auto",
+                    "lg:transition-[width] lg:duration-300 lg:ease-in-out overflow-hidden",
+                    open ? "lg:w-1/5" : "lg:w-0",
+                    "[@media(max-height:800px)]:my-0 [@media(max-height:800px)]:self-stretch [@media(max-height:800px)]:overflow-hidden",
+                )}
+            >        
+                <div className={clsx(
+                        "flex-1 flex flex-col min-w-0 lg:border-l border-gray-light",
+                        "lg:transition-opacity lg:duration-300",
+                        "lg:w-[20vw]",
+                        open ? "lg:opacity-100" : "lg:opacity-0 pointer-events-none",
+                    )}
+                >
+                    <MobilePanel title="Features">
+                        <div className="flex flex-col flex-1 min-h-0 lg:overflow-y-auto [@media(max-height:800px)]:overflow-y-auto">
+                        <FeatureSnippet />
+                        </div>
+                    </MobilePanel>
+                    <div className="p-4 [@media(min-width:1024px)_and_(min-height:801px)]:mt-auto">
+                        {disclaimer}
+                    </div>
+                </div>
+            </div>
+        </>
+    
+    )
+    
+}
