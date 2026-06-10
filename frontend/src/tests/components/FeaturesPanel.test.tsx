@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import FeaturesPanel from "../../shared/components/FeaturesPanel";
 
 // MobilePanel uses window.matchMedia to watch the lg breakpoint.
@@ -16,6 +16,10 @@ const renderPanel = (disclaimer = <p>Disclaimer text</p>) =>
   render(<FeaturesPanel disclaimer={disclaimer} />);
 
 describe("FeaturesPanel", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it("renders open by default", () => {
     renderPanel();
     expect(getToggle()).toHaveAttribute("aria-expanded", "true");
