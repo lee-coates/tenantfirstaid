@@ -3,11 +3,14 @@ import { describe, it, expect, vi } from "vitest";
 import FeaturesPanel from "../../shared/components/FeaturesPanel";
 
 // MobilePanel uses window.matchMedia to watch the lg breakpoint.
-vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({
-  matches: false,
-  addEventListener: vi.fn(),
-  removeEventListener: vi.fn(),
-}));
+vi.stubGlobal(
+  "matchMedia",
+  vi.fn().mockReturnValue({
+    matches: false,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }),
+);
 
 const renderPanel = (disclaimer = <p>Disclaimer text</p>) =>
   render(<FeaturesPanel disclaimer={disclaimer} />);

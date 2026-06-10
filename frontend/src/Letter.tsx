@@ -189,7 +189,7 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
     <>
       <LetterGenerationDialog ref={dialogRef} />
       <div className="min-h-full lg:h-full w-full flex flex-col lg:flex-row transition-all duration-300 lg:relative lg:bg-paper-background">
-        <div className="flex-1 lg:flex-none lg:my-0 w-full lg:w-3/5 flex lg:order-2">
+        <div className="flex-1 lg:my-0 w-full lg:flex-1 flex lg:order-2">
           <MessageContainer isOngoing={isOngoing} letterContent={letterContent}>
             <div
               className={clsx(
@@ -228,7 +228,9 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
             </div>
           </MobilePanel>
         </div>
-        <FeaturesPanel disclaimer={<LetterDisclaimer isOngoing={isOngoing} />} />
+        <FeaturesPanel
+          disclaimer={<LetterDisclaimer isOngoing={isOngoing} />}
+        />
       </div>
     </>
   );
