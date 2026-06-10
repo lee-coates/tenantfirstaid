@@ -15,6 +15,8 @@ export default function FeaturesPanel({ disclaimer }: Props) {
         <>
             <button
                 type="button"
+                aria-expanded={open}
+                aria-label="Toggle Features panel"
                 onClick={() => setOpen(!open)}
                 className={clsx(
                     "hidden lg:flex items-center justify-center", 
