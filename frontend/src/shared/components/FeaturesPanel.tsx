@@ -22,8 +22,8 @@ export default function FeaturesPanel({ disclaimer }: Props) {
         aria-controls="features-panel-content"
         aria-label="Toggle Features panel"
         onClick={() => {
-            setOpen(!open);
-            localStorage.setItem("featuresPanelOpen", String(!open));
+          setOpen(!open);
+          localStorage.setItem("featuresPanelOpen", String(!open));
         }}
         className={clsx(
           "hidden lg:flex items-center justify-center",
