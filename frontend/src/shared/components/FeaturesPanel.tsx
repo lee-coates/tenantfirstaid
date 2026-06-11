@@ -3,12 +3,14 @@ import clsx from "clsx";
 import ChevronRight from "./ChevronRight";
 import MobilePanel from "./MobilePanel";
 import FeatureSnippet from "./FeatureSnippet";
+import { useIsMobile } from "../../hooks/useIsMobile"; 
 
 interface Props {
   disclaimer: React.ReactNode;
 }
 
 export default function FeaturesPanel({ disclaimer }: Props) {
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(() => {
     const saved = localStorage.getItem("featuresPanelOpen");
     return saved === null ? true : saved === "true";
@@ -55,12 +57,12 @@ export default function FeaturesPanel({ disclaimer }: Props) {
       >
         <div
           id="features-panel-content"
-          inert={!open || undefined}
+          inert={!isMobile && !open || undefined}
           className={clsx(
             "flex-1 flex flex-col min-w-0 min-h-0 lg:border-l border-gray-light",
             "lg:transition-opacity lg:duration-300",
             "lg:w-[var(--features-w)]",
-            open ? "lg:opacity-100" : "lg:opacity-0 pointer-events-none",
+            open ? "lg:opacity-100" : "lg:opacity-0 lg:pointer-events-none",
           )}
         >
           <MobilePanel title="Features">
