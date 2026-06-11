@@ -6,6 +6,7 @@ import {
   jurisdictionFromPathname,
   jurisdictionByKey,
   toLocation,
+  pathFor,
 } from "../../shared/utils/jurisdiction";
 import { JURISDICTION_OPTIONS } from "../../shared/constants/jurisdictions";
 
@@ -92,6 +93,21 @@ describe("jurisdictionByKey", () => {
     expect(jurisdictionByKey("other").key).toBe("oregon");
     expect(jurisdictionByKey(null).key).toBe("oregon");
     expect(jurisdictionByKey(undefined).key).toBe("oregon");
+  });
+});
+
+describe("pathFor", () => {
+  it("builds a feature path carrying the jurisdiction", () => {
+    expect(pathFor("chat", jurisdictionByKey("oregon"))).toBe("/chat/or");
+    expect(pathFor("letter", jurisdictionByKey("portland"))).toBe(
+      "/letter/or/portland",
+    );
+  });
+
+  it("appends a search string when given", () => {
+    expect(pathFor("letter", jurisdictionByKey("eugene"), "?org=x")).toBe(
+      "/letter/or/eugene?org=x",
+    );
   });
 });
 

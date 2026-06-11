@@ -134,6 +134,18 @@ function toLocation(option: JurisdictionOption): Location {
   return { state: option.state, city: option.city };
 }
 
+/**
+ * Builds the path for a jurisdiction-carrying feature route,
+ * e.g. pathFor("letter", portland) -> "/letter/or/portland".
+ */
+function pathFor(
+  feature: "chat" | "letter",
+  jurisdiction: JurisdictionOption,
+  search = "",
+): string {
+  return `/${feature}${jurisdiction.pathSuffix}${search}`;
+}
+
 export {
   isKnownState,
   classifyStateSegment,
@@ -141,4 +153,5 @@ export {
   jurisdictionFromPathname,
   jurisdictionByKey,
   toLocation,
+  pathFor,
 };
