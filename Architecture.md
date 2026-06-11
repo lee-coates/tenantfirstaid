@@ -472,6 +472,7 @@ frontend/
 │   │   │   ├── BeaverIcon.tsx      # Oregon-themed icon
 │   │   │   ├── DisclaimerLayout.tsx  # Layout for disclaimer components
 │   │   │   ├── FeatureSnippet.tsx  # Features and references component
+│   │   │   ├── FeaturesPanel.tsx   # Collapsible Features sidebar
 │   │   │   ├── MessageContainer.tsx  # Layout for main UI component
 │   │   │   ├── PageSection.tsx     # Layout static page sections component
 │   │   │   ├── SafeMarkdown.tsx    # Safe markdown renderer
@@ -485,6 +486,7 @@ frontend/
 │   └── tests/                     # Testing suite
 │   │   ├── components/            # Component testing
 │   │   │   ├── About.test.tsx     # About component testing
+│   │   │   ├── FeaturesPanel.test.tsx # FeaturesPanel toggle testing
 │   │   │   ├── ChatDisclaimer.test.tsx # ChatDisclaimer component testing
 │   │   │   ├── HousingContext.test.tsx # HousingContext component testing
 │   │   │   ├── InitializationForm.test.tsx # InitializationForm component testing

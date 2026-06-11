@@ -23,7 +23,7 @@ import MessageContainer from "./shared/components/MessageContainer";
 import useHousingContext from "./hooks/useHousingContext";
 import { buildChatUserMessage } from "./pages/Chat/utils/formHelper";
 import type { Location } from "./types/models";
-import FeatureSnippet from "./shared/components/FeatureSnippet";
+import FeaturesPanel from "./shared/components/FeaturesPanel";
 import FrequentInquiries from "./pages/Chat/components/FrequentInquiries";
 import MobilePanel from "./shared/components/MobilePanel";
 import clsx from "clsx";
@@ -188,8 +188,8 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
   return (
     <>
       <LetterGenerationDialog ref={dialogRef} />
-      <div className="min-h-full lg:h-full w-full flex flex-col lg:flex-row transition-all duration-300">
-        <div className="flex-1 lg:flex-none lg:my-0 w-full lg:w-3/5 flex lg:order-2">
+      <div className="min-h-full lg:h-full w-full flex flex-col lg:flex-row transition-all duration-300 lg:relative lg:bg-paper-background">
+        <div className="flex-1 lg:my-0 w-full lg:flex-1 flex lg:order-2">
           <MessageContainer isOngoing={isOngoing} letterContent={letterContent}>
             <div
               className={clsx(
@@ -228,23 +228,9 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
             </div>
           </MobilePanel>
         </div>
-        <div
-          className={clsx(
-            "flex flex-col w-full bg-paper-background",
-            "border-b lg:border-b-0 border-gray-light",
-            "lg:order-3 lg:my-0 lg:w-1/5 lg:border-l",
-            "[@media(max-height:800px)]:my-0 [@media(max-height:800px)]:self-stretch [@media(max-height:800px)]:overflow-hidden",
-          )}
-        >
-          <MobilePanel title="Features">
-            <div className="flex flex-col flex-1 min-h-0 lg:overflow-y-auto [@media(max-height:800px)]:overflow-y-auto">
-              <FeatureSnippet />
-            </div>
-          </MobilePanel>
-          <div className="p-4 [@media(min-width:1024px)_and_(min-height:801px)]:mt-auto">
-            <LetterDisclaimer isOngoing={isOngoing} />
-          </div>
-        </div>
+        <FeaturesPanel
+          disclaimer={<LetterDisclaimer isOngoing={isOngoing} />}
+        />
       </div>
     </>
   );
