@@ -1,7 +1,10 @@
 import { useState, type ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import useActiveJurisdiction from "../../../hooks/useActiveJurisdiction";
 import type { JurisdictionKey } from "../../../shared/constants/jurisdictions";
+import { pathFor } from "../../../shared/utils/jurisdiction";
+import { readStorage, writeStorage } from "../../../shared/utils/storage";
 
 interface Inquiry {
   question: string;
@@ -11,9 +14,10 @@ interface Inquiry {
 }
 
 // Matches a statutory citation: Oregon Revised Statutes (with optional range),
-// Eugene Code (EC), or Portland City Code (PCC). Each resolves to its own source.
-const CITATION =
-  /ORS \d+\.\d+(?:\s*(?:–|-|to)\s*\d+\.\d+)?|EC \d+\.\d+|PCC \d+\.\d+(?:\.\d+)?/g;
+// Eugene Code (EC), or Portland City Code (PCC), plus the "draft it here"
+// call-to-action that links to the letter feature.
+const LINKABLE =
+  /ORS \d+\.\d+(?:\s*(?:–|-|to)\s*\d+\.\d+)?|EC \d+\.\d+|PCC \d+\.\d+(?:\.\d+)?|\bdraft it here\b/g;
 
 /** Resolves a matched citation to its canonical source URL, mirroring the chat's links. */
 function citationHref(citation: string): string | null {
@@ -35,16 +39,32 @@ function citationHref(citation: string): string | null {
 /**
  * Renders answer text with each statutory citation turned into a link to its source,
  * matching the per-section citation style the chat uses (e.g. ORS 90.394 -> ors_90.394).
+ * "draft it here" becomes an in-app link to the letter feature (`letterHref`);
+ * a null `letterHref` renders it as plain text instead.
  */
-function renderAnswer(text: string): ReactNode[] {
+function renderAnswer(text: string, letterHref: string | null): ReactNode[] {
   const parts: ReactNode[] = [];
   let lastIndex = 0;
-  for (const match of text.matchAll(CITATION)) {
+  for (const match of text.matchAll(LINKABLE)) {
     const start = match.index;
     if (start > lastIndex) parts.push(text.slice(lastIndex, start));
-    const href = citationHref(match[0]);
-    parts.push(
-      href ? (
+    let node: ReactNode;
+    if (match[0] === "draft it here") {
+      node =
+        letterHref === null ? (
+          match[0]
+        ) : (
+          <Link
+            key={start}
+            to={letterHref}
+            className="underline hover:opacity-80"
+          >
+            {match[0]}
+          </Link>
+        );
+    } else {
+      const href = citationHref(match[0]);
+      node = href ? (
         <a
           key={start}
           href={href}
@@ -57,8 +77,9 @@ function renderAnswer(text: string): ReactNode[] {
         </a>
       ) : (
         match[0]
-      ),
-    );
+      );
+    }
+    parts.push(node);
     lastIndex = start + match[0].length;
   }
   if (lastIndex < text.length) parts.push(text.slice(lastIndex));
@@ -68,40 +89,37 @@ function renderAnswer(text: string): ReactNode[] {
 // Oregon-focused FAQ content drawn from the most common tenant concerns Oregon
 // law librarians report from patrons. Each answer cites state law (ORS chapter 90),
 // and entries with a `local` note add Portland (PCC Title 30) or Eugene (EC 8.425)
-// rules shown only when that jurisdiction is active. Pending review by a qualified
-// attorney before merging — figures, dollar amounts, and timelines should be
-// verified against current statutes, local codes, and recent legislative changes.
+// rules shown only when that jurisdiction is active. Year-specific figures
+// (e.g. the ORS 90.324 rent cap) must be re-verified annually.
 const INQUIRIES: Inquiry[] = [
   {
-    question: "How do I respond to a FED (eviction lawsuit)?",
+    question: "I received an eviction notice. What should I do?",
     answer:
-      "A Forcible Entry and Detainer (FED) is the court eviction case a landlord files under ORS 105.100 to 105.168 after serving a termination notice. Once you have been served, it is important to appear by the first appearance date listed on the summons (often about a week out); if you do not, the court may enter a default judgment against you. Appearing preserves your right to a trial, to raise defenses, and to negotiate. Because an eviction record can follow you, you should respond promptly and may wish to consult a lawyer or legal aid.",
+      "There are several types of evictions under Oregon law and tenant rights and remedies vary depending on the type. Our chatbot can provide more information on specific types. No matter what, be sure to show up to your hearing. Tenants who don't appear usually lose automatically, even if they have a strong defense. By attending, you can challenge an improper notice, raise a defense, or work out more time to stay or move. You may also get free legal help at or before your hearing — just bring your court papers, lease, and payment records. Check your papers for the date and time.",
   },
   {
-    question: "How do I get repairs or action from my landlord?",
+    question: "How do I get my landlord to make a repair?",
     answer:
-      "Under ORS 90.320, a landlord must keep the unit habitable — including working plumbing, heat, hot and cold water, weatherproofing, safe electrical, and smoke and carbon monoxide alarms. You should make your repair request in writing and keep a dated copy. If the landlord does not make the repair, you may have remedies such as repair-and-deduct (capped at $300 under ORS 90.368), money damages, or terminating the tenancy. Withholding rent is generally not advisable, as it can lead to eviction.",
+      "Oregon landlords must keep rentals in habitable condition (ORS 90.320), so give written notice describing the problem; if they don't fix it within a reasonable time you may have remedies including repair-and-deduct or damages (ORS 90.360, ORS 90.365 for essential services like heat or water). A dated written request protects your rights — you can draft it here.",
     local: {
       eugene:
         "Eugene's habitability standards go beyond state law: a permanent heat source must be able to reach 68°F three feet above the floor in every habitable room (portable heaters do not qualify), and landlord-supplied appliances and door and window locks must be kept in working order (EC 8.425).",
     },
   },
   {
-    question: "How do rent increases and deposit returns work?",
+    question: "How much can my landlord increase my rent?",
     answer:
-      "Under Oregon's rent stabilization law (ORS 90.323), most annual rent increases are limited to 10% or 7% plus inflation, whichever is lower, and require 90 days' written notice. Rent generally may not be raised during the first year of the tenancy or more than once in any 12-month period, and buildings less than 15 years old are typically exempt. After you move out and return possession, the landlord must provide a written accounting of any deductions and return the balance of your deposit within 31 days (ORS 90.300).",
+      "For 2026 the cap is 9.5% over any 12-month period (6% for larger manufactured-dwelling parks), with only one increase per year, none in the first year, and at least 90 days' written notice (ORS 90.323; ORS 90.324 sets the annual figure).",
     local: {
       portland:
-        "A rent increase of 10% or more over a rolling 12-month period entitles you to relocation assistance ($2,900–$4,500 by unit size) and the right to end the tenancy instead; 5% or more requires 90 days' notice. Security deposits are also capped (generally one month's rent) and must be held in a separate account (PCC 30.01.085, PCC 30.01.087).",
-      eugene:
-        "A security deposit generally cannot exceed two months' rent (EC 8.425); state law sets no cap.",
+        "A rent increase of 10% or more within a rolling 12-month period triggers mandatory relocation assistance of roughly $2,900–$4,500 if you choose to move (PCC 30.01.085).",
     },
   },
   {
     question:
       "How do I recover personal property after losing access to my home?",
     answer:
-      "When a tenant leaves belongings behind or loses access to the unit, ORS 90.425 governs how the landlord must handle that 'abandoned' personal property. The landlord must provide written notice and allow time to arrange removal — generally at least 5 days after personal delivery or 8 days after mailing (45 days for a manufactured dwelling or floating home that you own). You should respond in writing by the deadline stated in the notice to reclaim your belongings before they may be sold or disposed of.",
+      "A landlord can't lock you out, shut off your utilities, or remove your belongings without a court order — doing so is an unlawful ouster, and you can recover possession plus up to two months' rent or twice your actual damages, whichever is greater (ORS 90.375). If your tenancy has actually ended, the landlord must instead store and let you reclaim your property through the abandoned-property process (ORS 90.425); get legal help quickly either way.",
   },
   {
     question:
@@ -139,19 +157,40 @@ const INQUIRIES: Inquiry[] = [
   {
     question: "Do tenants in RV parks have eviction protections?",
     answer:
-      "It depends on the arrangement. If you own your RV and rent only the space, the manufactured/floating-home and RV space rules (ORS 90.505–90.850) may apply. However, an RV park space rented as a short-term 'vacation occupancy' — where you have signed an agreement stating that it is NOT subject to ORS chapter 90 and that the RV must leave at the end of the stay — generally falls outside the Residential Landlord and Tenant Act. You should review what your written agreement says about which rules apply.",
+      "Yes — if you rent space in an RV park long-term (not a vacation stay of 90 days or less), you're a tenant entitled to a written rental agreement and the protections of Oregon landlord-tenant law, and the landlord must use proper notice and the court process to evict you (ORS 90.230; for-cause termination rules under ORS 90.392 and ORS 90.630).",
   },
   {
-    question: "What if my roommate is a co-signer who wants to move out?",
+    question:
+      "What do I do if my roommate, who is a co-signer on the lease, wants to move out?",
     answer:
-      "Whether a person may leave mid-lease depends on the rental agreement. A co-signer or co-tenant generally remains responsible for the obligations they signed for until the lease ends or the landlord agrees in writing to release them. Adding or removing a tenant typically requires the landlord's consent and an amended agreement. It is best to obtain any change to who is on the lease — and who owes rent — in writing.",
+      "Anyone who signed the lease is jointly and severally liable for the full rent and stays legally responsible even after moving out, until the landlord agrees in writing to remove them (ORS 90.220). Don't assume they're off the hook — ask the landlord to sign a new or amended agreement, which you can request in a letter.",
   },
   {
     question: "How do I respond to harassment by a landlord or manager?",
     answer:
-      "Oregon law prohibits landlord 'self-help' evictions — such as unlawfully removing or excluding you, or shutting off essential services like heat, water, or electricity to force you out rather than going through the courts (ORS 90.375). A tenant may recover up to two months' rent or twice their actual damages, whichever is greater. It is advisable to document the conduct with dates, photographs, and written communications, and to keep paying rent where possible. Conduct amounting to harassment based on a protected class, or retaliation for asserting your rights, may give rise to additional claims.",
+      "Document every incident with dates, and know that landlords can't harass you or retaliate for asserting your rights, complaining, or organizing — violations can cost them up to twice your rent or actual damages plus attorney fees (ORS 90.385). A written notice demanding the conduct stop is a strong first step (draft it here).",
+    local: {
+      eugene:
+        "Eugene tenants have added local protections, including against harassment and for relocation assistance (EC 8.425).",
+    },
   },
 ];
+
+const OPEN_FAQ_STORAGE_KEY = "faqOpenIndex";
+
+/**
+ * Reads the persisted open-FAQ index so the accordion survives route changes.
+ * Falls back to the first entry; "none" means the user collapsed all of them.
+ */
+function initialOpenIndex(): number | null {
+  const stored = readStorage(OPEN_FAQ_STORAGE_KEY);
+  if (stored === null) return 0;
+  if (stored === "none") return null;
+  const index = Number(stored);
+  return Number.isInteger(index) && index >= 0 && index < INQUIRIES.length
+    ? index
+    : 0;
+}
 
 /**
  * Static FAQ accordion shown on the Chat page left rail.
@@ -159,8 +198,20 @@ const INQUIRIES: Inquiry[] = [
  * click a question to expand its answer. Not wired into the chat agent.
  */
 export default function FrequentInquiries() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(initialOpenIndex);
   const { active } = useActiveJurisdiction();
+  const { pathname } = useLocation();
+  // On the letter page the CTA would link to the page itself (and drop any
+  // ?org= context on remount), so render it as plain text there.
+  const letterHref = pathname.startsWith("/letter")
+    ? null
+    : pathFor("letter", active);
+
+  const toggleInquiry = (index: number) => {
+    const next = openIndex === index ? null : index;
+    setOpenIndex(next);
+    writeStorage(OPEN_FAQ_STORAGE_KEY, next === null ? "none" : String(next));
+  };
 
   return (
     <div className="flex flex-col gap-3 p-4 pt-8">
@@ -185,7 +236,7 @@ export default function FrequentInquiries() {
                 type="button"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => setOpenIndex(isOpen ? null : index)}
+                onClick={() => toggleInquiry(index)}
                 className="w-full text-left text-sm rounded-none shadow-none"
               >
                 {inquiry.question}
@@ -210,14 +261,14 @@ export default function FrequentInquiries() {
                         Statewide:
                       </span>
                     )}
-                    {renderAnswer(inquiry.answer)}
+                    {renderAnswer(inquiry.answer, letterHref)}
                   </span>
                   {localNote && (
                     <span className="block border-t border-gray-medium bg-green-light/30 px-3 py-3">
                       <span className="mr-1 font-semibold text-green-dark">
                         {active.label}:
                       </span>
-                      {renderAnswer(localNote)}
+                      {renderAnswer(localNote, letterHref)}
                     </span>
                   )}
                 </p>
