@@ -3,7 +3,8 @@ import clsx from "clsx";
 import ChevronRight from "./ChevronRight";
 import MobilePanel from "./MobilePanel";
 import FeatureSnippet from "./FeatureSnippet";
-import { useIsMobile } from "../../hooks/useIsMobile"; 
+import { useIsMobile } from "../../hooks/useIsMobile";
+import { readStorage, writeStorage } from "../utils/storage";
 
 interface Props {
   disclaimer: React.ReactNode;
@@ -12,7 +13,7 @@ interface Props {
 export default function FeaturesPanel({ disclaimer }: Props) {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(() => {
-    const saved = localStorage.getItem("featuresPanelOpen");
+    const saved = readStorage("featuresPanelOpen");
     return saved === null ? true : saved === "true";
   });
 
@@ -25,7 +26,7 @@ export default function FeaturesPanel({ disclaimer }: Props) {
         aria-label="Toggle Features panel"
         onClick={() => {
           setOpen(!open);
-          localStorage.setItem("featuresPanelOpen", String(!open));
+          writeStorage("featuresPanelOpen", String(!open));
         }}
         className={clsx(
           "hidden lg:flex items-center justify-center",
@@ -57,7 +58,7 @@ export default function FeaturesPanel({ disclaimer }: Props) {
       >
         <div
           id="features-panel-content"
-          inert={!isMobile && !open || undefined}
+          inert={(!isMobile && !open) || undefined}
           className={clsx(
             "flex-1 flex flex-col min-w-0 min-h-0 lg:border-l border-gray-light",
             "lg:transition-opacity lg:duration-300",
@@ -70,7 +71,7 @@ export default function FeaturesPanel({ disclaimer }: Props) {
               <FeatureSnippet />
             </div>
           </MobilePanel>
-          <div className="p-4 [@media(min-width:1024px)_and_(min-height:801px)]:mt-auto">
+          <div className="p-4 border-t border-gray-light lg:border-t-0 [@media(min-width:1024px)_and_(min-height:801px)]:mt-auto">
             {disclaimer}
           </div>
         </div>

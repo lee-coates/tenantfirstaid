@@ -35,7 +35,12 @@ export default function MobilePanel({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="lg:hidden w-full flex items-center justify-between px-4 py-3 text-xl rounded-none shadow-none border-b border-gray-light bg-paper-background"
+        className={clsx(
+          "lg:hidden w-full flex items-center justify-between px-4 py-3 text-xl rounded-none shadow-none bg-paper-background",
+          // Only draw the header divider when content is expanded; when collapsed
+          // it would stack on the section wrapper's border-b into a 2px line.
+          open && "border-b border-gray-light",
+        )}
       >
         <span>{title}</span>
         <span aria-hidden className="text-base">

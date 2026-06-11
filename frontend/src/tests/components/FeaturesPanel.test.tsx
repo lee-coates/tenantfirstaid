@@ -71,9 +71,33 @@ describe("FeaturesPanel", () => {
   it("sets content inert when closed on desktop", () => {
     const { container } = renderPanel();
     fireEvent.click(getToggle());
-    expect(
-      container.querySelector("#features-panel-content"),
-    ).toHaveAttribute("inert");
+    expect(container.querySelector("#features-panel-content")).toHaveAttribute(
+      "inert",
+    );
+  });
+
+  it("renders open and still toggles when storage access throws", () => {
+    const getItem = vi
+      .spyOn(Storage.prototype, "getItem")
+      .mockImplementation(() => {
+        throw new Error("storage disabled");
+      });
+    const setItem = vi
+      .spyOn(Storage.prototype, "setItem")
+      .mockImplementation(() => {
+        throw new Error("storage disabled");
+      });
+    try {
+      renderPanel();
+      expect(getToggle()).toHaveAttribute("aria-expanded", "true");
+
+      // Toggling must still work even though persistence fails.
+      fireEvent.click(getToggle());
+      expect(getToggle()).toHaveAttribute("aria-expanded", "false");
+    } finally {
+      getItem.mockRestore();
+      setItem.mockRestore();
+    }
   });
 
   it("does not set content inert on mobile even when desktop panel state is closed", () => {
