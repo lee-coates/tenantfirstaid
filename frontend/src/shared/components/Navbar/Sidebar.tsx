@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { NAVBAR_LINKS, NAVBAR_FEATURES } from "../../constants/constants";
 import useActiveJurisdiction from "../../../hooks/useActiveJurisdiction";
+import { pathFor } from "../../utils/jurisdiction";
 import clsx from "clsx";
 
 interface Props {
@@ -15,17 +16,17 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: Props) {
     <>
       <div
         className={clsx(
-          "fixed top-0 right-0",
-          "h-full w-64",
+          "fixed top-0 right-0 bottom-(--footer-height)",
+          "w-64",
           "bg-paper-background shadow-lg",
           "z-50 transition-transform duration-300",
           sidebarOpen ? "translate-x-0" : "translate-x-full",
         )}
       >
         <div className="flex flex-col p-8 gap-6 mt-10">
-          {NAVBAR_FEATURES.map(({ label, basePath }) => (
+          {NAVBAR_FEATURES.map(({ label, feature }) => (
             <NavLink
-              to={`${basePath}${active.pathSuffix}`}
+              to={pathFor(feature, active)}
               key={label}
               className={({ isActive }) =>
                 clsx(

@@ -8,7 +8,7 @@ import MessageContainer from "./shared/components/MessageContainer";
 import FeaturesPanel from "./shared/components/FeaturesPanel";
 import MobilePanel from "./shared/components/MobilePanel";
 import { Navigate, useParams } from "react-router-dom";
-import { classifyStateSegment } from "./shared/utils/jurisdiction";
+import { classifyStateSegment, pathFor } from "./shared/utils/jurisdiction";
 import { DEFAULT_JURISDICTION } from "./shared/constants/jurisdictions";
 import clsx from "clsx";
 
@@ -25,7 +25,7 @@ export default function Chat() {
   if (kind === "out-of-state") {
     return (
       <Navigate
-        to={`/chat${DEFAULT_JURISDICTION.pathSuffix}`}
+        to={pathFor("chat", DEFAULT_JURISDICTION)}
         replace
         state={{ unsupportedRegion: true }}
       />
@@ -33,7 +33,7 @@ export default function Chat() {
   }
 
   if (kind === "unknown") {
-    return <Navigate to={`/chat${DEFAULT_JURISDICTION.pathSuffix}`} replace />;
+    return <Navigate to={pathFor("chat", DEFAULT_JURISDICTION)} replace />;
   }
 
   return <ChatView />;

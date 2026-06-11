@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import { useIsMobile } from "../../../hooks/useIsMobile";
 import useActiveJurisdiction from "../../../hooks/useActiveJurisdiction";
 import { NAVBAR_LINKS, NAVBAR_FEATURES } from "../../constants/constants";
+import { pathFor } from "../../utils/jurisdiction";
 import clsx from "clsx";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -47,9 +48,9 @@ export default function Navbar() {
           />
         ) : (
           <div className="flex gap-3 items-center">
-            {NAVBAR_FEATURES.map(({ label, basePath }) => (
+            {NAVBAR_FEATURES.map(({ label, feature }) => (
               <NavLink
-                to={`${basePath}${active.pathSuffix}`}
+                to={pathFor(feature, active)}
                 key={label}
                 className={navLinkClass}
               >

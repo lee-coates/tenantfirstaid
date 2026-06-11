@@ -113,8 +113,8 @@ const REFERENCED_LAW_LIST = {
 // Feature links whose target carries the active jurisdiction (see the navbar
 // location picker), e.g. Chat -> /chat/or/portland.
 const NAVBAR_FEATURES = [
-  { label: "Chat", basePath: "/chat" },
-  { label: "Letter", basePath: "/letter" },
+  { label: "Chat", feature: "chat" },
+  { label: "Letter", feature: "letter" },
 ] as const;
 
 const NAVBAR_LINKS = [

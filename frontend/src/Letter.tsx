@@ -10,6 +10,7 @@ import LetterGenerationDialog from "./pages/Letter/components/LetterGenerationDi
 import { buildLetterUserMessage } from "./pages/Letter/utils/letterHelper";
 import {
   classifyStateSegment,
+  pathFor,
   jurisdictionByKey,
   resolveJurisdiction,
   toLocation,
@@ -42,7 +43,7 @@ export default function Letter() {
   if (kind === "out-of-state") {
     return (
       <Navigate
-        to={`/letter${DEFAULT_JURISDICTION.pathSuffix}`}
+        to={pathFor("letter", DEFAULT_JURISDICTION)}
         replace
         state={{ unsupportedRegion: true }}
       />
@@ -52,9 +53,13 @@ export default function Letter() {
   // A non-state leading segment is a legacy /letter/:org/:loc partner link;
   // the loc shares the JurisdictionKey naming, so look it up directly.
   if (kind === "unknown") {
-    const { pathSuffix } = jurisdictionByKey(seg2);
     const search = seg1 ? `?org=${encodeURIComponent(seg1)}` : "";
-    return <Navigate to={`/letter${pathSuffix}${search}`} replace />;
+    return (
+      <Navigate
+        to={pathFor("letter", jurisdictionByKey(seg2), search)}
+        replace
+      />
+    );
   }
 
   const jurisdiction = resolveJurisdiction(seg1, seg2);

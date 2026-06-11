@@ -6,6 +6,7 @@ import {
   type JurisdictionOption,
 } from "../shared/constants/jurisdictions";
 import {
+  pathFor,
   jurisdictionByKey,
   jurisdictionFromPathname,
   toLocation,
@@ -35,9 +36,9 @@ export default function useActiveJurisdiction() {
       handleCityChange(option.key);
       handleHousingLocation(toLocation(option));
       if (pathname.startsWith("/letter")) {
-        navigate(`/letter${option.pathSuffix}`);
+        navigate(pathFor("letter", option));
       } else if (pathname.startsWith("/chat")) {
-        navigate(`/chat${option.pathSuffix}`);
+        navigate(pathFor("chat", option));
       }
     },
     [handleCityChange, handleHousingLocation, navigate, pathname],

@@ -15,7 +15,7 @@ import {
   type HousingType,
   type TenantTopic,
 } from "../../../shared/constants/constants";
-import { jurisdictionByKey } from "../../../shared/utils/jurisdiction";
+import { pathFor, jurisdictionByKey } from "../../../shared/utils/jurisdiction";
 import { scrollToTop } from "../../../shared/utils/scrolling";
 import AutoExpandText from "./AutoExpandText";
 import clsx from "clsx";
@@ -206,7 +206,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           !NONLETTERABLE_TOPICS.includes(tenantTopic) &&
           issueDescription && (
             <Link
-              to={`/letter${jurisdictionByKey(city).pathSuffix}`}
+              to={pathFor("letter", jurisdictionByKey(city))}
               className={clsx(
                 "flex items-center",
                 "py-1 px-4",
