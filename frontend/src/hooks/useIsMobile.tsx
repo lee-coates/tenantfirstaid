@@ -5,7 +5,9 @@ export function useIsMobile() {
 
   useEffect(() => {
     const checkWindowSize = () => {
-      setIsMobile(window.matchMedia("(max-width:767px)").matches);
+      // Collapse to the hamburger below Tailwind's lg breakpoint so the navbar
+      // links never wrap to a second line (they start wrapping ~960px).
+      setIsMobile(window.matchMedia("(max-width:1023px)").matches);
     };
 
     checkWindowSize();

@@ -2,46 +2,33 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import InitializationForm from "../../pages/Chat/components/InitializationForm";
 import HousingContextProvider from "../../contexts/HousingContext";
+import useSyncJurisdiction from "../../hooks/useSyncJurisdiction";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 vi.mock("../../pages/Chat/utils/streamHelper", () => ({
   streamText: vi.fn(),
 }));
 
-// Mirrors the App.tsx route structure: <Route path="/*"> wrapping inner <Routes>.
-// This ensures relative links inside /chat resolve as /chat/letter (not /letter),
-// so tests that check href values catch accidental relative-path regressions.
-const renderInitializationForm = () => {
+// Mirror Chat: the jurisdiction comes from the URL (navbar picker), not the
+// form, so seed it from the route params the way Chat does.
+function FormHarness() {
+  useSyncJurisdiction();
+  return <InitializationForm addMessage={vi.fn()} setMessages={vi.fn()} />;
+}
+
+const renderInitializationForm = (entry = "/chat") => {
   render(
-    <MemoryRouter initialEntries={["/chat"]}>
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            <Routes>
-              <Route
-                path="/chat"
-                element={
-                  <HousingContextProvider>
-                    <InitializationForm
-                      addMessage={vi.fn()}
-                      setMessages={vi.fn()}
-                    />
-                  </HousingContextProvider>
-                }
-              />
-            </Routes>
-          }
-        />
-      </Routes>
+    <MemoryRouter initialEntries={[entry]}>
+      <HousingContextProvider>
+        <Routes>
+          <Route path="/chat/:state?/:city?" element={<FormHarness />} />
+        </Routes>
+      </HousingContextProvider>
     </MemoryRouter>,
   );
 };
 
 const fillLetterForm = () => {
-  fireEvent.change(screen.getByLabelText("city"), {
-    target: { value: "portland" },
-  });
   fireEvent.change(screen.getByLabelText("housing type"), {
     target: { value: "Apartment/House Rental" },
   });
@@ -55,53 +42,30 @@ const fillLetterForm = () => {
 };
 
 describe("InitializationForm", () => {
-  it("renders all form fields", () => {
+  it("renders the form fields (no location selector)", () => {
     renderInitializationForm();
 
-    const citySelect = screen.getByLabelText("city");
-    const housingSelect = screen.getByLabelText("housing type");
-    const topicSelect = screen.getByLabelText("tenant topic");
-    const issueInput = screen.getByPlaceholderText(
-      /briefly describe your specific/i,
-    );
-    const chatButton = screen.getByRole("button", { name: "enter chat" });
+    expect(screen.getByLabelText("housing type")).toBeInTheDocument();
+    expect(screen.getByLabelText("tenant topic")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/briefly describe your specific/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "enter chat" }),
+    ).toBeInTheDocument();
 
-    expect(citySelect).toBeInTheDocument();
-    expect(housingSelect).toBeInTheDocument();
-    expect(topicSelect).toBeInTheDocument();
-    expect(issueInput).toBeInTheDocument();
-    expect(chatButton).toBeInTheDocument();
-  });
-
-  it('disables submit when city is "other"', async () => {
-    renderInitializationForm();
-
-    const citySelect = screen.getByLabelText("city");
-    const chatButton = screen.getByRole("button", { name: "enter chat" });
-
-    expect(chatButton).not.toBeDisabled();
-
-    fireEvent.change(citySelect, { target: { value: "other" } });
-
-    await waitFor(() => {
-      expect(chatButton).toBeDisabled();
-    });
+    // Location is controlled by the navbar picker, not the form.
+    expect(screen.queryByLabelText("city")).not.toBeInTheDocument();
   });
 
   it("updates context on field changes", async () => {
     renderInitializationForm();
 
-    const citySelect = screen.getByLabelText("city");
     const housingSelect = screen.getByLabelText("housing type");
     const topicSelect = screen.getByLabelText("tenant topic");
     const issueInput = screen.getByPlaceholderText(
       /briefly describe your specific/i,
     );
-
-    fireEvent.change(citySelect, { target: { value: "portland" } });
-    await waitFor(() => {
-      expect(citySelect).toHaveValue("portland");
-    });
 
     fireEvent.change(housingSelect, {
       target: { value: "Apartment/House Rental" },
@@ -159,30 +123,16 @@ describe("InitializationForm", () => {
         screen.queryByRole("link", { name: "generate letter" }),
       ).toBeInTheDocument();
     });
-
-    fireEvent.change(screen.getByLabelText("city"), {
-      target: { value: "other" },
-    });
-
-    // Changes styling for generate button when other is selected
-    await waitFor(() => {
-      const genButton = screen.queryByRole("link", {
-        name: "generate letter",
-      });
-      if (genButton) {
-        expect(genButton).toHaveClass("opacity-50");
-      }
-    });
   });
 
-  it("Generate Letter link points to absolute /letter route", async () => {
-    renderInitializationForm();
+  it("Generate Letter link carries the active jurisdiction from the URL", async () => {
+    renderInitializationForm("/chat/or/portland");
     fillLetterForm();
 
     await waitFor(() => {
       expect(
         screen.getByRole("link", { name: "generate letter" }),
-      ).toHaveAttribute("href", "/letter");
+      ).toHaveAttribute("href", "/letter/or/portland");
     });
   });
 });

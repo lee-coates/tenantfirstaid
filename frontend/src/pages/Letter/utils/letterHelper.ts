@@ -1,25 +1,22 @@
-import {
-  CITY_SELECT_OPTIONS,
-  type CitySelectOptionType,
-} from "../../../shared/constants/constants";
+import type { Location } from "../../../types/models";
 import { formatLocation } from "../../../shared/utils/formatLocation";
 
 interface BuildLetterReturnType {
   userMessage: string;
-  selectedLocation: CitySelectOptionType;
+  selectedLocation: Location;
 }
 
+/**
+ * Builds the initial letter-generation prompt for a given org and jurisdiction.
+ *
+ * @param org - Optional partner organization the user was redirected from.
+ * @param location - Resolved jurisdiction (city/state) for the letter.
+ */
 function buildLetterUserMessage(
   org: string | undefined,
-  loc: string | undefined,
-): BuildLetterReturnType | null {
-  const key = (loc ?? "oregon") as keyof typeof CITY_SELECT_OPTIONS;
-  const selectedLocation = CITY_SELECT_OPTIONS[key];
-  if (selectedLocation === undefined) return null;
-  const locationString = formatLocation(
-    selectedLocation.city,
-    selectedLocation.state,
-  );
+  location: Location,
+): BuildLetterReturnType {
+  const locationString = formatLocation(location.city, location.state);
 
   const CHARACTER_LIMIT = 100; // Limit character count to prevent token overflow
   const sanitizedOrg = org
@@ -41,7 +38,7 @@ function buildLetterUserMessage(
 
   return {
     userMessage: promptParts.join(" ").trim(),
-    selectedLocation,
+    selectedLocation: location,
   };
 }
 

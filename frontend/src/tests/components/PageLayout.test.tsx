@@ -36,17 +36,17 @@ describe("Page Layout component", () => {
     return container.querySelector("#page-layout");
   };
 
-  it("returns h-dvh when path is index", async () => {
+  it("returns lg:h-dvh when path is index", async () => {
     const pageLayout = await pageSetup("/");
 
-    expect(pageLayout).toHaveClass("h-dvh");
+    expect(pageLayout).toHaveClass("min-h-dvh", "lg:h-dvh");
     expect(pageLayout).not.toHaveClass("sm:pt-32", "sm:pb-16");
   });
 
-  it("returns h-dvh when path starts with /letter", async () => {
+  it("returns lg:h-dvh when path starts with /letter", async () => {
     const pageLayout = await pageSetup("/letter/oregon-law-help");
 
-    expect(pageLayout).toHaveClass("h-dvh");
+    expect(pageLayout).toHaveClass("min-h-dvh", "lg:h-dvh");
     expect(pageLayout).not.toHaveClass("sm:pt-32", "sm:pb-16");
   });
 

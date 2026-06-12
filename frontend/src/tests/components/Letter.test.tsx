@@ -57,20 +57,19 @@ vi.mock("../../LetterGenerationDialog", () => ({
 import * as streamHelper from "../../pages/Chat/utils/streamHelper";
 import useMessages from "../../hooks/useMessages";
 import HousingContextProvider from "../../contexts/HousingContext";
-import { CITY_SELECT_OPTIONS } from "../../shared/constants/constants";
 
 let mockStreamText: ReturnType<typeof vi.fn>;
 let mockUseMessages: ReturnType<typeof vi.fn>;
 
-const renderLetter = async () => {
+const renderLetter = async (initialEntry = "/letter/or/portland?org=org") => {
   const { default: Letter } = await import("../../Letter");
   const queryClient = new QueryClient();
   return render(
     <QueryClientProvider client={queryClient}>
       <HousingContextProvider>
-        <MemoryRouter initialEntries={["/letter/org/portland"]}>
+        <MemoryRouter initialEntries={[initialEntry]}>
           <Routes>
-            <Route path="/letter/:org/:loc" element={<Letter />} />
+            <Route path="/letter/:state?/:city?" element={<Letter />} />
           </Routes>
         </MemoryRouter>
       </HousingContextProvider>
@@ -130,9 +129,7 @@ describe("Letter component - effect orchestration", () => {
       expect.objectContaining({
         addMessage: mockAddMessage,
         setMessages: mockSetMessages,
-        housingLocation: expect.objectContaining(
-          CITY_SELECT_OPTIONS["portland"],
-        ),
+        housingLocation: { state: "or", city: "portland" },
       }),
     );
   });
@@ -169,22 +166,34 @@ describe("Letter component - effect orchestration", () => {
   });
 
   it("renders correctly when accessing /letter route directly", async () => {
-    const { default: Letter } = await import("../../Letter");
-    const queryClient = new QueryClient();
-    render(
-      <QueryClientProvider client={queryClient}>
-        <HousingContextProvider>
-          <MemoryRouter initialEntries={["/letter"]}>
-            <Routes>
-              <Route path="/letter" element={<Letter />} />
-            </Routes>
-          </MemoryRouter>
-        </HousingContextProvider>
-      </QueryClientProvider>,
-    );
+    await renderLetter("/letter");
 
     await waitFor(() => {
       expect(mockStreamText).toHaveBeenCalled();
+    });
+  });
+
+  it("redirects a legacy /letter/:org/:loc link to the canonical form", async () => {
+    await renderLetter("/letter/PartnerOrg/eugene");
+
+    await waitFor(() => {
+      expect(mockStreamText).toHaveBeenCalledWith(
+        expect.objectContaining({
+          housingLocation: { state: "or", city: "eugene" },
+        }),
+      );
+    });
+  });
+
+  it("redirects an out-of-state /letter link to Oregon", async () => {
+    await renderLetter("/letter/wa/seattle");
+
+    await waitFor(() => {
+      expect(mockStreamText).toHaveBeenCalledWith(
+        expect.objectContaining({
+          housingLocation: { state: "or", city: null },
+        }),
+      );
     });
   });
 

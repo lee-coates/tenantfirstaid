@@ -3,6 +3,7 @@
 
 :root {
   --navbar-height: 64px;
+  --footer-height: 32px;
 }
 
 @theme {
@@ -50,6 +51,20 @@ body {
   line-height: 1.6;
 }
 
+/* Hide native scrollbars app-wide. Scrollbars that take up layout space force a
+   choice between a content shift (when the bar appears) and a reserved gutter
+   gap (when space is always reserved); hiding them takes zero space, so neither
+   happens on any platform. Scrolling still works via wheel, trackpad, and touch.
+   Because the visible bar is gone, a scroll container that keyboard users must
+   reach should be focusable (tabindex/role) or hold focusable children. */
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes dotPulse {
   0% {
     opacity: 0.2;
@@ -64,15 +79,14 @@ body {
   }
 }
 
-button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button {
-  @apply transition-colors duration-300 shadow-sm;
+@layer base {
+  button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    @apply transition-colors duration-300 shadow-sm;
+  }
 }
 
 a {

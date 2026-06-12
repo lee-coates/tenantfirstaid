@@ -73,13 +73,13 @@ export default function InputField({
         onChange={onChange}
         onInput={resizeTextArea}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleSend();
           }
         }}
         rows={1}
-        className="overflow-auto box-border max-h-22 w-full px-3 py-2"
+        className="overflow-auto box-border max-h-40 w-full px-3 py-2"
         placeholder="Type your message here..."
         disabled={isLoading}
         ref={inputRef}

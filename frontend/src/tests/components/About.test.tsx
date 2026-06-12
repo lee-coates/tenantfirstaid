@@ -10,7 +10,7 @@ describe("About component", () => {
         <About />
       </MemoryRouter>,
     );
-    expect(screen.getAllByText("About Tenant First Aid")).not.toBeNull();
+    expect(screen.getByText("About Tenant First Aid")).toBeInTheDocument();
   });
 
   it("displays legal disclaimer section", () => {
@@ -20,8 +20,8 @@ describe("About component", () => {
       </MemoryRouter>,
     );
     expect(
-      screen.getAllByText("Legal Disclaimer & Privacy Notice"),
-    ).not.toBeNull();
+      screen.getByText("Legal Disclaimer & Privacy Notice"),
+    ).toBeInTheDocument();
   });
 
   it("displays contact information", () => {
@@ -30,6 +30,6 @@ describe("About component", () => {
         <About />
       </MemoryRouter>,
     );
-    expect(screen.getAllByText("michael@qiu-qiulaw.com")).not.toBeNull();
+    expect(screen.getByText("michael@qiu-qiulaw.com")).toBeInTheDocument();
   });
 });

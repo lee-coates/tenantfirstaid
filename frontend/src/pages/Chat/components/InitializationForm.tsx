@@ -1,7 +1,6 @@
 import type { ChatMessage } from "../../../shared/types/messages";
 import BeaverIcon from "../../../shared/components/BeaverIcon";
 import type { Location } from "../../../types/models";
-import { formatLocation } from "../../../shared/utils/formatLocation";
 import { useEffect, useState } from "react";
 import { buildChatUserMessage } from "../utils/formHelper";
 import { streamText } from "../utils/streamHelper";
@@ -10,14 +9,13 @@ import { Link } from "react-router-dom";
 import useHousingContext from "../../../hooks/useHousingContext";
 import {
   ALL_TOPIC_OPTIONS,
-  CITY_SELECT_OPTIONS,
   HOUSING_OPTIONS,
   LETTERABLE_TOPIC_OPTIONS,
   NONLETTERABLE_TOPIC_OPTIONS,
-  type CitySelectKey,
   type HousingType,
   type TenantTopic,
 } from "../../../shared/constants/constants";
+import { pathFor, jurisdictionByKey } from "../../../shared/utils/jurisdiction";
 import { scrollToTop } from "../../../shared/utils/scrolling";
 import AutoExpandText from "./AutoExpandText";
 import clsx from "clsx";
@@ -35,7 +33,8 @@ interface Props {
 }
 
 /**
- * Initial chat form for selecting location, housing type, topic, and issue description.
+ * Initial chat form for selecting housing type, topic, and issue description.
+ * The jurisdiction is set via the navbar location picker.
  */
 export default function InitializationForm({ addMessage, setMessages }: Props) {
   const {
@@ -44,28 +43,12 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
     housingType,
     tenantTopic,
     issueDescription,
-    handleHousingLocation,
-    handleCityChange,
     handleHousingChange,
     handleTenantTopic,
     handleIssueDescription,
     handleFormReset,
   } = useHousingContext();
   const [initialUserMessage, setInitialUserMessage] = useState("");
-  const locationString = formatLocation(
-    housingLocation.city,
-    housingLocation.state,
-  );
-
-  const handleLocationChange = (key: string | null) => {
-    const typedKey = key as CitySelectKey | null;
-    const selected = typedKey !== null ? CITY_SELECT_OPTIONS[typedKey] : null;
-    handleCityChange(typedKey);
-    handleHousingLocation({
-      city: selected?.city ?? null,
-      state: selected?.state ?? null,
-    });
-  };
 
   const handleInitialInput = async () => {
     // Initial user message
@@ -94,24 +77,24 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
 
   return (
     <form
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-1"
       onSubmit={(event) => {
         event.preventDefault();
         handleInitialInput();
       }}
     >
-      <div className="flex px-4 gap-4 items-center justify-center">
+      <div className="flex px-4 gap-2 items-center justify-center">
         <div>
           <BeaverIcon />
         </div>
         <div className="">
-          <p className="text-xl sm:text-2xl text-center">
+          <p className="text-lg sm:text-xl text-center">
             Welcome to Tenant First Aid!
           </p>
         </div>
       </div>
       <div>
-        <div className="border rounded-lg px-4 py-3">
+        <div className="border rounded-lg px-4 py-2">
           <p>Things to keep in mind!</p>
           <ul className="list-disc pl-4">
             <li>Tenants have rights under state and local law.</li>
@@ -130,27 +113,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           Depending on the topic, I could help generate a letter to address your
           housing situation or answer your questions.
         </p>
-      </div>
-      <div>
-        <SelectField
-          name="city"
-          value={city || ""}
-          description="Select your location"
-          handleFunction={handleLocationChange}
-        >
-          {Object.entries(CITY_SELECT_OPTIONS).map(([key, option]) => (
-            <option key={key} value={key}>
-              {option.label}
-            </option>
-          ))}
-        </SelectField>
-        <AutoExpandText isExpanded={Boolean(city)}>
-          {city === "other"
-            ? "Unfortunately, we can only answer questions related to tenant rights in Oregon at this time."
-            : locationString
-              ? `I can help answer your questions about tenant rights in ${locationString}.`
-              : ""}
-        </AutoExpandText>
       </div>
       <SelectField
         name="housing type"
@@ -215,7 +177,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
       </div>
       <div>
         <textarea
-          className="h-25 md:h-20 w-full"
+          className="h-25 md:h-16 w-full"
           placeholder="Briefly describe your specific housing situation or question about housing."
           onChange={handleIssueDescription}
         />
@@ -223,27 +185,17 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
 
       <div className="flex justify-center gap-4">
         <button
-          className={clsx(
-            "text-red-dark border border-red-medium hover:border-red-dark hover:bg-red-light",
-            city === "other" && "opacity-50",
-          )}
+          className="text-red-dark border border-red-medium hover:border-red-dark hover:bg-red-light"
           type="reset"
           onClick={handleFormReset}
         >
           Reset
         </button>
         <button
-          className={clsx(
-            "text-green-dark border border-green-medium hover:border-green-dark hover:bg-green-light",
-            city === "other" && "opacity-50",
-          )}
-          style={{
-            cursor: city === "other" ? "not-allowed" : "pointer",
-          }}
+          className="text-green-dark border border-green-medium hover:border-green-dark hover:bg-green-light"
           type="submit"
           aria-label="enter chat"
           title="Enter Chat"
-          disabled={city === "other"}
           onClick={() => scrollToTop()}
         >
           Start Chat
@@ -254,7 +206,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
           !NONLETTERABLE_TOPICS.includes(tenantTopic) &&
           issueDescription && (
             <Link
-              to="/letter"
+              to={pathFor("letter", jurisdictionByKey(city))}
               className={clsx(
                 "flex items-center",
                 "py-1 px-4",
@@ -262,12 +214,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
                 "font-semibold text-center text-blue-dark",
                 "hover:border-blue-dark hover:bg-blue-light",
                 "no-underline",
-                city === "other" && "opacity-50",
               )}
-              style={{
-                cursor: city === "other" ? "not-allowed" : "pointer",
-              }}
-              aria-disabled={city === "other"}
               aria-label="generate letter"
               title="Generate Letter"
               onClick={(e) => {
