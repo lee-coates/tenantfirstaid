@@ -22,12 +22,12 @@ import {
 import LetterDisclaimer from "./pages/Letter/components/LetterDisclaimer";
 import MessageContainer from "./shared/components/MessageContainer";
 import useHousingContext from "./hooks/useHousingContext";
-import { buildChatUserMessage } from "./pages/Chat/utils/formHelper";
 import type { Location } from "./types/models";
 import FeaturesPanel from "./shared/components/FeaturesPanel";
 import FrequentInquiries from "./pages/Chat/components/FrequentInquiries";
 import MobilePanel from "./shared/components/MobilePanel";
 import clsx from "clsx";
+import { formatLocation } from "./shared/utils/formatLocation";
 
 /**
  * Routes /letter requests by classifying the leading segment: an out-of-state
@@ -93,18 +93,10 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
   const LOADING_DISPLAY_DELAY_MS = 1000;
   const {
     housingLocation,
-    housingType,
-    tenantTopic,
     issueDescription,
     handleHousingLocation,
     handleCityChange,
   } = useHousingContext();
-  const { userMessage: initialUserMessage } = buildChatUserMessage(
-    housingLocation,
-    housingType,
-    tenantTopic,
-    issueDescription,
-  );
 
   // Keep the URL the source of truth for follow-up messages and the navbar
   // location picker on this page.
@@ -118,22 +110,25 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
     if (hasInitialized.current) return;
     const output = buildLetterUserMessage(org, toLocation(jurisdiction));
     hasInitialized.current = true;
-    const hasIssueContext = issueDescription !== "";
-
     const userMessageId = Date.now().toString();
-    // Add user message
+    const locationString = formatLocation(
+      housingLocation.city,
+      housingLocation.state,
+    );
+    const content = [
+      locationString ? `I'm in ${locationString}.` : "",
+      issueDescription,
+      output.userMessage,
+    ]
+      .join(" ")
+      .trim();
     setMessages((prev) => [
       ...prev,
-      new HumanMessage({
-        content: [hasIssueContext ? initialUserMessage : "", output.userMessage]
-          .join(" ")
-          .trim(),
-        id: userMessageId,
-      }),
+      new HumanMessage({ content, id: userMessageId }),
     ]);
     streamLocationRef.current = output.selectedLocation;
     setStartStreaming(true);
-  }, [jurisdiction, org, setMessages, issueDescription, initialUserMessage]);
+  }, [jurisdiction, org, setMessages, issueDescription]);
 
   useEffect(() => {
     if (startStreaming === false || streamLocationRef.current === null) return;
