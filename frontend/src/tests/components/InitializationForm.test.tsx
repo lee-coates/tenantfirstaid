@@ -36,7 +36,7 @@ const renderInitializationForm = (entry = "/chat") => {
 };
 
 /** Extracts the HumanMessage added by the first setMessages call. */
-function getSubmittedMessage(): ChatMessage | undefined {
+function getSubmittedMessage(): HumanMessage | undefined {
   const updater = mockSetMessages.mock.calls.find(
     (call) => typeof call[0] === "function",
   )?.[0];
