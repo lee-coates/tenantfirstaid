@@ -30,8 +30,6 @@ describe("HousingContext", () => {
 
     const dump = screen.getByTestId("ctx").textContent || "";
     expect(dump).toContain("housingLocation");
-    expect(dump).toContain("housingType");
-    expect(dump).toContain("tenantTopic");
     expect(dump).toContain("issueDescription");
   });
 

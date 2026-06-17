@@ -1,19 +1,14 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import DOMPurify, { SANITIZE_USER_SETTINGS } from "../shared/utils/dompurify";
 import type { Location } from "../types/models";
-import type { HousingType, TenantTopic } from "../shared/constants/constants";
 import type { JurisdictionKey } from "../shared/constants/jurisdictions";
 
 export interface HousingContextType {
   housingLocation: Location;
   city: JurisdictionKey | null;
-  housingType: HousingType | null;
-  tenantTopic: TenantTopic | null;
   issueDescription: string;
   handleHousingLocation: ({ city, state }: Location) => void;
   handleCityChange: (option: JurisdictionKey | null) => void;
-  handleHousingChange: (option: HousingType | null) => void;
-  handleTenantTopic: (option: TenantTopic | null) => void;
   handleIssueDescription: (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
@@ -32,8 +27,6 @@ export default function HousingContextProvider({ children }: Props) {
     city: null,
     state: null,
   });
-  const [housingType, setHousingType] = useState<HousingType | null>(null);
-  const [tenantTopic, setTenantTopic] = useState<TenantTopic | null>(null);
   const [issueDescription, setIssueDescription] = useState("");
 
   const handleHousingLocation = useCallback(({ city, state }: Location) => {
@@ -42,14 +35,6 @@ export default function HousingContextProvider({ children }: Props) {
 
   const handleCityChange = useCallback((option: JurisdictionKey | null) => {
     setCity(option);
-  }, []);
-
-  const handleHousingChange = useCallback((option: HousingType | null) => {
-    setHousingType(option);
-  }, []);
-
-  const handleTenantTopic = useCallback((option: TenantTopic | null) => {
-    setTenantTopic(option);
   }, []);
 
   const handleIssueDescription = useCallback(
@@ -63,8 +48,6 @@ export default function HousingContextProvider({ children }: Props) {
 
   // Location is owned by the navbar picker / URL, so a form reset leaves it.
   const handleFormReset = useCallback(() => {
-    setHousingType(null);
-    setTenantTopic(null);
     setIssueDescription("");
   }, []);
 
@@ -72,26 +55,18 @@ export default function HousingContextProvider({ children }: Props) {
     () => ({
       housingLocation,
       city,
-      housingType,
-      tenantTopic,
       issueDescription,
       handleHousingLocation,
       handleCityChange,
-      handleHousingChange,
-      handleTenantTopic,
       handleIssueDescription,
       handleFormReset,
     }),
     [
       housingLocation,
       city,
-      housingType,
-      tenantTopic,
       issueDescription,
       handleHousingLocation,
       handleCityChange,
-      handleHousingChange,
-      handleTenantTopic,
       handleIssueDescription,
       handleFormReset,
     ],
