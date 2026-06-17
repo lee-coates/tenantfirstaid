@@ -118,6 +118,7 @@ const NAVBAR_FEATURES = [
 ] as const;
 
 const NAVBAR_LINKS = [
+  { to: "/referrals", label: "Referrals" },
   { to: "/about", label: "About Tenant First Aid" },
   { to: "/disclaimer", label: "Disclaimer" },
   { to: "/privacy-policy", label: "Privacy Policy" },
