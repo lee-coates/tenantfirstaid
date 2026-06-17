@@ -3,7 +3,7 @@ import BeaverIcon from "../../../shared/components/BeaverIcon";
 import type { Location } from "../../../types/models";
 import { streamText } from "../utils/streamHelper";
 import useHousingContext from "../../../hooks/useHousingContext";
-import { formatLocation } from "../../../shared/utils/formatLocation";
+import { buildLocationPrefix } from "../../../shared/utils/buildLocationPrefix";
 import { scrollToTop } from "../../../shared/utils/scrolling";
 import { HumanMessage } from "@langchain/core/messages";
 
@@ -28,12 +28,8 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
 
   const handleInitialInput = async () => {
     const userMessageId = Date.now().toString();
-    const locationString = formatLocation(
-      housingLocation.city,
-      housingLocation.state,
-    );
     const content = [
-      locationString ? `I'm in ${locationString}.` : "",
+      buildLocationPrefix(housingLocation.city, housingLocation.state),
       issueDescription,
     ]
       .join(" ")

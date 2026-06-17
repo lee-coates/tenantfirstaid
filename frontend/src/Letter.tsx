@@ -27,7 +27,7 @@ import FeaturesPanel from "./shared/components/FeaturesPanel";
 import FrequentInquiries from "./pages/Chat/components/FrequentInquiries";
 import MobilePanel from "./shared/components/MobilePanel";
 import clsx from "clsx";
-import { formatLocation } from "./shared/utils/formatLocation";
+import { buildLocationPrefix } from "./shared/utils/buildLocationPrefix";
 
 /**
  * Routes /letter requests by classifying the leading segment: an out-of-state
@@ -111,12 +111,8 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
     const output = buildLetterUserMessage(org, toLocation(jurisdiction));
     hasInitialized.current = true;
     const userMessageId = Date.now().toString();
-    const locationString = formatLocation(
-      housingLocation.city,
-      housingLocation.state,
-    );
     const content = [
-      locationString ? `I'm in ${locationString}.` : "",
+      buildLocationPrefix(housingLocation.city, housingLocation.state),
       issueDescription,
       output.userMessage,
     ]
