@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage/HomePage";
 const About = lazy(() => import("./About"));
 const Disclaimer = lazy(() => import("./Disclaimer"));
 const PrivacyPolicy = lazy(() => import("./PrivacyPolicy"));
+const Referrals = lazy(() => import("./Referrals"));
 const Letter = lazy(() => import("./Letter"));
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/disclaimer" element={<Disclaimer />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/referrals" element={<Referrals />} />
                 </Routes>
               </Suspense>
             }

@@ -425,6 +425,7 @@ frontend/
 │   ├── About.tsx                   # About page
 │   ├── Disclaimer.tsx              # Legal disclaimer
 │   ├── PrivacyPolicy.tsx           # Privacy policy
+│   ├── Referrals.tsx               # Static referrals table (legal aid organizations)
 │   ├── main.tsx                    # Application entry point
 │   ├── style.css                   # Global styles
 │   ├── contexts/                   # React Contexts
