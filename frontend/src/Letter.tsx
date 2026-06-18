@@ -92,7 +92,6 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
   const hasInitialized = useRef(false);
   const LOADING_DISPLAY_DELAY_MS = 1000;
   const {
-    housingLocation,
     issueDescription,
     handleHousingLocation,
     handleCityChange,
@@ -108,11 +107,12 @@ function LetterView({ jurisdiction, org }: LetterViewProps) {
   // Adds the initial user message once and triggers streaming.
   useEffect(() => {
     if (hasInitialized.current) return;
-    const output = buildLetterUserMessage(org, toLocation(jurisdiction));
+    const loc = toLocation(jurisdiction);
+    const output = buildLetterUserMessage(org, loc);
     hasInitialized.current = true;
     const userMessageId = Date.now().toString();
     const content = [
-      buildLocationPrefix(housingLocation.city, housingLocation.state),
+      buildLocationPrefix(loc.city, loc.state),
       issueDescription,
       output.userMessage,
     ]
