@@ -79,11 +79,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             </li>
           </ul>
         </div>
-        <p className="pt-2 px-4">
-          I'm an interactive AI. We can start by filling the form below.
-          Depending on the topic, I could help generate a letter to address your
-          housing situation or answer your questions.
-        </p>
       </div>
       <div>
         <textarea
