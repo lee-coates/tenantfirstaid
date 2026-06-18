@@ -1,29 +1,11 @@
 import type { ChatMessage } from "../../../shared/types/messages";
 import BeaverIcon from "../../../shared/components/BeaverIcon";
 import type { Location } from "../../../types/models";
-import { useEffect, useState } from "react";
-import { buildChatUserMessage } from "../utils/formHelper";
 import { streamText } from "../utils/streamHelper";
-import SelectField from "./SelectField";
-import { Link } from "react-router-dom";
 import useHousingContext from "../../../hooks/useHousingContext";
-import {
-  ALL_TOPIC_OPTIONS,
-  HOUSING_OPTIONS,
-  LETTERABLE_TOPIC_OPTIONS,
-  NONLETTERABLE_TOPIC_OPTIONS,
-  type HousingType,
-  type TenantTopic,
-} from "../../../shared/constants/constants";
-import { pathFor, jurisdictionByKey } from "../../../shared/utils/jurisdiction";
+import { buildLocationPrefix } from "../../../shared/utils/buildLocationPrefix";
 import { scrollToTop } from "../../../shared/utils/scrolling";
-import AutoExpandText from "./AutoExpandText";
-import clsx from "clsx";
 import { HumanMessage } from "@langchain/core/messages";
-
-const NONLETTERABLE_TOPICS = Object.keys(
-  NONLETTERABLE_TOPIC_OPTIONS,
-) as TenantTopic[];
 
 interface Props {
   addMessage: (
@@ -33,29 +15,28 @@ interface Props {
 }
 
 /**
- * Initial chat form for selecting housing type, topic, and issue description.
+ * Initial chat form for describing a housing issue.
  * The jurisdiction is set via the navbar location picker.
  */
 export default function InitializationForm({ addMessage, setMessages }: Props) {
   const {
     housingLocation,
-    city,
-    housingType,
-    tenantTopic,
     issueDescription,
-    handleHousingChange,
-    handleTenantTopic,
     handleIssueDescription,
     handleFormReset,
   } = useHousingContext();
-  const [initialUserMessage, setInitialUserMessage] = useState("");
 
   const handleInitialInput = async () => {
-    // Initial user message
     const userMessageId = Date.now().toString();
+    const content = [
+      buildLocationPrefix(housingLocation.city, housingLocation.state),
+      issueDescription,
+    ]
+      .join(" ")
+      .trim();
     setMessages((prev) => [
       ...prev,
-      new HumanMessage({ content: initialUserMessage, id: userMessageId }),
+      new HumanMessage({ content, id: userMessageId }),
     ]);
 
     await streamText({
@@ -64,16 +45,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
       housingLocation,
     });
   };
-
-  useEffect(() => {
-    const { userMessage: initialUserMessage } = buildChatUserMessage(
-      housingLocation,
-      housingType,
-      tenantTopic,
-      issueDescription,
-    );
-    setInitialUserMessage(initialUserMessage);
-  }, [housingLocation, issueDescription, housingType, tenantTopic]);
 
   return (
     <form
@@ -108,72 +79,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
             </li>
           </ul>
         </div>
-        <p className="pt-2 px-4">
-          I'm an interactive AI. We can start by filling the form below.
-          Depending on the topic, I could help generate a letter to address your
-          housing situation or answer your questions.
-        </p>
-      </div>
-      <SelectField
-        name="housing type"
-        value={housingType || ""}
-        description="Select your housing type"
-        handleFunction={(option) =>
-          handleHousingChange(option as HousingType | null)
-        }
-      >
-        {HOUSING_OPTIONS.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </SelectField>
-      <div>
-        <SelectField
-          name="tenant topic"
-          value={tenantTopic || ""}
-          description="Select your topic"
-          handleFunction={(option) =>
-            handleTenantTopic(option as TenantTopic | null)
-          }
-        >
-          <optgroup label="--Letterable--">
-            {Object.entries(LETTERABLE_TOPIC_OPTIONS).map(([key, option]) => (
-              <option key={key} value={key}>
-                {option.label}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="--Non-Letterable--">
-            {Object.entries(NONLETTERABLE_TOPIC_OPTIONS).map(
-              ([key, option]) => (
-                <option key={key} value={key}>
-                  {option.label}
-                </option>
-              ),
-            )}
-          </optgroup>
-        </SelectField>
-        <AutoExpandText isExpanded={Boolean(tenantTopic)}>
-          <div className="px-4">
-            Here are some examples of questions I can help with:
-            <ul className="list-disc pl-4">
-              {(tenantTopic
-                ? ALL_TOPIC_OPTIONS[tenantTopic]
-                : null
-              )?.example.map((question, index) => (
-                <li key={`${tenantTopic}-${index}`}>
-                  {question.split(/(_)/).map((part, i) => {
-                    if (!part.startsWith("_")) return part;
-                    return (
-                      <span key={i} className="inline-block w-[3ch] border-b" />
-                    );
-                  })}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </AutoExpandText>
       </div>
       <div>
         <textarea
@@ -200,35 +105,6 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
         >
           Start Chat
         </button>
-        {housingLocation &&
-          housingType &&
-          tenantTopic &&
-          !NONLETTERABLE_TOPICS.includes(tenantTopic) &&
-          issueDescription && (
-            <Link
-              to={pathFor("letter", jurisdictionByKey(city))}
-              className={clsx(
-                "flex items-center",
-                "py-1 px-4",
-                "border rounded-md border-blue-medium",
-                "font-semibold text-center text-blue-dark",
-                "hover:border-blue-dark hover:bg-blue-light",
-                "no-underline",
-              )}
-              aria-label="generate letter"
-              title="Generate Letter"
-              onClick={(e) => {
-                if (NONLETTERABLE_TOPICS.includes(tenantTopic)) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                } else {
-                  scrollToTop();
-                }
-              }}
-            >
-              Generate Letter
-            </Link>
-          )}
       </div>
     </form>
   );

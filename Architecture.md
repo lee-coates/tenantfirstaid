@@ -444,17 +444,14 @@ frontend/
 │   │   │   ├── components/
 │   │   │   │   ├── ChatDisclaimer.tsx # Disclaimer for Chat page
 │   │   │   │   ├── InitializationForm.tsx # Context information from user
-│   │   │   │   ├── AutoExpandText.tsx  # Animated Text component
 │   │   │   │   ├── ExportMessagesButton.tsx # Chat export
 │   │   │   │   ├── InputField.tsx      # Message input
 │   │   │   │   ├── FeedbackModal.tsx   # Feedback modal
 │   │   │   │   ├── MessageContent.tsx  # Message display
-│   │   │   │   ├── MessageWindow.tsx   # Chat window
-│   │   │   │   └── SelectField.tsx     # Initialization form select field
+│   │   │   │   └── MessageWindow.tsx   # Chat window
 │   │   │   └── utils/
 │   │   │       ├── exportHelper.ts     # Export functionality
 │   │   │       ├── feedbackHelper.ts   # Feedback functionality
-│   │   │       ├── formHelper.ts       # Housing context functionality
 │   │   │       └── streamHelper.ts     # Stream functionality
 │   │   ├──Letter/               # Letter page components
 │   │   │   ├── components/
@@ -483,6 +480,7 @@ frontend/
 │   │   ├── constants/
 │   │   │   └── constants.ts        # File of constants
 │   │   └── utils/
+│   │       ├── buildLocationPrefix.ts # Helper function for location prefix
 │   │       ├── scrolling.ts        # Helper function for window scrolling
 │   │       ├── dompurify.ts        # Helper function for sanitizing text
 │   │       └── formatLocation.ts   # Formats OregonCity/UsaState into a display string (e.g. "Portland, OR")
@@ -508,7 +506,6 @@ frontend/
 │   │       ├── dompurify.test.ts   # dompurify testing
 │   │       ├── exportHelper.test.ts # exportHelper testing
 │   │       ├── feedbackHelper.test.ts # feedbackHelper testing
-│   │       ├── formHelper.test.ts  # formHelper testing
 │   │       ├── letterHelper.test.ts # letterHelper testing
 │   │       ├── sanitizeText.test.ts # sanitizeText testing
 │   │       ├── streamHelper.test.ts # streamHelper testing
