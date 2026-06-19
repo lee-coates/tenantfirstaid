@@ -48,7 +48,7 @@ export default function InitializationForm({ addMessage, setMessages }: Props) {
 
   return (
     <form
-      className="flex flex-col gap-1"
+      className="flex flex-col gap-3"
       onSubmit={(event) => {
         event.preventDefault();
         handleInitialInput();
