@@ -5,6 +5,7 @@ import InputField from "./InputField";
 import MessageContent from "./MessageContent";
 import ExportMessagesButton from "./ExportMessagesButton";
 import InitializationForm from "./InitializationForm";
+import MessageAvatar from "./MessageAvatar";
 import FeedbackModal from "./FeedbackModal";
 import { useLocation } from "react-router-dom";
 import clsx from "clsx";
@@ -67,21 +68,24 @@ export default function MessageWindow({
       >
         <div className="mx-auto max-w-[700px]">
           {isOngoing ? (
-            <div className="flex flex-col gap-2 relative">
+            <div className="flex flex-col gap-4 relative">
               {displayedMessages.map((message) => {
                 return (
                   <div
                     className={clsx(
-                      "flex w-full",
-                      message.type === "ai" && "justify-start",
-                      message.type === "human" && "justify-end",
-                      message.type === "ui" && "justify-start",
+                      "flex w-full gap-2 items-start",
+                      message.type === "human"
+                        ? "justify-end"
+                        : "justify-start",
                     )}
                     key={message.id}
                   >
+                    {message.type !== "human" && (
+                      <MessageAvatar type={message.type} />
+                    )}
                     <div
                       className={clsx(
-                        "message-bubble px-3.5 py-2 rounded-xl max-w-[90%] lg:max-w-[80%]",
+                        "message-bubble px-3.5 py-2 rounded-xl max-w-[85%] lg:max-w-[80%]",
                         message.type === "ai" && "bg-slate-200",
                         message.type === "human" && "bg-green-dark text-white",
                         message.type === "ui" && "bg-slate-200",
@@ -89,6 +93,9 @@ export default function MessageWindow({
                     >
                       <MessageContent message={message} />
                     </div>
+                    {message.type === "human" && (
+                      <MessageAvatar type={message.type} />
+                    )}
                   </div>
                 );
               })}
@@ -99,7 +106,7 @@ export default function MessageWindow({
       {openFeedback && (
         <FeedbackModal messages={messages} setOpenFeedback={setOpenFeedback} />
       )}
-      <div>
+      <div className={clsx(!isOngoing && "lg:my-auto")}>
         {messages.length > 0 ? (
           <>
             <InputField

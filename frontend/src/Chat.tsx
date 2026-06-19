@@ -53,8 +53,7 @@ function ChatView() {
             className={clsx(
               "flex flex-col min-h-0",
               letterContent === "" ? "flex-1" : "flex-1/3",
-              !isOngoing &&
-                "lg:justify-center [@media(max-height:800px)]:justify-start! [@media(max-height:800px)]:overflow-y-auto",
+              !isOngoing && "lg:overflow-y-auto",
             )}
           >
             <MessageWindow

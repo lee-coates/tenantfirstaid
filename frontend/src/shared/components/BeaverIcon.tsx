@@ -1,6 +1,11 @@
-export default function BeaverIcon() {
+interface Props {
+  className?: string;
+}
+
+export default function BeaverIcon({ className }: Props) {
   return (
     <svg
+      className={className}
       width="82"
       height="88"
       viewBox="0 0 82 88"
